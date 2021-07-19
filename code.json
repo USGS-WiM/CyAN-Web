@@ -1,10 +1,10 @@
 [
   {
-    "name": "wimpo",
+    "name": "CyAN Web App",
     "organization": "U.S. Geological Survey",
-    "description": "Documents best practices for software development within WIM",
+    "description": "Cyanobacterial Assessment Network (CyAN)",
     "version": "v0.0.0",
-    "status": ["Ideation", "Development", "Alpha", "Beta", "Release Candidate", "Production", "Archival"],
+    "status": ["Development"],
 
     "permissions": {
       "usageType": "openSource",
@@ -17,39 +17,24 @@
     },
 
     "homepageURL": "https://wim.usgs.gov",
-    "downloadURL": "https://github.com/USGS-WiM/wimpo/archive/master.zip",
-    "disclaimerURL": "https://github.com/USGS-WiM/wimpo/blob/master/DISCLAIMER.md",
-    "repositoryUrl": "https://github.com/USGS-WiM/wimpo",
+    "downloadURL": "https://github.com/USGS-WiM/CyAN-Web/tree/master.zip",
+    "disclaimerURL": "https://github.com/USGS-WiM/CyAN-Web/blob/master/DISCLAIMER.md",
+    "repositoryUrl": "https://github.com/USGS-WiM/CyAN-Web",
     "vcs": "git",
 
     "laborHours": null,
 
-    "tags": [
-      "client",
-      "service",
-      "script",
-      "guidance",
-      "template",
-      "interactive map",
-      "api",
-      "webapp"
-    ],
+    "tags": ["client"],
 
-    "languages": [
-      "markdown",
-      "jquery",
-      "python",
-      "leaflet",
-      "etc"
-    ],
+    "languages": ["markdown", "Typescript"],
 
     "contact": {
-      "name": "jessie doe",
-      "email": "jdoe@usgs.gov"
+      "name": "Kathy Dooley",
+      "email": "kdooley@usgs.gov"
     },
 
     "date": {
-      "metadataLastUpdated": "2017-10-25"
+      "metadataLastUpdated": "2021-07-16"
     }
   }
 ]
