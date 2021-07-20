@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatIconModule } from '@angular/material/icon';
 import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { HomeComponent } from './core/home/home.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
+    MatSliderModule,
+    NgxSliderModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

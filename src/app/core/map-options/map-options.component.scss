@@ -1,0 +1,14 @@
+::ng-deep {
+  .custom-slider {
+    .ngx-slider {
+      .ngx-slider-selection {
+        background: rgb(146, 146, 136) !important;
+      }
+    }
+    .ngx-slider-pointer {
+      background: rgb(146, 146, 136) !important;
+      /* width: 20px !important;
+      height: 20px !important; */
+    }
+  }
+}

@@ -1,3 +1,22 @@
 <div
-  style="background-color: rgba(255, 255, 255, 50); width: 200px; height: 400px"
-></div>
+  style="
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 200px;
+    height: 400px;
+    /* opacity: 0.5; */
+    margin-top: 20px;
+    margin-left: 20px;
+  "
+>
+  <div style="height: 10px"></div>
+  <div style="margin-left: 10px">
+    <p style="font-size: 15px">Filters</p>
+  </div>
+  <div class="custom-slider" style="margin-left: 10px">
+    <ngx-slider
+      [(value)]="minValue"
+      [(highValue)]="maxValue"
+      [options]="options"
+    ></ngx-slider>
+  </div>
+</div>
