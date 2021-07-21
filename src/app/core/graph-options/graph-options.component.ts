@@ -19,7 +19,7 @@ export class GraphOptionsComponent implements OnInit {
       type: 'scatter',
       name: 'Sample 1',
       text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
-      marker: { size: 12 },
+      marker: { size: 12, color: 'rgb(242, 189, 161) ' },
     };
 
     var trace2 = {
@@ -29,7 +29,7 @@ export class GraphOptionsComponent implements OnInit {
       type: 'scatter',
       name: 'Sample 2',
       text: ['B-a', 'B-b', 'B-c', 'B-d', 'B-e'],
-      marker: { size: 12 },
+      marker: { size: 12, color: 'rgb(104, 121, 128)' },
     };
 
     var data = [trace1, trace2];
@@ -41,9 +41,8 @@ export class GraphOptionsComponent implements OnInit {
       yaxis: {
         range: [0, 8],
       },
-      title: '',
-      paper_bgcolor: 'rgb(255, 255, 255, .8)',
-      plot_bgcolor: 'rgb(255, 255, 255, .8)',
+      paper_bgcolor: 'rgb(255, 255, 255, 0)',
+      plot_bgcolor: 'rgb(255, 255, 255, 0)',
     };
 
     Plotly.newPlot(bivariatePlot, data, layout);
