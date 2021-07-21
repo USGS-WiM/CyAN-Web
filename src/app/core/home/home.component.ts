@@ -11,6 +11,7 @@ export class HomeComponent implements OnInit {
   public showHomeLayout: Boolean = true;
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
+  public showGraph: Boolean = false;
   ngOnInit(): void {
     // this.changeLayout(false);
   }
@@ -28,13 +29,22 @@ export class HomeComponent implements OnInit {
   }
 
   public clickMap() {
-    console.log('clickMap');
     this.showMap = true;
     this.showHomeLayout = false;
+    this.showInfo = false;
+    this.showGraph = false;
   }
 
   public clickInfo() {
     this.showInfo = true;
     this.showHomeLayout = false;
+    this.showMap = false;
+  }
+
+  public clickGraph() {
+    this.showGraph = true;
+    this.showInfo = false;
+    this.showHomeLayout = false;
+    this.showMap = false;
   }
 }

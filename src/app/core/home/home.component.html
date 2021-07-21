@@ -10,9 +10,18 @@
         </p>
       </div>
     </div>
-    <div *ngIf="showHomeLayout === false">
-      <div class="flex-child" style="color: white">
-        <div style="height: 60px; width: 60px; background-color: #f2bda1">
+    <div class="flex-child flex-container" *ngIf="showHomeLayout === false">
+      <div style="color: white">
+        <div
+          style="
+            height: 60px;
+            width: 60px;
+            background-color: #f2bda1;
+            cursor: pointer;
+          "
+          (click)="clickInfo()"
+          matTooltip="About CyAN"
+        >
           <mat-icon
             style="
               font-size: 40px;
@@ -25,8 +34,17 @@
           >
         </div>
       </div>
-      <div class="flex-child" style="color: white">
-        <div style="height: 60px; width: 60px; background-color: #687980">
+      <div style="color: white">
+        <div
+          style="
+            height: 60px;
+            width: 60px;
+            background-color: #687980;
+            cursor: pointer;
+          "
+          (click)="clickMap()"
+          matTooltip="Map"
+        >
           <mat-icon
             style="
               font-size: 40px;
@@ -39,8 +57,17 @@
           >
         </div>
       </div>
-      <div class="flex-child" style="color: white">
-        <div style="height: 60px; width: 60px; background-color: #02475e">
+      <div style="color: white">
+        <div
+          style="
+            height: 60px;
+            width: 60px;
+            background-color: #02475e;
+            cursor: pointer;
+          "
+          (click)="clickGraph()"
+          matTooltip="Graph"
+        >
           <mat-icon
             style="
               font-size: 40px;
@@ -76,7 +103,7 @@
       <div
         class="graphBtn"
         *ngIf="showHomeLayout === true"
-        (click)="changeLayout(false)"
+        (click)="clickGraph()"
       >
         <p style="text-align: center">
           <br />
