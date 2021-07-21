@@ -1,24 +1,26 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-import {
-  HttpClient,
-  HttpHeaders,
-  HttpErrorResponse,
-} from '@angular/common/http';
-import { map, tap, catchError } from 'rxjs/operators';
-import { Observable, combineLatest, Subject, EMPTY, throwError } from 'rxjs';
-
 @Injectable({
   providedIn: 'root',
 })
 export class ComponentDisplayService {
-  constructor(public httpClient: HttpClient) {}
+  constructor() {}
 
+  //About modal
   public aboutVisibleSubject = new BehaviorSubject<Boolean>(undefined);
   aboutVisible$ = this.aboutVisibleSubject.asObservable();
 
-  public getAssociatedPicks(display: boolean) {
+  public getAboutVisible(display: boolean) {
     this.aboutVisibleSubject.next(display);
+  }
+
+  //default home screen configuration
+  public homeLayoutSubject = new BehaviorSubject<Boolean>(undefined);
+  homeLayout$ = this.homeLayoutSubject.asObservable();
+
+  public getHomeLayout(display: Boolean) {
+    console.log('display', display);
+    this.homeLayoutSubject.next(display);
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-map-options',
@@ -14,6 +15,15 @@ export class MapOptionsComponent implements OnInit {
     ceil: 2021,
     barDimension: 150,
   };
+  toppings = new FormControl();
+  toppingList: string[] = [
+    'Extra cheese',
+    'Mushroom',
+    'Onion',
+    'Pepperoni',
+    'Sausage',
+    'Tomato',
+  ];
 
   constructor() {}
 

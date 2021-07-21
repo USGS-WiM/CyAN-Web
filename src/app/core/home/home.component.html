@@ -1,84 +1,94 @@
-<app-map-options></app-map-options>
-<div
-  style="
-    height: 70px;
-    width: 10%;
-    color: rgb(163, 152, 152);
-    text-align: center;
-    background-color: #fefecc;
-    z-index: 10;
-    position: relative;
-    margin-left: 100px;
-    margin-top: 15px;
-    font-size: 30px;
-    margin-top: 50px;
-    cursor: pointer;
-  "
->
-  <br />
-  <p style="text-align: center">
-    <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-    CyAN
-  </p>
-</div>
-<div
-  style="
-    height: 70px;
-    width: 600px;
-    color: white;
-    text-align: center;
-    background-color: #f2bda1;
-    z-index: 10;
-    position: relative;
-    margin-left: 100px;
-    cursor: pointer;
-  "
->
-  <p style="text-align: center; font-size: 30px">
-    <br />
-    <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
-  </p>
-</div>
-<div class="flex-container" style="width: 200px">
-  <div class="flex-child">
-    <div
-      style="
-        height: 200px;
-        width: 200px;
-        color: white;
-        text-align: center;
-        background-color: #687980;
-        z-index: 10;
-        margin-left: 150px;
-        font-size: 20px;
-        cursor: pointer;
-      "
-    >
-      <br />
-      <p style="text-align: center">Map Data</p>
-      <mat-icon style="font-size: 80px; margin-left: -55px"> map</mat-icon>
+<div>
+  <div class="flex-container" style="width: 280px">
+    <div class="flex-child">
+      <div class="homeBtn" (click)="changeLayout(true)">
+        <p>
+          <mat-icon aria-hidden="false" aria-label="Example home icon"
+            >home</mat-icon
+          >
+          CyAN
+        </p>
+      </div>
+    </div>
+    <div *ngIf="showHomeLayout === false">
+      <div class="flex-child" style="color: white">
+        <div style="height: 60px; width: 60px; background-color: #f2bda1">
+          <mat-icon
+            style="
+              font-size: 40px;
+              text-align: center;
+              line-height: 60px;
+              vertical-align: center;
+              margin-left: 10px;
+            "
+            >info</mat-icon
+          >
+        </div>
+      </div>
+      <div class="flex-child" style="color: white">
+        <div style="height: 60px; width: 60px; background-color: #687980">
+          <mat-icon
+            style="
+              font-size: 40px;
+              text-align: center;
+              line-height: 60px;
+              vertical-align: center;
+              margin-left: 10px;
+            "
+            >map</mat-icon
+          >
+        </div>
+      </div>
+      <div class="flex-child" style="color: white">
+        <div style="height: 60px; width: 60px; background-color: #02475e">
+          <mat-icon
+            style="
+              font-size: 40px;
+              text-align: center;
+              line-height: 60px;
+              vertical-align: center;
+              margin-left: 10px;
+            "
+            >scatter_plot</mat-icon
+          >
+        </div>
+      </div>
     </div>
   </div>
-  <div class="flex-child">
-    <div
-      style="
-        height: 200px;
-        width: 200px;
-        color: white;
-        text-align: center;
-        background-color: #02475e;
-        z-index: 10;
-        font-size: 20px;
-        cursor: pointer;
-      "
-    >
-      <p style="text-align: center">
+
+  <div class="infoBtn" *ngIf="showHomeLayout === true" (click)="clickInfo()">
+    <p style="font-size: 30px">
+      <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
+    </p>
+  </div>
+  <div *ngIf="showInfo === true">
+    <app-about></app-about>
+  </div>
+  <div class="flex-container" style="width: 200px">
+    <div class="flex-child">
+      <div class="mapBtn" *ngIf="showHomeLayout === true" (click)="clickMap()">
         <br />
-        Graph Data
-      </p>
-      <mat-icon style="font-size: 80px; margin-left: -55px">
-        scatter_plot</mat-icon
+        <p style="text-align: center">Map</p>
+        <mat-icon style="font-size: 80px; margin-left: -55px"> map</mat-icon>
+      </div>
+    </div>
+    <div class="flex-child">
+      <div
+        class="graphBtn"
+        *ngIf="showHomeLayout === true"
+        (click)="changeLayout(false)"
       >
+        <p style="text-align: center">
+          <br />
+          Graph
+        </p>
+        <mat-icon style="font-size: 80px; margin-left: -55px">
+          scatter_plot</mat-icon
+        >
+      </div>
     </div>
   </div>
+</div>
+<div *ngIf="showMap === true" style="margin-left: 80px">
+  <app-map-options></app-map-options>
 </div>
