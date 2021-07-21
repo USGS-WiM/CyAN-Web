@@ -1,7 +1,7 @@
-import { R3TargetBinder } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
 import { FormControl } from '@angular/forms';
+import { Options } from '@angular-slider/ngx-slider';
 
 @Component({
   selector: 'app-graph-options',
@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./../core.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
+  public secondTrace: Boolean = false;
   Parameters = new FormControl();
   parameterList: string[] = [
     'Phosphorus',
@@ -17,6 +18,13 @@ export class GraphOptionsComponent implements OnInit {
     'Nitrogen',
     'Chloride',
   ];
+  minValue: number = 1975;
+  maxValue: number = 2021;
+  options: Options = {
+    floor: 1975,
+    ceil: 2021,
+    barDimension: 150,
+  };
   constructor() {}
 
   ngOnInit(): void {
@@ -55,5 +63,11 @@ export class GraphOptionsComponent implements OnInit {
     };
 
     Plotly.newPlot(bivariatePlot, data, layout);
+  }
+  public addTrace() {
+    this.secondTrace = true;
+  }
+  public removeTrace() {
+    this.secondTrace = false;
   }
 }

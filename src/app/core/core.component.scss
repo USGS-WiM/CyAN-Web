@@ -70,7 +70,7 @@
 
 .cyanInfo {
   height: 600px;
-  width: 580px;
+  width: 600px;
   color: white;
   background-color: #f2bda1;
   z-index: 10;
@@ -79,4 +79,70 @@
   border: none;
   padding-left: 10px;
   padding-right: 10px;
+}
+
+.graphOptionsBackground {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 260px !important;
+  height: 600px;
+  margin-top: 20px;
+  margin-left: 100px;
+}
+
+.traceOptionsBackground {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: 15px;
+  background-color: rgba(2, 71, 94, 0.08);
+}
+
+.traceBtn {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(131, 184, 124);
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  border: none;
+}
+
+.plotDataBtn {
+  height: 35px;
+  width: 110px;
+  background-color: rgb(131, 184, 124);
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  border: none;
+}
+
+.graphBackground {
+  width: 700px;
+  height: 600px;
+  margin-top: 20px;
+  margin-left: 60px;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+::ng-deep {
+  .custom-slider {
+    .ngx-slider {
+      .ngx-slider-selection {
+        background: rgb(146, 146, 136) !important;
+      }
+    }
+    .ngx-slider-pointer {
+      background: rgb(146, 146, 136) !important;
+    }
+  }
 }
