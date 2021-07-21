@@ -1,6 +1,7 @@
 import { R3TargetBinder } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-graph-options',
@@ -8,6 +9,14 @@ import * as Plotly from 'plotly.js-dist';
   styleUrls: ['./../core.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
+  Parameters = new FormControl();
+  parameterList: string[] = [
+    'Phosphorus',
+    'Dissolved Oxygen',
+    'pH',
+    'Nitrogen',
+    'Chloride',
+  ];
   constructor() {}
 
   ngOnInit(): void {

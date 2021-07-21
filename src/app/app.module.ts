@@ -13,6 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
 import { MatSliderModule } from '@angular/material/slider';
@@ -38,6 +40,8 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatFormFieldModule,
     MatSelectModule,
     MatTooltipModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
