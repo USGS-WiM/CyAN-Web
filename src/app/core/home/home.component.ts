@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit {
     if (homeLayout === true) {
       this.showMap = false;
       this.showInfo = false;
+      this.showGraph = false;
     }
   }
 
@@ -39,6 +40,7 @@ export class HomeComponent implements OnInit {
     this.showInfo = true;
     this.showHomeLayout = false;
     this.showMap = false;
+    this.showGraph = false;
   }
 
   public clickGraph() {
