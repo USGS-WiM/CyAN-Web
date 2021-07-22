@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
--
+- Example graph
+- Placeholders for graph options
+- Template to put map layers later
+- Placeholders for map filter options
+- About template
+- Landing view
 
 ### Changed
 
@@ -18,4 +23,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 
 -
-
