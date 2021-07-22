@@ -61,8 +61,10 @@ export class GraphOptionsComponent implements OnInit {
       yaxis: {
         range: [0, 8],
       },
-      paper_bgcolor: 'rgb(255, 255, 255, 0)',
-      plot_bgcolor: 'rgb(255, 255, 255, 0)',
+      paper_bgcolor: 'rgba(255, 255, 255, 0)',
+      plot_bgcolor: 'rgba(255, 255, 255, 0)',
+      legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
     };
 
     Plotly.newPlot(bivariatePlot, data, layout);

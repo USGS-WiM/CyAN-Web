@@ -1,14 +1,19 @@
-<div class="optionsBackgroundMini" *ngIf="!mapLayerOptions">
+<div
+  class="optionsBackgroundMini"
+  *ngIf="!mapLayerOptions"
+  (click)="displayMapLayerOptions(true)"
+>
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="maximize" (click)="displayMapLayerOptions(true)"
-      >maximize</mat-icon
-    >
+    <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
 <div class="mapLayerOptionsBackground" *ngIf="mapLayerOptions">
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="minimize" (click)="displayMapLayerOptions(false)"
+    <mat-icon
+      matTooltip="minimize"
+      style="cursor: pointer"
+      (click)="displayMapLayerOptions(false)"
       >minimize</mat-icon
     >
   </div>
@@ -16,7 +21,10 @@
 
 <div class="optionsBackground" *ngIf="mapFilters">
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="minimize" (click)="displayMapFilters(false)"
+    <mat-icon
+      matTooltip="minimize"
+      style="cursor: pointer"
+      (click)="displayMapFilters(false)"
       >minimize</mat-icon
     >
   </div>
@@ -79,14 +87,17 @@
         </mat-form-field>
       </div>
     </form>
+    <mat-checkbox [disableRipple]="true">Use map bounds </mat-checkbox>
   </div>
   <button class="mapFilterBtn">Filter</button>
 </div>
-<div *ngIf="!mapFilters" class="optionsBackgroundMini">
+<div
+  *ngIf="!mapFilters"
+  class="optionsBackgroundMini"
+  (click)="displayMapFilters(true)"
+>
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="maximize" (click)="displayMapFilters(true)"
-      >maximize</mat-icon
-    >
+    <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Filter Points</div>
 </div>
