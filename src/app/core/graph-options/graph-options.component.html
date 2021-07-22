@@ -1,5 +1,5 @@
 <div class="flex-container">
-  <div class="graphOptionsBackground">
+  <div class="optionsBackground">
     <div style="height: 10px"></div>
     <div class="traceOptionsBackground">
       <div style="margin-left: 10px">
@@ -67,9 +67,13 @@
     </div>
     <div style="margin-left: 10px; margin-top: 10px">
       Log Scale &nbsp;
-      <mat-checkbox class="example-margin">x </mat-checkbox>
+      <mat-checkbox class="example-margin" [disableRipple]="true"
+        >x
+      </mat-checkbox>
       &nbsp;
-      <mat-checkbox class="example-margin">y </mat-checkbox>
+      <mat-checkbox class="example-margin" [disableRipple]="true"
+        >y
+      </mat-checkbox>
     </div>
 
     <button

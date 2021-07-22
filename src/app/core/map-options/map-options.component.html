@@ -1,37 +1,92 @@
-<div
-  style="
-    background-color: rgba(255, 255, 255, 0.8);
-    width: 200px;
-    height: 400px;
-    margin-top: 20px;
-    margin-left: 20px;
-    position: relative;
-  "
->
-  <div style="height: 10px"></div>
+<div class="optionsBackgroundMini" *ngIf="!mapLayerOptions">
+  <div style="text-align: right; margin-right: 10px">
+    <mat-icon matTooltip="maximize" (click)="displayMapLayerOptions(true)"
+      >maximize</mat-icon
+    >
+  </div>
+  <div class="minimizedBackground">Map Layers</div>
+</div>
+<div class="mapLayerOptionsBackground" *ngIf="mapLayerOptions">
+  <div style="text-align: right; margin-right: 10px">
+    <mat-icon matTooltip="minimize" (click)="displayMapLayerOptions(false)"
+      >minimize</mat-icon
+    >
+  </div>
+</div>
+
+<div class="optionsBackground" *ngIf="mapFilters">
+  <div style="text-align: right; margin-right: 10px">
+    <mat-icon matTooltip="minimize" (click)="displayMapFilters(false)"
+      >minimize</mat-icon
+    >
+  </div>
+  <div style="margin-left: 10px">
+    <mat-form-field appearance="fill">
+      <mat-label>Parameters</mat-label>
+      <mat-select [formControl]="Parameters" multiple>
+        <mat-option
+          *ngFor="let parameter of parameterList"
+          [value]="parameter"
+          >{{ parameter }}</mat-option
+        >
+      </mat-select>
+    </mat-form-field>
+  </div>
   <div class="custom-slider" style="margin-left: 10px">
     <ngx-slider
       [(value)]="minValue"
       [(highValue)]="maxValue"
-      [options]="options"
+      [options]="timeOptions"
     ></ngx-slider>
   </div>
-  <button
-    style="
-      height: 35px;
-      width: 55px;
-      background-color: rgb(131, 184, 124);
-      cursor: pointer;
-      font-size: 20px;
-      color: white;
-      margin-left: 10px;
-      margin-top: 10px;
-      text-align: center;
-      vertical-align: middle;
-      line-height: 35px;
-      border: none;
-    "
-  >
-    Filter
-  </button>
+  <div style="margin-left: 10px; margin-top: 10px">
+    <mat-form-field appearance="fill">
+      <mat-label>States</mat-label>
+      <mat-select [formControl]="States" multiple>
+        <mat-option *ngFor="let state of stateList" [value]="state">{{
+          state
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    Bounding Box
+    <form class="boundingBoxForm">
+      <div class="flex-container">
+        <mat-form-field
+          class="boundingBoxFullWidth"
+          appearance="fill"
+          style="margin-right: 10px"
+        >
+          <mat-label>North</mat-label>
+          <input matInput />
+        </mat-form-field>
+        <mat-form-field class="boundingBoxFullWidth" appearance="fill">
+          <mat-label>South</mat-label>
+          <input matInput />
+        </mat-form-field>
+      </div>
+      <div class="flex-container">
+        <mat-form-field
+          class="boundingBoxFullWidth"
+          appearance="fill"
+          style="margin-right: 10px"
+        >
+          <mat-label>East</mat-label>
+          <input matInput />
+        </mat-form-field>
+        <mat-form-field class="boundingBoxFullWidth" appearance="fill">
+          <mat-label>West</mat-label>
+          <input matInput />
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+  <button class="mapFilterBtn">Filter</button>
+</div>
+<div *ngIf="!mapFilters" class="optionsBackgroundMini">
+  <div style="text-align: right; margin-right: 10px">
+    <mat-icon matTooltip="maximize" (click)="displayMapFilters(true)"
+      >maximize</mat-icon
+    >
+  </div>
+  <div class="minimizedBackground">Filter Points</div>
 </div>
