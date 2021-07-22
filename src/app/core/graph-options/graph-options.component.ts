@@ -67,7 +67,9 @@ export class GraphOptionsComponent implements OnInit {
       modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
     };
 
-    Plotly.newPlot(bivariatePlot, data, layout);
+    Plotly.newPlot(bivariatePlot, data, layout, {
+      displaylogo: false,
+    });
   }
   public addTrace() {
     this.secondTrace = true;
