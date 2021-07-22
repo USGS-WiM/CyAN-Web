@@ -18,13 +18,16 @@ export class GraphOptionsComponent implements OnInit {
     'Nitrogen',
     'Chloride',
   ];
+
+  //Parameters for creating the year slider
   minValue: number = 1975;
   maxValue: number = 2021;
-  options: Options = {
+  timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
-    barDimension: 150,
+    barDimension: 240,
   };
+
   constructor() {}
 
   ngOnInit(): void {
