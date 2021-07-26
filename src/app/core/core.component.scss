@@ -86,7 +86,16 @@
 .optionsBackground {
   background-color: rgba(255, 255, 255, 0.8);
   width: 260px !important;
-  height: 600px;
+  height: 630px;
+  margin-top: 20px;
+  margin-left: 100px;
+  position: relative;
+}
+
+.optionsBackgroundMap {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 260px !important;
+  height: 500px;
   margin-top: 20px;
   margin-left: 100px;
   position: relative;
@@ -141,8 +150,8 @@
 }
 
 .graphBackground {
-  width: 700px;
-  height: 600px;
+  width: 800px;
+  height: 630px;
   margin-top: 20px;
   margin-left: 60px;
   background-color: rgba(255, 255, 255, 0.8);
@@ -176,7 +185,7 @@
 .mapLayerOptionsBackground {
   background-color: rgba(255, 255, 255, 0.8);
   width: 260px !important;
-  height: 200px;
+  height: 120px;
   margin-top: 20px;
   margin-left: 100px;
   position: relative;

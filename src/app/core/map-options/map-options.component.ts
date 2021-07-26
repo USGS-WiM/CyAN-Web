@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-map-options',
@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
+  public basemapForm: FormGroup;
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
   minValue: number = 1975;
@@ -39,7 +40,11 @@ export class MapOptionsComponent implements OnInit {
     'Delaware',
   ];
 
-  constructor() {}
+  constructor(private formBuilder: FormBuilder) {
+    this.basemapForm = formBuilder.group({
+      baseControl: null,
+    });
+  }
 
   ngOnInit(): void {}
 
@@ -49,5 +54,17 @@ export class MapOptionsComponent implements OnInit {
 
   public displayMapLayerOptions(display: Boolean) {
     this.mapLayerOptions = display;
+  }
+
+  public changeBasemap(selectedBasemap: string) {
+    if (selectedBasemap === 'streets') {
+      console.log('streets selected');
+    }
+    if (selectedBasemap === 'imagery') {
+      console.log('imagery selected');
+    }
+    if (selectedBasemap === 'grayscale') {
+      console.log('gray selected');
+    }
   }
 }

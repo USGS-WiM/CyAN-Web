@@ -65,6 +65,8 @@ export class GraphOptionsComponent implements OnInit {
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
       legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
       modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      height: 600,
+      width: 750,
     };
 
     Plotly.newPlot(bivariatePlot, data, layout, {

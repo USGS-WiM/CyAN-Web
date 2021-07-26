@@ -17,19 +17,35 @@
       >minimize</mat-icon
     >
   </div>
+
   <div style="margin-left: 10px">
     <mat-radio-group aria-label="Select an option">
-      <mat-radio-button style="margin-bottom: 4px" value="1" checked
+      <mat-radio-button
+        id="streetsBtn"
+        style="margin-bottom: 4px"
+        value="true"
+        (click)="changeBasemap('streets')"
+        checked
         >Streets</mat-radio-button
       ><br />
-      <mat-radio-button style="margin-bottom: 4px" value="2"
+      <mat-radio-button
+        id="imageryBtn"
+        style="margin-bottom: 4px"
+        value="false"
+        (click)="changeBasemap('imagery')"
         >Imagery</mat-radio-button
       ><br />
-      <mat-radio-button value="3">Grayscale</mat-radio-button>
+      <mat-radio-button
+        id="grayscaleBtn"
+        value="false"
+        (click)="changeBasemap('grayscale')"
+      >
+        Grayscale</mat-radio-button
+      >
     </mat-radio-group>
   </div>
 </div>
-<div class="optionsBackground" *ngIf="mapFilters">
+<div class="optionsBackgroundMap" *ngIf="mapFilters">
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"

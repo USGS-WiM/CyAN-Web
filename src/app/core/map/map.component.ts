@@ -8,11 +8,38 @@ import * as L from 'leaflet';
 })
 export class MapComponent implements OnInit {
   private map;
+  public northBounds: number;
+  public southBounds: number;
+  public eastBounds: number;
+  public westBounds: number;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    this.initMap();
+  }
+
   private initMap(): void {
     this.map = L.map('map', {
       center: [39.8282, -98.5795],
       zoom: 5,
       zoomControl: false,
+    });
+    console.log('this.mapp', this.map);
+    this.map.on('moveend', () => {
+      if (this.map) {
+        this.northBounds = this.map.getBounds().getNorth();
+        this.southBounds = this.map.getBounds().getSouth();
+        this.eastBounds = this.map.getBounds().getEast();
+        this.westBounds = this.map.getBounds().getWest();
+        console.log(
+          'bounds',
+          this.northBounds,
+          this.southBounds,
+          this.eastBounds,
+          this.westBounds
+        );
+      }
     });
     const tiles = L.tileLayer(
       'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -23,12 +50,6 @@ export class MapComponent implements OnInit {
           '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }
     );
-
     tiles.addTo(this.map);
-  }
-  constructor() {}
-
-  ngOnInit(): void {
-    this.initMap();
   }
 }
