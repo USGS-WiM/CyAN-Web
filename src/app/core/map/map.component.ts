@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
   selector: 'app-map',
@@ -13,7 +14,7 @@ export class MapComponent implements OnInit {
   public eastBounds: number;
   public westBounds: number;
 
-  constructor() {}
+  constructor(private componentDisplayService: ComponentDisplayService) {}
 
   ngOnInit(): void {
     this.initMap();
@@ -32,13 +33,11 @@ export class MapComponent implements OnInit {
         this.southBounds = this.map.getBounds().getSouth();
         this.eastBounds = this.map.getBounds().getEast();
         this.westBounds = this.map.getBounds().getWest();
-        console.log(
-          'bounds',
-          this.northBounds,
-          this.southBounds,
-          this.eastBounds,
-          this.westBounds
-        );
+
+        this.componentDisplayService.getNorthBounds(this.northBounds);
+        //  this.componentDisplayService.getSouthBounds(this.southBounds);
+        // this.componentDisplayService.getEastBounds(this.eastBounds);
+        // this.componentDisplayService.getWestBounds(this.westBounds);
       }
     });
     const tiles = L.tileLayer(

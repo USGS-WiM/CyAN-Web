@@ -113,7 +113,9 @@
         </mat-form-field>
       </div>
     </form>
-    <mat-checkbox [disableRipple]="true">Use map bounds </mat-checkbox>
+    <mat-checkbox [disableRipple]="true" (click)="populateMapBounds()"
+      >Use map bounds
+    </mat-checkbox>
   </div>
   <button class="mapFilterBtn">Filter</button>
 </div>

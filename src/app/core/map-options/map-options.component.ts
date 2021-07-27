@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
   selector: 'app-map-options',
@@ -11,6 +12,14 @@ export class MapOptionsComponent implements OnInit {
   public basemapForm: FormGroup;
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
+
+  //for populating map bounds
+  public northBounds: number;
+  public southBounds: number;
+  public eastBounds: number;
+  public westBounds: number;
+
+  //Create year slider
   minValue: number = 1975;
   maxValue: number = 2021;
   timeOptions: Options = {
@@ -40,13 +49,18 @@ export class MapOptionsComponent implements OnInit {
     'Delaware',
   ];
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private componentDisplayService: ComponentDisplayService
+  ) {
     this.basemapForm = formBuilder.group({
       baseControl: null,
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.populateMapBounds;
+  }
 
   public displayMapFilters(display: Boolean) {
     this.mapFilters = display;
@@ -66,5 +80,31 @@ export class MapOptionsComponent implements OnInit {
     if (selectedBasemap === 'grayscale') {
       console.log('gray selected');
     }
+  }
+
+  public populateMapBounds() {
+    this.componentDisplayService.northBoundsSubject.subscribe((bounds) => {
+      if (bounds) {
+        this.northBounds = bounds;
+        console.log('this.northBounds', this.northBounds);
+      }
+    });
+    /*
+    this.componentDisplayService.southBoundsSubject.subscribe((bounds) => {
+      if (bounds) {
+        this.southBounds = bounds;
+        console.log('this.southBounds', this.southBounds);
+      }
+    });
+    this.componentDisplayService.eastBoundsSubject.subscribe((bounds) => {
+      if (bounds) {
+        this.eastBounds = bounds;
+      }
+    });
+    this.componentDisplayService.westBoundsSubject.subscribe((bounds) => {
+      if (bounds) {
+        this.westBounds = bounds;
+      }
+    }); */
   }
 }
