@@ -83,7 +83,7 @@
       </mat-select>
     </mat-form-field>
     Bounding Box
-    <form class="boundingBoxForm">
+    <form class="boundingBoxForm" [formGroup]="mapForm">
       <div class="flex-container">
         <mat-form-field
           class="boundingBoxFullWidth"
@@ -91,11 +91,11 @@
           style="margin-right: 10px"
         >
           <mat-label>North</mat-label>
-          <input matInput />
+          <input matInput #northControl formControlName="northControl" />
         </mat-form-field>
         <mat-form-field class="boundingBoxFullWidth" appearance="fill">
           <mat-label>South</mat-label>
-          <input matInput />
+          <input matInput formControlName="southControl" />
         </mat-form-field>
       </div>
       <div class="flex-container">
@@ -105,15 +105,19 @@
           style="margin-right: 10px"
         >
           <mat-label>East</mat-label>
-          <input matInput />
+          <input matInput formControlName="eastControl" />
         </mat-form-field>
         <mat-form-field class="boundingBoxFullWidth" appearance="fill">
           <mat-label>West</mat-label>
-          <input matInput />
+          <input matInput formControlName="westControl" />
         </mat-form-field>
       </div>
     </form>
-    <mat-checkbox [disableRipple]="true" (click)="populateMapBounds()"
+
+    <mat-checkbox
+      [disableRipple]="true"
+      (change)="populateMapBounds($event)"
+      [checked]="mapBoundsChecked"
       >Use map bounds
     </mat-checkbox>
   </div>

@@ -26,18 +26,11 @@ export class MapComponent implements OnInit {
       zoom: 5,
       zoomControl: false,
     });
-    console.log('this.mapp', this.map);
+    this.getMapBoundingBox();
     this.map.on('moveend', () => {
       if (this.map) {
-        this.northBounds = this.map.getBounds().getNorth();
-        this.southBounds = this.map.getBounds().getSouth();
-        this.eastBounds = this.map.getBounds().getEast();
-        this.westBounds = this.map.getBounds().getWest();
-
-        this.componentDisplayService.getNorthBounds(this.northBounds);
-        //  this.componentDisplayService.getSouthBounds(this.southBounds);
-        // this.componentDisplayService.getEastBounds(this.eastBounds);
-        // this.componentDisplayService.getWestBounds(this.westBounds);
+        console.log('moved');
+        this.getMapBoundingBox();
       }
     });
     const tiles = L.tileLayer(
@@ -50,5 +43,17 @@ export class MapComponent implements OnInit {
       }
     );
     tiles.addTo(this.map);
+  }
+  private getMapBoundingBox() {
+    this.northBounds = this.map.getBounds().getNorth();
+    this.southBounds = this.map.getBounds().getSouth();
+    this.eastBounds = this.map.getBounds().getEast();
+    this.westBounds = this.map.getBounds().getWest();
+
+    this.componentDisplayService.getNorthBounds(this.northBounds);
+    this.componentDisplayService.getSouthBounds(this.southBounds);
+    this.componentDisplayService.getEastBounds(this.eastBounds);
+    this.componentDisplayService.getWestBounds(this.westBounds);
+    console.log('coords updated');
   }
 }

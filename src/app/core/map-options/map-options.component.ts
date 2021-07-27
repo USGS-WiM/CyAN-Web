@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Options, LabelType } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-map-options',
@@ -9,17 +10,14 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
-  public basemapForm: FormGroup;
+  public mapForm: FormGroup;
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
-
-  //for populating map bounds
   public northBounds: number;
   public southBounds: number;
   public eastBounds: number;
   public westBounds: number;
-
-  //Create year slider
+  public mapBoundsChecked: Boolean = false;
   minValue: number = 1975;
   maxValue: number = 2021;
   timeOptions: Options = {
@@ -53,13 +51,19 @@ export class MapOptionsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService
   ) {
-    this.basemapForm = formBuilder.group({
+    /* formBuilder.group({
       baseControl: null,
-    });
+      northControl: Number,
+    }); */
   }
 
   ngOnInit(): void {
-    this.populateMapBounds;
+    this.mapForm = new FormGroup({
+      northControl: new FormControl(),
+      southControl: new FormControl(),
+      eastControl: new FormControl(),
+      westControl: new FormControl(),
+    });
   }
 
   public displayMapFilters(display: Boolean) {
@@ -82,29 +86,42 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
-  public populateMapBounds() {
-    this.componentDisplayService.northBoundsSubject.subscribe((bounds) => {
-      if (bounds) {
-        this.northBounds = bounds;
-        console.log('this.northBounds', this.northBounds);
-      }
-    });
-    /*
-    this.componentDisplayService.southBoundsSubject.subscribe((bounds) => {
-      if (bounds) {
-        this.southBounds = bounds;
-        console.log('this.southBounds', this.southBounds);
-      }
-    });
-    this.componentDisplayService.eastBoundsSubject.subscribe((bounds) => {
-      if (bounds) {
-        this.eastBounds = bounds;
-      }
-    });
-    this.componentDisplayService.westBoundsSubject.subscribe((bounds) => {
-      if (bounds) {
-        this.westBounds = bounds;
-      }
-    }); */
+  public populateMapBounds(boundsChecked: MatCheckboxChange) {
+    if (boundsChecked.checked) {
+      console.log('made it here');
+      this.componentDisplayService.northBoundsSubject.subscribe((lat) => {
+        if (lat && boundsChecked.checked) {
+          this.northBounds = lat;
+          console.log('updating north');
+        }
+      });
+      this.componentDisplayService.southBoundsSubject.subscribe((lat) => {
+        if (lat) {
+          this.southBounds = lat;
+        }
+      });
+      this.componentDisplayService.eastBoundsSubject.subscribe((lng) => {
+        if (lng) {
+          this.eastBounds = lng;
+        }
+      });
+      this.componentDisplayService.westBoundsSubject.subscribe((lng) => {
+        if (lng) {
+          this.westBounds = lng;
+        }
+      });
+
+      this.mapForm.get('northControl').setValue(this.northBounds);
+      this.mapForm.get('southControl').setValue(this.southBounds);
+      this.mapForm.get('eastControl').setValue(this.eastBounds);
+      this.mapForm.get('westControl').setValue(this.westBounds);
+    }
+    if (!boundsChecked.checked) {
+      let testVal: number;
+      this.mapForm.get('northControl').setValue(testVal);
+      this.mapForm.get('southControl').setValue('');
+      this.mapForm.get('eastControl').setValue('');
+      this.mapForm.get('westControl').setValue('');
+    }
   }
 }

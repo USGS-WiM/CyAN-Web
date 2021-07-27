@@ -33,7 +33,7 @@ export class ComponentDisplayService {
   }
 
   //get bounding box: south
-  /* public southBoundsSubject = new BehaviorSubject<number>(undefined);
+  public southBoundsSubject = new BehaviorSubject<number>(undefined);
   southBounds$ = this.southBoundsSubject.asObservable();
 
   public getSouthBounds(south: number) {
@@ -54,5 +54,5 @@ export class ComponentDisplayService {
 
   public getWestBounds(west: number) {
     this.westBoundsSubject.next(west);
-  } */
+  }
 }
