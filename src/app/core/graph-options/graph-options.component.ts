@@ -25,7 +25,8 @@ export class GraphOptionsComponent implements OnInit {
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
-    barDimension: 240,
+    barDimension: 230,
+    animate: false,
   };
 
   constructor() {}

@@ -46,7 +46,8 @@ export class MapOptionsComponent implements OnInit {
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
-    barDimension: 240,
+    animate: false,
+    barDimension: 230,
   };
 
   Parameters = new FormControl();
