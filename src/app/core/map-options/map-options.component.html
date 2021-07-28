@@ -1,6 +1,6 @@
 <div
   class="optionsBackgroundMini"
-  *ngIf="!mapLayerOptions"
+  [hidden]="mapLayerOptions"
   (click)="displayMapLayerOptions(true)"
 >
   <div style="text-align: right; margin-right: 10px">
@@ -8,7 +8,7 @@
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
-<div class="mapLayerOptionsBackground" *ngIf="mapLayerOptions">
+<div class="mapLayerOptionsBackground" [hidden]="!mapLayerOptions">
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"
@@ -52,7 +52,7 @@
     </label>
   </div>
 </div>
-<div class="optionsBackgroundMap" *ngIf="mapFilters">
+<div class="optionsBackgroundMap" [hidden]="!mapFilters">
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"
@@ -131,7 +131,7 @@
   <button class="mapFilterBtn">Filter</button>
 </div>
 <div
-  *ngIf="!mapFilters"
+  [hidden]="mapFilters"
   class="optionsBackgroundMini"
   (click)="displayMapFilters(true)"
 >

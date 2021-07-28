@@ -88,28 +88,24 @@
     </div>
   </div>
 
-  <div class="infoBtn" *ngIf="showHomeLayout === true" (click)="clickInfo()">
+  <div class="infoBtn" [hidden]="!showHomeLayout" (click)="clickInfo()">
     <p style="font-size: 30px">
       <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
     </p>
   </div>
-  <div *ngIf="showInfo === true">
+  <div [hidden]="!showInfo">
     <app-about></app-about>
   </div>
   <div class="flex-container" style="width: 200px">
     <div class="flex-child">
-      <div class="mapBtn" *ngIf="showHomeLayout === true" (click)="clickMap()">
+      <div class="mapBtn" [hidden]="!showHomeLayout" (click)="clickMap()">
         <br />
         <p style="text-align: center">Map</p>
         <mat-icon style="font-size: 80px; margin-left: -55px"> map</mat-icon>
       </div>
     </div>
     <div class="flex-child">
-      <div
-        class="graphBtn"
-        *ngIf="showHomeLayout === true"
-        (click)="clickGraph()"
-      >
+      <div class="graphBtn" [hidden]="!showHomeLayout" (click)="clickGraph()">
         <p style="text-align: center">
           <br />
           Graph
@@ -121,10 +117,10 @@
     </div>
   </div>
 </div>
-<div *ngIf="showMap === true">
+<div [hidden]="!showMap">
   <app-map-options></app-map-options>
 </div>
-<div *ngIf="showGraph === true">
+<div [hidden]="!showGraph">
   <app-graph-options></app-graph-options>
 </div>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
