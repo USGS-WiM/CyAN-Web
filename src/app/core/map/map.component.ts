@@ -23,6 +23,11 @@ export class MapComponent implements OnInit {
         base.addTo(this.map);
       }
     });
+    this.componentDisplayService.removeBasemapSubject.subscribe((base) => {
+      if (base) {
+        base.removeFrom(this.map);
+      }
+    });
   }
 
   private initMap(): void {
@@ -38,6 +43,7 @@ export class MapComponent implements OnInit {
         this.componentDisplayService.basemapSubject.subscribe((base) => {
           if (base) {
             base.addTo(this.map);
+            console.log('base', base);
           }
         });
       }

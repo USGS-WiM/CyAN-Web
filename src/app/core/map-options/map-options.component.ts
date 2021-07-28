@@ -158,12 +158,18 @@ export class MapOptionsComponent implements OnInit {
     ) as HTMLInputElement;
     if (streetRadioBtn.checked) {
       this.componentDisplayService.getBasemap(this.osm);
+      this.componentDisplayService.removeBasemap(this.imagery);
+      this.componentDisplayService.removeBasemap(this.grayscale);
     }
     if (imageryRadioBtn.checked) {
       this.componentDisplayService.getBasemap(this.imagery);
+      this.componentDisplayService.removeBasemap(this.osm);
+      this.componentDisplayService.removeBasemap(this.grayscale);
     }
     if (grayscaleRadioBtn.checked) {
       this.componentDisplayService.getBasemap(this.grayscale);
+      this.componentDisplayService.removeBasemap(this.imagery);
+      this.componentDisplayService.removeBasemap(this.osm);
     }
   }
 }

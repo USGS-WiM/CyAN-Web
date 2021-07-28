@@ -57,10 +57,19 @@ export class ComponentDisplayService {
   }
 
   //Basemap Display
+  //Add basemap
   public basemapSubject = new BehaviorSubject<any>(undefined);
-  osm$ = this.basemapSubject.asObservable();
+  basemap$ = this.basemapSubject.asObservable();
 
   public getBasemap(base) {
     this.basemapSubject.next(base);
+  }
+
+  //Remove basemap
+  public removeBasemapSubject = new BehaviorSubject<any>(undefined);
+  removeBasemap$ = this.removeBasemapSubject.asObservable();
+
+  public removeBasemap(base) {
+    this.removeBasemapSubject.next(base);
   }
 }
