@@ -25,7 +25,8 @@ export class GraphOptionsComponent implements OnInit {
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
-    barDimension: 240,
+    barDimension: 230,
+    animate: false,
   };
 
   constructor() {}
@@ -61,11 +62,17 @@ export class GraphOptionsComponent implements OnInit {
       yaxis: {
         range: [0, 8],
       },
-      paper_bgcolor: 'rgb(255, 255, 255, 0)',
-      plot_bgcolor: 'rgb(255, 255, 255, 0)',
+      paper_bgcolor: 'rgba(255, 255, 255, 0)',
+      plot_bgcolor: 'rgba(255, 255, 255, 0)',
+      legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      height: 600,
+      width: 750,
     };
 
-    Plotly.newPlot(bivariatePlot, data, layout);
+    Plotly.newPlot(bivariatePlot, data, layout, {
+      displaylogo: false,
+    });
   }
   public addTrace() {
     this.secondTrace = true;

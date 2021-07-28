@@ -75,6 +75,11 @@
         >y
       </mat-checkbox>
     </div>
+    <div style="margin-left: 10px; margin-top: 10px">
+      <mat-checkbox class="example-margin" [disableRipple]="true"
+        >Limit to map extent
+      </mat-checkbox>
+    </div>
 
     <button
       *ngIf="!secondTrace"
@@ -98,3 +103,4 @@
     <div id="graph"></div>
   </div>
 </div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />

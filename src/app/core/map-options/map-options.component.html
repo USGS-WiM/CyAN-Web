@@ -1,22 +1,63 @@
-<div class="optionsBackgroundMini" *ngIf="!mapLayerOptions">
+<div
+  class="optionsBackgroundMini"
+  [hidden]="mapLayerOptions"
+  (click)="displayMapLayerOptions(true)"
+>
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="maximize" (click)="displayMapLayerOptions(true)"
-      >maximize</mat-icon
-    >
+    <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
-<div class="mapLayerOptionsBackground" *ngIf="mapLayerOptions">
+<div class="mapLayerOptionsBackground" [hidden]="!mapLayerOptions">
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="minimize" (click)="displayMapLayerOptions(false)"
+    <mat-icon
+      matTooltip="minimize"
+      style="cursor: pointer"
+      (click)="displayMapLayerOptions(false)"
       >minimize</mat-icon
     >
   </div>
-</div>
 
-<div class="optionsBackground" *ngIf="mapFilters">
+  <div style="margin-left: 10px">
+    <label class="radioContainer" style="font-size: 17px"
+      >Streets
+      <input
+        id="streetRadio"
+        (change)="newBasemap()"
+        type="radio"
+        checked="checked"
+        name="radio"
+      />
+      <span class="radioCheckmark"></span>
+    </label>
+    <label class="radioContainer" style="font-size: 17px"
+      >Imagery
+      <input
+        type="radio"
+        name="radio"
+        id="imageryRadio"
+        (change)="newBasemap()"
+      />
+      <span class="radioCheckmark"></span>
+    </label>
+    <label class="radioContainer" style="font-size: 17px"
+      >Grayscale
+      <input
+        type="radio"
+        name="radio"
+        id="grayscaleRadio"
+        (change)="newBasemap()"
+      />
+      <span class="radioCheckmark"></span>
+    </label>
+  </div>
+</div>
+<div class="optionsBackgroundMap" [hidden]="!mapFilters">
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="minimize" (click)="displayMapFilters(false)"
+    <mat-icon
+      matTooltip="minimize"
+      style="cursor: pointer"
+      (click)="displayMapFilters(false)"
       >minimize</mat-icon
     >
   </div>
@@ -49,7 +90,7 @@
       </mat-select>
     </mat-form-field>
     Bounding Box
-    <form class="boundingBoxForm">
+    <form class="boundingBoxForm" [formGroup]="mapForm">
       <div class="flex-container">
         <mat-form-field
           class="boundingBoxFullWidth"
@@ -57,11 +98,11 @@
           style="margin-right: 10px"
         >
           <mat-label>North</mat-label>
-          <input matInput />
+          <input matInput #northControl formControlName="northControl" />
         </mat-form-field>
         <mat-form-field class="boundingBoxFullWidth" appearance="fill">
           <mat-label>South</mat-label>
-          <input matInput />
+          <input matInput formControlName="southControl" />
         </mat-form-field>
       </div>
       <div class="flex-container">
@@ -71,22 +112,31 @@
           style="margin-right: 10px"
         >
           <mat-label>East</mat-label>
-          <input matInput />
+          <input matInput formControlName="eastControl" />
         </mat-form-field>
         <mat-form-field class="boundingBoxFullWidth" appearance="fill">
           <mat-label>West</mat-label>
-          <input matInput />
+          <input matInput formControlName="westControl" />
         </mat-form-field>
       </div>
     </form>
+
+    <mat-checkbox
+      [disableRipple]="true"
+      (change)="populateMapBounds($event)"
+      [checked]="mapBoundsChecked"
+      >Use map bounds
+    </mat-checkbox>
   </div>
   <button class="mapFilterBtn">Filter</button>
 </div>
-<div *ngIf="!mapFilters" class="optionsBackgroundMini">
+<div
+  [hidden]="mapFilters"
+  class="optionsBackgroundMini"
+  (click)="displayMapFilters(true)"
+>
   <div style="text-align: right; margin-right: 10px">
-    <mat-icon matTooltip="maximize" (click)="displayMapFilters(true)"
-      >maximize</mat-icon
-    >
+    <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Filter Points</div>
 </div>

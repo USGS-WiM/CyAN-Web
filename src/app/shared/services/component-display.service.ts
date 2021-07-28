@@ -23,4 +23,53 @@ export class ComponentDisplayService {
     console.log('display', display);
     this.homeLayoutSubject.next(display);
   }
+
+  //get bounding box: north
+  public northBoundsSubject = new BehaviorSubject<number>(undefined);
+  northBounds$ = this.northBoundsSubject.asObservable();
+
+  public getNorthBounds(north: number) {
+    this.northBoundsSubject.next(north);
+  }
+
+  //get bounding box: south
+  public southBoundsSubject = new BehaviorSubject<number>(undefined);
+  southBounds$ = this.southBoundsSubject.asObservable();
+
+  public getSouthBounds(south: number) {
+    this.southBoundsSubject.next(south);
+  }
+
+  //get bounding box: east
+  public eastBoundsSubject = new BehaviorSubject<number>(undefined);
+  eastBounds$ = this.eastBoundsSubject.asObservable();
+
+  public getEastBounds(east: number) {
+    this.eastBoundsSubject.next(east);
+  }
+
+  //get bounding box: west
+  public westBoundsSubject = new BehaviorSubject<number>(undefined);
+  westBounds$ = this.westBoundsSubject.asObservable();
+
+  public getWestBounds(west: number) {
+    this.westBoundsSubject.next(west);
+  }
+
+  //Basemap Display
+  //Add basemap
+  public basemapSubject = new BehaviorSubject<any>(undefined);
+  basemap$ = this.basemapSubject.asObservable();
+
+  public getBasemap(base) {
+    this.basemapSubject.next(base);
+  }
+
+  //Remove basemap
+  public removeBasemapSubject = new BehaviorSubject<any>(undefined);
+  removeBasemap$ = this.removeBasemapSubject.asObservable();
+
+  public removeBasemap(base) {
+    this.removeBasemapSubject.next(base);
+  }
 }

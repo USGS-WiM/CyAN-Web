@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
@@ -45,6 +46,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     ReactiveFormsModule,
     MatCheckboxModule,
     MatInputModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
