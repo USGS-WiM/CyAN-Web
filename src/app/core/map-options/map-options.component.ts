@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Options, LabelType } from '@angular-slider/ngx-slider';
+import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-map-options',
@@ -18,6 +19,28 @@ export class MapOptionsComponent implements OnInit {
   public eastBounds: number;
   public westBounds: number;
   public mapBoundsChecked: Boolean = false;
+  public osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      maxZoom: 18,
+      minZoom: 3,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }
+  );
+  public grayscale = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    }
+  );
+  public imagery = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution:
+        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    }
+  );
   minValue: number = 1975;
   maxValue: number = 2021;
   timeOptions: Options = {
@@ -88,11 +111,9 @@ export class MapOptionsComponent implements OnInit {
 
   public populateMapBounds(boundsChecked: MatCheckboxChange) {
     if (boundsChecked.checked) {
-      console.log('made it here');
       this.componentDisplayService.northBoundsSubject.subscribe((lat) => {
         if (lat && boundsChecked.checked) {
           this.northBounds = lat;
-          console.log('updating north');
         }
       });
       this.componentDisplayService.southBoundsSubject.subscribe((lat) => {
@@ -122,6 +143,27 @@ export class MapOptionsComponent implements OnInit {
       this.mapForm.get('southControl').setValue('');
       this.mapForm.get('eastControl').setValue('');
       this.mapForm.get('westControl').setValue('');
+    }
+  }
+
+  public newBasemap() {
+    let streetRadioBtn = document.getElementById(
+      'streetRadio'
+    ) as HTMLInputElement;
+    let imageryRadioBtn = document.getElementById(
+      'imageryRadio'
+    ) as HTMLInputElement;
+    let grayscaleRadioBtn = document.getElementById(
+      'grayscaleRadio'
+    ) as HTMLInputElement;
+    if (streetRadioBtn.checked) {
+      this.componentDisplayService.getBasemap(this.osm);
+    }
+    if (imageryRadioBtn.checked) {
+      this.componentDisplayService.getBasemap(this.imagery);
+    }
+    if (grayscaleRadioBtn.checked) {
+      this.componentDisplayService.getBasemap(this.grayscale);
     }
   }
 }

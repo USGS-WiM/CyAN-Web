@@ -18,6 +18,11 @@ export class MapComponent implements OnInit {
 
   ngOnInit(): void {
     this.initMap();
+    this.componentDisplayService.basemapSubject.subscribe((base) => {
+      if (base) {
+        base.addTo(this.map);
+      }
+    });
   }
 
   private initMap(): void {
@@ -29,8 +34,12 @@ export class MapComponent implements OnInit {
     this.getMapBoundingBox();
     this.map.on('moveend', () => {
       if (this.map) {
-        console.log('moved');
         this.getMapBoundingBox();
+        this.componentDisplayService.basemapSubject.subscribe((base) => {
+          if (base) {
+            base.addTo(this.map);
+          }
+        });
       }
     });
     const tiles = L.tileLayer(
@@ -54,6 +63,5 @@ export class MapComponent implements OnInit {
     this.componentDisplayService.getSouthBounds(this.southBounds);
     this.componentDisplayService.getEastBounds(this.eastBounds);
     this.componentDisplayService.getWestBounds(this.westBounds);
-    console.log('coords updated');
   }
 }

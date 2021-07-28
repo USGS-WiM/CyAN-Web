@@ -19,30 +19,37 @@
   </div>
 
   <div style="margin-left: 10px">
-    <mat-radio-group aria-label="Select an option">
-      <mat-radio-button
-        id="streetsBtn"
-        style="margin-bottom: 4px"
-        value="true"
-        (click)="changeBasemap('streets')"
-        checked
-        >Streets</mat-radio-button
-      ><br />
-      <mat-radio-button
-        id="imageryBtn"
-        style="margin-bottom: 4px"
-        value="false"
-        (click)="changeBasemap('imagery')"
-        >Imagery</mat-radio-button
-      ><br />
-      <mat-radio-button
-        id="grayscaleBtn"
-        value="false"
-        (click)="changeBasemap('grayscale')"
-      >
-        Grayscale</mat-radio-button
-      >
-    </mat-radio-group>
+    <label class="radioContainer" style="font-size: 17px"
+      >Streets
+      <input
+        id="streetRadio"
+        (change)="newBasemap()"
+        type="radio"
+        checked="checked"
+        name="radio"
+      />
+      <span class="radioCheckmark"></span>
+    </label>
+    <label class="radioContainer" style="font-size: 17px"
+      >Imagery
+      <input
+        type="radio"
+        name="radio"
+        id="imageryRadio"
+        (change)="newBasemap()"
+      />
+      <span class="radioCheckmark"></span>
+    </label>
+    <label class="radioContainer" style="font-size: 17px"
+      >Grayscale
+      <input
+        type="radio"
+        name="radio"
+        id="grayscaleRadio"
+        (change)="newBasemap()"
+      />
+      <span class="radioCheckmark"></span>
+    </label>
   </div>
 </div>
 <div class="optionsBackgroundMap" *ngIf="mapFilters">
