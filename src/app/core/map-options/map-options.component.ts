@@ -59,6 +59,15 @@ export class MapOptionsComponent implements OnInit {
     'Chloride',
   ];
 
+  Methods = new FormControl();
+  methodsList: string[] = [
+    'Method 1',
+    'Method 2',
+    'Method 3',
+    'Method 4',
+    'Method 5',
+  ];
+
   States = new FormControl();
   stateList: string[] = [
     'Alabama',
@@ -69,6 +78,21 @@ export class MapOptionsComponent implements OnInit {
     'Colorado',
     'Connecticut',
     'Delaware',
+    'District of Columbia',
+    'Federated States of Micronesia',
+    'Florida',
+    'Georgia',
+    'Guam',
+    'Hawaii',
+    'Idaho',
+    'Illinois',
+    'Indiana',
+    'Iowa',
+    'Kansas',
+    'Kentucky',
+    'Louisiana',
+    'Maine',
+    'Marshall Islands',
   ];
 
   constructor(
@@ -87,6 +111,50 @@ export class MapOptionsComponent implements OnInit {
       southControl: new FormControl(),
       eastControl: new FormControl(),
       westControl: new FormControl(),
+    });
+
+    this.resizeDivs();
+    window.addEventListener('resize', function () {
+      let windowHeight = window.innerHeight;
+      console.log('windowHeight', windowHeight);
+      let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
+      let mapLayersRadioLabels = document.getElementById('mapLayersID');
+      let mapLayersRadioBtns = document.getElementById('mapLayerRadioBtns');
+      let radioCheckmarkOuter = document.getElementById('radioCheckmarkOuter');
+      if (windowHeight < 788) {
+        mapPointFilterDiv.classList.remove('optionsBackgroundMapFull');
+        mapPointFilterDiv.classList.add('optionsBackgroundMapResize');
+      }
+
+      if (windowHeight > 788) {
+        mapPointFilterDiv.classList.add('optionsBackgroundMapFull');
+        mapPointFilterDiv.classList.remove('optionsBackgroundMapResize');
+      }
+      if (windowHeight < 530) {
+        console.log('tiny height');
+
+        mapLayersRadioLabels.classList.remove('mapLayers');
+        mapLayersRadioLabels.classList.add('mapLayersResize');
+
+        mapLayersRadioBtns.classList.remove('radioContainer');
+        mapLayersRadioBtns.classList.add('radioContainerResize');
+
+        radioCheckmarkOuter.classList.remove('radioCheckmark');
+        radioCheckmarkOuter.classList.add('radioCheckmarkResize');
+        console.log('mapLayersRadio.classList', mapLayersRadioLabels.classList);
+      }
+      if (windowHeight > 530) {
+        mapLayersRadioLabels.classList.add('mapLayers');
+        mapLayersRadioLabels.classList.remove('mapLayersResize');
+
+        mapLayersRadioBtns.classList.add('radioContainer');
+        mapLayersRadioBtns.classList.remove('radioContainerResize');
+
+        radioCheckmarkOuter.classList.add('radioCheckmark');
+        radioCheckmarkOuter.classList.remove('radioCheckmarkResize');
+
+        console.log('mapLayersRadio.classList', mapLayersRadioLabels.classList);
+      }
     });
   }
 
@@ -107,6 +175,24 @@ export class MapOptionsComponent implements OnInit {
     }
     if (selectedBasemap === 'grayscale') {
       console.log('gray selected');
+    }
+  }
+
+  public resizeDivs() {
+    let windowHeight = window.innerHeight;
+    console.log('windowHeight', windowHeight);
+    let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
+    if (windowHeight < 788) {
+      mapPointFilterDiv.classList.remove('optionsBackgroundMapFull');
+      mapPointFilterDiv.classList.add('optionsBackgroundMapResize');
+    }
+
+    if (windowHeight > 788) {
+      mapPointFilterDiv.classList.add('optionsBackgroundMapFull');
+      mapPointFilterDiv.classList.remove('optionsBackgroundMapResize');
+    }
+    if (windowHeight < 150) {
+      console.log('super small');
     }
   }
 

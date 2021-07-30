@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as L from 'leaflet';
+import * as La from 'leaflet-lasso';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
@@ -28,6 +29,21 @@ export class MapComponent implements OnInit {
         base.removeFrom(this.map);
       }
     });
+
+    interface LassoHandlerOptions {
+      polygon?: L.PolylineOptions;
+      intersect?: boolean;
+    }
+    const lasso = new La.LassoControl(this.map);
+    type LassoControlOptions = LassoHandlerOptions & L.ControlOptions;
+    L.control.lasso().addTo(this.map);
+    interface LassoHandlerFinishedEventData {
+      latLngs: L.LatLng[];
+      layers: L.Layer[];
+    }
+    this.map.on('lasso.finished', (event: LassoHandlerFinishedEventData) => {
+      console.log(event.layers);
+    });
   }
 
   private initMap(): void {
@@ -43,7 +59,6 @@ export class MapComponent implements OnInit {
         this.componentDisplayService.basemapSubject.subscribe((base) => {
           if (base) {
             base.addTo(this.map);
-            console.log('base', base);
           }
         });
       }
@@ -69,5 +84,23 @@ export class MapComponent implements OnInit {
     this.componentDisplayService.getSouthBounds(this.southBounds);
     this.componentDisplayService.getEastBounds(this.eastBounds);
     this.componentDisplayService.getWestBounds(this.westBounds);
+  }
+
+  public getResolution() {
+    let w =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      document.body.clientWidth;
+
+    let h =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
+
+    let x = document.getElementById('map');
+    console.log(
+      (x.innerHTML =
+        'Browser inner window width: ' + w + ', height: ' + h + '.')
+    );
   }
 }

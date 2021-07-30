@@ -21,6 +21,7 @@ import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatCheckboxModule,
     MatInputModule,
     MatRadioModule,
+    ScrollingModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

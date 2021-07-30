@@ -17,9 +17,8 @@
       >minimize</mat-icon
     >
   </div>
-
-  <div style="margin-left: 10px">
-    <label class="radioContainer" style="font-size: 17px"
+  <div class="mapLayers" id="mapLayersID">
+    <label class="radioContainerResize" id="mapLayerRadioBtns"
       >Streets
       <input
         id="streetRadio"
@@ -28,9 +27,9 @@
         checked="checked"
         name="radio"
       />
-      <span class="radioCheckmark"></span>
+      <span class="radioCheckmarkResize" id="radioCheckmarkOuter"></span>
     </label>
-    <label class="radioContainer" style="font-size: 17px"
+    <label class="radioContainer"
       >Imagery
       <input
         type="radio"
@@ -40,7 +39,7 @@
       />
       <span class="radioCheckmark"></span>
     </label>
-    <label class="radioContainer" style="font-size: 17px"
+    <label class="radioContainer"
       >Grayscale
       <input
         type="radio"
@@ -52,7 +51,11 @@
     </label>
   </div>
 </div>
-<div class="optionsBackgroundMap" [hidden]="!mapFilters">
+<div
+  id="mapOptionsContainer"
+  class="optionsBackgroundMapFull"
+  [hidden]="!mapFilters"
+>
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"
@@ -70,6 +73,14 @@
           [value]="parameter"
           >{{ parameter }}</mat-option
         >
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Methods</mat-label>
+      <mat-select [formControl]="Parameters" multiple>
+        <mat-option *ngFor="let method of methodsList" [value]="method">{{
+          method
+        }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>

@@ -92,13 +92,23 @@
   position: relative;
 }
 
-.optionsBackgroundMap {
+.optionsBackgroundMapFull {
   background-color: rgba(255, 255, 255, 0.8);
   width: 260px !important;
-  height: 500px;
+  height: 550px;
   margin-top: 20px;
   margin-left: 100px;
   position: relative;
+}
+
+.optionsBackgroundMapResize {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 260px !important;
+  height: 55vh;
+  margin-top: 20px;
+  margin-left: 100px;
+  position: relative;
+  overflow-y: scroll;
 }
 
 .optionsBackgroundMini {
@@ -128,6 +138,7 @@
   color: white;
   margin-left: 10px;
   margin-top: 10px;
+  margin-bottom: 5px;
   text-align: center;
   vertical-align: middle;
   line-height: 35px;
@@ -143,6 +154,7 @@
   color: white;
   margin-left: 10px;
   margin-top: 10px;
+  margin-bottom: 5px;
   text-align: center;
   vertical-align: middle;
   line-height: 35px;
@@ -158,6 +170,7 @@
   color: white;
   margin-left: 10px;
   margin-top: 10px;
+  margin-bottom: 5px;
   text-align: center;
   vertical-align: middle;
   line-height: 3px;
@@ -181,6 +194,7 @@
   color: white;
   margin-left: 10px;
   margin-top: 10px;
+  margin-bottom: 5px;
   text-align: center;
   vertical-align: middle;
   line-height: 35px;
@@ -203,6 +217,19 @@
   margin-top: 20px;
   margin-left: 100px;
   position: relative;
+}
+
+.mapLayers {
+  margin-left: 10px;
+}
+.mapLayers label {
+  font-size: 17px;
+}
+.mapLayersResize {
+  margin-left: 10px;
+}
+.mapLayersResize label {
+  font-size: 14px;
 }
 
 ::ng-deep {
@@ -318,6 +345,71 @@
   left: 9px;
   width: 8px;
   height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+/* Custom Radio for small window */
+
+.radioContainerResize {
+  display: block;
+  position: relative;
+  padding-left: 17px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.radioContainerResize input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Create a custom radio button */
+.radioCheckmarkResize {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 12px;
+  width: 12px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radioContainerResize:hover input ~ .radioCheckmarkResize {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radioContainerResize input:checked ~ .radioCheckmarkResize {
+  background-color: #76838d;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.radioCheckmarkResize:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radioContainerResize input:checked ~ .radioCheckmarkResize:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radioContainerResize .radioCheckmarkResize:after {
+  top: 4px;
+  left: 4px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: white;
 }
