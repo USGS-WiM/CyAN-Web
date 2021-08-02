@@ -2,6 +2,7 @@
   class="optionsBackgroundMini marginLeftFullWidth"
   [hidden]="mapLayerOptions"
   (click)="displayMapLayerOptions(true)"
+  id="mapLayersCollapsed"
 >
   <div style="text-align: right; margin-right: 10px">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
@@ -152,6 +153,7 @@
   [hidden]="mapFilters"
   class="optionsBackgroundMini marginLeftFullWidth"
   (click)="displayMapFilters(true)"
+  id="filterPointsCollapsed"
 >
   <div style="text-align: right; margin-right: 10px">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
