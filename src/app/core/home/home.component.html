@@ -1,7 +1,7 @@
 <div>
   <div class="flex-container" style="width: 280px">
     <div class="flex-child" *ngIf="this.windowWidth">
-      <div class="homeBtn" (click)="changeLayout(true)">
+      <div class="homeBtn marginLeftFullWidth" (click)="changeLayout(true)">
         <p>
           <mat-icon aria-hidden="false" aria-label="Example home icon"
             >home</mat-icon
@@ -13,7 +13,10 @@
 
     <div class="flex-child flex-container" *ngIf="showHomeLayout === false">
       <div *ngIf="!this.windowWidth">
-        <div class="homeBtnResize" (click)="changeLayout(true)">
+        <div
+          class="homeBtnResize marginLeftSmallWidth"
+          (click)="changeLayout(true)"
+        >
           <p>
             <mat-icon
               aria-hidden="false"
@@ -108,7 +111,11 @@
     </div>
   </div>
 
-  <div class="infoBtn" [hidden]="!showHomeLayout" (click)="clickInfo()">
+  <div
+    class="infoBtn marginLeftFullWidth"
+    [hidden]="!showHomeLayout"
+    (click)="clickInfo()"
+  >
     <p style="font-size: 30px">
       <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
     </p>

@@ -47,7 +47,7 @@ export class MapOptionsComponent implements OnInit {
     floor: 1975,
     ceil: 2021,
     animate: false,
-    barDimension: 230,
+    barDimension: 210,
   };
 
   Parameters = new FormControl();
@@ -131,7 +131,6 @@ export class MapOptionsComponent implements OnInit {
       let radioCheckmarkOuter1 = document.getElementById(
         'radioCheckmarkOuter1'
       );
-
       let mapLayersRadioBtns2 = document.getElementById(
         'radioContainerResize2'
       );
@@ -139,13 +138,19 @@ export class MapOptionsComponent implements OnInit {
         'radioCheckmarkOuter2'
       );
       let mapLayersOptions = document.getElementById('mapLayersOptions');
-      if (windowWidth < 700) {
-        mapLayersOptions.classList.remove('mapLayerOptionsBackground');
-        mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeW');
+      if (windowWidth < 800) {
+        mapLayersOptions.classList.remove('marginLeftFullWidth');
+        mapLayersOptions.classList.add('marginLeftSmallWidth');
+
+        mapPointFilterDiv.classList.remove('marginLeftFullWidth');
+        mapPointFilterDiv.classList.add('marginLeftSmallWidth');
       }
-      if (windowWidth > 700) {
-        mapLayersOptions.classList.add('mapLayerOptionsBackground');
-        mapLayersOptions.classList.remove('mapLayerOptionsBackgroundResizeW');
+      if (windowWidth > 800) {
+        mapLayersOptions.classList.add('marginLeftFullWidth');
+        mapLayersOptions.classList.remove('marginLeftSmallWidth');
+
+        mapPointFilterDiv.classList.add('marginLeftFullWidth');
+        mapPointFilterDiv.classList.remove('marginLeftSmallWidth');
       }
       if (windowHeight < 788) {
         mapPointFilterDiv.classList.remove('optionsBackgroundMapFull');
@@ -182,7 +187,7 @@ export class MapOptionsComponent implements OnInit {
         radioCheckmarkOuter2.classList.add('radioCheckmarkResize');
 
         //reduce spacing between map layers and nav buttons and decrease background height
-        mapLayersOptions.classList.remove('mapLayerOptionsBackground ');
+        mapLayersOptions.classList.remove('mapLayerOptionsBackground');
         mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeH');
       }
       if (windowHeight > 530) {
@@ -210,7 +215,7 @@ export class MapOptionsComponent implements OnInit {
         radioCheckmarkOuter2.classList.remove('radioCheckmarkResize');
 
         //increase spacing between map layers and nav buttons and increase background height
-        mapLayersOptions.classList.add('mapLayerOptionsBackground ');
+        mapLayersOptions.classList.add('mapLayerOptionsBackground');
         mapLayersOptions.classList.remove('mapLayerOptionsBackgroundResizeH');
       }
     });

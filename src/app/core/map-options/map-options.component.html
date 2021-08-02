@@ -1,5 +1,5 @@
 <div
-  class="optionsBackgroundMini"
+  class="optionsBackgroundMini marginLeftFullWidth"
   [hidden]="mapLayerOptions"
   (click)="displayMapLayerOptions(true)"
 >
@@ -9,7 +9,7 @@
   <div class="minimizedBackground">Map Layers</div>
 </div>
 <div
-  class="mapLayerOptionsBackground"
+  class="mapLayerOptionsBackground marginLeftFullWidth"
   [hidden]="!mapLayerOptions"
   id="mapLayersOptions"
 >
@@ -57,7 +57,7 @@
 </div>
 <div
   id="mapOptionsContainer"
-  class="optionsBackgroundMapFull"
+  class="optionsBackgroundMapFull marginLeftFullWidth"
   [hidden]="!mapFilters"
 >
   <div style="text-align: right; margin-right: 10px">
@@ -150,7 +150,7 @@
 </div>
 <div
   [hidden]="mapFilters"
-  class="optionsBackgroundMini"
+  class="optionsBackgroundMini marginLeftFullWidth"
   (click)="displayMapFilters(true)"
 >
   <div style="text-align: right; margin-right: 10px">
