@@ -116,44 +116,102 @@ export class MapOptionsComponent implements OnInit {
     this.resizeDivs();
     window.addEventListener('resize', function () {
       let windowHeight = window.innerHeight;
-      console.log('windowHeight', windowHeight);
+      let windowWidth = this.window.innerWidth;
       let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
       let mapLayersRadioLabels = document.getElementById('mapLayersID');
-      let mapLayersRadioBtns = document.getElementById('mapLayerRadioBtns');
-      let radioCheckmarkOuter = document.getElementById('radioCheckmarkOuter');
+      let mapLayersRadioBtns0 = document.getElementById(
+        'radioContainerResize0'
+      );
+      let radioCheckmarkOuter0 = document.getElementById(
+        'radioCheckmarkOuter0'
+      );
+      let mapLayersRadioBtns1 = document.getElementById(
+        'radioContainerResize1'
+      );
+      let radioCheckmarkOuter1 = document.getElementById(
+        'radioCheckmarkOuter1'
+      );
+
+      let mapLayersRadioBtns2 = document.getElementById(
+        'radioContainerResize2'
+      );
+      let radioCheckmarkOuter2 = document.getElementById(
+        'radioCheckmarkOuter2'
+      );
+      let mapLayersOptions = document.getElementById('mapLayersOptions');
+      if (windowWidth < 700) {
+        mapLayersOptions.classList.remove('mapLayerOptionsBackground');
+        mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeW');
+      }
+      if (windowWidth > 700) {
+        mapLayersOptions.classList.add('mapLayerOptionsBackground');
+        mapLayersOptions.classList.remove('mapLayerOptionsBackgroundResizeW');
+      }
       if (windowHeight < 788) {
         mapPointFilterDiv.classList.remove('optionsBackgroundMapFull');
-        mapPointFilterDiv.classList.add('optionsBackgroundMapResize');
+        mapPointFilterDiv.classList.add('optionsBackgroundMapResizeH');
       }
 
       if (windowHeight > 788) {
         mapPointFilterDiv.classList.add('optionsBackgroundMapFull');
-        mapPointFilterDiv.classList.remove('optionsBackgroundMapResize');
+        mapPointFilterDiv.classList.remove('optionsBackgroundMapResizeH');
       }
+      //Edit map layers box when the height shrinks
       if (windowHeight < 530) {
-        console.log('tiny height');
-
+        //reduce font size
         mapLayersRadioLabels.classList.remove('mapLayers');
         mapLayersRadioLabels.classList.add('mapLayersResize');
 
-        mapLayersRadioBtns.classList.remove('radioContainer');
-        mapLayersRadioBtns.classList.add('radioContainerResize');
+        //reduce radio button size
+        mapLayersRadioBtns0.classList.remove('radioContainer');
+        mapLayersRadioBtns0.classList.add('radioContainerResize');
 
-        radioCheckmarkOuter.classList.remove('radioCheckmark');
-        radioCheckmarkOuter.classList.add('radioCheckmarkResize');
-        console.log('mapLayersRadio.classList', mapLayersRadioLabels.classList);
+        radioCheckmarkOuter0.classList.remove('radioCheckmark');
+        radioCheckmarkOuter0.classList.add('radioCheckmarkResize');
+
+        mapLayersRadioBtns1.classList.remove('radioContainer');
+        mapLayersRadioBtns1.classList.add('radioContainerResize');
+
+        radioCheckmarkOuter1.classList.remove('radioCheckmark');
+        radioCheckmarkOuter1.classList.add('radioCheckmarkResize');
+
+        mapLayersRadioBtns2.classList.remove('radioContainer');
+        mapLayersRadioBtns2.classList.add('radioContainerResize');
+
+        radioCheckmarkOuter2.classList.remove('radioCheckmark');
+        radioCheckmarkOuter2.classList.add('radioCheckmarkResize');
+
+        //reduce spacing between map layers and nav buttons and decrease background height
+        mapLayersOptions.classList.remove('mapLayerOptionsBackground ');
+        mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeH');
       }
       if (windowHeight > 530) {
+        //increase font size
         mapLayersRadioLabels.classList.add('mapLayers');
         mapLayersRadioLabels.classList.remove('mapLayersResize');
 
-        mapLayersRadioBtns.classList.add('radioContainer');
-        mapLayersRadioBtns.classList.remove('radioContainerResize');
+        //increase radio button size
+        mapLayersRadioBtns0.classList.add('radioContainer');
+        mapLayersRadioBtns0.classList.remove('radioContainerResize');
 
-        radioCheckmarkOuter.classList.add('radioCheckmark');
-        radioCheckmarkOuter.classList.remove('radioCheckmarkResize');
+        radioCheckmarkOuter0.classList.add('radioCheckmark');
+        radioCheckmarkOuter0.classList.remove('radioCheckmarkResize');
 
-        console.log('mapLayersRadio.classList', mapLayersRadioLabels.classList);
+        mapLayersRadioBtns1.classList.add('radioContainer');
+        mapLayersRadioBtns1.classList.remove('radioContainerResize');
+
+        radioCheckmarkOuter1.classList.add('radioCheckmark');
+        radioCheckmarkOuter1.classList.remove('radioCheckmarkResize');
+
+        mapLayersRadioBtns2.classList.add('radioContainer');
+        mapLayersRadioBtns2.classList.remove('radioContainerResize');
+
+        radioCheckmarkOuter2.classList.add('radioCheckmark');
+        radioCheckmarkOuter2.classList.remove('radioCheckmarkResize');
+
+        //increase spacing between map layers and nav buttons and increase background height
+        mapLayersOptions.classList.add('mapLayerOptionsBackground ');
+        mapLayersOptions.classList.remove('mapLayerOptionsBackgroundResizeH');
       }
     });
   }
@@ -184,12 +242,12 @@ export class MapOptionsComponent implements OnInit {
     let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
     if (windowHeight < 788) {
       mapPointFilterDiv.classList.remove('optionsBackgroundMapFull');
-      mapPointFilterDiv.classList.add('optionsBackgroundMapResize');
+      mapPointFilterDiv.classList.add('optionsBackgroundMapResizeH');
     }
 
     if (windowHeight > 788) {
       mapPointFilterDiv.classList.add('optionsBackgroundMapFull');
-      mapPointFilterDiv.classList.remove('optionsBackgroundMapResize');
+      mapPointFilterDiv.classList.remove('optionsBackgroundMapResizeH');
     }
     if (windowHeight < 150) {
       console.log('super small');

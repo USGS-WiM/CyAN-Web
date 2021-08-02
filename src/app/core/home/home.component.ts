@@ -12,8 +12,10 @@ export class HomeComponent implements OnInit {
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
+  public windowWidth = false;
   ngOnInit(): void {
-    // this.changeLayout(false);
+    window.onload = () => (this.windowWidth = window.innerWidth >= 700);
+    window.onresize = () => (this.windowWidth = window.innerWidth >= 700);
   }
   public changeLayout(homeLayout: Boolean) {
     /*

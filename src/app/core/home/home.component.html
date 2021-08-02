@@ -1,6 +1,6 @@
 <div>
   <div class="flex-container" style="width: 280px">
-    <div class="flex-child">
+    <div class="flex-child" *ngIf="this.windowWidth">
       <div class="homeBtn" (click)="changeLayout(true)">
         <p>
           <mat-icon aria-hidden="false" aria-label="Example home icon"
@@ -10,7 +10,27 @@
         </p>
       </div>
     </div>
+
     <div class="flex-child flex-container" *ngIf="showHomeLayout === false">
+      <div *ngIf="!this.windowWidth">
+        <div class="homeBtnResize" (click)="changeLayout(true)">
+          <p>
+            <mat-icon
+              aria-hidden="false"
+              style="
+                font-size: 40px;
+                text-align: center;
+                line-height: 60px;
+                vertical-align: center;
+                margin-left: 10px;
+                position: relative;
+              "
+              aria-label="Example home icon"
+              >home</mat-icon
+            >
+          </p>
+        </div>
+      </div>
       <div style="color: white">
         <div
           style="

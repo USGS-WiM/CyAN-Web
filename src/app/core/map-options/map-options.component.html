@@ -8,7 +8,11 @@
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
-<div class="mapLayerOptionsBackground" [hidden]="!mapLayerOptions">
+<div
+  class="mapLayerOptionsBackground"
+  [hidden]="!mapLayerOptions"
+  id="mapLayersOptions"
+>
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"
@@ -18,7 +22,7 @@
     >
   </div>
   <div class="mapLayers" id="mapLayersID">
-    <label class="radioContainerResize" id="mapLayerRadioBtns"
+    <label class="radioContainer" id="radioContainerResize0"
       >Streets
       <input
         id="streetRadio"
@@ -27,9 +31,9 @@
         checked="checked"
         name="radio"
       />
-      <span class="radioCheckmarkResize" id="radioCheckmarkOuter"></span>
+      <span class="radioCheckmark" id="radioCheckmarkOuter0"></span>
     </label>
-    <label class="radioContainer"
+    <label class="radioContainer" id="radioContainerResize1"
       >Imagery
       <input
         type="radio"
@@ -37,9 +41,9 @@
         id="imageryRadio"
         (change)="newBasemap()"
       />
-      <span class="radioCheckmark"></span>
+      <span class="radioCheckmark" id="radioCheckmarkOuter1"></span>
     </label>
-    <label class="radioContainer"
+    <label class="radioContainer" id="radioContainerResize2"
       >Grayscale
       <input
         type="radio"
@@ -47,7 +51,7 @@
         id="grayscaleRadio"
         (change)="newBasemap()"
       />
-      <span class="radioCheckmark"></span>
+      <span class="radioCheckmark" id="radioCheckmarkOuter2"></span>
     </label>
   </div>
 </div>

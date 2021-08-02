@@ -30,6 +30,16 @@
   line-height: 60px;
 }
 
+.homeBtnResize {
+  height: 60px;
+  width: 60px;
+
+  color: rgb(163, 152, 152);
+  background-color: #fefecc;
+  cursor: pointer;
+  position: relative;
+}
+
 .infoBtn {
   height: 70px;
   width: 600px;
@@ -101,11 +111,11 @@
   position: relative;
 }
 
-.optionsBackgroundMapResize {
+.optionsBackgroundMapResizeH {
   background-color: rgba(255, 255, 255, 0.8);
   width: 260px !important;
   height: 55vh;
-  margin-top: 20px;
+  margin-top: 5px;
   margin-left: 100px;
   position: relative;
   overflow-y: scroll;
@@ -217,6 +227,31 @@
   margin-top: 20px;
   margin-left: 100px;
   position: relative;
+}
+
+.mapLayerOptionsBackgroundResizeH {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 260px !important;
+  height: 105px;
+  margin-top: 5px;
+  margin-left: 100px;
+  position: relative;
+}
+
+.mapLayerOptionsBackgroundResizeW {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 240px !important;
+  height: 130px;
+  margin-top: 20px;
+  margin-left: 0px;
+  position: relative;
+}
+
+.marginLeftFullWidth {
+  margin-left: 100px;
+}
+.marginLeftSmallWidth {
+  margin-left: 100px;
 }
 
 .mapLayers {
