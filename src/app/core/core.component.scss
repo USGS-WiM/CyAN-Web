@@ -77,29 +77,56 @@
   position: relative;
 }
 
+.infoPanel {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 45vw;
+  min-width: 240px;
+  max-width: 700px;
+  height: 400px;
+  position: relative;
+}
+
+.yOverflow {
+  overflow-y: scroll;
+  height: calc(98vh - 65px);
+}
+
 .optionsBackground {
   background-color: rgba(255, 255, 255, 0.8);
   width: 240px !important;
   height: 630px;
-  margin-top: 20px;
   position: relative;
 }
 
 .optionsBackgroundMapFull {
   background-color: rgba(255, 255, 255, 0.8);
   width: 240px !important;
-  height: 550px;
-  margin-top: 20px;
   position: relative;
 }
 
 .optionsBackgroundMapResizeH {
   background-color: rgba(255, 255, 255, 0.8);
   width: 240px !important;
-  height: 55vh;
-  margin-top: 5px;
   position: relative;
+}
+
+.mapFiltersFullHeight {
+  height: 550px;
+}
+.mapFiltersSmallHeight {
+  height: calc(98vh - 200px);
   overflow-y: scroll;
+  min-height: 100px;
+}
+.mapFiltersMedHeight {
+  height: calc(98vh - 130px);
+  overflow-y: scroll;
+  min-height: 100px;
+}
+.mapFiltersMLHeight {
+  height: calc(98vh - 175px);
+  overflow-y: scroll;
+  min-height: 100px;
 }
 
 .optionsBackgroundMini {
@@ -204,7 +231,6 @@
   background-color: rgba(255, 255, 255, 0.8);
   width: 240px !important;
   height: 130px;
-  margin-top: 20px;
   position: relative;
 }
 
@@ -220,7 +246,6 @@
   background-color: rgba(255, 255, 255, 0.8);
   width: 240px !important;
   height: 130px;
-  margin-top: 20px;
   margin-left: 0px;
   position: relative;
 }
@@ -230,6 +255,12 @@
 }
 .marginLeftSmallWidth {
   margin-left: 5px;
+}
+.marginTopFullHeight {
+  margin-top: 20px;
+}
+.marginTopSmallHeight {
+  margin-top: 5px;
 }
 
 .mapLayers {

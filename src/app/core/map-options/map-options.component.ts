@@ -123,10 +123,14 @@ export class MapOptionsComponent implements OnInit {
 
   public displayMapFilters(display: Boolean) {
     this.mapFilters = display;
+    //because toggling the panels changes the layout, resize elements as necessary
+    this.resizeDivs();
   }
 
   public displayMapLayerOptions(display: Boolean) {
     this.mapLayerOptions = display;
+    //because toggling the panels changes the layout, resize elements as necessary
+    this.resizeDivs();
   }
 
   public changeBasemap(selectedBasemap: string) {
@@ -142,8 +146,11 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public resizeDivs() {
+    //get window dimensions
     let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;
+
+    //get all the elements that change according to window dimensions
     let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
     let mapLayersRadioLabels = document.getElementById('mapLayersID');
     let mapLayersRadioBtns0 = document.getElementById('radioContainerResize0');
@@ -157,6 +164,7 @@ export class MapOptionsComponent implements OnInit {
       'filterPointsCollapsed'
     );
     let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
+
     if (windowWidth < 800) {
       mapLayersOptions.classList.remove('marginLeftFullWidth');
       mapLayersOptions.classList.add('marginLeftSmallWidth');
@@ -184,16 +192,76 @@ export class MapOptionsComponent implements OnInit {
       mapLayersCollapsed.classList.remove('marginLeftSmallWidth');
     }
     if (windowHeight < 788) {
-      mapPointFilterDiv.classList.remove('optionsBackgroundMapFull');
-      mapPointFilterDiv.classList.add('optionsBackgroundMapResizeH');
-    }
+      //if the filters panel is open, decrease the spacing above collapsed Map Filters
+      //if the height is super tiny (<280), do this regardless of the filters panel
+      if (this.mapFilters || windowHeight < 280) {
+        mapLayersCollapsed.classList.remove('marginTopFullHeight');
+        mapLayersCollapsed.classList.add('marginTopSmallHeight');
 
+        filterPointsCollapsed.classList.remove('marginTopFullHeight');
+        filterPointsCollapsed.classList.add('marginTopSmallHeight');
+
+        mapPointFilterDiv.classList.remove('mapFiltersFullHeight');
+        mapPointFilterDiv.classList.remove('mapFiltersMLHeight');
+        if (this.mapLayerOptions) {
+          mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
+          mapPointFilterDiv.classList.add('mapFiltersSmallHeight');
+        }
+        if (!this.mapLayerOptions) {
+          mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
+          mapPointFilterDiv.classList.add('mapFiltersMedHeight');
+        }
+
+        mapPointFilterDiv.classList.remove('marginTopFullHeight');
+        mapPointFilterDiv.classList.add('marginTopSmallHeight');
+
+        //reduce spacing between map layers and nav buttons
+        mapLayersOptions.classList.remove('marginTopFullHeight');
+        mapLayersOptions.classList.add('marginTopSmallHeight');
+      }
+      //
+      if (!this.mapFilters && windowHeight > 280) {
+        mapLayersCollapsed.classList.add('marginTopFullHeight');
+        mapLayersCollapsed.classList.remove('marginTopSmallHeight');
+
+        filterPointsCollapsed.classList.add('marginTopFullHeight');
+        filterPointsCollapsed.classList.remove('marginTopSmallHeight');
+
+        //reduce spacing between map layers and nav buttons
+        mapLayersOptions.classList.add('marginTopFullHeight');
+        mapLayersOptions.classList.remove('marginTopSmallHeight');
+      }
+    }
     if (windowHeight > 788) {
-      mapPointFilterDiv.classList.add('optionsBackgroundMapFull');
-      mapPointFilterDiv.classList.remove('optionsBackgroundMapResizeH');
+      mapPointFilterDiv.classList.add('mapFiltersFullHeight');
+      mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
+      mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
+      mapPointFilterDiv.classList.remove('mapFiltersMLHeight');
+
+      mapPointFilterDiv.classList.add('marginTopFullHeight');
+      mapPointFilterDiv.classList.remove('marginTopSmallHeight');
+
+      //increase spacing between map layers and nav buttons
+      mapLayersOptions.classList.add('marginTopFullHeight');
+      mapLayersOptions.classList.remove('marginTopSmallHeight');
+
+      //increase the spacing above collapsed Map Layers
+      mapLayersCollapsed.classList.add('marginTopFullHeight');
+      mapLayersCollapsed.classList.remove('marginTopSmallHeight');
+
+      //increase the spacing above collapsed Map Filters
+      filterPointsCollapsed.classList.add('marginTopFullHeight');
+      filterPointsCollapsed.classList.remove('marginTopSmallHeight');
     }
     //Edit map layers box when the height shrinks
     if (windowHeight < 530) {
+      mapPointFilterDiv.classList.remove('mapFiltersFullHeight');
+      if (this.mapLayerOptions) {
+        mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
+        mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
+        mapPointFilterDiv.classList.add('mapFiltersMLHeight');
+      }
+
       //reduce font size
       mapLayersRadioLabels.classList.remove('mapLayers');
       mapLayersRadioLabels.classList.add('mapLayersResize');
@@ -217,7 +285,7 @@ export class MapOptionsComponent implements OnInit {
       radioCheckmarkOuter2.classList.remove('radioCheckmark');
       radioCheckmarkOuter2.classList.add('radioCheckmarkResize');
 
-      //reduce spacing between map layers and nav buttons and decrease background height
+      //decrease background height
       mapLayersOptions.classList.remove('mapLayerOptionsBackground');
       mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeH');
     }
@@ -245,7 +313,7 @@ export class MapOptionsComponent implements OnInit {
       radioCheckmarkOuter2.classList.add('radioCheckmark');
       radioCheckmarkOuter2.classList.remove('radioCheckmarkResize');
 
-      //increase spacing between map layers and nav buttons and increase background height
+      //increase background height
       mapLayersOptions.classList.add('mapLayerOptionsBackground');
       mapLayersOptions.classList.remove('mapLayerOptionsBackgroundResizeH');
     }
