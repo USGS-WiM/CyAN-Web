@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ComponentDisplayService } from '../../shared/services/component-display.service';
 
 @Component({
@@ -8,14 +8,21 @@ import { ComponentDisplayService } from '../../shared/services/component-display
 })
 export class HomeComponent implements OnInit {
   constructor(private componentDisplayService: ComponentDisplayService) {}
+  @HostListener('window:resize')
+  onResize() {
+    this.resizeDivs();
+  }
+
   public showHomeLayout: Boolean = true;
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
   public windowWidth = false;
+  public fullHomeScreen = true;
   ngOnInit(): void {
     window.onload = () => (this.windowWidth = window.innerWidth >= 800);
     window.onresize = () => (this.windowWidth = window.innerWidth >= 800);
+    this.resizeDivs();
   }
   public changeLayout(homeLayout: Boolean) {
     /*
@@ -50,5 +57,42 @@ export class HomeComponent implements OnInit {
     this.showInfo = false;
     this.showHomeLayout = false;
     this.showMap = false;
+  }
+
+  public resizeDivs() {
+    //get window dimensions
+    let windowHeight = window.innerHeight;
+    let windowWidth = window.innerWidth;
+
+    let homeBtnFullID = document.getElementById('homeBtnFullID');
+    let infoBtnFullID = document.getElementById('infoBtnFullID');
+    let mapBtnFullID = document.getElementById('mapBtnFullID');
+
+    if (windowWidth < 720) {
+      homeBtnFullID.classList.remove('marginLeftFullWidth');
+      homeBtnFullID.classList.add('marginLeftSmallWidth');
+
+      infoBtnFullID.classList.remove('marginLeftFullWidth');
+      infoBtnFullID.classList.add('marginLeftSmallWidth');
+
+      mapBtnFullID.classList.remove('mapBtnFullMargin');
+      mapBtnFullID.classList.add('mapBtnSmallMargin');
+      if (windowWidth < 605) {
+        this.fullHomeScreen = false;
+      }
+    }
+    if (windowWidth > 605) {
+      this.fullHomeScreen = true;
+    }
+    if (windowWidth > 720) {
+      homeBtnFullID.classList.add('marginLeftFullWidth');
+      homeBtnFullID.classList.remove('marginLeftSmallWidth');
+
+      infoBtnFullID.classList.add('marginLeftFullWidth');
+      infoBtnFullID.classList.remove('marginLeftSmallWidth');
+
+      mapBtnFullID.classList.add('mapBtnFullMargin');
+      mapBtnFullID.classList.remove('mapBtnSmallMargin');
+    }
   }
 }

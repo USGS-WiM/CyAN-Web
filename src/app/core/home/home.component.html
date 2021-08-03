@@ -1,7 +1,11 @@
 <div>
   <div class="flex-container" style="width: 280px">
-    <div class="flex-child" *ngIf="this.windowWidth">
-      <div class="homeBtn marginLeftFullWidth" (click)="changeLayout(true)">
+    <div class="flex-child" *ngIf="this.windowWidth || showHomeLayout === true">
+      <div
+        id="homeBtnFullID"
+        class="homeBtn marginLeftFullWidth"
+        (click)="changeLayout(true)"
+      >
         <p>
           <mat-icon aria-hidden="false" aria-label="Example home icon"
             >home</mat-icon
@@ -115,17 +119,40 @@
     class="infoBtn marginLeftFullWidth"
     [hidden]="!showHomeLayout"
     (click)="clickInfo()"
+    id="infoBtnFullID"
+    *ngIf="fullHomeScreen"
   >
     <p style="font-size: 30px">
       <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
     </p>
   </div>
+
+  <div
+    *ngIf="!fullHomeScreen && showHomeLayout"
+    [hidden]="!showHomeLayout"
+    (click)="clickInfo()"
+    class="infoBtnSmallScreen flex-container"
+  >
+    <mat-icon style="margin-left: 10px; margin-top: 10px">info</mat-icon>
+    <div class="flex-child">
+      <p style="font-size: 20px; margin-top: 10px; margin-left: 10px">
+        Cyanobacteria <br />
+        Assessment Network
+      </p>
+    </div>
+  </div>
+
   <div [hidden]="!showInfo">
     <app-about></app-about>
   </div>
-  <div class="flex-container" style="width: 200px">
+  <div class="flex-container" style="width: 200px" *ngIf="fullHomeScreen">
     <div class="flex-child">
-      <div class="mapBtn" [hidden]="!showHomeLayout" (click)="clickMap()">
+      <div
+        class="mapBtn mapBtnFullMargin"
+        [hidden]="!showHomeLayout"
+        (click)="clickMap()"
+        id="mapBtnFullID"
+      >
         <br />
         <p style="text-align: center">Map</p>
         <mat-icon style="font-size: 80px; margin-left: -55px"> map</mat-icon>
@@ -140,6 +167,56 @@
         <mat-icon style="font-size: 80px; margin-left: -55px">
           scatter_plot</mat-icon
         >
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="flex-container"
+    style="width: 200px"
+    *ngIf="!fullHomeScreen && showHomeLayout"
+  >
+    <div class="flex-child">
+      <div
+        class="mapBtnSmallScreen flex-container"
+        [hidden]="!showHomeLayout"
+        (click)="clickMap()"
+      >
+        <br />
+        <mat-icon style="margin-left: 10px; margin-top: 20px"> map</mat-icon>
+        <p
+          style="
+            font-size: 20px;
+            margin-top: 20px;
+            margin-left: 10px;
+            margin-right: 20px;
+          "
+        >
+          Map
+        </p>
+      </div>
+    </div>
+    <div class="flex-child">
+      <div
+        class="graphBtnSmallScreen flex-container"
+        [hidden]="!showHomeLayout"
+        (click)="clickGraph()"
+      >
+        <br />
+        <mat-icon style="margin-left: 10px; margin-top: 20px">
+          scatter_plot</mat-icon
+        >
+        <div class="flex-child"></div>
+        <p
+          style="
+            font-size: 20px;
+            margin-top: 20px;
+            margin-left: 10px;
+            margin-right: 20px;
+          "
+        >
+          Graph
+        </p>
       </div>
     </div>
   </div>
