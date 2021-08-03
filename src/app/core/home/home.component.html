@@ -1,6 +1,9 @@
 <div>
   <div class="flex-container" style="width: 280px">
-    <div class="flex-child" *ngIf="this.windowWidth || showHomeLayout === true">
+    <div
+      class="flex-child"
+      *ngIf="this.windowWidthResize || showHomeLayout === true"
+    >
       <div
         id="homeBtnFullID"
         class="homeBtn marginLeftFullWidth"
@@ -16,7 +19,7 @@
     </div>
 
     <div class="flex-child flex-container" *ngIf="showHomeLayout === false">
-      <div *ngIf="!this.windowWidth">
+      <div *ngIf="!this.windowWidthResize">
         <div
           class="homeBtnResize marginLeftSmallWidth"
           (click)="changeLayout(true)"
