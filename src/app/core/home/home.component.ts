@@ -23,7 +23,7 @@ export class HomeComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 800);
     window.onresize = () => (this.windowWidthResize = window.innerWidth >= 800);
-    this.resizeDivs();
+    Promise.resolve().then(() => this.resizeDivs());
   }
   public changeLayout(homeLayout: Boolean) {
     /*
