@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, AfterViewInit, HostListener } from '@angular/core';
 import { ComponentDisplayService } from '../../shared/services/component-display.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { ComponentDisplayService } from '../../shared/services/component-display
   templateUrl: './home.component.html',
   styleUrls: ['./../core.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements AfterViewInit {
   constructor(private componentDisplayService: ComponentDisplayService) {}
   @HostListener('window:resize')
   onResize() {
@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   public showGraph: Boolean = false;
   public windowWidthResize = false;
   public fullHomeScreen = true;
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 800);
     window.onresize = () => (this.windowWidthResize = window.innerWidth >= 800);
     this.resizeDivs();
@@ -50,6 +50,7 @@ export class HomeComponent implements OnInit {
     this.showHomeLayout = false;
     this.showMap = false;
     this.showGraph = false;
+    this.resizeDivs();
   }
 
   public clickGraph() {
