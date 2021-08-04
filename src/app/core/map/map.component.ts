@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
-import * as La from 'leaflet-lasso';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
@@ -8,7 +7,7 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss'],
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements AfterViewInit {
   private map;
   public northBounds: number;
   public southBounds: number;
@@ -17,7 +16,7 @@ export class MapComponent implements OnInit {
 
   constructor(private componentDisplayService: ComponentDisplayService) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.initMap();
     this.componentDisplayService.basemapSubject.subscribe((base) => {
       if (base) {
@@ -28,21 +27,6 @@ export class MapComponent implements OnInit {
       if (base) {
         base.removeFrom(this.map);
       }
-    });
-
-    interface LassoHandlerOptions {
-      polygon?: L.PolylineOptions;
-      intersect?: boolean;
-    }
-    const lasso = new La.LassoControl(this.map);
-    type LassoControlOptions = LassoHandlerOptions & L.ControlOptions;
-    L.control.lasso().addTo(this.map);
-    interface LassoHandlerFinishedEventData {
-      latLngs: L.LatLng[];
-      layers: L.Layer[];
-    }
-    this.map.on('lasso.finished', (event: LassoHandlerFinishedEventData) => {
-      console.log(event.layers);
     });
   }
 
