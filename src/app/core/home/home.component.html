@@ -1,23 +1,21 @@
 <div>
   <div class="flex-container" style="width: 280px">
-    <div
-      class="flex-child"
-      *ngIf="this.windowWidthResize || showHomeLayout === true"
-    >
-      <div
-        id="homeBtnFullID"
-        class="homeBtn marginLeftFullWidth"
-        (click)="changeLayout(true)"
-      >
-        <p>
-          <mat-icon aria-hidden="false" aria-label="Example home icon"
-            >home</mat-icon
-          >
-          CyAN
-        </p>
+    <div [hidden]="!showFullCyanHomeBtn">
+      <div class="flex-child">
+        <div
+          id="homeBtnFullID"
+          class="homeBtn marginLeftFullWidth"
+          (click)="changeLayout(true)"
+        >
+          <p>
+            <mat-icon aria-hidden="false" aria-label="Example home icon"
+              >home</mat-icon
+            >
+            CyAN
+          </p>
+        </div>
       </div>
     </div>
-
     <div [hidden]="showHomeLayout">
       <div class="flex-child flex-container">
         <div [hidden]="this.windowWidthResize">
