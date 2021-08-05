@@ -39,11 +39,20 @@ export class HomeComponent implements AfterViewInit {
     }
   }
 
+  public clickHome() {
+    this.showMap = false;
+    this.showInfo = false;
+    this.showGraph = false;
+    this.showHomeLayout = true;
+    this.resizeDivs();
+  }
+
   public clickMap() {
     this.showMap = true;
     this.showHomeLayout = false;
     this.showInfo = false;
     this.showGraph = false;
+    this.resizeDivs();
   }
 
   public clickInfo() {
@@ -59,9 +68,11 @@ export class HomeComponent implements AfterViewInit {
     this.showInfo = false;
     this.showHomeLayout = false;
     this.showMap = false;
+    this.resizeDivs();
   }
 
   public resizeDivs() {
+    console.log('entering home component resizeDivs');
     //get window dimensions
     let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;

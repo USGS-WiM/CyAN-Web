@@ -1,11 +1,12 @@
 <div>
   <div class="flex-container" style="width: 280px">
     <div [hidden]="!showFullCyanHomeBtn">
-      <div class="flex-child">
+      <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
         <div
           id="homeBtnFullID"
           class="homeBtn marginLeftFullWidth"
-          (click)="changeLayout(true)"
+          (click)="clickHome()"
+          [hidden]="!showFullCyanHomeBtn"
         >
           <p>
             <mat-icon aria-hidden="false" aria-label="Example home icon"
@@ -18,11 +19,8 @@
     </div>
     <div [hidden]="showHomeLayout">
       <div class="flex-child flex-container">
-        <div [hidden]="this.windowWidthResize">
-          <div
-            class="homeBtnResize marginLeftSmallWidth"
-            (click)="changeLayout(true)"
-          >
+        <div [hidden]="windowWidthResize">
+          <div class="homeBtnResize marginLeftSmallWidth" (click)="clickHome()">
             <p>
               <mat-icon
                 aria-hidden="false"

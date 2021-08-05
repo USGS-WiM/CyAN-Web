@@ -1,5 +1,51 @@
 <div class="flex-container">
-  <div class="optionsBackground marginLeftFullWidth marginTopFullHeight">
+  <div
+    class="graphOptionsBackgroundMini marginLeftFullWidth marginTopFullHeight"
+    [hidden]="graphOptionsVisible"
+    (click)="collapseGraphOptions(true)"
+    style="margin-right: 5px"
+    id="graphOptionsCollapsedID"
+  >
+    <div
+      style="
+        text-align: right;
+        margin-right: 10px;
+        margin-top: 15px;
+        transform: rotate(270deg);
+      "
+    >
+      <mat-icon matTooltip="maximize">maximize</mat-icon>
+    </div>
+    <div
+      style="
+        transform: rotate(270deg);
+        font-size: 20px;
+        text-align: center;
+        word-wrap: none;
+        width: 150px;
+        margin-left: -45px;
+        margin-top: 50px;
+        color: rgb(163, 152, 152);
+      "
+    >
+      Graph Options
+    </div>
+  </div>
+
+  <div
+    class="optionsBackground marginLeftFullWidth marginTopFullHeight"
+    id="graphOptionsBackgroundID"
+    [hidden]="!graphOptionsVisible"
+    style="margin-right: 60px"
+  >
+    <div style="text-align: right; margin-right: 10px">
+      <mat-icon
+        matTooltip="minimize"
+        style="cursor: pointer"
+        (click)="collapseGraphOptions(false)"
+        >minimize</mat-icon
+      >
+    </div>
     <div style="height: 10px"></div>
     <div class="traceOptionsBackground">
       <div style="margin-left: 10px">
@@ -102,7 +148,7 @@
       <mat-icon>cloud_download</mat-icon>
     </button>
   </div>
-  <div class="graphBackground">
+  <div class="graphBackground marginTopFullHeight" id="graphBackgroundID">
     <div id="graph"></div>
   </div>
 </div>
