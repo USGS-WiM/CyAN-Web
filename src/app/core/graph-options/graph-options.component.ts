@@ -45,13 +45,24 @@ export class GraphOptionsComponent implements OnInit {
 
   public collapseGraphOptions(collapsed: Boolean) {
     this.graphOptionsVisible = collapsed;
+    this.resizeDivs();
   }
 
   public addTrace() {
     this.secondTrace = true;
+    let graphOptionsBackgroundID = document.getElementById(
+      'graphOptionsBackgroundID'
+    );
+    graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightSmall');
+    graphOptionsBackgroundID.classList.add('optionsBackgroundHeightLarge');
   }
   public removeTrace() {
     this.secondTrace = false;
+    let graphOptionsBackgroundID = document.getElementById(
+      'graphOptionsBackgroundID'
+    );
+    graphOptionsBackgroundID.classList.add('optionsBackgroundHeightSmall');
+    graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightLarge');
   }
 
   public createGraph() {
@@ -104,9 +115,7 @@ export class GraphOptionsComponent implements OnInit {
     let windowWidth = window.innerWidth;
 
     this.graphHeight = 0.7 * window.innerHeight;
-    this.graphWidth = 0.5 * window.innerWidth;
-
-    this.createGraph();
+    // this.graphWidth = 0.5 * window.innerWidth;
 
     let graphOptionsBackgroundID = document.getElementById(
       'graphOptionsBackgroundID'
@@ -119,10 +128,36 @@ export class GraphOptionsComponent implements OnInit {
     if (windowWidth < 800) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
       graphOptionsBackgroundID.classList.add('marginLeftSmallWidth');
+
+      graphOptionsCollapsedID.classList.remove('marginLeftFullWidth');
+      graphOptionsCollapsedID.classList.add('marginLeftSmallWidth');
+
+      graphOptionsBackgroundID.classList.remove('optionsMarginRightLarge');
+      graphOptionsBackgroundID.classList.add('optionsMarginRightSmall');
+
+      if (this.graphOptionsVisible) {
+        this.graphWidth = 0.95 * windowWidth - 245;
+      }
+      if (!this.graphOptionsVisible) {
+        this.graphWidth = 0.95 * windowWidth - 65;
+      }
     }
     if (windowWidth > 800) {
       graphOptionsBackgroundID.classList.add('marginLeftFullWidth');
       graphOptionsBackgroundID.classList.remove('marginLeftSmallWidth');
+
+      graphOptionsCollapsedID.classList.add('marginLeftFullWidth');
+      graphOptionsCollapsedID.classList.remove('marginLeftSmallWidth');
+
+      graphOptionsBackgroundID.classList.add('optionsMarginRightLarge');
+      graphOptionsBackgroundID.classList.remove('optionsMarginRightSmall');
+
+      if (this.graphOptionsVisible) {
+        this.graphWidth = 0.8 * windowWidth - 400;
+      }
+      if (!this.graphOptionsVisible) {
+        this.graphWidth = 0.8 * windowWidth - 165;
+      }
     }
     if (windowHeight < 723) {
       graphOptionsBackgroundID.classList.remove('marginTopFullHeight');
@@ -144,5 +179,7 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.add('marginTopFullHeight');
       graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
     }
+
+    this.createGraph();
   }
 }
