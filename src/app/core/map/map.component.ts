@@ -69,22 +69,4 @@ export class MapComponent implements AfterViewInit {
     this.componentDisplayService.getEastBounds(this.eastBounds);
     this.componentDisplayService.getWestBounds(this.westBounds);
   }
-
-  public getResolution() {
-    let w =
-      window.innerWidth ||
-      document.documentElement.clientWidth ||
-      document.body.clientWidth;
-
-    let h =
-      window.innerHeight ||
-      document.documentElement.clientHeight ||
-      document.body.clientHeight;
-
-    let x = document.getElementById('map');
-    console.log(
-      (x.innerHTML =
-        'Browser inner window width: ' + w + ', height: ' + h + '.')
-    );
-  }
 }
