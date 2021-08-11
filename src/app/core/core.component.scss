@@ -1,114 +1,204 @@
-.flex-container {
-  display: flex;
-}
-
-.flex-child {
-  flex: 1;
-}
-
-.flex-child:first-child {
-  margin-right: 0px;
-}
-
-.flex-child:second-child {
-  margin-right: 0px;
-}
-
+/* Start nav buttons */
+/* Start full home screen buttons */
 .homeBtn {
   height: 60px;
   width: 180px;
   color: rgb(163, 152, 152);
-  text-align: center;
   background-color: #fefecc;
-  /* z-index: 10; */
-  position: relative;
   font-size: 30px;
-  cursor: pointer;
-  text-align: center;
   vertical-align: middle;
   line-height: 60px;
 }
-
 .infoBtn {
   height: 70px;
   width: 600px;
   color: white;
   background-color: #f2bda1;
-  position: relative;
-  cursor: pointer;
-  text-align: center;
   vertical-align: middle;
   line-height: 70px;
   border: none;
 }
-
-.infoBtnSmallScreen {
-  height: 70px;
-  width: 250px;
-  color: white;
-  background-color: #f2bda1;
-  position: relative;
-  cursor: pointer;
-  text-align: left;
-  vertical-align: middle;
-  border: none;
-  line-height: 25px;
-}
-
 .mapBtn {
   height: 200px;
   width: 200px;
   color: white;
-  text-align: center;
   background-color: #687980;
   font-size: 20px;
+}
+.graphBtn {
+  height: 200px;
+  width: 200px;
+  color: white;
+  background-color: #02475e;
+  font-size: 20px;
+}
+.mapGraphIconFullScreen {
+  font-size: 80px;
+  margin-left: -55px;
+}
+.landingPgBtns {
   cursor: pointer;
   position: relative;
+  text-align: center;
 }
+/* End full home screen buttons */
 
+/* Start small home screen buttons */
+.infoBtnSmallScreen {
+  width: 250px;
+  background-color: #f2bda1;
+}
 .mapBtnSmallScreen {
-  height: 70px;
   width: 100px;
-  color: white;
   background-color: #687980;
+}
+.graphBtnSmallScreen {
+  width: 120px;
+  background-color: #02475e;
+}
+.smScreenLandingBtns {
+  line-height: 25px;
+  border: none;
+  height: 70px;
+  color: white;
   position: relative;
   cursor: pointer;
   text-align: left;
   vertical-align: middle;
-  border: none;
-  line-height: 25px;
+}
+.mapGraphTitleSmScreen {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+.mapGraphIconSmallScreen {
+  margin-left: 10px;
+  margin-top: 20px;
 }
 
+/* End small home screen buttons */
+
+/* Start small navbar buttons */
+.smBtnIcon {
+  font-size: 40px;
+  text-align: center;
+  line-height: 60px;
+  vertical-align: center;
+  margin-left: 10px;
+  position: relative;
+}
+
+.smNavBtn {
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+  position: relative;
+}
+/* End small navbar buttons */
+
+/* nav buttons - universal */
 .mapBtnFullMargin {
   margin-left: 150px;
 }
 .mapBtnSmallMargin {
   margin-left: 50px;
 }
-
-.graphBtn {
-  height: 200px;
-  width: 200px;
-  color: white;
-  text-align: center;
+.infoBtnColor {
+  background-color: #f2bda1;
+}
+.mapBtnColor {
+  background-color: #687980;
+}
+.homeBtnColor {
+  color: rgb(163, 152, 152);
+  background-color: #fefecc;
+}
+.graphBtnColor {
   background-color: #02475e;
+}
+/* nav buttons - universal */
+/* End nav buttons */
+
+/* start: display divs side-by-side */
+.flex-container {
+  display: flex;
+}
+.flex-child {
+  flex: 1;
+}
+.flex-child:first-child {
+  margin-right: 0px;
+}
+.flex-child:second-child {
+  margin-right: 0px;
+}
+/* end: display divs side-by-side */
+
+/* start: data buttons */
+.traceBtn {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(131, 184, 124);
+  cursor: pointer;
   font-size: 20px;
-  cursor: pointer;
-  position: relative;
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  border: none;
 }
 
-.graphBtnSmallScreen {
-  height: 70px;
-  width: 120px;
-  color: white;
-  background-color: #02475e;
-  position: relative;
+.plotDataBtn {
+  height: 35px;
+  width: 110px;
+  background-color: rgb(131, 184, 124);
   cursor: pointer;
-  text-align: left;
+  font-size: 20px;
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
   vertical-align: middle;
+  line-height: 35px;
   border: none;
-  line-height: 25px;
 }
+
+.downloadBtn {
+  height: 35px;
+  width: 45px;
+  background-color: rgb(131, 184, 124);
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 3px;
+  border: none;
+}
+.mapFilterBtn {
+  height: 35px;
+  width: 55px;
+  background-color: rgb(131, 184, 124);
+  cursor: pointer;
+  font-size: 20px;
+  color: white;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 35px;
+  border: none;
+}
+/* end: data buttons */
 
 .infoPanel {
   background-color: rgba(255, 255, 255, 0.8);
@@ -146,12 +236,6 @@
 }
 
 .optionsBackgroundMapFull {
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 240px !important;
-  position: relative;
-}
-
-.optionsBackgroundMapResizeH {
   background-color: rgba(255, 255, 255, 0.8);
   width: 240px !important;
   position: relative;
@@ -202,53 +286,6 @@
   background-color: rgba(2, 71, 94, 0.08);
 }
 
-.traceBtn {
-  height: 35px;
-  width: 35px;
-  background-color: rgb(131, 184, 124);
-  cursor: pointer;
-  font-size: 20px;
-  color: white;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 35px;
-  border: none;
-}
-
-.plotDataBtn {
-  height: 35px;
-  width: 110px;
-  background-color: rgb(131, 184, 124);
-  cursor: pointer;
-  font-size: 20px;
-  color: white;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 35px;
-  border: none;
-}
-
-.downloadBtn {
-  height: 35px;
-  width: 45px;
-  background-color: rgb(131, 184, 124);
-  cursor: pointer;
-  font-size: 20px;
-  color: white;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 3px;
-  border: none;
-}
 .graphBackground {
   height: 70vh;
   background-color: rgba(255, 255, 255, 0.8);
@@ -260,22 +297,6 @@
 }
 .graphSpacerSmall {
   margin-left: 5px;
-}
-
-.mapFilterBtn {
-  height: 35px;
-  width: 55px;
-  background-color: rgb(131, 184, 124);
-  cursor: pointer;
-  font-size: 20px;
-  color: white;
-  margin-left: 10px;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 35px;
-  border: none;
 }
 
 .minimizedBackground {
@@ -521,57 +542,4 @@
 
 .hidden {
   display: none !important;
-}
-
-/* Small navbar buttons */
-.smBtnIcon {
-  font-size: 40px;
-  text-align: center;
-  line-height: 60px;
-  vertical-align: center;
-  margin-left: 10px;
-  position: relative;
-}
-
-.smInfoBtn {
-  background-color: #f2bda1;
-  cursor: pointer;
-  position: relative;
-}
-
-.smMapBtn {
-  background-color: #687980;
-}
-
-.smHomeBtn {
-  color: rgb(163, 152, 152);
-  background-color: #fefecc;
-}
-
-.smGraphBtn {
-  background-color: #02475e;
-}
-
-.smNavBtn {
-  height: 60px;
-  width: 60px;
-  cursor: pointer;
-  position: relative;
-}
-
-.mapGraphTitleSmScreen {
-  font-size: 20px;
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
-}
-
-.mapGraphIconSmallScreen {
-  margin-left: 10px;
-  margin-top: 20px;
-}
-
-.mapGraphIconFullScreen {
-  font-size: 80px;
-  margin-left: -55px;
 }
