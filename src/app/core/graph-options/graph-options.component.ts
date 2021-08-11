@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
 import { FormControl } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-graph-options',
@@ -31,6 +32,7 @@ export class GraphOptionsComponent implements OnInit {
 
   public graphHeight: Number;
   public graphWidth: Number;
+  public graphMargins: Number;
   public graphOptionsVisible: Boolean = true;
 
   constructor() {}
@@ -102,6 +104,12 @@ export class GraphOptionsComponent implements OnInit {
       modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
+      margin: {
+        l: this.graphMargins,
+        r: this.graphMargins,
+        t: this.graphMargins,
+        b: this.graphMargins,
+      },
     };
 
     Plotly.newPlot(bivariatePlot, data, layout, {
@@ -178,6 +186,12 @@ export class GraphOptionsComponent implements OnInit {
 
       graphOptionsCollapsedID.classList.add('marginTopFullHeight');
       graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
+    }
+    if (windowWidth > 1200 && windowHeight > 450) {
+      this.graphMargins = 80;
+    }
+    if (windowWidth < 1200 || windowHeight < 450) {
+      this.graphMargins = 20;
     }
 
     this.createGraph();

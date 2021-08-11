@@ -29,15 +29,6 @@
   line-height: 60px;
 }
 
-.homeBtnResize {
-  height: 60px;
-  width: 60px;
-  color: rgb(163, 152, 152);
-  background-color: #fefecc;
-  cursor: pointer;
-  position: relative;
-}
-
 .infoBtn {
   height: 70px;
   width: 600px;
@@ -530,4 +521,57 @@
 
 .hidden {
   display: none !important;
+}
+
+/* Small navbar buttons */
+.smBtnIcon {
+  font-size: 40px;
+  text-align: center;
+  line-height: 60px;
+  vertical-align: center;
+  margin-left: 10px;
+  position: relative;
+}
+
+.smInfoBtn {
+  background-color: #f2bda1;
+  cursor: pointer;
+  position: relative;
+}
+
+.smMapBtn {
+  background-color: #687980;
+}
+
+.smHomeBtn {
+  color: rgb(163, 152, 152);
+  background-color: #fefecc;
+}
+
+.smGraphBtn {
+  background-color: #02475e;
+}
+
+.smNavBtn {
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+  position: relative;
+}
+
+.mapGraphTitleSmScreen {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-left: 10px;
+  margin-right: 20px;
+}
+
+.mapGraphIconSmallScreen {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.mapGraphIconFullScreen {
+  font-size: 80px;
+  margin-left: -55px;
 }
