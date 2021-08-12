@@ -134,7 +134,7 @@
 
     <button
       *ngIf="!secondTrace"
-      class="traceBtn"
+      class="traceBtn dataBtn"
       matTooltip="Add Trace"
       (click)="addTrace()"
     >
@@ -142,14 +142,14 @@
     </button>
     <button
       *ngIf="secondTrace"
-      class="traceBtn"
+      class="traceBtn dataBtn"
       matTooltip="Remove Trace"
       (click)="removeTrace()"
     >
       -
     </button>
-    <button class="plotDataBtn">Plot Data</button>
-    <button class="downloadBtn" matTooltip="Download CSV">
+    <button class="plotDataBtn dataBtn">Plot Data</button>
+    <button class="downloadBtn dataBtn" matTooltip="Download CSV">
       <mat-icon>cloud_download</mat-icon>
     </button>
   </div>

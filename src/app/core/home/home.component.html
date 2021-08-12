@@ -4,7 +4,7 @@
       <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
         <div
           id="homeBtnFullID"
-          class="landingPgBtns homeBtn marginLeftFullWidth"
+          class="landingPgBtns homeBtn marginLeftFullWidth homeBtnColor"
           (click)="clickHome()"
           [hidden]="!showFullCyanHomeBtn"
         >
@@ -34,7 +34,7 @@
             </p>
           </div>
         </div>
-        <div style="color: white">
+        <div>
           <div
             class="infoBtnColor smNavBtn"
             (click)="clickInfo()"
@@ -43,7 +43,7 @@
             <mat-icon class="smBtnIcon">info</mat-icon>
           </div>
         </div>
-        <div style="color: white">
+        <div>
           <div
             class="mapBtnColor smNavBtn"
             (click)="clickMap()"
@@ -52,7 +52,7 @@
             <mat-icon class="smBtnIcon">map</mat-icon>
           </div>
         </div>
-        <div style="color: white">
+        <div>
           <div
             class="graphBtnColor smNavBtn"
             (click)="clickGraph()"
@@ -66,7 +66,7 @@
   </div>
 
   <div
-    class="landingPgBtns infoBtn marginLeftFullWidth"
+    class="landingPgBtns infoBtn marginLeftFullWidth infoBtnColor"
     [hidden]="!showHomeLayout || !fullHomeScreen"
     (click)="clickInfo()"
     id="infoBtnFullID"
@@ -79,7 +79,7 @@
   <div [hidden]="fullHomeScreen || !showHomeLayout">
     <div
       (click)="clickInfo()"
-      class="smScreenLandingBtns infoBtnSmallScreen flex-container"
+      class="smScreenLandingBtns infoBtnSmallScreen infoBtnColor flex-container"
     >
       <mat-icon style="margin-left: 10px; margin-top: 10px">info</mat-icon>
       <div class="flex-child">
@@ -98,7 +98,7 @@
     <div class="flex-container" style="width: 200px">
       <div class="flex-child">
         <div
-          class="landingPgBtns mapBtn mapBtnFullMargin"
+          class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor"
           [hidden]="!showHomeLayout"
           (click)="clickMap()"
           id="mapBtnFullID"
@@ -110,7 +110,7 @@
       </div>
       <div class="flex-child">
         <div
-          class="landingPgBtns graphBtn"
+          class="landingPgBtns mapGraphBtn graphBtnColor"
           [hidden]="!showHomeLayout"
           (click)="clickGraph()"
         >
@@ -127,7 +127,12 @@
     <div class="flex-container" style="width: 200px" [hidden]="!showHomeLayout">
       <div class="flex-child">
         <div
-          class="smScreenLandingBtns mapBtnSmallScreen flex-container"
+          class="
+            smScreenLandingBtns
+            mapBtnSmallScreen
+            mapBtnColor
+            flex-container
+          "
           [hidden]="!showHomeLayout"
           (click)="clickMap()"
         >
@@ -138,7 +143,12 @@
       </div>
       <div class="flex-child">
         <div
-          class="smScreenLandingBtns graphBtnSmallScreen flex-container"
+          class="
+            smScreenLandingBtns
+            graphBtnSmallScreen
+            graphBtnColor
+            flex-container
+          "
           [hidden]="!showHomeLayout"
           (click)="clickGraph()"
         >
