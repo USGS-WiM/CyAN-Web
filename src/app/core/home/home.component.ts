@@ -72,7 +72,6 @@ export class HomeComponent implements AfterViewInit {
   }
 
   public resizeDivs() {
-    console.log('entering home component resizeDivs');
     //get window dimensions
     let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;

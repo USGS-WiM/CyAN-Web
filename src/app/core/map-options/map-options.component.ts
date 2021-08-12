@@ -135,13 +135,10 @@ export class MapOptionsComponent implements OnInit {
 
   public changeBasemap(selectedBasemap: string) {
     if (selectedBasemap === 'streets') {
-      console.log('streets selected');
     }
     if (selectedBasemap === 'imagery') {
-      console.log('imagery selected');
     }
     if (selectedBasemap === 'grayscale') {
-      console.log('gray selected');
     }
   }
 
