@@ -1,14 +1,19 @@
 <div
-  class="optionsBackgroundMini"
+  class="optionsBackgroundMini marginLeftFullWidth"
   [hidden]="mapLayerOptions"
   (click)="displayMapLayerOptions(true)"
+  id="mapLayersCollapsed"
 >
   <div style="text-align: right; margin-right: 10px">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
-<div class="mapLayerOptionsBackground" [hidden]="!mapLayerOptions">
+<div
+  class="mapLayerOptionsBackground marginLeftFullWidth marginTopFullHeight"
+  [hidden]="!mapLayerOptions"
+  id="mapLayersOptions"
+>
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"
@@ -17,9 +22,8 @@
       >minimize</mat-icon
     >
   </div>
-
-  <div style="margin-left: 10px">
-    <label class="radioContainer" style="font-size: 17px"
+  <div class="mapLayers" id="mapLayersID">
+    <label class="radioContainer" id="radioContainerResize0"
       >Streets
       <input
         id="streetRadio"
@@ -28,9 +32,9 @@
         checked="checked"
         name="radio"
       />
-      <span class="radioCheckmark"></span>
+      <span class="radioCheckmark" id="radioCheckmarkOuter0"></span>
     </label>
-    <label class="radioContainer" style="font-size: 17px"
+    <label class="radioContainer" id="radioContainerResize1"
       >Imagery
       <input
         type="radio"
@@ -38,9 +42,9 @@
         id="imageryRadio"
         (change)="newBasemap()"
       />
-      <span class="radioCheckmark"></span>
+      <span class="radioCheckmark" id="radioCheckmarkOuter1"></span>
     </label>
-    <label class="radioContainer" style="font-size: 17px"
+    <label class="radioContainer" id="radioContainerResize2"
       >Grayscale
       <input
         type="radio"
@@ -48,11 +52,15 @@
         id="grayscaleRadio"
         (change)="newBasemap()"
       />
-      <span class="radioCheckmark"></span>
+      <span class="radioCheckmark" id="radioCheckmarkOuter2"></span>
     </label>
   </div>
 </div>
-<div class="optionsBackgroundMap" [hidden]="!mapFilters">
+<div
+  id="mapOptionsContainer"
+  class="optionsBackgroundMapFull marginLeftFullWidth marginTopFullHeight"
+  [hidden]="!mapFilters"
+>
   <div style="text-align: right; margin-right: 10px">
     <mat-icon
       matTooltip="minimize"
@@ -70,6 +78,14 @@
           [value]="parameter"
           >{{ parameter }}</mat-option
         >
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Methods</mat-label>
+      <mat-select [formControl]="Parameters" multiple>
+        <mat-option *ngFor="let method of methodsList" [value]="method">{{
+          method
+        }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
@@ -128,12 +144,16 @@
       >Use map bounds
     </mat-checkbox>
   </div>
-  <button class="mapFilterBtn">Filter</button>
+  <button class="mapFilterBtn dataBtn">Filter</button>
+  <button class="downloadBtn dataBtn" matTooltip="Download CSV">
+    <mat-icon>cloud_download</mat-icon>
+  </button>
 </div>
 <div
   [hidden]="mapFilters"
-  class="optionsBackgroundMini"
+  class="optionsBackgroundMini marginLeftFullWidth"
   (click)="displayMapFilters(true)"
+  id="filterPointsCollapsed"
 >
   <div style="text-align: right; margin-right: 10px">
     <mat-icon matTooltip="maximize">maximize</mat-icon>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
@@ -47,7 +47,7 @@ export class MapOptionsComponent implements OnInit {
     floor: 1975,
     ceil: 2021,
     animate: false,
-    barDimension: 230,
+    barDimension: 210,
   };
 
   Parameters = new FormControl();
@@ -57,6 +57,15 @@ export class MapOptionsComponent implements OnInit {
     'pH',
     'Nitrogen',
     'Chloride',
+  ];
+
+  Methods = new FormControl();
+  methodsList: string[] = [
+    'Method 1',
+    'Method 2',
+    'Method 3',
+    'Method 4',
+    'Method 5',
   ];
 
   States = new FormControl();
@@ -69,6 +78,21 @@ export class MapOptionsComponent implements OnInit {
     'Colorado',
     'Connecticut',
     'Delaware',
+    'District of Columbia',
+    'Federated States of Micronesia',
+    'Florida',
+    'Georgia',
+    'Guam',
+    'Hawaii',
+    'Idaho',
+    'Illinois',
+    'Indiana',
+    'Iowa',
+    'Kansas',
+    'Kentucky',
+    'Louisiana',
+    'Maine',
+    'Marshall Islands',
   ];
 
   constructor(
@@ -81,6 +105,11 @@ export class MapOptionsComponent implements OnInit {
     }); */
   }
 
+  @HostListener('window:resize')
+  onResize() {
+    this.resizeDivs();
+  }
+
   ngOnInit(): void {
     this.mapForm = new FormGroup({
       northControl: new FormControl(),
@@ -88,25 +117,215 @@ export class MapOptionsComponent implements OnInit {
       eastControl: new FormControl(),
       westControl: new FormControl(),
     });
+
+    this.resizeDivs();
   }
 
   public displayMapFilters(display: Boolean) {
     this.mapFilters = display;
+    //because toggling the panels changes the layout, resize elements as necessary
+    this.resizeDivs();
   }
 
   public displayMapLayerOptions(display: Boolean) {
     this.mapLayerOptions = display;
+    //because toggling the panels changes the layout, resize elements as necessary
+    this.resizeDivs();
   }
 
   public changeBasemap(selectedBasemap: string) {
     if (selectedBasemap === 'streets') {
-      console.log('streets selected');
     }
     if (selectedBasemap === 'imagery') {
-      console.log('imagery selected');
     }
     if (selectedBasemap === 'grayscale') {
-      console.log('gray selected');
+    }
+  }
+
+  public resizeDivs() {
+    //get window dimensions
+    let windowHeight = window.innerHeight;
+    let windowWidth = window.innerWidth;
+
+    //get all the elements that change according to window dimensions
+    let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
+    let mapLayersRadioLabels = document.getElementById('mapLayersID');
+    let mapLayersRadioBtns0 = document.getElementById('radioContainerResize0');
+    let radioCheckmarkOuter0 = document.getElementById('radioCheckmarkOuter0');
+    let mapLayersRadioBtns1 = document.getElementById('radioContainerResize1');
+    let radioCheckmarkOuter1 = document.getElementById('radioCheckmarkOuter1');
+    let mapLayersRadioBtns2 = document.getElementById('radioContainerResize2');
+    let radioCheckmarkOuter2 = document.getElementById('radioCheckmarkOuter2');
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let filterPointsCollapsed = document.getElementById(
+      'filterPointsCollapsed'
+    );
+    let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
+
+    //move everything to the left when the width shrinks
+    if (windowWidth < 800) {
+      mapLayersOptions.classList.remove('marginLeftFullWidth');
+      mapLayersOptions.classList.add('marginLeftSmallWidth');
+
+      mapPointFilterDiv.classList.remove('marginLeftFullWidth');
+      mapPointFilterDiv.classList.add('marginLeftSmallWidth');
+
+      filterPointsCollapsed.classList.remove('marginLeftFullWidth');
+      filterPointsCollapsed.classList.add('marginLeftSmallWidth');
+
+      mapLayersCollapsed.classList.remove('marginLeftFullWidth');
+      mapLayersCollapsed.classList.add('marginLeftSmallWidth');
+    }
+
+    //move everything to the right when the width grows
+    if (windowWidth > 800) {
+      mapLayersOptions.classList.add('marginLeftFullWidth');
+      mapLayersOptions.classList.remove('marginLeftSmallWidth');
+
+      mapPointFilterDiv.classList.add('marginLeftFullWidth');
+      mapPointFilterDiv.classList.remove('marginLeftSmallWidth');
+
+      filterPointsCollapsed.classList.add('marginLeftFullWidth');
+      filterPointsCollapsed.classList.remove('marginLeftSmallWidth');
+
+      mapLayersCollapsed.classList.add('marginLeftFullWidth');
+      mapLayersCollapsed.classList.remove('marginLeftSmallWidth');
+    }
+    //initiate the filter points scroll depending on the height of the screen and whether the Map Layers panel is collapsed
+    if (
+      (this.mapLayerOptions && windowHeight < 788) ||
+      (!this.mapLayerOptions && windowHeight < 710)
+    ) {
+      //if the filters panel is open, decrease the spacing above collapsed Map Filters
+      //if the height is super tiny (<280), do this regardless of the filters panel
+      if (this.mapFilters || windowHeight < 280) {
+        mapLayersCollapsed.classList.remove('marginTopFullHeight');
+        mapLayersCollapsed.classList.add('marginTopSmallHeight');
+
+        filterPointsCollapsed.classList.remove('marginTopFullHeight');
+        filterPointsCollapsed.classList.add('marginTopSmallHeight');
+
+        //the percentage of the screen that the filters panel takes up depends on the spacing and whether or not Map Layers is collapsed
+        mapPointFilterDiv.classList.remove('mapFiltersFullHeight');
+        mapPointFilterDiv.classList.remove('mapFiltersMLHeight');
+        if (this.mapLayerOptions) {
+          mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
+          mapPointFilterDiv.classList.add('mapFiltersSmallHeight');
+        }
+        if (!this.mapLayerOptions) {
+          mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
+          mapPointFilterDiv.classList.add('mapFiltersMedHeight');
+        }
+
+        mapPointFilterDiv.classList.remove('marginTopFullHeight');
+        mapPointFilterDiv.classList.add('marginTopSmallHeight');
+
+        //reduce spacing between map layers and nav buttons
+        mapLayersOptions.classList.remove('marginTopFullHeight');
+        mapLayersOptions.classList.add('marginTopSmallHeight');
+      }
+      //
+      if (!this.mapFilters && windowHeight > 280) {
+        mapLayersCollapsed.classList.add('marginTopFullHeight');
+        mapLayersCollapsed.classList.remove('marginTopSmallHeight');
+
+        filterPointsCollapsed.classList.add('marginTopFullHeight');
+        filterPointsCollapsed.classList.remove('marginTopSmallHeight');
+
+        //reduce spacing between map layers and nav buttons
+        mapLayersOptions.classList.add('marginTopFullHeight');
+        mapLayersOptions.classList.remove('marginTopSmallHeight');
+      }
+    }
+    //remove the filter points scroll depending on the height of the screen and whether the Map Layers panel is collapsed
+    if (
+      (this.mapLayerOptions && windowHeight > 788) ||
+      (!this.mapLayerOptions && windowHeight > 710)
+    ) {
+      mapPointFilterDiv.classList.add('mapFiltersFullHeight');
+      mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
+      mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
+      mapPointFilterDiv.classList.remove('mapFiltersMLHeight');
+
+      mapPointFilterDiv.classList.add('marginTopFullHeight');
+      mapPointFilterDiv.classList.remove('marginTopSmallHeight');
+
+      //increase spacing between map layers and nav buttons
+      mapLayersOptions.classList.add('marginTopFullHeight');
+      mapLayersOptions.classList.remove('marginTopSmallHeight');
+
+      //increase the spacing above collapsed Map Layers
+      mapLayersCollapsed.classList.add('marginTopFullHeight');
+      mapLayersCollapsed.classList.remove('marginTopSmallHeight');
+
+      //increase the spacing above collapsed Map Filters
+      filterPointsCollapsed.classList.add('marginTopFullHeight');
+      filterPointsCollapsed.classList.remove('marginTopSmallHeight');
+    }
+
+    //Edit map layers box when the height shrinks
+    if (windowHeight < 530) {
+      mapPointFilterDiv.classList.remove('mapFiltersFullHeight');
+      if (this.mapLayerOptions) {
+        mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
+        mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
+        mapPointFilterDiv.classList.add('mapFiltersMLHeight');
+      }
+
+      //reduce font size
+      mapLayersRadioLabels.classList.remove('mapLayers');
+      mapLayersRadioLabels.classList.add('mapLayersResize');
+
+      //reduce radio button size
+      mapLayersRadioBtns0.classList.remove('radioContainer');
+      mapLayersRadioBtns0.classList.add('radioContainerResize');
+
+      radioCheckmarkOuter0.classList.remove('radioCheckmark');
+      radioCheckmarkOuter0.classList.add('radioCheckmarkResize');
+
+      mapLayersRadioBtns1.classList.remove('radioContainer');
+      mapLayersRadioBtns1.classList.add('radioContainerResize');
+
+      radioCheckmarkOuter1.classList.remove('radioCheckmark');
+      radioCheckmarkOuter1.classList.add('radioCheckmarkResize');
+
+      mapLayersRadioBtns2.classList.remove('radioContainer');
+      mapLayersRadioBtns2.classList.add('radioContainerResize');
+
+      radioCheckmarkOuter2.classList.remove('radioCheckmark');
+      radioCheckmarkOuter2.classList.add('radioCheckmarkResize');
+
+      //decrease background height
+      mapLayersOptions.classList.remove('mapLayerOptionsBackground');
+      mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeH');
+    }
+    if (windowHeight > 530) {
+      //increase font size
+      mapLayersRadioLabels.classList.add('mapLayers');
+      mapLayersRadioLabels.classList.remove('mapLayersResize');
+
+      //increase radio button size
+      mapLayersRadioBtns0.classList.add('radioContainer');
+      mapLayersRadioBtns0.classList.remove('radioContainerResize');
+
+      radioCheckmarkOuter0.classList.add('radioCheckmark');
+      radioCheckmarkOuter0.classList.remove('radioCheckmarkResize');
+
+      mapLayersRadioBtns1.classList.add('radioContainer');
+      mapLayersRadioBtns1.classList.remove('radioContainerResize');
+
+      radioCheckmarkOuter1.classList.add('radioCheckmark');
+      radioCheckmarkOuter1.classList.remove('radioCheckmarkResize');
+
+      mapLayersRadioBtns2.classList.add('radioContainer');
+      mapLayersRadioBtns2.classList.remove('radioContainerResize');
+
+      radioCheckmarkOuter2.classList.add('radioCheckmark');
+      radioCheckmarkOuter2.classList.remove('radioCheckmarkResize');
+
+      //increase background height
+      mapLayersOptions.classList.add('mapLayerOptionsBackground');
+      mapLayersOptions.classList.remove('mapLayerOptionsBackgroundResizeH');
     }
   }
 

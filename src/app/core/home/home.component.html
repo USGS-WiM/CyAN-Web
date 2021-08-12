@@ -1,118 +1,162 @@
 <div>
   <div class="flex-container" style="width: 280px">
-    <div class="flex-child">
-      <div class="homeBtn" (click)="changeLayout(true)">
-        <p>
-          <mat-icon aria-hidden="false" aria-label="Example home icon"
-            >home</mat-icon
-          >
-          CyAN
-        </p>
+    <div [hidden]="!showFullCyanHomeBtn">
+      <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
+        <div
+          id="homeBtnFullID"
+          class="landingPgBtns homeBtn marginLeftFullWidth homeBtnColor"
+          (click)="clickHome()"
+          [hidden]="!showFullCyanHomeBtn"
+        >
+          <p>
+            <mat-icon aria-hidden="false" aria-label="Example home icon"
+              >home</mat-icon
+            >
+            CyAN
+          </p>
+        </div>
       </div>
     </div>
-    <div class="flex-child flex-container" *ngIf="showHomeLayout === false">
-      <div style="color: white">
-        <div
-          style="
-            height: 60px;
-            width: 60px;
-            background-color: #f2bda1;
-            cursor: pointer;
-            position: relative;
-          "
-          (click)="clickInfo()"
-          matTooltip="About CyAN"
-        >
-          <mat-icon
-            style="
-              font-size: 40px;
-              text-align: center;
-              line-height: 60px;
-              vertical-align: center;
-              margin-left: 10px;
-              position: relative;
-            "
-            >info</mat-icon
+    <div [hidden]="showHomeLayout">
+      <div class="flex-child flex-container">
+        <div [hidden]="windowWidthResize">
+          <div
+            class="homeBtnColor smNavBtn marginLeftSmallWidth"
+            (click)="clickHome()"
           >
+            <p>
+              <mat-icon
+                aria-hidden="false"
+                class="smBtnIcon"
+                aria-label="Example home icon"
+                >home</mat-icon
+              >
+            </p>
+          </div>
         </div>
-      </div>
-      <div style="color: white">
-        <div
-          style="
-            height: 60px;
-            width: 60px;
-            background-color: #687980;
-            cursor: pointer;
-            position: relative;
-          "
-          (click)="clickMap()"
-          matTooltip="Map"
-        >
-          <mat-icon
-            style="
-              font-size: 40px;
-              text-align: center;
-              line-height: 60px;
-              vertical-align: center;
-              margin-left: 10px;
-              position: relative;
-            "
-            >map</mat-icon
+        <div>
+          <div
+            class="infoBtnColor smNavBtn"
+            (click)="clickInfo()"
+            matTooltip="About"
           >
+            <mat-icon class="smBtnIcon">info</mat-icon>
+          </div>
         </div>
-      </div>
-      <div style="color: white">
-        <div
-          style="
-            height: 60px;
-            width: 60px;
-            background-color: #02475e;
-            cursor: pointer;
-            position: relative;
-          "
-          (click)="clickGraph()"
-          matTooltip="Graph"
-        >
-          <mat-icon
-            style="
-              font-size: 40px;
-              text-align: center;
-              line-height: 60px;
-              vertical-align: center;
-              margin-left: 10px;
-            "
-            >scatter_plot</mat-icon
+        <div>
+          <div
+            class="mapBtnColor smNavBtn"
+            (click)="clickMap()"
+            matTooltip="Map"
           >
+            <mat-icon class="smBtnIcon">map</mat-icon>
+          </div>
+        </div>
+        <div>
+          <div
+            class="graphBtnColor smNavBtn"
+            (click)="clickGraph()"
+            matTooltip="Graph"
+          >
+            <mat-icon class="smBtnIcon">scatter_plot</mat-icon>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="infoBtn" [hidden]="!showHomeLayout" (click)="clickInfo()">
+  <div
+    class="landingPgBtns infoBtn marginLeftFullWidth infoBtnColor"
+    [hidden]="!showHomeLayout || !fullHomeScreen"
+    (click)="clickInfo()"
+    id="infoBtnFullID"
+  >
     <p style="font-size: 30px">
       <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
     </p>
   </div>
+
+  <div [hidden]="fullHomeScreen || !showHomeLayout">
+    <div
+      (click)="clickInfo()"
+      class="smScreenLandingBtns infoBtnSmallScreen infoBtnColor flex-container"
+    >
+      <mat-icon style="margin-left: 10px; margin-top: 10px">info</mat-icon>
+      <div class="flex-child">
+        <p style="font-size: 20px; margin-top: 10px; margin-left: 10px">
+          Cyanobacteria <br />
+          Assessment Network
+        </p>
+      </div>
+    </div>
+  </div>
+
   <div [hidden]="!showInfo">
     <app-about></app-about>
   </div>
-  <div class="flex-container" style="width: 200px">
-    <div class="flex-child">
-      <div class="mapBtn" [hidden]="!showHomeLayout" (click)="clickMap()">
-        <br />
-        <p style="text-align: center">Map</p>
-        <mat-icon style="font-size: 80px; margin-left: -55px"> map</mat-icon>
+  <div [hidden]="!fullHomeScreen">
+    <div class="flex-container" style="width: 200px">
+      <div class="flex-child">
+        <div
+          class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor"
+          [hidden]="!showHomeLayout"
+          (click)="clickMap()"
+          id="mapBtnFullID"
+        >
+          <br />
+          <p style="text-align: center">Map</p>
+          <mat-icon class="mapGraphIconFullScreen"> map</mat-icon>
+        </div>
+      </div>
+      <div class="flex-child">
+        <div
+          class="landingPgBtns mapGraphBtn graphBtnColor"
+          [hidden]="!showHomeLayout"
+          (click)="clickGraph()"
+        >
+          <p style="text-align: center">
+            <br />
+            Graph
+          </p>
+          <mat-icon class="mapGraphIconFullScreen"> scatter_plot</mat-icon>
+        </div>
       </div>
     </div>
-    <div class="flex-child">
-      <div class="graphBtn" [hidden]="!showHomeLayout" (click)="clickGraph()">
-        <p style="text-align: center">
-          <br />
-          Graph
-        </p>
-        <mat-icon style="font-size: 80px; margin-left: -55px">
-          scatter_plot</mat-icon
+  </div>
+  <div [hidden]="fullHomeScreen || !showHomeLayout">
+    <div class="flex-container" style="width: 200px" [hidden]="!showHomeLayout">
+      <div class="flex-child">
+        <div
+          class="
+            smScreenLandingBtns
+            mapBtnSmallScreen
+            mapBtnColor
+            flex-container
+          "
+          [hidden]="!showHomeLayout"
+          (click)="clickMap()"
         >
+          <br />
+          <mat-icon class="mapGraphIconSmallScreen"> map</mat-icon>
+          <p class="mapGraphTitleSmScreen">Map</p>
+        </div>
+      </div>
+      <div class="flex-child">
+        <div
+          class="
+            smScreenLandingBtns
+            graphBtnSmallScreen
+            graphBtnColor
+            flex-container
+          "
+          [hidden]="!showHomeLayout"
+          (click)="clickGraph()"
+        >
+          <br />
+          <mat-icon class="mapGraphIconSmallScreen"> scatter_plot</mat-icon>
+          <div class="flex-child"></div>
+          <p class="mapGraphTitleSmScreen">Graph</p>
+        </div>
       </div>
     </div>
   </div>
@@ -123,4 +167,3 @@
 <div [hidden]="!showGraph">
   <app-graph-options></app-graph-options>
 </div>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />

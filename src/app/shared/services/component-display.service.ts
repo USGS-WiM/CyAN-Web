@@ -20,7 +20,6 @@ export class ComponentDisplayService {
   homeLayout$ = this.homeLayoutSubject.asObservable();
 
   public getHomeLayout(display: Boolean) {
-    console.log('display', display);
     this.homeLayoutSubject.next(display);
   }
 
