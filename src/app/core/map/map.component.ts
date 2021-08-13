@@ -35,23 +35,20 @@ export class MapComponent implements AfterViewInit {
     });
     this.mapLayersService.filterWqSampleSubject.subscribe((points) => {
       if (points) {
-        if (this.currentPoints) {
-          this.currentPoints.removeFrom(this.map);
+        if (points._leaflet_id) {
+          if (this.currentPoints) {
+            this.currentPoints.removeFrom(this.map);
+          }
+          this.currentPoints = points;
+          this.currentPoints.addTo(this.map);
+          this.zoomToPoints(points);
         }
-        this.currentPoints = points;
-        this.currentPoints.addTo(this.map);
-        setTimeout(() => {
-          // this.zoomToPoints(this.currentPoints);
-        }, 400);
-        //this.map.fitBounds(this.currentPoints.getBounds());
-        // Promise.resolve().then(() => this.resizeDivs());
       }
     });
   }
 
   private zoomToPoints(layer) {
-    console.log('layer', layer);
-    this.map.fitBounds(layer);
+    this.map.fitBounds(layer.getBounds());
   }
 
   private initMap(): void {

@@ -120,12 +120,11 @@ export class MapOptionsComponent implements OnInit {
 
   public runFilters() {
     let filterParameters = {
-      north: this.mapForm.get('northControl').value,
-      south: this.mapForm.get('southControl').value,
-      east: this.mapForm.get('eastControl').value,
-      west: this.mapForm.get('westControl').value,
+      north: parseFloat(this.mapForm.get('northControl').value),
+      south: parseFloat(this.mapForm.get('southControl').value),
+      east: parseFloat(this.mapForm.get('eastControl').value),
+      west: parseFloat(this.mapForm.get('westControl').value),
     };
-    console.log(filterParameters);
     this.mapLayersService.filterWqSample(true, filterParameters);
   }
 

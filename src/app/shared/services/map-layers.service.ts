@@ -34,7 +34,7 @@ export class MapLayersService {
   //Filter water quality sample points
   public filterWqSample(
     showPoints: Boolean,
-    options: { north: Number; south: Number; east: Number; west: Number }
+    options: { north: number; south: number; east: number; west: number }
   ) {
     this.mapWQSites = L.featureGroup([]);
     this.filterWqSampleSubject.next(this.mapWQSites);
@@ -43,11 +43,10 @@ export class MapLayersService {
       for (let site of this.wqPointList) {
         let lat = Number(site.latitude);
         let lng = Number(site.longitude);
-        if (options.south == null || lat > options.south) {
-          if (options.north == null || lat < options.north) {
-            if (options.east == null || lng < options.east) {
-              if (options.west == null || lng > options.west) {
-                console.log('adding marker');
+        if (isNaN(options.south) || lat > options.south) {
+          if (isNaN(options.north) || lat < options.north) {
+            if (isNaN(options.east) || lng < options.east) {
+              if (isNaN(options.west) || lng > options.west) {
                 L.marker([lat, lng], {
                   icon: L.divIcon({
                     className: 'wqMapIcon',
@@ -57,8 +56,8 @@ export class MapLayersService {
             }
           }
         }
-        this.filterWqSampleSubject.next(this.mapWQSites);
       }
+      this.filterWqSampleSubject.next(this.mapWQSites);
     }
   }
 

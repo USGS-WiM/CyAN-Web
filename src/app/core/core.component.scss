@@ -164,20 +164,20 @@
 
 /* start: map layers box */
 .mapLayerOptionsBackground {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   height: 130px;
   position: relative;
 }
 .mapLayerOptionsBackgroundResizeH {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   height: 105px;
   margin-top: 5px;
   position: relative;
 }
 .mapLayerOptionsBackgroundResizeW {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   height: 130px;
   margin-left: 0px;
@@ -199,7 +199,7 @@
 
 /* start: map filter options box */
 .optionsBackgroundMapFull {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   position: relative;
 }
@@ -222,7 +222,7 @@
   min-height: 100px;
 }
 .optionsBackgroundMini {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   height: 60px;
   margin-top: 20px;
@@ -242,7 +242,7 @@
 
 /* start: graph options box */
 .optionsBackground {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   position: relative;
 }
@@ -259,7 +259,7 @@
   margin-right: 5px;
 }
 .graphOptionsBackgroundMini {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 60px !important;
   height: 190px;
   position: relative;
@@ -269,14 +269,14 @@
   margin-left: 10px;
   margin-right: 10px;
   font-size: 15px;
-  background-color: rgba(2, 71, 94, 0.08);
+  background-color: rgba(2, 71, 94, 0.085);
 }
 /* end: graph options box */
 
 /* start: graph */
 .graphBackground {
   height: 70vh;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.95);
   position: relative;
 }
 .graphSpacerLarge {
@@ -289,7 +289,7 @@
 
 /* start: info box */
 .infoPanel {
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.85);
   width: 45vw;
   min-width: 240px;
   max-width: 700px;
