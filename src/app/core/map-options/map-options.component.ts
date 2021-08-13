@@ -2,8 +2,10 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import * as L from 'leaflet';
+//import * as testData from '../../../../../../output/exampleOutput.json';
 
 @Component({
   selector: 'app-map-options',
@@ -97,13 +99,9 @@ export class MapOptionsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private componentDisplayService: ComponentDisplayService
-  ) {
-    /* formBuilder.group({
-      baseControl: null,
-      northControl: Number,
-    }); */
-  }
+    private componentDisplayService: ComponentDisplayService,
+    private mapLayersService: MapLayersService
+  ) {}
 
   @HostListener('window:resize')
   onResize() {
@@ -117,8 +115,18 @@ export class MapOptionsComponent implements OnInit {
       eastControl: new FormControl(),
       westControl: new FormControl(),
     });
-
     this.resizeDivs();
+  }
+
+  public runFilters() {
+    let filterParameters = {
+      north: this.mapForm.get('northControl').value,
+      south: this.mapForm.get('southControl').value,
+      east: this.mapForm.get('eastControl').value,
+      west: this.mapForm.get('westControl').value,
+    };
+    console.log(filterParameters);
+    this.mapLayersService.filterWqSample(true, filterParameters);
   }
 
   public displayMapFilters(display: Boolean) {
@@ -377,19 +385,19 @@ export class MapOptionsComponent implements OnInit {
       'grayscaleRadio'
     ) as HTMLInputElement;
     if (streetRadioBtn.checked) {
-      this.componentDisplayService.getBasemap(this.osm);
-      this.componentDisplayService.removeBasemap(this.imagery);
-      this.componentDisplayService.removeBasemap(this.grayscale);
+      this.mapLayersService.getBasemap(this.osm);
+      this.mapLayersService.removeBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.grayscale);
     }
     if (imageryRadioBtn.checked) {
-      this.componentDisplayService.getBasemap(this.imagery);
-      this.componentDisplayService.removeBasemap(this.osm);
-      this.componentDisplayService.removeBasemap(this.grayscale);
+      this.mapLayersService.getBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.osm);
+      this.mapLayersService.removeBasemap(this.grayscale);
     }
     if (grayscaleRadioBtn.checked) {
-      this.componentDisplayService.getBasemap(this.grayscale);
-      this.componentDisplayService.removeBasemap(this.imagery);
-      this.componentDisplayService.removeBasemap(this.osm);
+      this.mapLayersService.getBasemap(this.grayscale);
+      this.mapLayersService.removeBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.osm);
     }
   }
 }

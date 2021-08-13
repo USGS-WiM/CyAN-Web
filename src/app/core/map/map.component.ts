@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 
 @Component({
   selector: 'app-map',
@@ -13,21 +14,44 @@ export class MapComponent implements AfterViewInit {
   public southBounds: number;
   public eastBounds: number;
   public westBounds: number;
+  public currentPoints;
 
-  constructor(private componentDisplayService: ComponentDisplayService) {}
+  constructor(
+    private componentDisplayService: ComponentDisplayService,
+    private mapLayersService: MapLayersService
+  ) {}
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.componentDisplayService.basemapSubject.subscribe((base) => {
+    this.mapLayersService.basemapSubject.subscribe((base) => {
       if (base) {
         base.addTo(this.map);
       }
     });
-    this.componentDisplayService.removeBasemapSubject.subscribe((base) => {
+    this.mapLayersService.removeBasemapSubject.subscribe((base) => {
       if (base) {
         base.removeFrom(this.map);
       }
     });
+    this.mapLayersService.filterWqSampleSubject.subscribe((points) => {
+      if (points) {
+        if (this.currentPoints) {
+          this.currentPoints.removeFrom(this.map);
+        }
+        this.currentPoints = points;
+        this.currentPoints.addTo(this.map);
+        setTimeout(() => {
+          // this.zoomToPoints(this.currentPoints);
+        }, 400);
+        //this.map.fitBounds(this.currentPoints.getBounds());
+        // Promise.resolve().then(() => this.resizeDivs());
+      }
+    });
+  }
+
+  private zoomToPoints(layer) {
+    console.log('layer', layer);
+    this.map.fitBounds(layer);
   }
 
   private initMap(): void {
@@ -40,7 +64,7 @@ export class MapComponent implements AfterViewInit {
     this.map.on('moveend', () => {
       if (this.map) {
         this.getMapBoundingBox();
-        this.componentDisplayService.basemapSubject.subscribe((base) => {
+        this.mapLayersService.basemapSubject.subscribe((base) => {
           if (base) {
             base.addTo(this.map);
           }
