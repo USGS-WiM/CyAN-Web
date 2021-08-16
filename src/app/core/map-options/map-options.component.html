@@ -69,28 +69,31 @@
       >minimize</mat-icon
     >
   </div>
-  <div style="margin-left: 10px">
-    <mat-form-field appearance="fill">
-      <mat-label>Parameters</mat-label>
-      <mat-select [formControl]="Parameters" multiple>
-        <mat-option
-          *ngFor="let parameter of parameterList"
-          [value]="parameter"
-          >{{ parameter }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Methods</mat-label>
-      <mat-select [formControl]="Parameters" multiple>
-        <mat-option *ngFor="let method of methodsList" [value]="method">{{
-          method
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
+  <form [formGroup]="codeForm">
+    <div style="margin-left: 10px">
+      <mat-form-field appearance="fill">
+        <mat-label>Parameters</mat-label>
+        <mat-select formControlName="parameterControl" multiple>
+          <mat-option
+            *ngFor="let parameter of parameterList"
+            [value]="parameter"
+            >{{ parameter }}</mat-option
+          >
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Methods</mat-label>
+        <mat-select formControlName="methodControl" multiple>
+          <mat-option *ngFor="let method of methodsList" [value]="method">{{
+            method
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
   <div class="custom-slider" style="margin-left: 10px">
     <ngx-slider
+      id="testID"
       [(value)]="minValue"
       [(highValue)]="maxValue"
       [options]="timeOptions"

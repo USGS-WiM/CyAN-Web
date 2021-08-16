@@ -5,6 +5,8 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import * as L from 'leaflet';
+import * as moment from 'moment';
+import { stringify } from '@angular/compiler/src/util';
 //import * as testData from '../../../../../../output/exampleOutput.json';
 
 @Component({
@@ -14,6 +16,7 @@ import * as L from 'leaflet';
 })
 export class MapOptionsComponent implements OnInit {
   public mapForm: FormGroup;
+  public codeForm: FormGroup;
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
   public northBounds: number;
@@ -115,6 +118,10 @@ export class MapOptionsComponent implements OnInit {
       eastControl: new FormControl(),
       westControl: new FormControl(),
     });
+    this.codeForm = new FormGroup({
+      parameterControl: new FormControl(),
+      methodControl: new FormControl(),
+    });
     this.resizeDivs();
   }
 
@@ -124,8 +131,17 @@ export class MapOptionsComponent implements OnInit {
       south: parseFloat(this.mapForm.get('southControl').value),
       east: parseFloat(this.mapForm.get('eastControl').value),
       west: parseFloat(this.mapForm.get('westControl').value),
+      pcode: this.codeForm.get('parameterControl').value,
+      mcode: this.codeForm.get('methodControl').value,
+      minYear: this.minValue,
+      maxYear: this.maxValue,
     };
-    this.mapLayersService.filterWqSample(true, filterParameters);
+    //this.mapLayersService.filterWqSample3(true, filterParameters);
+    this.mapLayersService.filterWqSample2_TEST2(filterParameters);
+
+    let sampleData = '2014-08-04 15:30:00+00:00';
+    let sampleDataFormatted = moment(sampleData).format('YYYY');
+    console.log('sampleDataFormatted', sampleDataFormatted);
   }
 
   public displayMapFilters(display: Boolean) {
