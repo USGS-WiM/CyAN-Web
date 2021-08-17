@@ -137,7 +137,7 @@ export class MapOptionsComponent implements OnInit {
       maxYear: this.maxValue,
     };
     //this.mapLayersService.filterWqSample3(true, filterParameters);
-    this.mapLayersService.filterWqSample2_TEST2(filterParameters);
+    this.mapLayersService.filterWqSample2_TEST3(filterParameters);
 
     let sampleData = '2014-08-04 15:30:00+00:00';
     let sampleDataFormatted = moment(sampleData).format('YYYY');

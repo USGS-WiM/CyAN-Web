@@ -23,6 +23,8 @@ import { MatSliderModule } from '@angular/material/slider';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -51,8 +53,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatRadioModule,
     ScrollingModule,
     HttpClientModule,
+    MatSnackBarModule,
   ],
-  providers: [],
+  providers: [MatSnackBar],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

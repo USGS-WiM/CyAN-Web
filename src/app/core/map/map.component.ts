@@ -34,11 +34,11 @@ export class MapComponent implements AfterViewInit {
       }
     });
     this.mapLayersService.filterWqSampleSubject.subscribe((points) => {
+      if (this.currentPoints) {
+        this.currentPoints.removeFrom(this.map);
+      }
       if (points) {
         if (points._leaflet_id) {
-          if (this.currentPoints) {
-            this.currentPoints.removeFrom(this.map);
-          }
           this.currentPoints = points;
           this.currentPoints.addTo(this.map);
           this.zoomToPoints(points);

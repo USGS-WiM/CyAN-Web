@@ -5,7 +5,9 @@ import { of } from 'rxjs';
 import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +15,7 @@ import * as L from 'leaflet';
 export class MapLayersService {
   public wqPointList;
   mapWQSites = L.featureGroup([]);
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, public snackBar: MatSnackBar) {}
 
   //Basemap Display
   //Add basemap
@@ -201,6 +203,68 @@ export class MapLayersService {
           }),
         }).addTo(this.mapWQSites);
       }
+      this.filterWqSampleSubject.next(this.mapWQSites);
+    });
+  }
+
+  public filterWqSample2_TEST3(options: {
+    north: number;
+    south: number;
+    east: number;
+    west: number;
+    pcode: [];
+    mcode: [];
+    minYear: number;
+    maxYear: number;
+  }): Subscription {
+    this.mapWQSites = L.featureGroup([]);
+    this.filterWqSampleSubject.next(this.mapWQSites);
+    if (isNaN(options.south)) {
+      options.south = -90;
+    }
+    if (isNaN(options.north)) {
+      options.north = 90;
+    }
+    if (isNaN(options.east)) {
+      options.east = 180;
+    }
+    if (isNaN(options.west)) {
+      options.west = -180;
+    }
+    const url =
+      'http://127.0.0.1:5003/pcode_by_loci/?minlat=' +
+      options.south +
+      '&maxlat=' +
+      options.north +
+      '&minlong=' +
+      options.west +
+      '&maxlong=' +
+      options.east;
+    return this.httpClient.get(url).subscribe((res: any[]) => {
+      if (res.length === 0) {
+        this.snackBar.open('No sites match your query.', 'OK', {
+          duration: 4500,
+          verticalPosition: 'top',
+        });
+      } else {
+        // for (let i = 0; i < res.length; i++) {
+        for (let i = 0; i < 10; i++) {
+          let date = res[i].date_time_group;
+          let formattedDate = Number(moment(date).format('YYYY'));
+          if (options.minYear <= formattedDate) {
+            if (options.maxYear >= formattedDate) {
+              let lat = Number(res[i].latitude);
+              let lng = Number(res[i].longitude);
+              L.marker([lat, lng], {
+                icon: L.divIcon({
+                  className: 'wqMapIcon',
+                }),
+              }).addTo(this.mapWQSites);
+            }
+          }
+        }
+      }
+
       this.filterWqSampleSubject.next(this.mapWQSites);
     });
   }

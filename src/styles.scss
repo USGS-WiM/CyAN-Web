@@ -22,3 +22,9 @@ body {
   margin-top: 6px;
   background-color: #ff9100;
 }
+
+::ng-deep .mat-snack-bar-container.no-data-warning {
+  background-color: rgba(255, 166, 0, 0.801);
+  color: white;
+  margin-bottom: 300px;
+}
