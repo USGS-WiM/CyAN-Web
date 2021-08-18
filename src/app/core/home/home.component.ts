@@ -98,6 +98,8 @@ export class HomeComponent implements AfterViewInit {
       }
       if (windowWidth < 605) {
         this.fullHomeScreen = false;
+        homeBtnFullID.classList.remove('marginLeftFullWidth');
+        homeBtnFullID.classList.add('marginLeftSmallWidth');
       }
     }
     if (windowWidth > 605) {

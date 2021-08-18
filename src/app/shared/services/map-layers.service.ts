@@ -114,7 +114,6 @@ export class MapLayersService {
       maxYear: number;
     }
   ) {
-    console.log('options', options);
     this.mapWQSites = L.featureGroup([]);
     this.filterWqSampleSubject.next(this.mapWQSites);
     if (showPoints) {
@@ -156,9 +155,7 @@ export class MapLayersService {
   public filterWqSample2_TEST(): Subscription {
     const url =
       'http://127.0.0.1:5003/pcode_by_loci/?minlat=31.466153715024294&maxlat=47.279229002570844&minlong=-137.15332031250003&maxlong=-60.02929687500001';
-    return this.httpClient.get(url).subscribe((res) => {
-      console.log('result', res);
-    });
+    return this.httpClient.get(url).subscribe((res) => {});
   }
 
   public filterWqSample2_TEST2(options: {
@@ -243,11 +240,12 @@ export class MapLayersService {
     return this.httpClient.get(url).subscribe((res: any[]) => {
       if (res.length === 0) {
         this.snackBar.open('No sites match your query.', 'OK', {
-          duration: 4500,
+          duration: 4000,
           verticalPosition: 'top',
         });
       } else {
-        // for (let i = 0; i < res.length; i++) {
+        //for (let i = 0; i < res.length; i++) {
+        //taking too long, so limit to the first 10 for now
         for (let i = 0; i < 10; i++) {
           let date = res[i].date_time_group;
           let formattedDate = Number(moment(date).format('YYYY'));
@@ -264,7 +262,6 @@ export class MapLayersService {
           }
         }
       }
-
       this.filterWqSampleSubject.next(this.mapWQSites);
     });
   }
@@ -274,7 +271,6 @@ export class MapLayersService {
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
-    console.log('error');
     return (error: any): Observable<T> => {
       console.error(error);
       console.log(`${operation} failed: ${error.message}`);

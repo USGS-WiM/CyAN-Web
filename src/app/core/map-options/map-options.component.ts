@@ -6,8 +6,6 @@ import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import * as L from 'leaflet';
 import * as moment from 'moment';
-import { stringify } from '@angular/compiler/src/util';
-//import * as testData from '../../../../../../output/exampleOutput.json';
 
 @Component({
   selector: 'app-map-options',
@@ -56,21 +54,18 @@ export class MapOptionsComponent implements OnInit {
   };
 
   Parameters = new FormControl();
-  parameterList: string[] = [
-    'Phosphorus',
-    'Dissolved Oxygen',
-    'pH',
-    'Nitrogen',
-    'Chloride',
+  parameterList: any[] = [
+    { name: 'Phosphorus', code: 123 },
+    { name: 'Dissolved Oxygen', code: 456 },
+    { name: 'pH', code: 789 },
   ];
 
   Methods = new FormControl();
-  methodsList: string[] = [
-    'Method 1',
-    'Method 2',
-    'Method 3',
-    'Method 4',
-    'Method 5',
+  methodsList: any[] = [
+    { name: 'Method 1', code: 'abc' },
+    { name: 'Method 2', code: 'def' },
+    { name: 'Method 3', code: 'ghi' },
+    { name: 'Method 4', code: 'jkl' },
   ];
 
   States = new FormControl();
@@ -138,10 +133,6 @@ export class MapOptionsComponent implements OnInit {
     };
     //this.mapLayersService.filterWqSample3(true, filterParameters);
     this.mapLayersService.filterWqSample2_TEST3(filterParameters);
-
-    let sampleData = '2014-08-04 15:30:00+00:00';
-    let sampleDataFormatted = moment(sampleData).format('YYYY');
-    console.log('sampleDataFormatted', sampleDataFormatted);
   }
 
   public displayMapFilters(display: Boolean) {
