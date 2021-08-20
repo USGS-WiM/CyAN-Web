@@ -22,7 +22,7 @@ export class MapLayersService {
     iconCreateFunction: function (cluster) {
       var markers = cluster.getAllChildMarkers();
       var html =
-        '<div style="text-align: center; margin-top: 7px; color: white">' +
+        '<div style="text-align: center; margin-top: 7px; color: gray">' +
         markers.length +
         '</div>';
       return L.divIcon({
@@ -64,13 +64,16 @@ export class MapLayersService {
     minYear: number;
     maxYear: number;
   }): Subscription {
+    //remove previous points from map
+    this.filterWqSampleSubject.next(undefined);
+    //reset the sites layer
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
       iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
         var html =
-          '<div style="text-align: center; margin-top: 7px; color: white">' +
+          '<div style="text-align: center; margin-top: 7px; color: gray">' +
           markers.length +
           '</div>';
         return L.divIcon({
@@ -80,8 +83,6 @@ export class MapLayersService {
         });
       },
     });
-    //remove previous points from map
-    this.filterWqSampleSubject.next(undefined);
     //if one of the bounding boxes is blank, don't constrain the query in that direction
     if (isNaN(options.south)) {
       options.south = -90;
