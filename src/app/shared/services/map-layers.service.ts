@@ -80,7 +80,9 @@ export class MapLayersService {
         });
       },
     });
-    this.filterWqSampleSubject.next(this.mapWQSites);
+    //remove previous points from map
+    this.filterWqSampleSubject.next(undefined);
+    //if one of the bounding boxes is blank, don't constrain the query in that direction
     if (isNaN(options.south)) {
       options.south = -90;
     }
@@ -93,6 +95,7 @@ export class MapLayersService {
     if (isNaN(options.west)) {
       options.west = -180;
     }
+    ///////////////// Update this later to use url base from app.settings.ts ////////////////////////////
     const url =
       'http://127.0.0.1:5005/pcode_by_loci/?minlat=' +
       options.south +
@@ -126,8 +129,8 @@ export class MapLayersService {
             }
           }
         }
+        this.filterWqSampleSubject.next(this.mapWQSites);
       }
-      this.filterWqSampleSubject.next(this.mapWQSites);
     });
   }
 
@@ -142,173 +145,4 @@ export class MapLayersService {
       return of(result as T);
     };
   }
-
-  //Filter water quality sample points
-  /*
-  public filterWqSample(
-    showPoints: Boolean,
-    options: { north: number; south: number; east: number; west: number }
-  ) {
-    this.mapWQSites = L.featureGroup([]);
-    this.filterWqSampleSubject.next(this.mapWQSites);
-    if (showPoints) {
-      this.wqPointList = APP_SETTINGS.wqPoints;
-      for (let site of this.wqPointList) {
-        let lat = Number(site.latitude);
-        let lng = Number(site.longitude);
-        if (isNaN(options.south) || lat > options.south) {
-          if (isNaN(options.north) || lat < options.north) {
-            if (isNaN(options.east) || lng < options.east) {
-              if (isNaN(options.west) || lng > options.west) {
-                L.marker([lat, lng], {
-                  icon: L.divIcon({
-                    className: 'wqMapIcon',
-                  }),
-                }).addTo(this.mapWQSites);
-              }
-            }
-          }
-        }
-      }
-      this.filterWqSampleSubject.next(this.mapWQSites);
-    }
-  }
-
-  //Filter water quality sample points
-  /*
-  public filterWqSample2(
-    showPoints: Boolean,
-    options: { north: number; south: number; east: number; west: number }
-  ): Observable<any> {
-    console.log('made it');
-    this.mapWQSites = L.featureGroup([]);
-    this.filterWqSampleSubject.next(this.mapWQSites);
-    if (showPoints) {
-      this.filterWqSampleSubject.next(this.mapWQSites);
-      return this.httpClient
-        .get(
-          APP_SETTINGS.wqPoints2 +
-            '?minlat=' +
-            options.south +
-            '&maxlat=' +
-            options.north +
-            '&minlong=' +
-            options.west +
-            '&maxlong=' +
-            options.east
-        )
-        .pipe(
-          tap((response) => {
-            console.log('sites received', response);
-            return response;
-          }),
-          catchError(this.handleError<any>('filterWqSample2', []))
-        );
-    }
-  } */
-
-  //Filter water quality sample points
-  /*
-  public filterWqSample3(
-    showPoints: Boolean,
-    options: {
-      north: number;
-      south: number;
-      east: number;
-      west: number;
-      pcode: [];
-      mcode: [];
-      minYear: number;
-      maxYear: number;
-    }
-  ) {
-    this.mapWQSites = L.featureGroup([]);
-    this.filterWqSampleSubject.next(this.mapWQSites);
-    if (showPoints) {
-      this.wqPointList = APP_SETTINGS.wqPoints;
-      for (let site of this.wqPointList) {
-        let lat = Number(site.latitude);
-        let lng = Number(site.longitude);
-        //if one of the bounding parameters is left blank, set parameter to maximum distance as to not constrain the data in that direction
-        if (isNaN(options.south)) {
-          options.south = -90;
-        }
-        if (isNaN(options.north)) {
-          options.north = 90;
-        }
-        if (isNaN(options.east)) {
-          options.east = 180;
-        }
-        if (isNaN(options.west)) {
-          options.west = -180;
-        }
-        if (lat > options.south) {
-          if (lat < options.north) {
-            if (lng < options.east) {
-              if (lng > options.west) {
-                L.marker([lat, lng], {
-                  icon: L.divIcon({
-                    className: 'wqMapIcon',
-                  }),
-                }).addTo(this.mapWQSites);
-              }
-            }
-          }
-        }
-      }
-      this.filterWqSampleSubject.next(this.mapWQSites);
-    }
-  }
-
-  public filterWqSample2_TEST(): Subscription {
-    const url =
-      'http://127.0.0.1:5005/pcode_by_loci/?minlat=31.466153715024294&maxlat=47.279229002570844&minlong=-137.15332031250003&maxlong=-60.02929687500001';
-    return this.httpClient.get(url).subscribe((res) => {});
-  }
-
-  public filterWqSample2_TEST2(options: {
-    north: number;
-    south: number;
-    east: number;
-    west: number;
-    pcode: [];
-    mcode: [];
-    minYear: number;
-    maxYear: number;
-  }): Subscription {
-    if (isNaN(options.south)) {
-      options.south = -90;
-    }
-    if (isNaN(options.north)) {
-      options.north = 90;
-    }
-    if (isNaN(options.east)) {
-      options.east = 180;
-    }
-    if (isNaN(options.west)) {
-      options.west = -180;
-    }
-    const url =
-      'http://127.0.0.1:5005/pcode_by_loci/?minlat=' +
-      options.south +
-      '&maxlat=' +
-      options.north +
-      '&minlong=' +
-      options.west +
-      '&maxlong=' +
-      options.east;
-    return this.httpClient.get(url).subscribe((res: any[]) => {
-      // for (let i = 0; i < res.length; i++) {
-      for (let i = 0; i < 10; i++) {
-        let lat = Number(res[i].latitude);
-        let lng = Number(res[i].longitude);
-        L.marker([lat, lng], {
-          icon: L.divIcon({
-            className: 'wqMapIcon',
-          }),
-        }).addTo(this.mapWQSites);
-      }
-      this.filterWqSampleSubject.next(this.mapWQSites);
-    });
-  } */
 }
