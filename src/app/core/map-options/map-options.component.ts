@@ -3,6 +3,7 @@ import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
+import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import * as L from 'leaflet';
 import * as moment from 'moment';
@@ -98,7 +99,8 @@ export class MapOptionsComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService,
-    private mapLayersService: MapLayersService
+    private mapLayersService: MapLayersService,
+    private markersService: MarkersService
   ) {}
 
   @HostListener('window:resize')
@@ -133,6 +135,8 @@ export class MapOptionsComponent implements OnInit {
     };
     //this.mapLayersService.filterWqSample3(true, filterParameters);
     this.mapLayersService.filterWqSample2_TEST3(filterParameters);
+
+    // this.markersService.testMarkers();
   }
 
   public displayMapFilters(display: Boolean) {

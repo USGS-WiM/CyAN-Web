@@ -50,6 +50,6 @@ export class APP_SETTINGS {
     return latLngData;
   }
   public static get wqPoints2() {
-    return 'http://127.0.0.1:5001/pcode_by_loci/';
+    return 'http://127.0.0.1:5005/pcode_by_loci/';
   }
 }

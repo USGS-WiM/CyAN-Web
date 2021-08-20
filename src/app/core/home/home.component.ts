@@ -20,11 +20,13 @@ export class HomeComponent implements AfterViewInit {
   public windowWidthResize = false;
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
+
   ngAfterViewInit(): void {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 800);
     window.onresize = () => (this.windowWidthResize = window.innerWidth >= 800);
     Promise.resolve().then(() => this.resizeDivs());
   }
+
   public changeLayout(homeLayout: Boolean) {
     /*
     this.componentDisplayService.getHomeLayout(homeLayout);
