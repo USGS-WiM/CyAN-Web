@@ -5,6 +5,7 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { LoaderService } from 'src/app/shared/services/loader.service';
 import * as L from 'leaflet';
 import * as moment from 'moment';
 
@@ -100,7 +101,7 @@ export class MapOptionsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
-    private markersService: MarkersService
+    private _loaderService: LoaderService
   ) {}
 
   @HostListener('window:resize')
@@ -123,6 +124,7 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public runFilters() {
+    this._loaderService.showFullPageLoad();
     let filterParameters = {
       north: parseFloat(this.mapForm.get('northControl').value),
       south: parseFloat(this.mapForm.get('southControl').value),
@@ -137,6 +139,9 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.filterWqSample2_TEST3(filterParameters);
 
     // this.markersService.testMarkers();
+    setTimeout(() => {
+      this._loaderService.hideFullPageLoad();
+    }, 500);
   }
 
   public displayMapFilters(display: Boolean) {
