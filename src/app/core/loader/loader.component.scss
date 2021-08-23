@@ -5,15 +5,15 @@
   visibility: hidden;
 }
 .loader-overlay {
-  position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
   z-index: 500000;
+
+  position: relative;
 }
 .page-loader {
-  position: fixed !important;
   width: 100%;
   height: 100%;
   opacity: 1;
@@ -24,4 +24,6 @@
   background-repeat: no-repeat;
   background-size: 120px auto;
   background-position: center 50%;
+
+  position: relative;
 }

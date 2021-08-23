@@ -6,6 +6,7 @@ import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LoaderService } from 'src/app/shared/services/loader.service';
+
 import * as L from 'leaflet';
 import * as moment from 'moment';
 
@@ -101,6 +102,7 @@ export class MapOptionsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
+    private markersService: MarkersService,
     private _loaderService: LoaderService
   ) {}
 
