@@ -16,6 +16,10 @@ export class MapComponent implements AfterViewInit {
   public westBounds: number;
   public currentPoints;
 
+  mapScale;
+  latitude;
+  longitude;
+
   constructor(
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService
@@ -44,6 +48,17 @@ export class MapComponent implements AfterViewInit {
           this.zoomToPoints(points);
         }
       }
+    });
+
+    L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+    this.map.whenReady(() => {
+      const mapZoom = this.map.getZoom();
+      //const tempMapScale = APP_UTILITIES.SCALE_LOOKUP(this.map.getZoom());
+      // this.zoomLevel = mapZoom;
+      //this.mapScale = tempMapScale;
+      const initMapCenter = this.map.getCenter();
+      this.latitude = initMapCenter.lat.toFixed(4);
+      this.longitude = initMapCenter.lng.toFixed(4);
     });
   }
 
