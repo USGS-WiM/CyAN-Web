@@ -8,14 +8,30 @@
           (click)="clickHome()"
           [hidden]="!showFullCyanHomeBtn"
         >
-          <p>
-            <mat-icon aria-hidden="false" aria-label="Example home icon"
-              >home</mat-icon
-            >
-            CyAN
-          </p>
+          <mat-icon aria-hidden="false" aria-label="Example home icon"
+            >home</mat-icon
+          >
+          CyAN FIELD
         </div>
       </div>
+    </div>
+    <div
+      class="landingPgBtns marginLeftFullWidth"
+      style="
+        background-color: white;
+        height: 60px;
+        width: 200px;
+        margin-left: 0px;
+        color: white;
+      "
+      [hidden]="!showHomeLayout || !fullHomeScreen"
+    >
+      <a href="https://www.usgs.gov/" target="_blank">
+        <img
+          style="margin-top: -42px; width: 150px"
+          src="../../../assets/USGS_logo.png"
+        />
+      </a>
     </div>
     <div [hidden]="showHomeLayout">
       <div class="flex-child flex-container">
@@ -33,6 +49,17 @@
               >
             </p>
           </div>
+        </div>
+        <div
+          class="smNavBtn"
+          style="width: 60px; height: 60px"
+          matTooltip="USGS Home"
+        >
+          <a href="https://www.usgs.gov/" target="_blank">
+            <img
+              style="width: 60px; height: 60px"
+              src="../../../assets/USGS_logo_sm.PNG"
+          /></a>
         </div>
         <div>
           <div
