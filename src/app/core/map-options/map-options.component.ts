@@ -143,7 +143,7 @@ export class MapOptionsComponent implements OnInit {
     // this.markersService.testMarkers();
     setTimeout(() => {
       this._loaderService.hideFullPageLoad();
-    }, 500);
+    }, 10000);
   }
 
   public displayMapFilters(display: Boolean) {
