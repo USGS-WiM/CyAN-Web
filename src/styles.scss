@@ -1,4 +1,45 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/leaflet/dist/leaflet.css";
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+/* icons for map layers */
+.wqMapIcon {
+  height: 30px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 30px;
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  margin-top: 6px;
+  background-color: #ff9100;
+}
+
+.allSiteIcon {
+  height: 32px;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  width: 32px;
+  display: block;
+  overflow: hidden;
+  position: absolute;
+  margin-top: 6px;
+  background-color: #fefecc;
+  border: 2px solid gray;
+  opacity: 1;
+}
+
+::ng-deep .mat-snack-bar-container.no-data-warning {
+  background-color: #ff9100;
+  color: white;
+  margin-bottom: 300px;
+}

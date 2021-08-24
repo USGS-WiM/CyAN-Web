@@ -34,6 +34,11 @@ export class GraphOptionsComponent implements OnInit {
   public graphWidth: Number;
   public graphMargins: Number;
   public graphOptionsVisible: Boolean = true;
+  public showGraph = false;
+  public xDataTrace1;
+  public yDataTrace1;
+  public xDataTrace2;
+  public yDataTrace2;
 
   constructor() {}
   @HostListener('window:resize')
@@ -70,8 +75,8 @@ export class GraphOptionsComponent implements OnInit {
   public createGraph() {
     let bivariatePlot = document.getElementById('graph');
     var trace1 = {
-      x: [1, 2, 3, 4, 5],
-      y: [1, 6, 3, 6, 1],
+      x: this.xDataTrace1,
+      y: this.yDataTrace1,
       mode: 'markers',
       type: 'scatter',
       name: 'Sample 1',
@@ -80,8 +85,8 @@ export class GraphOptionsComponent implements OnInit {
     };
 
     var trace2 = {
-      x: [1.5, 2.5, 3.5, 4.5, 5.5],
-      y: [4, 1, 7, 1, 4],
+      x: this.xDataTrace2,
+      y: this.yDataTrace2,
       mode: 'markers',
       type: 'scatter',
       name: 'Sample 2',
@@ -115,6 +120,19 @@ export class GraphOptionsComponent implements OnInit {
     Plotly.newPlot(bivariatePlot, data, layout, {
       displaylogo: false,
     });
+  }
+
+  public displayGraph() {
+    this.populateGraphData();
+    this.showGraph = true;
+    this.resizeDivs();
+  }
+
+  public populateGraphData() {
+    this.xDataTrace1 = [1, 2, 3, 4, 5];
+    this.yDataTrace1 = [1, 6, 3, 6, 1];
+    this.xDataTrace2 = [1.5, 2.5, 3.5, 4.5, 5.5];
+    this.yDataTrace2 = [4, 1, 7, 1, 4];
   }
 
   public resizeDivs() {
@@ -194,6 +212,8 @@ export class GraphOptionsComponent implements OnInit {
       this.graphMargins = 20;
     }
 
-    this.createGraph();
+    if (this.showGraph) {
+      this.createGraph();
+    }
   }
 }

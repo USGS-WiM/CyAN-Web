@@ -1,6 +1,7 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 
 @Component({
   selector: 'app-map',
@@ -13,21 +14,56 @@ export class MapComponent implements AfterViewInit {
   public southBounds: number;
   public eastBounds: number;
   public westBounds: number;
+  public currentPoints;
 
-  constructor(private componentDisplayService: ComponentDisplayService) {}
+  mapScale;
+  latitude;
+  longitude;
+
+  constructor(
+    private componentDisplayService: ComponentDisplayService,
+    private mapLayersService: MapLayersService
+  ) {}
 
   ngAfterViewInit(): void {
     this.initMap();
-    this.componentDisplayService.basemapSubject.subscribe((base) => {
+    this.mapLayersService.basemapSubject.subscribe((base) => {
       if (base) {
         base.addTo(this.map);
       }
     });
-    this.componentDisplayService.removeBasemapSubject.subscribe((base) => {
+    this.mapLayersService.removeBasemapSubject.subscribe((base) => {
       if (base) {
         base.removeFrom(this.map);
       }
     });
+    this.mapLayersService.filterWqSampleSubject.subscribe((points) => {
+      if (this.currentPoints) {
+        this.currentPoints.removeFrom(this.map);
+      }
+      if (points) {
+        if (points._leaflet_id) {
+          this.currentPoints = points;
+          this.currentPoints.addTo(this.map);
+          this.zoomToPoints(points);
+        }
+      }
+    });
+
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
+    this.map.whenReady(() => {
+      const mapZoom = this.map.getZoom();
+      //const tempMapScale = APP_UTILITIES.SCALE_LOOKUP(this.map.getZoom());
+      // this.zoomLevel = mapZoom;
+      //this.mapScale = tempMapScale;
+      const initMapCenter = this.map.getCenter();
+      this.latitude = initMapCenter.lat.toFixed(4);
+      this.longitude = initMapCenter.lng.toFixed(4);
+    });
+  }
+
+  private zoomToPoints(layer) {
+    this.map.fitBounds(layer.getBounds());
   }
 
   private initMap(): void {
@@ -40,7 +76,7 @@ export class MapComponent implements AfterViewInit {
     this.map.on('moveend', () => {
       if (this.map) {
         this.getMapBoundingBox();
-        this.componentDisplayService.basemapSubject.subscribe((base) => {
+        this.mapLayersService.basemapSubject.subscribe((base) => {
           if (base) {
             base.addTo(this.map);
           }

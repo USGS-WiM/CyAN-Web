@@ -20,11 +20,13 @@ export class HomeComponent implements AfterViewInit {
   public windowWidthResize = false;
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
+
   ngAfterViewInit(): void {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 800);
     window.onresize = () => (this.windowWidthResize = window.innerWidth >= 800);
     Promise.resolve().then(() => this.resizeDivs());
   }
+
   public changeLayout(homeLayout: Boolean) {
     /*
     this.componentDisplayService.getHomeLayout(homeLayout);
@@ -98,6 +100,8 @@ export class HomeComponent implements AfterViewInit {
       }
       if (windowWidth < 605) {
         this.fullHomeScreen = false;
+        homeBtnFullID.classList.remove('marginLeftFullWidth');
+        homeBtnFullID.classList.add('marginLeftSmallWidth');
       }
     }
     if (windowWidth > 605) {
@@ -112,6 +116,9 @@ export class HomeComponent implements AfterViewInit {
 
       mapBtnFullID.classList.add('mapBtnFullMargin');
       mapBtnFullID.classList.remove('mapBtnSmallMargin');
+    }
+    if (this.showHomeLayout) {
+      homeBtnFullID.classList.remove('marginLeftFullWidth');
     }
   }
 }

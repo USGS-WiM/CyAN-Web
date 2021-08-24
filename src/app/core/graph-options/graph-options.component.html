@@ -148,12 +148,18 @@
     >
       -
     </button>
-    <button class="plotDataBtn dataBtn">Plot Data</button>
+    <button class="plotDataBtn dataBtn" (click)="displayGraph()">
+      Plot Data
+    </button>
     <button class="downloadBtn dataBtn" matTooltip="Download CSV">
       <mat-icon>cloud_download</mat-icon>
     </button>
   </div>
-  <div class="graphBackground marginTopFullHeight" id="graphBackgroundID">
+  <div
+    class="graphBackground marginTopFullHeight"
+    id="graphBackgroundID"
+    [hidden]="!showGraph"
+  >
     <div id="graph"></div>
   </div>
 </div>

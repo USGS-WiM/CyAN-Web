@@ -2,8 +2,13 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { MapLayersService } from 'src/app/shared/services/map-layers.service';
+import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { FiltersService } from '../../shared/services/filters.service';
+import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-options',
@@ -11,7 +16,9 @@ import * as L from 'leaflet';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
+  public parameterTypes$: Observable<any[]>;
   public mapForm: FormGroup;
+  public codeForm: FormGroup;
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
   public northBounds: number;
@@ -19,6 +26,11 @@ export class MapOptionsComponent implements OnInit {
   public eastBounds: number;
   public westBounds: number;
   public mapBoundsChecked: Boolean = false;
+  public showNullWarning: Boolean = false;
+  public includeNullSites: Boolean = false;
+  public nullDataChecked: Boolean = false;
+  public optimalAlignment: Boolean = false;
+  public nullCheckboxElement = document.getElementById('nullCheckbox');
   public osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -51,21 +63,18 @@ export class MapOptionsComponent implements OnInit {
   };
 
   Parameters = new FormControl();
-  parameterList: string[] = [
-    'Phosphorus',
-    'Dissolved Oxygen',
-    'pH',
-    'Nitrogen',
-    'Chloride',
+  parameterList: any[] = [
+    { name: 'Phosphorus', code: 123 },
+    { name: 'Dissolved Oxygen', code: 456 },
+    { name: 'pH', code: 789 },
   ];
 
   Methods = new FormControl();
-  methodsList: string[] = [
-    'Method 1',
-    'Method 2',
-    'Method 3',
-    'Method 4',
-    'Method 5',
+  methodsList: any[] = [
+    { name: 'Method 1', code: 'abc' },
+    { name: 'Method 2', code: 'def' },
+    { name: 'Method 3', code: 'ghi' },
+    { name: 'Method 4', code: 'jkl' },
   ];
 
   States = new FormControl();
@@ -97,12 +106,12 @@ export class MapOptionsComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private componentDisplayService: ComponentDisplayService
+    private componentDisplayService: ComponentDisplayService,
+    private mapLayersService: MapLayersService,
+    private markersService: MarkersService,
+    private filterService: FiltersService
   ) {
-    /* formBuilder.group({
-      baseControl: null,
-      northControl: Number,
-    }); */
+    this.parameterTypes$ = this.filterService.parameterTypes$;
   }
 
   @HostListener('window:resize')
@@ -117,8 +126,30 @@ export class MapOptionsComponent implements OnInit {
       eastControl: new FormControl(),
       westControl: new FormControl(),
     });
-
+    this.codeForm = new FormGroup({
+      parameterControl: new FormControl(),
+      methodControl: new FormControl(),
+    });
     this.resizeDivs();
+  }
+
+  public runFilters() {
+    let filterParameters = {
+      north: parseFloat(this.mapForm.get('northControl').value),
+      south: parseFloat(this.mapForm.get('southControl').value),
+      east: parseFloat(this.mapForm.get('eastControl').value),
+      west: parseFloat(this.mapForm.get('westControl').value),
+      pcode: this.codeForm.get('parameterControl').value,
+      mcode: this.codeForm.get('methodControl').value,
+      minYear: this.minValue,
+      maxYear: this.maxValue,
+      includeNull: this.includeNullSites,
+      satelliteAlign: this.optimalAlignment,
+    };
+    //this.mapLayersService.filterWqSample3(true, filterParameters);
+    this.mapLayersService.filterWqSample2_TEST3(filterParameters);
+
+    // this.markersService.testMarkers();
   }
 
   public displayMapFilters(display: Boolean) {
@@ -329,10 +360,10 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
-  public populateMapBounds(boundsChecked: MatCheckboxChange) {
-    if (boundsChecked.checked) {
+  public populateMapBounds(boundsChecked: Boolean) {
+    if (boundsChecked) {
       this.componentDisplayService.northBoundsSubject.subscribe((lat) => {
-        if (lat && boundsChecked.checked) {
+        if (lat && boundsChecked) {
           this.northBounds = lat;
         }
       });
@@ -357,12 +388,57 @@ export class MapOptionsComponent implements OnInit {
       this.mapForm.get('eastControl').setValue(this.eastBounds);
       this.mapForm.get('westControl').setValue(this.westBounds);
     }
-    if (!boundsChecked.checked) {
+    if (!boundsChecked) {
       let testVal: number;
       this.mapForm.get('northControl').setValue(testVal);
       this.mapForm.get('southControl').setValue('');
       this.mapForm.get('eastControl').setValue('');
       this.mapForm.get('westControl').setValue('');
+    }
+  }
+
+  public nullwarning(nullChecked: MatCheckboxChange) {
+    this.nullDataChecked = false;
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
+    if (nullChecked.checked) {
+      this.showNullWarning = true;
+      mapLayersOptions.classList.add('disableClick');
+      mapOptionsContainer.classList.add('disableClick');
+    } else {
+      this.showNullWarning = false;
+      mapOptionsContainer.classList.remove('disableClick');
+      mapLayersOptions.classList.remove('disableClick');
+    }
+  }
+
+  public submitNullWarning(showNullSites: Boolean) {
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
+
+    mapLayersOptions.classList.remove('disableClick');
+    mapOptionsContainer.classList.remove('disableClick');
+
+    let nullCheckboxElement = document.getElementById(
+      'nullCheckbox'
+    ) as HTMLInputElement;
+    // nullCheckboxElement.checked = true;
+    this.showNullWarning = false;
+    if (showNullSites) {
+      this.includeNullSites = true;
+      this.nullDataChecked = true;
+    } else {
+      nullCheckboxElement.classList.remove('mat-checkbox-checked');
+      this.includeNullSites = false;
+      this.nullDataChecked = false;
+    }
+  }
+
+  public clickSatelliteAlignment(satelliteAlignChecked: MatCheckboxChange) {
+    if (satelliteAlignChecked.checked) {
+      this.optimalAlignment = true;
+    } else {
+      this.optimalAlignment = false;
     }
   }
 
@@ -377,19 +453,19 @@ export class MapOptionsComponent implements OnInit {
       'grayscaleRadio'
     ) as HTMLInputElement;
     if (streetRadioBtn.checked) {
-      this.componentDisplayService.getBasemap(this.osm);
-      this.componentDisplayService.removeBasemap(this.imagery);
-      this.componentDisplayService.removeBasemap(this.grayscale);
+      this.mapLayersService.getBasemap(this.osm);
+      this.mapLayersService.removeBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.grayscale);
     }
     if (imageryRadioBtn.checked) {
-      this.componentDisplayService.getBasemap(this.imagery);
-      this.componentDisplayService.removeBasemap(this.osm);
-      this.componentDisplayService.removeBasemap(this.grayscale);
+      this.mapLayersService.getBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.osm);
+      this.mapLayersService.removeBasemap(this.grayscale);
     }
     if (grayscaleRadioBtn.checked) {
-      this.componentDisplayService.getBasemap(this.grayscale);
-      this.componentDisplayService.removeBasemap(this.imagery);
-      this.componentDisplayService.removeBasemap(this.osm);
+      this.mapLayersService.getBasemap(this.grayscale);
+      this.mapLayersService.removeBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.osm);
     }
   }
 }

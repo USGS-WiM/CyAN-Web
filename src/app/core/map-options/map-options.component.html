@@ -56,98 +56,160 @@
     </label>
   </div>
 </div>
-<div
-  id="mapOptionsContainer"
-  class="optionsBackgroundMapFull marginLeftFullWidth marginTopFullHeight"
-  [hidden]="!mapFilters"
->
-  <div style="text-align: right; margin-right: 10px">
-    <mat-icon
-      matTooltip="minimize"
-      style="cursor: pointer"
-      (click)="displayMapFilters(false)"
-      >minimize</mat-icon
-    >
-  </div>
-  <div style="margin-left: 10px">
-    <mat-form-field appearance="fill">
-      <mat-label>Parameters</mat-label>
-      <mat-select [formControl]="Parameters" multiple>
-        <mat-option
-          *ngFor="let parameter of parameterList"
-          [value]="parameter"
-          >{{ parameter }}</mat-option
-        >
-      </mat-select>
-    </mat-form-field>
-    <mat-form-field appearance="fill">
-      <mat-label>Methods</mat-label>
-      <mat-select [formControl]="Parameters" multiple>
-        <mat-option *ngFor="let method of methodsList" [value]="method">{{
-          method
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="custom-slider" style="margin-left: 10px">
-    <ngx-slider
-      [(value)]="minValue"
-      [(highValue)]="maxValue"
-      [options]="timeOptions"
-    ></ngx-slider>
-  </div>
-  <div style="margin-left: 10px; margin-top: 10px">
-    <mat-form-field appearance="fill">
-      <mat-label>States</mat-label>
-      <mat-select [formControl]="States" multiple>
-        <mat-option *ngFor="let state of stateList" [value]="state">{{
-          state
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    Bounding Box
-    <form class="boundingBoxForm" [formGroup]="mapForm">
-      <div class="flex-container">
-        <mat-form-field
-          class="boundingBoxFullWidth"
-          appearance="fill"
-          style="margin-right: 10px"
-        >
-          <mat-label>North</mat-label>
-          <input matInput #northControl formControlName="northControl" />
+<div class="flex-container" style="width: 660px">
+  <div
+    id="mapOptionsContainer"
+    class="optionsBackgroundMapFull marginLeftFullWidth marginTopFullHeight"
+    [hidden]="!mapFilters"
+  >
+    <div style="text-align: right; margin-right: 10px">
+      <mat-icon
+        matTooltip="minimize"
+        style="cursor: pointer"
+        (click)="displayMapFilters(false)"
+        >minimize</mat-icon
+      >
+    </div>
+    <form [formGroup]="codeForm">
+      <div style="margin-left: 10px">
+        <mat-form-field appearance="fill">
+          <mat-label>Parameters</mat-label>
+          <mat-select formControlName="parameterControl" multiple>
+            <mat-option
+              *ngFor="let parameter of parameterTypes$ | async"
+              [value]="parameter.pcode"
+              >{{ parameter.short_name }}</mat-option
+            >
+          </mat-select>
         </mat-form-field>
-        <mat-form-field class="boundingBoxFullWidth" appearance="fill">
-          <mat-label>South</mat-label>
-          <input matInput formControlName="southControl" />
-        </mat-form-field>
-      </div>
-      <div class="flex-container">
-        <mat-form-field
-          class="boundingBoxFullWidth"
-          appearance="fill"
-          style="margin-right: 10px"
-        >
-          <mat-label>East</mat-label>
-          <input matInput formControlName="eastControl" />
-        </mat-form-field>
-        <mat-form-field class="boundingBoxFullWidth" appearance="fill">
-          <mat-label>West</mat-label>
-          <input matInput formControlName="westControl" />
+        <mat-form-field appearance="fill">
+          <mat-label>Methods</mat-label>
+          <mat-select formControlName="methodControl" multiple>
+            <mat-option
+              *ngFor="let method of methodsList"
+              [value]="method.code"
+              >{{ method.name }}</mat-option
+            >
+          </mat-select>
         </mat-form-field>
       </div>
     </form>
+    <div class="custom-slider" style="margin-left: 10px">
+      <ngx-slider
+        [(value)]="minValue"
+        [(highValue)]="maxValue"
+        [options]="timeOptions"
+      ></ngx-slider>
+    </div>
+    <div style="margin-left: 10px; margin-top: 10px">
+      <mat-form-field appearance="fill">
+        <mat-label>States</mat-label>
+        <mat-select [formControl]="States" multiple>
+          <mat-option *ngFor="let state of stateList" [value]="state">{{
+            state
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button
+        style="
+          font-size: 15px;
+          margin-bottom: 5px;
+          color: white;
+          cursor: pointer;
+          background-color: rgb(131, 184, 124);
+          height: 25px;
+          text-align: center;
+          vertical-align: middle;
+          border: none;
+        "
+        (click)="populateMapBounds(true)"
+      >
+        Use map bounds
+      </button>
+      <form class="boundingBoxForm" [formGroup]="mapForm">
+        <div class="flex-container">
+          <mat-form-field
+            class="boundingBoxFullWidth"
+            appearance="fill"
+            style="margin-right: 10px"
+          >
+            <mat-label>North</mat-label>
+            <input matInput #northControl formControlName="northControl" />
+          </mat-form-field>
+          <mat-form-field class="boundingBoxFullWidth" appearance="fill">
+            <mat-label>South</mat-label>
+            <input matInput formControlName="southControl" />
+          </mat-form-field>
+        </div>
+        <div class="flex-container">
+          <mat-form-field
+            class="boundingBoxFullWidth"
+            appearance="fill"
+            style="margin-right: 10px"
+          >
+            <mat-label>East</mat-label>
+            <input matInput formControlName="eastControl" />
+          </mat-form-field>
+          <mat-form-field class="boundingBoxFullWidth" appearance="fill">
+            <mat-label>West</mat-label>
+            <input matInput formControlName="westControl" />
+          </mat-form-field>
+        </div>
+      </form>
 
-    <mat-checkbox
-      [disableRipple]="true"
-      (change)="populateMapBounds($event)"
-      [checked]="mapBoundsChecked"
-      >Use map bounds
-    </mat-checkbox>
+      <mat-checkbox
+        [disableRipple]="true"
+        (change)="clickSatelliteAlignment($event)"
+        >Optimal satellite alignment
+      </mat-checkbox>
+      <mat-checkbox
+        [disableRipple]="true"
+        [checked]="nullDataChecked"
+        (change)="nullwarning($event)"
+        id="nullCheckbox"
+        >Inclue null values</mat-checkbox
+      >
+    </div>
+    <button class="mapFilterBtn dataBtn" (click)="runFilters()">Filter</button>
+    <button class="downloadBtn dataBtn" matTooltip="Download CSV">
+      <mat-icon>cloud_download</mat-icon>
+    </button>
   </div>
-  <button class="mapFilterBtn dataBtn">Filter</button>
-  <button class="downloadBtn dataBtn" matTooltip="Download CSV">
-    <mat-icon>cloud_download</mat-icon>
-  </button>
+  <div
+    class="flex-child"
+    style="
+      height: 105px;
+      width: 210px !important;
+      background-color: rgb(255, 255, 255, 0.85);
+      position: relative;
+      border: 4px solid orange;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      margin-top: 20px;
+      margin-left: 15px;
+    "
+    [hidden]="!showNullWarning"
+  >
+    Are you sure you want to include sites with null values? This will
+    significantly slow processing times. <br />
+    <button
+      class="mapFilterBtn dataBtn"
+      style="margin-left: 0px"
+      (click)="submitNullWarning(false)"
+      matTooltip="Recommended"
+    >
+      No
+    </button>
+    <button
+      class="mapFilterBtn dataBtn"
+      style="background-color: rgb(172, 172, 172)"
+      (click)="submitNullWarning(true)"
+      matTooltip="Not Recommended"
+    >
+      Yes
+    </button>
+  </div>
 </div>
 <div
   [hidden]="mapFilters"

@@ -54,21 +54,4 @@ export class ComponentDisplayService {
   public getWestBounds(west: number) {
     this.westBoundsSubject.next(west);
   }
-
-  //Basemap Display
-  //Add basemap
-  public basemapSubject = new BehaviorSubject<any>(undefined);
-  basemap$ = this.basemapSubject.asObservable();
-
-  public getBasemap(base) {
-    this.basemapSubject.next(base);
-  }
-
-  //Remove basemap
-  public removeBasemapSubject = new BehaviorSubject<any>(undefined);
-  removeBasemap$ = this.removeBasemapSubject.asObservable();
-
-  public removeBasemap(base) {
-    this.removeBasemapSubject.next(base);
-  }
 }
