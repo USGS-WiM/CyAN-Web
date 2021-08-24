@@ -14,7 +14,6 @@ import * as moment from 'moment';
 })
 export class MapLayersService {
   public wqPointList;
-  //mapWQSites = L.featureGroup([]);
   // Markers for All Sites Layers
   public mapWQSites = L.markerClusterGroup({
     showCoverageOnHover: false,
@@ -102,7 +101,8 @@ export class MapLayersService {
     base.classList.add('initial-loader');
     ///////////////// Update this later to use url base from app.settings.ts ////////////////////////////
     const url =
-      'http://127.0.0.1:5005/pcode_by_loci/?minlat=' +
+      APP_SETTINGS.wqPoints +
+      '/?minlat=' +
       options.south +
       '&maxlat=' +
       options.north +
@@ -139,10 +139,6 @@ export class MapLayersService {
         base.classList.remove('initial-loader');
       }
     });
-  }
-
-  public getWqSample() {
-    return this.mapWQSites;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

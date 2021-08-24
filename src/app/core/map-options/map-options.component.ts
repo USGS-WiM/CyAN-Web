@@ -109,7 +109,6 @@ export class MapOptionsComponent implements OnInit {
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
     private markersService: MarkersService,
-
     private filterService: FiltersService
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
@@ -132,9 +131,6 @@ export class MapOptionsComponent implements OnInit {
       methodControl: new FormControl(),
     });
     this.resizeDivs();
-
-    let nullCheckboxElement = document.getElementById('nullCheckbox');
-    console.log('nullCheckboxElement', nullCheckboxElement);
   }
 
   public runFilters() {

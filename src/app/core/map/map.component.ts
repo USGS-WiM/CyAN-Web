@@ -63,11 +63,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   private zoomToPoints(layer) {
-    //   if (layer._featureGroup._layers !== {}) {
     this.map.fitBounds(layer.getBounds());
-    //}
-    // console.log('layer2', layer._featureGroup._layers);
-    // console.log('layer2', layer._featureGroup._layers.length);
   }
 
   private initMap(): void {
