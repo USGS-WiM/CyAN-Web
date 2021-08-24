@@ -127,6 +127,9 @@ export class MapOptionsComponent implements OnInit {
 
   public runFilters() {
     this._loaderService.showFullPageLoad();
+    //uncommenting this will display the loader when the filter button is clicked
+    //let base = document.getElementById('base');
+    //base.classList.add('initial-loader');
     let filterParameters = {
       north: parseFloat(this.mapForm.get('northControl').value),
       south: parseFloat(this.mapForm.get('southControl').value),
@@ -141,9 +144,8 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.filterWqSample2_TEST3(filterParameters);
 
     // this.markersService.testMarkers();
-    setTimeout(() => {
-      this._loaderService.hideFullPageLoad();
-    }, 10000);
+
+    this._loaderService.hideFullPageLoad();
   }
 
   public displayMapFilters(display: Boolean) {

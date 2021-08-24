@@ -131,6 +131,8 @@ export class MapLayersService {
           }
         }
         this.filterWqSampleSubject.next(this.mapWQSites);
+        let base = document.getElementById('base');
+        base.classList.remove('initial-loader');
       }
     });
   }
