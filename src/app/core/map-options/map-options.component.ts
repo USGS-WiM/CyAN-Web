@@ -397,7 +397,6 @@ export class MapOptionsComponent implements OnInit {
     let mapOptionsContainer = document.getElementById('mapOptionsContainer');
     if (nullChecked.checked) {
       this.showNullWarning = true;
-
       mapLayersOptions.classList.add('disableClick');
       mapOptionsContainer.classList.add('disableClick');
     } else {

@@ -111,7 +111,12 @@
           }}</mat-option>
         </mat-select>
       </mat-form-field>
-      Bounding Box
+      <mat-checkbox
+        [disableRipple]="true"
+        (change)="populateMapBounds($event)"
+        [checked]="mapBoundsChecked"
+        >Use map bounds
+      </mat-checkbox>
       <form class="boundingBoxForm" [formGroup]="mapForm">
         <div class="flex-container">
           <mat-form-field
@@ -143,11 +148,8 @@
         </div>
       </form>
 
-      <mat-checkbox
-        [disableRipple]="true"
-        (change)="populateMapBounds($event)"
-        [checked]="mapBoundsChecked"
-        >Use map bounds
+      <mat-checkbox [disableRipple]="true"
+        >Optimal satellite alignment
       </mat-checkbox>
       <mat-checkbox
         [disableRipple]="true"
@@ -179,7 +181,7 @@
     [hidden]="!showNullWarning"
   >
     Are you sure you want to include sites with null values? This will
-    signicantly slow processing times. <br />
+    significantly slow processing times. <br />
     <button
       class="mapFilterBtn dataBtn"
       (click)="submitNullWarning(false)"

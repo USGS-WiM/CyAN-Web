@@ -50,7 +50,7 @@ export class MapComponent implements AfterViewInit {
       }
     });
 
-    L.control.scale({ position: 'bottomleft' }).addTo(this.map);
+    L.control.scale({ position: 'bottomright' }).addTo(this.map);
     this.map.whenReady(() => {
       const mapZoom = this.map.getZoom();
       //const tempMapScale = APP_UTILITIES.SCALE_LOOKUP(this.map.getZoom());
