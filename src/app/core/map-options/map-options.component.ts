@@ -23,6 +23,10 @@ export class MapOptionsComponent implements OnInit {
   public eastBounds: number;
   public westBounds: number;
   public mapBoundsChecked: Boolean = false;
+  public showNullWarning: Boolean = false;
+  public includeNullSites: Boolean = false;
+  public nullDataChecked: Boolean = false;
+  public nullCheckboxElement = document.getElementById('nullCheckbox');
   public osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
@@ -120,6 +124,9 @@ export class MapOptionsComponent implements OnInit {
       methodControl: new FormControl(),
     });
     this.resizeDivs();
+
+    let nullCheckboxElement = document.getElementById('nullCheckbox');
+    console.log('nullCheckboxElement', nullCheckboxElement);
   }
 
   public runFilters() {
@@ -381,6 +388,44 @@ export class MapOptionsComponent implements OnInit {
       this.mapForm.get('southControl').setValue('');
       this.mapForm.get('eastControl').setValue('');
       this.mapForm.get('westControl').setValue('');
+    }
+  }
+
+  public nullwarning(nullChecked: MatCheckboxChange) {
+    this.nullDataChecked = false;
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
+    if (nullChecked.checked) {
+      this.showNullWarning = true;
+
+      mapLayersOptions.classList.add('disableClick');
+      mapOptionsContainer.classList.add('disableClick');
+    } else {
+      this.showNullWarning = false;
+      mapOptionsContainer.classList.remove('disableClick');
+      mapLayersOptions.classList.remove('disableClick');
+    }
+  }
+
+  public submitNullWarning(showNullSites: Boolean) {
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
+
+    mapLayersOptions.classList.remove('disableClick');
+    mapOptionsContainer.classList.remove('disableClick');
+
+    let nullCheckboxElement = document.getElementById(
+      'nullCheckbox'
+    ) as HTMLInputElement;
+    // nullCheckboxElement.checked = true;
+    this.showNullWarning = false;
+    if (showNullSites) {
+      this.includeNullSites = true;
+      this.nullDataChecked = true;
+    } else {
+      nullCheckboxElement.classList.remove('mat-checkbox-checked');
+      this.includeNullSites = false;
+      this.nullDataChecked = false;
     }
   }
 

@@ -319,6 +319,9 @@
 .marginTopSmallHeight {
   margin-top: 5px;
 }
+.disableClick {
+  pointer-events: none;
+}
 
 /* start: year slider */
 ::ng-deep {
