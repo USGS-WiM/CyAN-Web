@@ -5,6 +5,8 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { FiltersService } from '../../shared/services/filters.service';
+import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
 import * as moment from 'moment';
 
@@ -14,6 +16,7 @@ import * as moment from 'moment';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
+  public parameterTypes$: Observable<any[]>;
   public mapForm: FormGroup;
   public codeForm: FormGroup;
   public mapFilters: Boolean = true;
@@ -105,8 +108,12 @@ export class MapOptionsComponent implements OnInit {
     private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
-    private markersService: MarkersService
-  ) {}
+    private markersService: MarkersService,
+
+    private filterService: FiltersService
+  ) {
+    this.parameterTypes$ = this.filterService.parameterTypes$;
+  }
 
   @HostListener('window:resize')
   onResize() {

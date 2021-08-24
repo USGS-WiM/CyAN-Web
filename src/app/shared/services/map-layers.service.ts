@@ -115,13 +115,14 @@ export class MapLayersService {
           verticalPosition: 'top',
         });
       } else {
-        //for (let i = 0; i < res.length; i++) {
-        //taking too long, so limit to the first 10 for now
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < res.length; i++) {
+          //taking too long, so limit to the first 10 for now
+          // for (let i = 0; i < 1000; i++) {
           let date = res[i].date_time_group;
           let formattedDate = Number(moment(date).format('YYYY'));
           if (options.minYear <= formattedDate) {
             if (options.maxYear >= formattedDate) {
+              console.log('results', res[i]);
               let lat = Number(res[i].latitude);
               let lng = Number(res[i].longitude);
               L.marker([lat, lng], {

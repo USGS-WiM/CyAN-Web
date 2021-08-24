@@ -76,9 +76,9 @@
           <mat-label>Parameters</mat-label>
           <mat-select formControlName="parameterControl" multiple>
             <mat-option
-              *ngFor="let parameter of parameterList"
-              [value]="parameter.code"
-              >{{ parameter.name }}</mat-option
+              *ngFor="let parameter of parameterTypes$ | async"
+              [value]="parameter.pcode"
+              >{{ parameter.short_name }}</mat-option
             >
           </mat-select>
         </mat-form-field>
