@@ -1,206 +1,218 @@
-<div>
-  <div class="flex-container" style="width: 280px">
-    <div
-      class="landingPgBtns"
-      style="
-        background-color: white;
-        height: 60px;
-        width: 200px;
-        margin-left: 0px;
-        color: white;
-      "
-      [hidden]="!showHomeLayout || !fullHomeScreen"
-    >
-      <a href="https://www.usgs.gov/" target="_blank">
-        <img
-          style="margin-top: -42px; width: 150px"
-          src="../../../assets/USGS_logo.png"
-        />
-      </a>
-    </div>
-    <div [hidden]="!showFullCyanHomeBtn">
-      <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
-        <div
-          id="homeBtnFullID"
-          class="landingPgBtns homeBtn homeBtnColor"
-          (click)="clickHome()"
-          [hidden]="!showFullCyanHomeBtn"
-        >
-          <mat-icon
-            style="font-size: 30px; margin-left: -20px; margin-right: 10px"
-            aria-hidden="false"
-            aria-label="Example home icon"
-            >home</mat-icon
-          >
-          CyAN FIELD
-        </div>
-      </div>
-    </div>
-
-    <div [hidden]="showHomeLayout">
-      <div class="flex-child flex-container">
-        <div [hidden]="windowWidthResize">
-          <div
-            class="homeBtnColor smNavBtn marginLeftSmallWidth"
-            (click)="clickHome()"
-            matTooltip="CyAN Home"
-          >
-            <p>
-              <mat-icon
-                aria-hidden="false"
-                class="smBtnIcon"
-                aria-label="Example home icon"
-                >home</mat-icon
-              >
-            </p>
-          </div>
-        </div>
-        <div
-          class="smNavBtn"
-          style="width: 60px; height: 60px"
-          matTooltip="USGS Home"
-        >
-          <a href="https://www.usgs.gov/" target="_blank">
-            <img
-              style="width: 60px; height: 60px"
-              src="../../../assets/USGS_logo_sm.PNG"
-          /></a>
-        </div>
-        <div>
-          <div
-            class="infoBtnColor smNavBtn"
-            (click)="clickInfo()"
-            matTooltip="About"
-          >
-            <mat-icon class="smBtnIcon">info</mat-icon>
-          </div>
-        </div>
-        <div>
-          <div
-            class="mapBtnColor smNavBtn"
-            (click)="clickMap()"
-            matTooltip="Map"
-          >
-            <mat-icon class="smBtnIcon">map</mat-icon>
-          </div>
-        </div>
-        <div>
-          <div
-            class="graphBtnColor smNavBtn"
-            (click)="clickGraph()"
-            matTooltip="Graph"
-          >
-            <mat-icon class="smBtnIcon">scatter_plot</mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div
-    class="landingPgBtns infoBtn marginLeftFullWidth infoBtnColor"
-    [hidden]="!showHomeLayout || !fullHomeScreen"
-    (click)="clickInfo()"
-    id="infoBtnFullID"
-  >
-    <div style="height: 20px"></div>
-    <p style="font-size: 30px">
-      <mat-icon style="font-size: 32px; margin-left: -20px; margin-right: 10px"
-        >info</mat-icon
+<div id="base">
+  <div>
+    <div class="flex-container" style="width: 280px">
+      <div
+        class="landingPgBtns"
+        style="
+          background-color: white;
+          height: 60px;
+          width: 200px;
+          margin-left: 0px;
+          color: white;
+        "
+        [hidden]="!showHomeLayout || !fullHomeScreen"
       >
-      Cyanobacteria Assessment Network <br />
-      Field Exploratory Lakes Database
-    </p>
-  </div>
+        <a href="https://www.usgs.gov/" target="_blank">
+          <img
+            style="margin-top: -42px; width: 150px"
+            src="../../../assets/USGS_logo.png"
+          />
+        </a>
+      </div>
+      <div [hidden]="!showFullCyanHomeBtn">
+        <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
+          <div
+            id="homeBtnFullID"
+            class="landingPgBtns homeBtn homeBtnColor"
+            (click)="clickHome()"
+            [hidden]="!showFullCyanHomeBtn"
+          >
+            <mat-icon
+              style="font-size: 30px; margin-left: -20px; margin-right: 10px"
+              aria-hidden="false"
+              aria-label="Example home icon"
+              >home</mat-icon
+            >
+            CyAN FIELD
+          </div>
+        </div>
+      </div>
 
-  <div [hidden]="fullHomeScreen || !showHomeLayout">
+      <div [hidden]="showHomeLayout">
+        <div class="flex-child flex-container">
+          <div [hidden]="windowWidthResize">
+            <div
+              class="homeBtnColor smNavBtn marginLeftSmallWidth"
+              (click)="clickHome()"
+              matTooltip="CyAN Home"
+            >
+              <p>
+                <mat-icon
+                  aria-hidden="false"
+                  class="smBtnIcon"
+                  aria-label="Example home icon"
+                  >home</mat-icon
+                >
+              </p>
+            </div>
+          </div>
+          <div
+            class="smNavBtn"
+            style="width: 60px; height: 60px"
+            matTooltip="USGS Home"
+          >
+            <a href="https://www.usgs.gov/" target="_blank">
+              <img
+                style="width: 60px; height: 60px"
+                src="../../../assets/USGS_logo_sm.PNG"
+            /></a>
+          </div>
+          <div>
+            <div
+              class="infoBtnColor smNavBtn"
+              (click)="clickInfo()"
+              matTooltip="About"
+            >
+              <mat-icon class="smBtnIcon">info</mat-icon>
+            </div>
+          </div>
+          <div>
+            <div
+              class="mapBtnColor smNavBtn"
+              (click)="clickMap()"
+              matTooltip="Map"
+            >
+              <mat-icon class="smBtnIcon">map</mat-icon>
+            </div>
+          </div>
+          <div>
+            <div
+              class="graphBtnColor smNavBtn"
+              (click)="clickGraph()"
+              matTooltip="Graph"
+            >
+              <mat-icon class="smBtnIcon">scatter_plot</mat-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div
+      class="landingPgBtns infoBtn marginLeftFullWidth infoBtnColor"
+      [hidden]="!showHomeLayout || !fullHomeScreen"
       (click)="clickInfo()"
-      class="smScreenLandingBtns infoBtnSmallScreen infoBtnColor flex-container"
+      id="infoBtnFullID"
     >
-      <mat-icon style="margin-left: 10px; margin-top: 10px">info</mat-icon>
-      <div class="flex-child">
-        <p style="font-size: 20px; margin-top: 10px; margin-left: 10px">
-          Cyanobacteria <br />
-          Assessment Network
-        </p>
-      </div>
+      <div style="height: 20px"></div>
+      <p style="font-size: 30px">
+        <mat-icon
+          style="font-size: 32px; margin-left: -20px; margin-right: 10px"
+          >info</mat-icon
+        >
+        Cyanobacteria Assessment Network <br />
+        Field Exploratory Lakes Database
+      </p>
     </div>
-  </div>
 
-  <div [hidden]="!showInfo">
-    <app-about></app-about>
-  </div>
-  <div [hidden]="!fullHomeScreen">
-    <div class="flex-container" style="width: 200px">
-      <div class="flex-child">
-        <div
-          class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor"
-          [hidden]="!showHomeLayout"
-          (click)="clickMap()"
-          id="mapBtnFullID"
-        >
-          <br />
-          <p style="text-align: center">Map</p>
-          <mat-icon class="mapGraphIconFullScreen"> map</mat-icon>
-        </div>
-      </div>
-      <div class="flex-child">
-        <div
-          class="landingPgBtns mapGraphBtn graphBtnColor"
-          [hidden]="!showHomeLayout"
-          (click)="clickGraph()"
-        >
-          <p style="text-align: center">
-            <br />
-            Graph
+    <div [hidden]="fullHomeScreen || !showHomeLayout">
+      <div
+        (click)="clickInfo()"
+        class="
+          smScreenLandingBtns
+          infoBtnSmallScreen
+          infoBtnColor
+          flex-container
+        "
+      >
+        <mat-icon style="margin-left: 10px; margin-top: 10px">info</mat-icon>
+        <div class="flex-child">
+          <p style="font-size: 20px; margin-top: 10px; margin-left: 10px">
+            Cyanobacteria <br />
+            Assessment Network
           </p>
-          <mat-icon class="mapGraphIconFullScreen"> scatter_plot</mat-icon>
+        </div>
+      </div>
+    </div>
+
+    <div [hidden]="!showInfo">
+      <app-about></app-about>
+    </div>
+    <div [hidden]="!fullHomeScreen">
+      <div class="flex-container" style="width: 200px">
+        <div class="flex-child">
+          <div
+            class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor"
+            [hidden]="!showHomeLayout"
+            (click)="clickMap()"
+            id="mapBtnFullID"
+          >
+            <br />
+            <p style="text-align: center">Map</p>
+            <mat-icon class="mapGraphIconFullScreen"> map</mat-icon>
+          </div>
+        </div>
+        <div class="flex-child">
+          <div
+            class="landingPgBtns mapGraphBtn graphBtnColor"
+            [hidden]="!showHomeLayout"
+            (click)="clickGraph()"
+          >
+            <p style="text-align: center">
+              <br />
+              Graph
+            </p>
+            <mat-icon class="mapGraphIconFullScreen"> scatter_plot</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div [hidden]="fullHomeScreen || !showHomeLayout">
+      <div
+        class="flex-container"
+        style="width: 200px"
+        [hidden]="!showHomeLayout"
+      >
+        <div class="flex-child">
+          <div
+            class="
+              smScreenLandingBtns
+              mapBtnSmallScreen
+              mapBtnColor
+              flex-container
+            "
+            [hidden]="!showHomeLayout"
+            (click)="clickMap()"
+          >
+            <br />
+            <mat-icon class="mapGraphIconSmallScreen"> map</mat-icon>
+            <p class="mapGraphTitleSmScreen">Map</p>
+          </div>
+        </div>
+        <div class="flex-child">
+          <div
+            class="
+              smScreenLandingBtns
+              graphBtnSmallScreen
+              graphBtnColor
+              flex-container
+            "
+            [hidden]="!showHomeLayout"
+            (click)="clickGraph()"
+          >
+            <br />
+            <mat-icon class="mapGraphIconSmallScreen"> scatter_plot</mat-icon>
+            <div class="flex-child"></div>
+            <p class="mapGraphTitleSmScreen">Graph</p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div [hidden]="fullHomeScreen || !showHomeLayout">
-    <div class="flex-container" style="width: 200px" [hidden]="!showHomeLayout">
-      <div class="flex-child">
-        <div
-          class="
-            smScreenLandingBtns
-            mapBtnSmallScreen
-            mapBtnColor
-            flex-container
-          "
-          [hidden]="!showHomeLayout"
-          (click)="clickMap()"
-        >
-          <br />
-          <mat-icon class="mapGraphIconSmallScreen"> map</mat-icon>
-          <p class="mapGraphTitleSmScreen">Map</p>
-        </div>
-      </div>
-      <div class="flex-child">
-        <div
-          class="
-            smScreenLandingBtns
-            graphBtnSmallScreen
-            graphBtnColor
-            flex-container
-          "
-          [hidden]="!showHomeLayout"
-          (click)="clickGraph()"
-        >
-          <br />
-          <mat-icon class="mapGraphIconSmallScreen"> scatter_plot</mat-icon>
-          <div class="flex-child"></div>
-          <p class="mapGraphTitleSmScreen">Graph</p>
-        </div>
-      </div>
-    </div>
+  <div [hidden]="!showMap">
+    <app-map-options></app-map-options>
   </div>
-</div>
-<div [hidden]="!showMap">
-  <app-map-options></app-map-options>
-</div>
-<div [hidden]="!showGraph">
-  <app-graph-options></app-graph-options>
+  <div [hidden]="!showGraph">
+    <app-graph-options></app-graph-options>
+  </div>
 </div>

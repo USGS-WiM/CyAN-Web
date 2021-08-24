@@ -98,6 +98,8 @@ export class MapLayersService {
     if (isNaN(options.west)) {
       options.west = -180;
     }
+    let base = document.getElementById('base');
+    base.classList.add('initial-loader');
     ///////////////// Update this later to use url base from app.settings.ts ////////////////////////////
     const url =
       'http://127.0.0.1:5005/pcode_by_loci/?minlat=' +
@@ -122,7 +124,7 @@ export class MapLayersService {
           let formattedDate = Number(moment(date).format('YYYY'));
           if (options.minYear <= formattedDate) {
             if (options.maxYear >= formattedDate) {
-              console.log('results', res[i]);
+              //console.log('results', res[i]);
               let lat = Number(res[i].latitude);
               let lng = Number(res[i].longitude);
               L.marker([lat, lng], {
@@ -134,6 +136,7 @@ export class MapLayersService {
           }
         }
         this.filterWqSampleSubject.next(this.mapWQSites);
+        base.classList.remove('initial-loader');
       }
     });
   }
