@@ -117,5 +117,8 @@ export class HomeComponent implements AfterViewInit {
       mapBtnFullID.classList.add('mapBtnFullMargin');
       mapBtnFullID.classList.remove('mapBtnSmallMargin');
     }
+    if (this.showHomeLayout) {
+      homeBtnFullID.classList.remove('marginLeftFullWidth');
+    }
   }
 }

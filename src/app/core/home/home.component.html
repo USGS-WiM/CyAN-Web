@@ -1,22 +1,7 @@
 <div>
   <div class="flex-container" style="width: 280px">
-    <div [hidden]="!showFullCyanHomeBtn">
-      <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
-        <div
-          id="homeBtnFullID"
-          class="landingPgBtns homeBtn marginLeftFullWidth homeBtnColor"
-          (click)="clickHome()"
-          [hidden]="!showFullCyanHomeBtn"
-        >
-          <mat-icon aria-hidden="false" aria-label="Example home icon"
-            >home</mat-icon
-          >
-          CyAN FIELD
-        </div>
-      </div>
-    </div>
     <div
-      class="landingPgBtns marginLeftFullWidth"
+      class="landingPgBtns"
       style="
         background-color: white;
         height: 60px;
@@ -33,12 +18,32 @@
         />
       </a>
     </div>
+    <div [hidden]="!showFullCyanHomeBtn">
+      <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
+        <div
+          id="homeBtnFullID"
+          class="landingPgBtns homeBtn homeBtnColor"
+          (click)="clickHome()"
+          [hidden]="!showFullCyanHomeBtn"
+        >
+          <mat-icon
+            style="font-size: 30px; margin-left: -20px; margin-right: 10px"
+            aria-hidden="false"
+            aria-label="Example home icon"
+            >home</mat-icon
+          >
+          CyAN FIELD
+        </div>
+      </div>
+    </div>
+
     <div [hidden]="showHomeLayout">
       <div class="flex-child flex-container">
         <div [hidden]="windowWidthResize">
           <div
             class="homeBtnColor smNavBtn marginLeftSmallWidth"
             (click)="clickHome()"
+            matTooltip="CyAN Home"
           >
             <p>
               <mat-icon
@@ -98,8 +103,13 @@
     (click)="clickInfo()"
     id="infoBtnFullID"
   >
+    <div style="height: 20px"></div>
     <p style="font-size: 30px">
-      <mat-icon>info</mat-icon> Cyanobacteria Assessment Network
+      <mat-icon style="font-size: 32px; margin-left: -20px; margin-right: 10px"
+        >info</mat-icon
+      >
+      Cyanobacteria Assessment Network <br />
+      Field Exploratory Lakes Database
     </p>
   </div>
 
