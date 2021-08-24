@@ -26,6 +26,7 @@ export class MapOptionsComponent implements OnInit {
   public showNullWarning: Boolean = false;
   public includeNullSites: Boolean = false;
   public nullDataChecked: Boolean = false;
+  public optimalAlignment: Boolean = false;
   public nullCheckboxElement = document.getElementById('nullCheckbox');
   public osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -139,6 +140,8 @@ export class MapOptionsComponent implements OnInit {
       mcode: this.codeForm.get('methodControl').value,
       minYear: this.minValue,
       maxYear: this.maxValue,
+      includeNull: this.includeNullSites,
+      satelliteAlign: this.optimalAlignment,
     };
     //this.mapLayersService.filterWqSample3(true, filterParameters);
     this.mapLayersService.filterWqSample2_TEST3(filterParameters);
@@ -354,10 +357,10 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
-  public populateMapBounds(boundsChecked: MatCheckboxChange) {
-    if (boundsChecked.checked) {
+  public populateMapBounds(boundsChecked: Boolean) {
+    if (boundsChecked) {
       this.componentDisplayService.northBoundsSubject.subscribe((lat) => {
-        if (lat && boundsChecked.checked) {
+        if (lat && boundsChecked) {
           this.northBounds = lat;
         }
       });
@@ -382,7 +385,7 @@ export class MapOptionsComponent implements OnInit {
       this.mapForm.get('eastControl').setValue(this.eastBounds);
       this.mapForm.get('westControl').setValue(this.westBounds);
     }
-    if (!boundsChecked.checked) {
+    if (!boundsChecked) {
       let testVal: number;
       this.mapForm.get('northControl').setValue(testVal);
       this.mapForm.get('southControl').setValue('');
@@ -425,6 +428,14 @@ export class MapOptionsComponent implements OnInit {
       nullCheckboxElement.classList.remove('mat-checkbox-checked');
       this.includeNullSites = false;
       this.nullDataChecked = false;
+    }
+  }
+
+  public clickSatelliteAlignment(satelliteAlignChecked: MatCheckboxChange) {
+    if (satelliteAlignChecked.checked) {
+      this.optimalAlignment = true;
+    } else {
+      this.optimalAlignment = false;
     }
   }
 

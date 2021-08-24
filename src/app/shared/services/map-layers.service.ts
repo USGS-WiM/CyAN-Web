@@ -63,6 +63,8 @@ export class MapLayersService {
     mcode: [];
     minYear: number;
     maxYear: number;
+    includeNull: Boolean;
+    satelliteAlign: Boolean;
   }): Subscription {
     //remove previous points from map
     this.filterWqSampleSubject.next(undefined);

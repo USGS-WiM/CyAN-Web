@@ -111,12 +111,22 @@
           }}</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-checkbox
-        [disableRipple]="true"
-        (change)="populateMapBounds($event)"
-        [checked]="mapBoundsChecked"
-        >Use map bounds
-      </mat-checkbox>
+      <button
+        style="
+          font-size: 15px;
+          margin-bottom: 5px;
+          color: white;
+          cursor: pointer;
+          background-color: rgb(131, 184, 124);
+          height: 25px;
+          text-align: center;
+          vertical-align: middle;
+          border: none;
+        "
+        (click)="populateMapBounds(true)"
+      >
+        Populate with map bounds
+      </button>
       <form class="boundingBoxForm" [formGroup]="mapForm">
         <div class="flex-container">
           <mat-form-field
@@ -148,7 +158,9 @@
         </div>
       </form>
 
-      <mat-checkbox [disableRipple]="true"
+      <mat-checkbox
+        [disableRipple]="true"
+        (change)="clickSatelliteAlignment($event)"
         >Optimal satellite alignment
       </mat-checkbox>
       <mat-checkbox
