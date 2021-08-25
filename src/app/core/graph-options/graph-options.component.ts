@@ -42,7 +42,9 @@ export class GraphOptionsComponent implements OnInit {
   public yDataTrace2;
   public parameterTypes$: Observable<any[]>;
   public methodTypes$: Observable<any[]>;
-  public matchingMcodes = [];
+  public pcodeToMcode$: Observable<any[]>;
+  public matchingMcodesY = [];
+  public matchingMcodesX = [];
   public pcodeToMcode;
   public mcodeShortName;
   graphSelectionsForm: FormGroup;
@@ -50,6 +52,7 @@ export class GraphOptionsComponent implements OnInit {
   constructor(private filterService: FiltersService) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
+    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
   }
   @HostListener('window:resize')
   onResize() {
@@ -64,10 +67,12 @@ export class GraphOptionsComponent implements OnInit {
       MethodsY: new FormControl(),
     });
     this.resizeDivs();
+    this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
+    this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
   }
 
-  public parameterSelected() {
-    this.matchingMcodes = [];
+  public parameterX() {
+    this.matchingMcodesX = [];
     let tempParameter = this.graphSelectionsForm.get('ParametersX').value;
     for (let pcode in this.pcodeToMcode) {
       if (pcode == tempParameter) {
@@ -75,7 +80,24 @@ export class GraphOptionsComponent implements OnInit {
         for (let i = 0; i < this.mcodeShortName.length; i++) {
           for (let x = 0; x < mcodes.length; x++) {
             if (mcodes[x] == this.mcodeShortName[i].mcode) {
-              this.matchingMcodes.push(this.mcodeShortName[i]);
+              this.matchingMcodesX.push(this.mcodeShortName[i]);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public parameterY() {
+    this.matchingMcodesY = [];
+    let tempParameter = this.graphSelectionsForm.get('ParametersY').value;
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempParameter) {
+        let mcodes = this.pcodeToMcode[pcode];
+        for (let i = 0; i < this.mcodeShortName.length; i++) {
+          for (let x = 0; x < mcodes.length; x++) {
+            if (mcodes[x] == this.mcodeShortName[i].mcode) {
+              this.matchingMcodesY.push(this.mcodeShortName[i]);
             }
           }
         }

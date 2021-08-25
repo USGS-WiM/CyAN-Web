@@ -58,7 +58,10 @@
           Y-Axis <br />
           <mat-form-field appearance="fill">
             <mat-label>Parameter</mat-label>
-            <mat-select formControlName="ParametersX" multiple>
+            <mat-select
+              (ngModelChange)="parameterX()"
+              formControlName="ParametersX"
+            >
               <mat-option
                 *ngFor="let parameter of this.parameterTypes$ | async"
                 [value]="parameter.pcode"
@@ -70,7 +73,7 @@
             <mat-label>Methods</mat-label>
             <mat-select formControlName="MethodsX" multiple>
               <mat-option
-                *ngFor="let method of this.methodTypes$ | async"
+                *ngFor="let method of this.matchingMcodesX"
                 [value]="method.mcode"
                 >{{ method.short_name }}</mat-option
               >
@@ -84,7 +87,10 @@
           X-Axis <br />
           <mat-form-field appearance="fill">
             <mat-label>Parameter</mat-label>
-            <mat-select formControlName="ParametersY" multiple>
+            <mat-select
+              (ngModelChange)="parameterY()"
+              formControlName="ParametersY"
+            >
               <mat-option
                 *ngFor="let parameter of this.parameterTypes$ | async"
                 [value]="parameter.pcode"
@@ -96,7 +102,7 @@
             <mat-label>Methods</mat-label>
             <mat-select formControlName="MethodsY" multiple>
               <mat-option
-                *ngFor="let method of this.methodTypes$ | async"
+                *ngFor="let method of matchingMcodesY"
                 [value]="method.mcode"
                 >{{ method.short_name }}</mat-option
               >
