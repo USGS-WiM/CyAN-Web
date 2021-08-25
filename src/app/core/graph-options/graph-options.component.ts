@@ -1,8 +1,9 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
-import { ThrowStmt } from '@angular/compiler';
+import { FiltersService } from '../../shared/services/filters.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-graph-options',
@@ -11,7 +12,7 @@ import { ThrowStmt } from '@angular/compiler';
 })
 export class GraphOptionsComponent implements OnInit {
   public secondTrace: Boolean = false;
-  Parameters = new FormControl();
+
   parameterList: string[] = [
     'Phosphorus',
     'Dissolved Oxygen',
@@ -39,37 +40,52 @@ export class GraphOptionsComponent implements OnInit {
   public yDataTrace1;
   public xDataTrace2;
   public yDataTrace2;
+  public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public matchingMcodes = [];
+  public pcodeToMcode;
+  public mcodeShortName;
+  graphSelectionsForm: FormGroup;
 
-  constructor() {}
+  constructor(private filterService: FiltersService) {
+    this.parameterTypes$ = this.filterService.parameterTypes$;
+    this.methodTypes$ = this.filterService.methodTypes$;
+  }
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
+    this.graphSelectionsForm = new FormGroup({
+      ParametersX: new FormControl(),
+      MethodsX: new FormControl(),
+      ParametersY: new FormControl(),
+      MethodsY: new FormControl(),
+    });
     this.resizeDivs();
+  }
+
+  public parameterSelected() {
+    this.matchingMcodes = [];
+    let tempParameter = this.graphSelectionsForm.get('ParametersX').value;
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempParameter) {
+        let mcodes = this.pcodeToMcode[pcode];
+        for (let i = 0; i < this.mcodeShortName.length; i++) {
+          for (let x = 0; x < mcodes.length; x++) {
+            if (mcodes[x] == this.mcodeShortName[i].mcode) {
+              this.matchingMcodes.push(this.mcodeShortName[i]);
+            }
+          }
+        }
+      }
+    }
   }
 
   public collapseGraphOptions(collapsed: Boolean) {
     this.graphOptionsVisible = collapsed;
     this.resizeDivs();
-  }
-
-  public addTrace() {
-    this.secondTrace = true;
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightSmall');
-    graphOptionsBackgroundID.classList.add('optionsBackgroundHeightLarge');
-  }
-  public removeTrace() {
-    this.secondTrace = false;
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    graphOptionsBackgroundID.classList.add('optionsBackgroundHeightSmall');
-    graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightLarge');
   }
 
   public createGraph() {
@@ -97,6 +113,9 @@ export class GraphOptionsComponent implements OnInit {
     var data = [trace1, trace2];
 
     var layout = {
+      font: {
+        size: 18,
+      },
       xaxis: {
         range: [0.75, 5.25],
       },

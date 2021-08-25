@@ -53,7 +53,7 @@ export class MapLayersService {
   public filterWqSampleSubject = new BehaviorSubject<any>(undefined);
   filterWqSample$ = this.filterWqSampleSubject.asObservable();
 
-  public filterWqSample2_TEST3(options: {
+  public filterWqSample(options: {
     north: number;
     south: number;
     east: number;

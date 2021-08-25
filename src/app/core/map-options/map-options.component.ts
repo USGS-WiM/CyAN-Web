@@ -17,6 +17,11 @@ import * as moment from 'moment';
 })
 export class MapOptionsComponent implements OnInit {
   public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public pcodeToMcode$: Observable<any[]>;
+  public pcodeToMcode;
+  public mcodeShortName;
+  public matchingMcodes = [];
   public mapForm: FormGroup;
   public codeForm: FormGroup;
   public mapFilters: Boolean = true;
@@ -112,6 +117,8 @@ export class MapOptionsComponent implements OnInit {
     private filterService: FiltersService
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
+    this.methodTypes$ = this.filterService.methodTypes$;
+    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
   }
 
   @HostListener('window:resize')
@@ -131,6 +138,25 @@ export class MapOptionsComponent implements OnInit {
       methodControl: new FormControl(),
     });
     this.resizeDivs();
+    this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
+    this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+  }
+
+  public parameterSelected() {
+    this.matchingMcodes = [];
+    let tempParameter = this.codeForm.get('parameterControl').value;
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempParameter) {
+        let mcodes = this.pcodeToMcode[pcode];
+        for (let i = 0; i < this.mcodeShortName.length; i++) {
+          for (let x = 0; x < mcodes.length; x++) {
+            if (mcodes[x] == this.mcodeShortName[i].mcode) {
+              this.matchingMcodes.push(this.mcodeShortName[i]);
+            }
+          }
+        }
+      }
+    }
   }
 
   public runFilters() {
@@ -146,10 +172,7 @@ export class MapOptionsComponent implements OnInit {
       includeNull: this.includeNullSites,
       satelliteAlign: this.optimalAlignment,
     };
-    //this.mapLayersService.filterWqSample3(true, filterParameters);
-    this.mapLayersService.filterWqSample2_TEST3(filterParameters);
-
-    // this.markersService.testMarkers();
+    this.mapLayersService.filterWqSample(filterParameters);
   }
 
   public displayMapFilters(display: Boolean) {
