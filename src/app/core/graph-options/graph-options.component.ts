@@ -170,6 +170,19 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public populateGraphData() {
+    let paramX = this.graphSelectionsForm.get('ParametersX').value;
+    let methodsX = this.graphSelectionsForm.get('MethodsX').value;
+
+    let paramY = this.graphSelectionsForm.get('ParametersY').value;
+    let methodsY = this.graphSelectionsForm.get('MethodsY').value;
+
+    let filterParametersX = {
+      paramX: paramX,
+      methodsX: methodsX,
+      paramY: paramY,
+      methodsY: methodsY,
+    };
+
     this.xDataTrace1 = [1, 2, 3, 4, 5];
     this.yDataTrace1 = [1, 6, 3, 6, 1];
     this.xDataTrace2 = [1.5, 2.5, 3.5, 4.5, 5.5];
