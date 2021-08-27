@@ -110,6 +110,7 @@ export class MapLayersService {
       options.west +
       '&maxlong=' +
       options.east;
+    console.log('url', url);
     return this.httpClient.get(url).subscribe((res: any[]) => {
       if (res.length === 0) {
         this.snackBar.open('No sites match your query.', 'OK', {
@@ -124,7 +125,10 @@ export class MapLayersService {
           let formattedDate = Number(moment(date).format('YYYY'));
           if (options.minYear <= formattedDate) {
             if (options.maxYear >= formattedDate) {
-              //console.log('results', res[i]);
+              //if (formattedDate == 2013) {
+              //  if (res[i].pcode == 'P47' || res[i].pcode == 'P25') {
+              //if (res[i].mcode == 'M41') {
+              console.log('results', res[i]);
               let lat = Number(res[i].latitude);
               let lng = Number(res[i].longitude);
               L.marker([lat, lng], {
@@ -132,6 +136,9 @@ export class MapLayersService {
                   className: 'allSiteIcon',
                 }),
               }).addTo(this.mapWQSites);
+              // }
+              // }
+              //}
             }
           }
         }

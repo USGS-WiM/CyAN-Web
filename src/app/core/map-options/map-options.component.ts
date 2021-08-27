@@ -8,7 +8,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-options',

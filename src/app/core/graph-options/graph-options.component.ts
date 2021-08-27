@@ -3,6 +3,7 @@ import * as Plotly from 'plotly.js-dist';
 import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
 import { FiltersService } from '../../shared/services/filters.service';
+import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -47,9 +48,14 @@ export class GraphOptionsComponent implements OnInit {
   public matchingMcodesX = [];
   public pcodeToMcode;
   public mcodeShortName;
+  public currentXaxisValues = [];
+  public currentYaxisValues = [];
   graphSelectionsForm: FormGroup;
 
-  constructor(private filterService: FiltersService) {
+  constructor(
+    private filterService: FiltersService,
+    private graphSelectionsService: GraphSelectionsService
+  ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
@@ -69,6 +75,22 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+
+    this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+      this.currentXaxisValues = points;
+
+      console.log('this.currentXaxisValues', this.currentXaxisValues);
+    });
+    this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
+      this.currentYaxisValues = points;
+      console.log('this.currentYaxisValues', this.currentYaxisValues);
+      this.createGraph();
+      if (this.currentYaxisValues) {
+        if (this.currentYaxisValues.length > 0) {
+          this.showGraph = true;
+        }
+      }
+    });
   }
 
   public parameterX() {
@@ -113,15 +135,16 @@ export class GraphOptionsComponent implements OnInit {
   public createGraph() {
     let bivariatePlot = document.getElementById('graph');
     var trace1 = {
-      x: this.xDataTrace1,
-      y: this.yDataTrace1,
+      x: this.currentXaxisValues,
+      y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
       name: 'Sample 1',
-      text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
+      // text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
       marker: { size: 12, color: 'rgb(242, 189, 161) ' },
     };
 
+    /*
     var trace2 = {
       x: this.xDataTrace2,
       y: this.yDataTrace2,
@@ -130,19 +153,19 @@ export class GraphOptionsComponent implements OnInit {
       name: 'Sample 2',
       text: ['B-a', 'B-b', 'B-c', 'B-d', 'B-e'],
       marker: { size: 12, color: 'rgb(104, 121, 128)' },
-    };
+    }; */
 
-    var data = [trace1, trace2];
+    var data = [trace1];
 
     var layout = {
       font: {
         size: 18,
       },
       xaxis: {
-        range: [0.75, 5.25],
+        rangemode: 'tozero',
       },
       yaxis: {
-        range: [0, 8],
+        rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -163,9 +186,9 @@ export class GraphOptionsComponent implements OnInit {
     });
   }
 
-  public displayGraph() {
+  public clickPlotData() {
+    this.showGraph = false;
     this.populateGraphData();
-    this.showGraph = true;
     this.resizeDivs();
   }
 
@@ -176,17 +199,13 @@ export class GraphOptionsComponent implements OnInit {
     let paramY = this.graphSelectionsForm.get('ParametersY').value;
     let methodsY = this.graphSelectionsForm.get('MethodsY').value;
 
-    let filterParametersX = {
+    let filterParameters = {
       paramX: paramX,
       methodsX: methodsX,
       paramY: paramY,
       methodsY: methodsY,
     };
-
-    this.xDataTrace1 = [1, 2, 3, 4, 5];
-    this.yDataTrace1 = [1, 6, 3, 6, 1];
-    this.xDataTrace2 = [1.5, 2.5, 3.5, 4.5, 5.5];
-    this.yDataTrace2 = [4, 1, 7, 1, 4];
+    this.graphSelectionsService.filterGraphPoints(filterParameters);
   }
 
   public resizeDivs() {
