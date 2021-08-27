@@ -19,6 +19,9 @@ export class GraphSelectionsService {
   public graphPointsYSubject = new BehaviorSubject<any>(undefined);
   graphPointsY$ = this.graphPointsYSubject.asObservable();
 
+  public sidSubject = new BehaviorSubject<any>(undefined);
+  sid$ = this.sidSubject.asObservable();
+
   public filterGraphPoints(options: {
     paramX: string;
     methodsX: [];
@@ -33,6 +36,9 @@ export class GraphSelectionsService {
     let tempResultsY = [];
     let resultsX = [];
     let resultsY = [];
+    let valuesX = [];
+    let valuesY = [];
+    let sid = [];
     const url =
       APP_SETTINGS.wqPoints +
       '/?minlat=' +
@@ -43,6 +49,7 @@ export class GraphSelectionsService {
       -180 +
       '&maxlong=' +
       180;
+
     console.log('options.paramX', options.paramX);
     console.log('options.methodsX', options.methodsX);
     console.log('options.paramY', options.paramY);
@@ -66,32 +73,19 @@ export class GraphSelectionsService {
             }
           }
         }
-        /*for (let i = 0; i < tempResultsX.length; i++) {
-          for (let x = 0; x < tempResultsY.length; x++) {
-            if (tempResultsX[i].latitude === tempResultsY[x].latitude) {
-              if (tempResultsX[i].longitude === tempResultsY[x].longitude) {
-                if (
-                  tempResultsX[i].date_time_group ===
-                  tempResultsY[x].date_time_group
-                ) {
-                  resultsX.push(tempResultsX[i].result);
-                  resultsY.push(tempResultsY[x].result);
-                  // console.log('FOUND A MATCH');
-                }
-              }
-            }
-          }
-        } */
         for (let i = 0; i < tempResultsX.length; i++) {
           for (let x = 0; x < tempResultsY.length; x++) {
             if (tempResultsY[x].sid == tempResultsX[i].sid) {
-              resultsX.push(tempResultsX[i].result);
-              resultsY.push(tempResultsY[x].result);
+              valuesX.push(tempResultsX[i].result);
+              valuesY.push(tempResultsY[x].result);
+              sid.push(tempResultsY[x].sid);
             }
           }
         }
-        this.graphPointsXSubject.next(resultsX);
-        this.graphPointsYSubject.next(resultsY);
+        console.log('SID', sid);
+        this.graphPointsXSubject.next(valuesX);
+        this.graphPointsYSubject.next(valuesY);
+        this.sidSubject.next(sid);
         console.log('X length', tempResultsX.length);
         console.log('Y length', tempResultsY.length);
       }

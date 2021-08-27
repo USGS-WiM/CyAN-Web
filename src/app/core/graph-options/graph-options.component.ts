@@ -44,12 +44,14 @@ export class GraphOptionsComponent implements OnInit {
   public parameterTypes$: Observable<any[]>;
   public methodTypes$: Observable<any[]>;
   public pcodeToMcode$: Observable<any[]>;
+  // public sid$: Observable<any[]>;
   public matchingMcodesY = [];
   public matchingMcodesX = [];
   public pcodeToMcode;
   public mcodeShortName;
   public currentXaxisValues = [];
   public currentYaxisValues = [];
+  public sid = [];
   graphSelectionsForm: FormGroup;
 
   constructor(
@@ -59,6 +61,7 @@ export class GraphOptionsComponent implements OnInit {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
+    // this.sid$ = this.filterService.sid$;
   }
   @HostListener('window:resize')
   onResize() {
@@ -76,18 +79,25 @@ export class GraphOptionsComponent implements OnInit {
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
 
+    this.graphSelectionsService.sidSubject.subscribe((sid) => {
+      this.sid = sid;
+      console.log('this.sid in first', this.sid);
+    });
+
     this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
       this.currentXaxisValues = points;
-
       console.log('this.currentXaxisValues', this.currentXaxisValues);
     });
     this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
       this.currentYaxisValues = points;
       console.log('this.currentYaxisValues', this.currentYaxisValues);
-      this.createGraph();
+      setTimeout(() => {
+        this.createGraph();
+      }, 2000);
       if (this.currentYaxisValues) {
         if (this.currentYaxisValues.length > 0) {
           this.showGraph = true;
+          console.log('this.sid', this.sid);
         }
       }
     });
@@ -140,7 +150,9 @@ export class GraphOptionsComponent implements OnInit {
       mode: 'markers',
       type: 'scatter',
       name: 'Sample 1',
-      // text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
+      text: this.sid,
+
+      textposition: 'bottom center',
       marker: { size: 12, color: 'rgb(242, 189, 161) ' },
     };
 
@@ -162,15 +174,16 @@ export class GraphOptionsComponent implements OnInit {
         size: 18,
       },
       xaxis: {
-        rangemode: 'tozero',
+        // rangemode: 'tozero',
       },
       yaxis: {
-        rangemode: 'tozero',
+        // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
+      showlegend: true,
       legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
-      modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
       margin: {
