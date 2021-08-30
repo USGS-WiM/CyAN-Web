@@ -15,19 +15,19 @@ export class FiltersService {
 
   constructor(private httpClient: HttpClient) {
     this.parameterTypes$ = httpClient
-      .get('http://127.0.0.1:5006/get_pcode_shortname/')
+      .get('http://127.0.0.1:5005/get_pcode_shortname/')
       .pipe(
         shareReplay(1),
         tap(() => console.log('aftersharing'))
       );
     this.methodTypes$ = httpClient
-      .get('http://127.0.0.1:5006/get_mcode_shortname/')
+      .get('http://127.0.0.1:5005/get_mcode_shortname/')
       .pipe(
         shareReplay(1),
         tap(() => console.log('aftersharing'))
       );
     this.pcodeToMcode$ = httpClient
-      .get('http://127.0.0.1:5006/pcode_to_mcode/')
+      .get('http://127.0.0.1:5005/pcode_to_mcode/')
       .pipe(
         shareReplay(1),
         tap(() => console.log('aftersharing'))

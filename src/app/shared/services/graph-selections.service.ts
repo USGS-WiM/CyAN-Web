@@ -93,4 +93,36 @@ export class GraphSelectionsService {
       base.classList.remove('initial-loader');
     });
   }
+
+  public filterGraphPointsXXXX(options: {
+    paramX: string;
+    methodsX: [];
+    paramY: string;
+    methodsY: [];
+  }) {
+    console.log('entering filterGraphPts');
+
+    let testJSON2 = {
+      meta: {
+        north: 0,
+        south: 0,
+        east: 0,
+        west: 0,
+        min_year: 1776,
+        max_year: 2021,
+        include_NULL: false,
+        satellite_align: false,
+      },
+      items: {
+        P70: 'M59',
+        P17: 'M6',
+      },
+    };
+
+    return this.httpClient
+      .post('http://127.0.0.1:5005/json_query', testJSON2)
+      .subscribe((res: any[]) => {
+        console.log('test results', res);
+      });
+  }
 }

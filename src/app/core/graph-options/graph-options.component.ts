@@ -52,6 +52,7 @@ export class GraphOptionsComponent implements OnInit {
   public currentXaxisValues = [];
   public currentYaxisValues = [];
   public sid = [];
+  public pointColors = [];
   graphSelectionsForm: FormGroup;
 
   constructor(
@@ -96,6 +97,9 @@ export class GraphOptionsComponent implements OnInit {
       }, 2000);
       if (this.currentYaxisValues) {
         if (this.currentYaxisValues.length > 0) {
+          for (let i = 0; i < this.currentYaxisValues.length; i++) {
+            this.pointColors.push('rgb(242, 189, 161)');
+          }
           this.showGraph = true;
           console.log('this.sid', this.sid);
         }
@@ -143,7 +147,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public createGraph() {
-    let bivariatePlot = document.getElementById('graph');
+    let bivariatePlot: any = document.getElementById('graph');
     var trace1 = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
@@ -153,7 +157,7 @@ export class GraphOptionsComponent implements OnInit {
       text: this.sid,
 
       textposition: 'bottom center',
-      marker: { size: 12, color: 'rgb(242, 189, 161) ' },
+      marker: { size: 12, color: this.pointColors },
     };
 
     /*
@@ -196,6 +200,21 @@ export class GraphOptionsComponent implements OnInit {
 
     Plotly.newPlot(bivariatePlot, data, layout, {
       displaylogo: false,
+    });
+
+    bivariatePlot.on('plotly_click', function (data) {
+      var pn = '',
+        tn = '',
+        colors = [];
+      for (var i = 0; i < data.points.length; i++) {
+        pn = data.points[i].pointNumber;
+        tn = data.points[i].curveNumber;
+        colors = data.points[i].data.marker.color;
+      }
+      colors[pn] = '#C54C82';
+
+      var update = { marker: { color: colors, size: 16 } };
+      Plotly.restyle('graph', update, [tn]);
     });
   }
 
