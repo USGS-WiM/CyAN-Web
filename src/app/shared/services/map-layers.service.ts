@@ -156,23 +156,23 @@ export class MapLayersService {
 
     let testJSON2 = {
       meta: {
-        north: 0,
-        south: 0,
-        east: 0,
-        west: 0,
-        min_year: 1776,
-        max_year: 2021,
+        north: 49,
+        south: 38,
+        east: -74,
+        west: -95,
+        min_year: 2013,
+        max_year: 2014,
         include_NULL: false,
         satellite_align: false,
       },
       items: {
-        P70: 'M59',
-        P17: 'M6',
+        P101: ['M89', 'M90'],
+        P409: ['M398'],
       },
     };
 
     return this.httpClient
-      .post('http://127.0.0.1:5005/json_query/', testJSON2)
+      .post('http://127.0.0.1:5005/json_query', testJSON2)
       .subscribe((res: any[]) => {
         console.log('test results', res);
       });
