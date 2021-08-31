@@ -136,8 +136,15 @@
     <button class="plotDataBtn dataBtn" (click)="clickPlotData()">
       Plot Data
     </button>
-    <button class="downloadBtn dataBtn" matTooltip="Download CSV">
+    <button class="downloadBtn dataBtn" matTooltip="CSV of all data">
       <mat-icon>cloud_download</mat-icon>
+    </button>
+    <button
+      class="downloadBtn dataBtn"
+      (click)="createFlags()"
+      matTooltip="CSV of flagged data"
+    >
+      <mat-icon>flag</mat-icon>
     </button>
   </div>
   <div

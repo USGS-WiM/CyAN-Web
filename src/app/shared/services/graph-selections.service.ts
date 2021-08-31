@@ -19,6 +19,18 @@ export class GraphSelectionsService {
   public graphPointsYSubject = new BehaviorSubject<any>(undefined);
   graphPointsY$ = this.graphPointsYSubject.asObservable();
 
+  public allGraphDataYSubject = new BehaviorSubject<any>(undefined);
+  allGraphDataY$ = this.allGraphDataYSubject.asObservable();
+
+  public allGraphDataXSubject = new BehaviorSubject<any>(undefined);
+  allGraphDataX$ = this.allGraphDataXSubject.asObservable();
+
+  public flagsSubject = new BehaviorSubject<any>(undefined);
+  flags$ = this.flagsSubject.asObservable();
+  public updateFlags(flags) {
+    this.flagsSubject.next(flags);
+  }
+
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
@@ -38,6 +50,8 @@ export class GraphSelectionsService {
     let resultsY = [];
     let valuesX = [];
     let valuesY = [];
+    let allDataX = [];
+    let allDataY = [];
     let sid = [];
     const url =
       APP_SETTINGS.wqPoints +
@@ -49,11 +63,6 @@ export class GraphSelectionsService {
       -180 +
       '&maxlong=' +
       180;
-
-    console.log('options.paramX', options.paramX);
-    console.log('options.methodsX', options.methodsX);
-    console.log('options.paramY', options.paramY);
-    console.log('options.methodsY', options.methodsY);
     return this.httpClient.get(url).subscribe((res: any[]) => {
       if (res.length === 0) {
         this.snackBar.open('No points match your query.', 'OK', {
@@ -78,16 +87,17 @@ export class GraphSelectionsService {
             if (tempResultsY[x].sid == tempResultsX[i].sid) {
               valuesX.push(tempResultsX[i].result);
               valuesY.push(tempResultsY[x].result);
+              allDataX.push(tempResultsX[i]);
+              allDataY.push(tempResultsY[x]);
               sid.push(tempResultsY[x].sid);
             }
           }
         }
-        console.log('SID', sid);
         this.graphPointsXSubject.next(valuesX);
         this.graphPointsYSubject.next(valuesY);
+        this.allGraphDataYSubject.next(allDataY);
+        this.allGraphDataXSubject.next(allDataX);
         this.sidSubject.next(sid);
-        console.log('X length', tempResultsX.length);
-        console.log('Y length', tempResultsY.length);
       }
 
       base.classList.remove('initial-loader');
@@ -100,8 +110,6 @@ export class GraphSelectionsService {
     paramY: string;
     methodsY: [];
   }) {
-    console.log('entering filterGraphPts');
-
     let testJSON2 = {
       meta: {
         north: 0,

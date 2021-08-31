@@ -51,9 +51,11 @@ export class GraphOptionsComponent implements OnInit {
   public mcodeShortName;
   public currentXaxisValues = [];
   public currentYaxisValues = [];
-  public sid = [];
+  // public sid = [];
   public pointColors = [];
+  public flaggedPointIndices: Array<number> = [];
   graphSelectionsForm: FormGroup;
+  public bivariatePlot: any;
 
   constructor(
     private filterService: FiltersService,
@@ -61,6 +63,10 @@ export class GraphOptionsComponent implements OnInit {
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
+    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
+
+    //this.allGraphDataX$ = this.filterService.allGraphDataX$;
+
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     // this.sid$ = this.filterService.sid$;
   }
@@ -80,30 +86,27 @@ export class GraphOptionsComponent implements OnInit {
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
 
-    this.graphSelectionsService.sidSubject.subscribe((sid) => {
+    /* this.graphSelectionsService.sidSubject.subscribe((sid) => {
       this.sid = sid;
-      console.log('this.sid in first', this.sid);
-    });
+    }); */
 
     this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
       this.currentXaxisValues = points;
-      console.log('this.currentXaxisValues', this.currentXaxisValues);
     });
     this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
       this.currentYaxisValues = points;
-      console.log('this.currentYaxisValues', this.currentYaxisValues);
-      setTimeout(() => {
-        this.createGraph();
-      }, 2000);
+      //  setTimeout(() => {
+      // }, 2000);
       if (this.currentYaxisValues) {
         if (this.currentYaxisValues.length > 0) {
           for (let i = 0; i < this.currentYaxisValues.length; i++) {
             this.pointColors.push('rgb(242, 189, 161)');
           }
           this.showGraph = true;
-          console.log('this.sid', this.sid);
         }
       }
+
+      this.createGraph();
     });
   }
 
@@ -147,29 +150,17 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public createGraph() {
-    let bivariatePlot: any = document.getElementById('graph');
+    this.bivariatePlot = document.getElementById('graph');
     var trace1 = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
       name: 'Sample 1',
-      text: this.sid,
-
+      // text: this.sid,
       textposition: 'bottom center',
       marker: { size: 12, color: this.pointColors },
     };
-
-    /*
-    var trace2 = {
-      x: this.xDataTrace2,
-      y: this.yDataTrace2,
-      mode: 'markers',
-      type: 'scatter',
-      name: 'Sample 2',
-      text: ['B-a', 'B-b', 'B-c', 'B-d', 'B-e'],
-      marker: { size: 12, color: 'rgb(104, 121, 128)' },
-    }; */
 
     var data = [trace1];
 
@@ -198,11 +189,12 @@ export class GraphOptionsComponent implements OnInit {
       },
     };
 
-    Plotly.newPlot(bivariatePlot, data, layout, {
+    Plotly.newPlot(this.bivariatePlot, data, layout, {
       displaylogo: false,
     });
 
-    bivariatePlot.on('plotly_click', function (data) {
+    let tempIndex = [];
+    this.bivariatePlot.on('plotly_click', (data) => {
       var pn = '',
         tn = '',
         colors = [];
@@ -210,12 +202,41 @@ export class GraphOptionsComponent implements OnInit {
         pn = data.points[i].pointNumber;
         tn = data.points[i].curveNumber;
         colors = data.points[i].data.marker.color;
+        tempIndex.push(data.points[i].pointIndex);
+        if (this.flaggedPointIndices == undefined) {
+          this.flaggedPointIndices = [];
+        }
+        this.flaggedPointIndices.push(data.points[i].pointIndex);
       }
-      colors[pn] = '#C54C82';
-
+      colors[pn] = 'rgb(104, 121, 128)';
       var update = { marker: { color: colors, size: 16 } };
       Plotly.restyle('graph', update, [tn]);
     });
+  }
+
+  public createFlags() {
+    let flaggedIndices;
+    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
+      flaggedIndices = flags;
+    });
+    let tempXData;
+    let tempYData;
+    let flaggedXData = [];
+    let flaggedYData = [];
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+      tempYData = data;
+      for (let i = 0; i < this.flaggedPointIndices.length; i++) {
+        flaggedYData.push(tempYData[this.flaggedPointIndices[i]]);
+      }
+    });
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+      tempXData = data;
+      for (let i = 0; i < this.flaggedPointIndices.length; i++) {
+        flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
+      }
+    });
+    console.log('flaggedXData', flaggedXData);
+    console.log('flaggedYData', flaggedYData);
   }
 
   public clickPlotData() {
