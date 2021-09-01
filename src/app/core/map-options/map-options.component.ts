@@ -143,14 +143,22 @@ export class MapOptionsComponent implements OnInit {
 
   public parameterSelected() {
     this.matchingMcodes = [];
-    let tempParameter = this.codeForm.get('parameterControl').value;
-    for (let pcode in this.pcodeToMcode) {
-      if (pcode == tempParameter) {
-        let mcodes = this.pcodeToMcode[pcode];
-        for (let i = 0; i < this.mcodeShortName.length; i++) {
-          for (let x = 0; x < mcodes.length; x++) {
-            if (mcodes[x] == this.mcodeShortName[i].mcode) {
-              this.matchingMcodes.push(this.mcodeShortName[i]);
+    let tempParameter = [];
+    let mcodes = [];
+    tempParameter.push(this.codeForm.get('parameterControl').value);
+    console.log('tempParameter', tempParameter);
+
+    for (let x = 0; x < tempParameter[0].length; x++) {
+      console.log('tempParameter[x]', tempParameter[0][x]);
+      for (let pcode in this.pcodeToMcode) {
+        if (pcode == tempParameter[0][x]) {
+          mcodes.push(this.pcodeToMcode[pcode]);
+          console.log('mcodes', mcodes);
+          for (let i = 0; i < this.mcodeShortName.length; i++) {
+            for (let x = 0; x < mcodes.length; x++) {
+              if (mcodes[x] == this.mcodeShortName[i].mcode) {
+                this.matchingMcodes.push(this.mcodeShortName[i]);
+              }
             }
           }
         }
@@ -159,7 +167,28 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public runFilters() {
+    let pairs = new Object();
+    let tempP = this.codeForm.get('parameterControl').value;
+    console.log('pairs0', pairs);
+    console.log('tempP', tempP);
+    for (let i = 0; i < tempP.length; i++) {
+      pairs[String(tempP[i])] = 'TESTTTT';
+    }
+    console.log('pairs', pairs);
     let filterParameters = {
+      meta: {
+        north: parseFloat(this.mapForm.get('northControl').value),
+        south: parseFloat(this.mapForm.get('southControl').value),
+        east: parseFloat(this.mapForm.get('eastControl').value),
+        west: parseFloat(this.mapForm.get('westControl').value),
+        min_year: this.minValue,
+        max_year: this.maxValue,
+        include_NULL: this.includeNullSites,
+        satellite_align: this.optimalAlignment,
+      },
+      items: {},
+    };
+    let filterParametersX = {
       north: parseFloat(this.mapForm.get('northControl').value),
       south: parseFloat(this.mapForm.get('southControl').value),
       east: parseFloat(this.mapForm.get('eastControl').value),

@@ -141,16 +141,17 @@ export class MapLayersService {
   }
 
   public filterWqSample(options: {
-    north: number;
-    south: number;
-    east: number;
-    west: number;
-    pcode: [];
-    mcode: [];
-    minYear: number;
-    maxYear: number;
-    includeNull: Boolean;
-    satelliteAlign: Boolean;
+    meta: {
+      north: number;
+      south: number;
+      east: number;
+      west: number;
+      min_year: number;
+      max_year: number;
+      include_NULL: Boolean;
+      satellite_align: Boolean;
+    };
+    items: {};
   }) {
     console.log('entering filterGraphPts');
 
@@ -160,19 +161,16 @@ export class MapLayersService {
         south: 38,
         east: -74,
         west: -95,
-        min_year: 2013,
-        max_year: 2014,
+        min_year: 2000,
+        max_year: 2020,
         include_NULL: false,
         satellite_align: false,
       },
-      items: {
-        P101: ['M89', 'M90'],
-        P409: ['M398'],
-      },
+      items: {},
     };
 
     return this.httpClient
-      .post('http://127.0.0.1:5005/json_query', testJSON2)
+      .post('http://127.0.0.1:5005/json_query', options)
       .subscribe((res: any[]) => {
         console.log('test results', res);
       });
