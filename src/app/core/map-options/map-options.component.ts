@@ -144,19 +144,18 @@ export class MapOptionsComponent implements OnInit {
   public parameterSelected() {
     this.matchingMcodes = [];
     let tempParameter = [];
-    let mcodes = [];
     tempParameter.push(this.codeForm.get('parameterControl').value);
-    console.log('tempParameter', tempParameter);
-
     for (let x = 0; x < tempParameter[0].length; x++) {
-      console.log('tempParameter[x]', tempParameter[0][x]);
+      let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
         if (pcode == tempParameter[0][x]) {
+          console.log('pcode', tempParameter[0][x]);
+          console.log('mcode', this.pcodeToMcode[pcode]);
           mcodes.push(this.pcodeToMcode[pcode]);
-          console.log('mcodes', mcodes);
+          console.log('mcodes!!!', mcodes);
           for (let i = 0; i < this.mcodeShortName.length; i++) {
-            for (let x = 0; x < mcodes.length; x++) {
-              if (mcodes[x] == this.mcodeShortName[i].mcode) {
+            for (let x = 0; x < mcodes[0].length; x++) {
+              if (mcodes[0][x] == this.mcodeShortName[i].mcode) {
                 this.matchingMcodes.push(this.mcodeShortName[i]);
               }
             }
@@ -167,14 +166,28 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public runFilters() {
-    let pairs = new Object();
+    //format pcodes with their corresponding mcodes so they're compatible in the http request
+    let items = new Object();
     let tempP = this.codeForm.get('parameterControl').value;
-    console.log('pairs0', pairs);
-    console.log('tempP', tempP);
+    let tempM = this.codeForm.get('methodControl').value;
     for (let i = 0; i < tempP.length; i++) {
-      pairs[String(tempP[i])] = 'TESTTTT';
+      let matchMcodes = [];
+      for (let pcode in this.pcodeToMcode) {
+        if (pcode == tempP[i]) {
+          let currentMcodes = [];
+          currentMcodes.push(this.pcodeToMcode[pcode]);
+          for (let y = 0; y < currentMcodes.length; y++) {
+            for (let x = 0; x < tempM.length; x++) {
+              if (currentMcodes[y] == tempM[x]) {
+                matchMcodes.push(currentMcodes[y]);
+              }
+            }
+          }
+        }
+      }
+      items[tempP[i]] = matchMcodes[0];
     }
-    console.log('pairs', pairs);
+    console.log('pairs', items);
     let filterParameters = {
       meta: {
         north: parseFloat(this.mapForm.get('northControl').value),
@@ -186,8 +199,10 @@ export class MapOptionsComponent implements OnInit {
         include_NULL: this.includeNullSites,
         satellite_align: this.optimalAlignment,
       },
-      items: {},
+      items,
     };
+
+    console.log('filterParameters', filterParameters);
     let filterParametersX = {
       north: parseFloat(this.mapForm.get('northControl').value),
       south: parseFloat(this.mapForm.get('southControl').value),
