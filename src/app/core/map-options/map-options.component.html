@@ -3,6 +3,7 @@
   [hidden]="mapLayerOptions"
   (click)="displayMapLayerOptions(true)"
   id="mapLayersCollapsed"
+  aria-label="This panel contains different base map options for the map. Right now, the panel is minimized click on it to access the base map options."
 >
   <div style="text-align: right; margin-right: 10px">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
@@ -14,7 +15,10 @@
   [hidden]="!mapLayerOptions"
   id="mapLayersOptions"
 >
-  <div style="text-align: right; margin-right: 10px">
+  <div
+    style="text-align: right; margin-right: 10px"
+    aria-label="Click on this button to minimize the map filters panel."
+  >
     <mat-icon
       matTooltip="minimize"
       style="cursor: pointer"
@@ -23,7 +27,10 @@
     >
   </div>
   <div class="mapLayers" id="mapLayersID">
-    <label class="radioContainer" id="radioContainerResize0"
+    <label
+      class="radioContainer"
+      id="radioContainerResize0"
+      aria-label="This button changes the base map to display streets"
       >Street
       <input
         id="streetRadio"
@@ -34,7 +41,10 @@
       />
       <span class="radioCheckmark" id="radioCheckmarkOuter0"></span>
     </label>
-    <label class="radioContainer" id="radioContainerResize1"
+    <label
+      class="radioContainer"
+      id="radioContainerResize1"
+      aria-label="This button changes the basemap to display satellite imagery"
       >Satellite Imagery
       <input
         type="radio"
@@ -44,7 +54,10 @@
       />
       <span class="radioCheckmark" id="radioCheckmarkOuter1"></span>
     </label>
-    <label class="radioContainer" id="radioContainerResize2"
+    <label
+      class="radioContainer"
+      id="radioContainerResize2"
+      aria-label="This button changes the basemap to display a simple grayscale background"
       >Grayscale
       <input
         type="radio"
@@ -67,6 +80,7 @@
         matTooltip="minimize"
         style="cursor: pointer"
         (click)="displayMapFilters(false)"
+        aria-label="Clicking this button will minimize the map filters panel"
         >minimize</mat-icon
       >
     </div>
@@ -78,6 +92,7 @@
             (ngModelChange)="parameterSelected()"
             formControlName="parameterControl"
             multiple
+            aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map."
           >
             <mat-option
               *ngFor="let parameter of parameterTypes$ | async"
@@ -86,7 +101,10 @@
             >
           </mat-select>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+        <mat-form-field
+          appearance="fill"
+          aria-label="This is a dropdown filters menu. Select one or more methods to plot on the map. The methods list is based on the parameter(s) selected above"
+        >
           <mat-label>Methods</mat-label>
           <mat-select formControlName="methodControl" multiple>
             <mat-option
@@ -98,7 +116,11 @@
         </mat-form-field>
       </div>
     </form>
-    <div class="custom-slider" style="margin-left: 10px">
+    <div
+      class="custom-slider"
+      style="margin-left: 10px"
+      aria-label="This is a slider filter. It determines the minimum and maximum years of the points displayed in the map"
+    >
       <ngx-slider
         [(value)]="minValue"
         [(highValue)]="maxValue"
@@ -106,7 +128,10 @@
       ></ngx-slider>
     </div>
     <div style="margin-left: 10px; margin-top: 10px">
-      <mat-form-field appearance="fill">
+      <mat-form-field
+        appearance="fill"
+        aria-label="This is a dropdown menu containing U.S. states and territories."
+      >
         <mat-label>States</mat-label>
         <mat-select [formControl]="States" multiple>
           <mat-option *ngFor="let state of stateList" [value]="state">{{
@@ -127,6 +152,7 @@
           border: none;
         "
         (click)="populateMapBounds(true)"
+        aria-label="Clicking this button will populate the bounding box with the current map extent"
       >
         Use map bounds
       </button>
@@ -136,11 +162,16 @@
             class="boundingBoxFullWidth"
             appearance="fill"
             style="margin-right: 10px"
+            aria-label="Enter the northern coordinate for the points to be displayed in the map"
           >
             <mat-label>North</mat-label>
             <input matInput #northControl formControlName="northControl" />
           </mat-form-field>
-          <mat-form-field class="boundingBoxFullWidth" appearance="fill">
+          <mat-form-field
+            class="boundingBoxFullWidth"
+            appearance="fill"
+            aria-label="Enter the southern coordinate for the points to be displayed in the map"
+          >
             <mat-label>South</mat-label>
             <input matInput formControlName="southControl" />
           </mat-form-field>
@@ -150,20 +181,25 @@
             class="boundingBoxFullWidth"
             appearance="fill"
             style="margin-right: 10px"
+            aria-label="Enter the eastern coordinate for the points to be displayed in the map"
           >
             <mat-label>East</mat-label>
             <input matInput formControlName="eastControl" />
           </mat-form-field>
-          <mat-form-field class="boundingBoxFullWidth" appearance="fill">
+          <mat-form-field
+            class="boundingBoxFullWidth"
+            appearance="fill"
+            aria-label="Enter the western coordinate for the points to be displayed in the map"
+          >
             <mat-label>West</mat-label>
             <input matInput formControlName="westControl" />
           </mat-form-field>
         </div>
       </form>
-
       <mat-checkbox
         [disableRipple]="true"
         (change)="clickSatelliteAlignment($event)"
+        aria-label="Check this box to filter points that have optimal satellite alignment"
         >Optimal satellite alignment
       </mat-checkbox>
       <mat-checkbox
@@ -171,10 +207,17 @@
         [checked]="nullDataChecked"
         (change)="nullwarning($event)"
         id="nullCheckbox"
+        aria-label="Check this box to include sites with null values"
         >Inclue null values</mat-checkbox
       >
     </div>
-    <button class="mapFilterBtn dataBtn" (click)="runFilters()">Filter</button>
+    <button
+      class="mapFilterBtn dataBtn"
+      (click)="runFilters()"
+      aria-label="Click this button to filter points and plot them on the map"
+    >
+      Filter
+    </button>
     <button class="downloadBtn dataBtn" matTooltip="Download CSV">
       <mat-icon>cloud_download</mat-icon>
     </button>
@@ -202,6 +245,7 @@
       style="margin-left: 0px"
       (click)="submitNullWarning(false)"
       matTooltip="Recommended"
+      aria-label="Click this button to exclude null values from the map"
     >
       No
     </button>
@@ -210,6 +254,7 @@
       style="background-color: rgb(172, 172, 172)"
       (click)="submitNullWarning(true)"
       matTooltip="Not Recommended"
+      aria-label="Click this button to include null values from the map"
     >
       Yes
     </button>
@@ -220,6 +265,7 @@
   class="optionsBackgroundMini marginLeftFullWidth"
   (click)="displayMapFilters(true)"
   id="filterPointsCollapsed"
+  aria-label="Click this button to maximize the map filter panel"
 >
   <div style="text-align: right; margin-right: 10px">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
