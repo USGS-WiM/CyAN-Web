@@ -5,6 +5,7 @@
     (click)="collapseGraphOptions(true)"
     style="margin-right: 5px"
     id="graphOptionsCollapsedID"
+    aria-label="clicking here will maximize the panel that contains the graph filters"
   >
     <div
       style="
@@ -48,6 +49,7 @@
         matTooltip="minimize"
         style="cursor: pointer"
         (click)="collapseGraphOptions(false)"
+        aria-label="clicking here will maximize the panel that contains graph options"
         >minimize</mat-icon
       >
     </div>
@@ -56,7 +58,10 @@
       <div>
         <div style="margin-left: 10px">
           Y-Axis <br />
-          <mat-form-field appearance="fill">
+          <mat-form-field
+            appearance="fill"
+            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's x-axis."
+          >
             <mat-label>Parameter</mat-label>
             <mat-select
               (ngModelChange)="parameterX()"
@@ -69,7 +74,10 @@
               >
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field
+            appearance="fill"
+            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis."
+          >
             <mat-label>Methods</mat-label>
             <mat-select formControlName="MethodsX" multiple>
               <mat-option
@@ -85,7 +93,10 @@
       <div>
         <div style="margin-left: 10px">
           X-Axis <br />
-          <mat-form-field appearance="fill">
+          <mat-form-field
+            appearance="fill"
+            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's y-axis."
+          >
             <mat-label>Parameter</mat-label>
             <mat-select
               (ngModelChange)="parameterY()"
@@ -98,7 +109,10 @@
               >
             </mat-select>
           </mat-form-field>
-          <mat-form-field appearance="fill">
+          <mat-form-field
+            appearance="fill"
+            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis."
+          >
             <mat-label>Methods</mat-label>
             <mat-select formControlName="MethodsY" multiple>
               <mat-option
@@ -111,7 +125,11 @@
         </div>
       </div>
     </form>
-    <div class="custom-slider" style="margin-left: 10px">
+    <div
+      class="custom-slider"
+      style="margin-left: 10px"
+      aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph."
+    >
       <ngx-slider
         [(value)]="minValue"
         [(highValue)]="maxValue"
@@ -120,29 +138,47 @@
     </div>
     <div style="margin-left: 10px; margin-top: 10px">
       Log Scale &nbsp;
-      <mat-checkbox class="example-margin" [disableRipple]="true"
+      <mat-checkbox
+        class="example-margin"
+        [disableRipple]="true"
+        aria-label="Checking this box will add a logarithmic scale to the x-axis "
         >x
       </mat-checkbox>
       &nbsp;
-      <mat-checkbox class="example-margin" [disableRipple]="true"
+      <mat-checkbox
+        class="example-margin"
+        [disableRipple]="true"
+        aria-label="Checking this box will add a logarithmic scale to the y-axis "
         >y
       </mat-checkbox>
     </div>
-    <div style="margin-left: 10px; margin-top: 10px">
+    <div
+      style="margin-left: 10px; margin-top: 10px"
+      aria-label="Checking this box will filter points using the current map extent"
+    >
       <mat-checkbox class="example-margin" [disableRipple]="true"
         >Limit to map extent
       </mat-checkbox>
     </div>
-    <button class="plotDataBtn dataBtn" (click)="clickPlotData()">
+    <button
+      class="plotDataBtn dataBtn"
+      (click)="clickPlotData()"
+      aria-label="Clicking this button will create a graph using the points defined by the user-defined filters"
+    >
       Plot Data
     </button>
-    <button class="downloadBtn dataBtn" matTooltip="CSV of all data">
+    <button
+      class="downloadBtn dataBtn"
+      matTooltip="CSV of all data"
+      aria-label="Clicking this button will download a CSV of the filtered points"
+    >
       <mat-icon>cloud_download</mat-icon>
     </button>
     <button
       class="downloadBtn dataBtn"
       (click)="createFlags()"
       matTooltip="CSV of flagged data"
+      aria-label="Clicking this button will download a CSV of the flagged data"
     >
       <mat-icon>flag</mat-icon>
     </button>
@@ -151,6 +187,7 @@
     class="graphBackground marginTopFullHeight"
     id="graphBackgroundID"
     [hidden]="!showGraph"
+    aria-label="This is a graph displaying the points that were filtered using the menu located to the left of this graph"
   >
     <div id="graph"></div>
   </div>
