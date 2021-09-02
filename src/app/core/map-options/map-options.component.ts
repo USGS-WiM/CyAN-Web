@@ -187,7 +187,6 @@ export class MapOptionsComponent implements OnInit {
       }
       items[tempP[i]] = matchMcodes[0];
     }
-    console.log('pairs', items);
     let filterParameters = {
       meta: {
         north: parseFloat(this.mapForm.get('northControl').value),
