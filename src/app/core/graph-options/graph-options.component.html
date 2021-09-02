@@ -52,63 +52,65 @@
       >
     </div>
     <div style="height: 10px"></div>
-    <div class="traceOptionsBackground">
-      <div style="margin-left: 10px">
-        <br />
-        x Axis <br />
-        <mat-form-field appearance="fill">
-          <mat-label>Parameters</mat-label>
-          <mat-select [formControl]="Parameters" multiple>
-            <mat-option
-              *ngFor="let parameter of parameterList"
-              [value]="parameter"
-              >{{ parameter }}</mat-option
+    <form [formGroup]="graphSelectionsForm">
+      <div>
+        <div style="margin-left: 10px">
+          Y-Axis <br />
+          <mat-form-field appearance="fill">
+            <mat-label>Parameter</mat-label>
+            <mat-select
+              (ngModelChange)="parameterX()"
+              formControlName="ParametersX"
             >
-          </mat-select>
-        </mat-form-field>
-        <br />
-        y Axis <br />
-        <mat-form-field appearance="fill">
-          <mat-label>Parameters</mat-label>
-          <mat-select [formControl]="Parameters" multiple>
-            <mat-option
-              *ngFor="let parameter of parameterList"
-              [value]="parameter"
-              >{{ parameter }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
+              <mat-option
+                *ngFor="let parameter of this.parameterTypes$ | async"
+                [value]="parameter.pcode"
+                >{{ parameter.short_name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Methods</mat-label>
+            <mat-select formControlName="MethodsX" multiple>
+              <mat-option
+                *ngFor="let method of this.matchingMcodesX"
+                [value]="method.mcode"
+                >{{ method.short_name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-    <div style="height: 10px"></div>
-    <div *ngIf="secondTrace" class="traceOptionsBackground">
-      <div style="margin-left: 10px">
-        <br />
-        x Axis <br />
-        <mat-form-field appearance="fill">
-          <mat-label>Parameters</mat-label>
-          <mat-select [formControl]="Parameters" multiple>
-            <mat-option
-              *ngFor="let parameter of parameterList"
-              [value]="parameter"
-              >{{ parameter }}</mat-option
+      <div style="height: 10px"></div>
+      <div>
+        <div style="margin-left: 10px">
+          X-Axis <br />
+          <mat-form-field appearance="fill">
+            <mat-label>Parameter</mat-label>
+            <mat-select
+              (ngModelChange)="parameterY()"
+              formControlName="ParametersY"
             >
-          </mat-select>
-        </mat-form-field>
-        <br />
-        y Axis <br />
-        <mat-form-field appearance="fill">
-          <mat-label>Parameters</mat-label>
-          <mat-select [formControl]="Parameters" multiple>
-            <mat-option
-              *ngFor="let parameter of parameterList"
-              [value]="parameter"
-              >{{ parameter }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
+              <mat-option
+                *ngFor="let parameter of this.parameterTypes$ | async"
+                [value]="parameter.pcode"
+                >{{ parameter.short_name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Methods</mat-label>
+            <mat-select formControlName="MethodsY" multiple>
+              <mat-option
+                *ngFor="let method of matchingMcodesY"
+                [value]="method.mcode"
+                >{{ method.short_name }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
+    </form>
     <div class="custom-slider" style="margin-left: 10px">
       <ngx-slider
         [(value)]="minValue"
@@ -131,28 +133,18 @@
         >Limit to map extent
       </mat-checkbox>
     </div>
-
-    <button
-      *ngIf="!secondTrace"
-      class="traceBtn dataBtn"
-      matTooltip="Add Trace"
-      (click)="addTrace()"
-    >
-      +
-    </button>
-    <button
-      *ngIf="secondTrace"
-      class="traceBtn dataBtn"
-      matTooltip="Remove Trace"
-      (click)="removeTrace()"
-    >
-      -
-    </button>
-    <button class="plotDataBtn dataBtn" (click)="displayGraph()">
+    <button class="plotDataBtn dataBtn" (click)="clickPlotData()">
       Plot Data
     </button>
-    <button class="downloadBtn dataBtn" matTooltip="Download CSV">
+    <button class="downloadBtn dataBtn" matTooltip="CSV of all data">
       <mat-icon>cloud_download</mat-icon>
+    </button>
+    <button
+      class="downloadBtn dataBtn"
+      (click)="createFlags()"
+      matTooltip="CSV of flagged data"
+    >
+      <mat-icon>flag</mat-icon>
     </button>
   </div>
   <div

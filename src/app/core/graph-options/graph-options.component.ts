@@ -1,8 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
-import { ThrowStmt } from '@angular/compiler';
+import { FiltersService } from '../../shared/services/filters.service';
+import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-graph-options',
@@ -11,7 +13,7 @@ import { ThrowStmt } from '@angular/compiler';
 })
 export class GraphOptionsComponent implements OnInit {
   public secondTrace: Boolean = false;
-  Parameters = new FormControl();
+
   parameterList: string[] = [
     'Phosphorus',
     'Dissolved Oxygen',
@@ -39,15 +41,107 @@ export class GraphOptionsComponent implements OnInit {
   public yDataTrace1;
   public xDataTrace2;
   public yDataTrace2;
+  public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public pcodeToMcode$: Observable<any[]>;
+  // public sid$: Observable<any[]>;
+  public matchingMcodesY = [];
+  public matchingMcodesX = [];
+  public pcodeToMcode;
+  public mcodeShortName;
+  public currentXaxisValues = [];
+  public currentYaxisValues = [];
+  // public sid = [];
+  public pointColors = [];
+  public flaggedPointIndices: Array<number> = [];
+  graphSelectionsForm: FormGroup;
+  public bivariatePlot: any;
 
-  constructor() {}
+  constructor(
+    private filterService: FiltersService,
+    private graphSelectionsService: GraphSelectionsService
+  ) {
+    this.parameterTypes$ = this.filterService.parameterTypes$;
+    this.methodTypes$ = this.filterService.methodTypes$;
+    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
+
+    //this.allGraphDataX$ = this.filterService.allGraphDataX$;
+
+    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
+    // this.sid$ = this.filterService.sid$;
+  }
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
+    this.graphSelectionsForm = new FormGroup({
+      ParametersX: new FormControl(),
+      MethodsX: new FormControl(),
+      ParametersY: new FormControl(),
+      MethodsY: new FormControl(),
+    });
     this.resizeDivs();
+    this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
+    this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+
+    /* this.graphSelectionsService.sidSubject.subscribe((sid) => {
+      this.sid = sid;
+    }); */
+
+    this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+      this.currentXaxisValues = points;
+    });
+    this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
+      this.currentYaxisValues = points;
+      //  setTimeout(() => {
+      // }, 2000);
+      if (this.currentYaxisValues) {
+        if (this.currentYaxisValues.length > 0) {
+          for (let i = 0; i < this.currentYaxisValues.length; i++) {
+            this.pointColors.push('rgb(242, 189, 161)');
+          }
+          this.showGraph = true;
+        }
+      }
+
+      this.createGraph();
+    });
+  }
+
+  public parameterX() {
+    this.matchingMcodesX = [];
+    let tempParameter = this.graphSelectionsForm.get('ParametersX').value;
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempParameter) {
+        let mcodes = this.pcodeToMcode[pcode];
+        for (let i = 0; i < this.mcodeShortName.length; i++) {
+          for (let x = 0; x < mcodes.length; x++) {
+            if (mcodes[x] == this.mcodeShortName[i].mcode) {
+              this.matchingMcodesX.push(this.mcodeShortName[i]);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  public parameterY() {
+    this.matchingMcodesY = [];
+    let tempParameter = this.graphSelectionsForm.get('ParametersY').value;
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempParameter) {
+        let mcodes = this.pcodeToMcode[pcode];
+        for (let i = 0; i < this.mcodeShortName.length; i++) {
+          for (let x = 0; x < mcodes.length; x++) {
+            if (mcodes[x] == this.mcodeShortName[i].mcode) {
+              this.matchingMcodesY.push(this.mcodeShortName[i]);
+            }
+          }
+        }
+      }
+    }
   }
 
   public collapseGraphOptions(collapsed: Boolean) {
@@ -55,58 +149,36 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
-  public addTrace() {
-    this.secondTrace = true;
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightSmall');
-    graphOptionsBackgroundID.classList.add('optionsBackgroundHeightLarge');
-  }
-  public removeTrace() {
-    this.secondTrace = false;
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    graphOptionsBackgroundID.classList.add('optionsBackgroundHeightSmall');
-    graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightLarge');
-  }
-
   public createGraph() {
-    let bivariatePlot = document.getElementById('graph');
+    this.bivariatePlot = document.getElementById('graph');
     var trace1 = {
-      x: this.xDataTrace1,
-      y: this.yDataTrace1,
+      x: this.currentXaxisValues,
+      y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
       name: 'Sample 1',
-      text: ['A-1', 'A-2', 'A-3', 'A-4', 'A-5'],
-      marker: { size: 12, color: 'rgb(242, 189, 161) ' },
+      // text: this.sid,
+      textposition: 'bottom center',
+      marker: { size: 12, color: this.pointColors },
     };
 
-    var trace2 = {
-      x: this.xDataTrace2,
-      y: this.yDataTrace2,
-      mode: 'markers',
-      type: 'scatter',
-      name: 'Sample 2',
-      text: ['B-a', 'B-b', 'B-c', 'B-d', 'B-e'],
-      marker: { size: 12, color: 'rgb(104, 121, 128)' },
-    };
-
-    var data = [trace1, trace2];
+    var data = [trace1];
 
     var layout = {
+      font: {
+        size: 18,
+      },
       xaxis: {
-        range: [0.75, 5.25],
+        // rangemode: 'tozero',
       },
       yaxis: {
-        range: [0, 8],
+        // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
+      showlegend: true,
       legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
-      modebare: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
       margin: {
@@ -117,22 +189,76 @@ export class GraphOptionsComponent implements OnInit {
       },
     };
 
-    Plotly.newPlot(bivariatePlot, data, layout, {
+    Plotly.newPlot(this.bivariatePlot, data, layout, {
       displaylogo: false,
+    });
+
+    let tempIndex = [];
+    this.bivariatePlot.on('plotly_click', (data) => {
+      var pn = '',
+        tn = '',
+        colors = [];
+      for (var i = 0; i < data.points.length; i++) {
+        pn = data.points[i].pointNumber;
+        tn = data.points[i].curveNumber;
+        colors = data.points[i].data.marker.color;
+        tempIndex.push(data.points[i].pointIndex);
+        if (this.flaggedPointIndices == undefined) {
+          this.flaggedPointIndices = [];
+        }
+        this.flaggedPointIndices.push(data.points[i].pointIndex);
+      }
+      colors[pn] = 'rgb(104, 121, 128)';
+      var update = { marker: { color: colors, size: 16 } };
+      Plotly.restyle('graph', update, [tn]);
     });
   }
 
-  public displayGraph() {
+  public createFlags() {
+    let flaggedIndices;
+    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
+      flaggedIndices = flags;
+    });
+    let tempXData;
+    let tempYData;
+    let flaggedXData = [];
+    let flaggedYData = [];
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+      tempYData = data;
+      for (let i = 0; i < this.flaggedPointIndices.length; i++) {
+        flaggedYData.push(tempYData[this.flaggedPointIndices[i]]);
+      }
+    });
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+      tempXData = data;
+      for (let i = 0; i < this.flaggedPointIndices.length; i++) {
+        flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
+      }
+    });
+    console.log('flaggedXData', flaggedXData);
+    console.log('flaggedYData', flaggedYData);
+  }
+
+  public clickPlotData() {
+    this.showGraph = false;
     this.populateGraphData();
-    this.showGraph = true;
     this.resizeDivs();
   }
 
   public populateGraphData() {
-    this.xDataTrace1 = [1, 2, 3, 4, 5];
-    this.yDataTrace1 = [1, 6, 3, 6, 1];
-    this.xDataTrace2 = [1.5, 2.5, 3.5, 4.5, 5.5];
-    this.yDataTrace2 = [4, 1, 7, 1, 4];
+    let paramX = this.graphSelectionsForm.get('ParametersX').value;
+    let methodsX = this.graphSelectionsForm.get('MethodsX').value;
+
+    let paramY = this.graphSelectionsForm.get('ParametersY').value;
+    let methodsY = this.graphSelectionsForm.get('MethodsY').value;
+
+    let filterParameters = {
+      paramX: paramX,
+      methodsX: methodsX,
+      paramY: paramY,
+      methodsY: methodsY,
+    };
+    this.graphSelectionsService.filterGraphPoints(filterParameters);
   }
 
   public resizeDivs() {

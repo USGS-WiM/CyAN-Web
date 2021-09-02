@@ -8,7 +8,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-options',
@@ -17,6 +16,11 @@ import * as moment from 'moment';
 })
 export class MapOptionsComponent implements OnInit {
   public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public pcodeToMcode$: Observable<any[]>;
+  public pcodeToMcode;
+  public mcodeShortName;
+  public matchingMcodes = [];
   public mapForm: FormGroup;
   public codeForm: FormGroup;
   public mapFilters: Boolean = true;
@@ -112,6 +116,8 @@ export class MapOptionsComponent implements OnInit {
     private filterService: FiltersService
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
+    this.methodTypes$ = this.filterService.methodTypes$;
+    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
   }
 
   @HostListener('window:resize')
@@ -131,10 +137,72 @@ export class MapOptionsComponent implements OnInit {
       methodControl: new FormControl(),
     });
     this.resizeDivs();
+    this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
+    this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+  }
+
+  public parameterSelected() {
+    this.matchingMcodes = [];
+    let tempParameter = [];
+    tempParameter.push(this.codeForm.get('parameterControl').value);
+    for (let x = 0; x < tempParameter[0].length; x++) {
+      let mcodes = [];
+      for (let pcode in this.pcodeToMcode) {
+        if (pcode == tempParameter[0][x]) {
+          console.log('pcode', tempParameter[0][x]);
+          console.log('mcode', this.pcodeToMcode[pcode]);
+          mcodes.push(this.pcodeToMcode[pcode]);
+          console.log('mcodes!!!', mcodes);
+          for (let i = 0; i < this.mcodeShortName.length; i++) {
+            for (let x = 0; x < mcodes[0].length; x++) {
+              if (mcodes[0][x] == this.mcodeShortName[i].mcode) {
+                this.matchingMcodes.push(this.mcodeShortName[i]);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   public runFilters() {
+    //format pcodes with their corresponding mcodes so they're compatible in the http request
+    let items = new Object();
+    let tempP = this.codeForm.get('parameterControl').value;
+    let tempM = this.codeForm.get('methodControl').value;
+    for (let i = 0; i < tempP.length; i++) {
+      let matchMcodes = [];
+      for (let pcode in this.pcodeToMcode) {
+        if (pcode == tempP[i]) {
+          let currentMcodes = [];
+          currentMcodes.push(this.pcodeToMcode[pcode]);
+          for (let y = 0; y < currentMcodes.length; y++) {
+            for (let x = 0; x < tempM.length; x++) {
+              if (currentMcodes[y] == tempM[x]) {
+                matchMcodes.push(currentMcodes[y]);
+              }
+            }
+          }
+        }
+      }
+      items[tempP[i]] = matchMcodes[0];
+    }
     let filterParameters = {
+      meta: {
+        north: parseFloat(this.mapForm.get('northControl').value),
+        south: parseFloat(this.mapForm.get('southControl').value),
+        east: parseFloat(this.mapForm.get('eastControl').value),
+        west: parseFloat(this.mapForm.get('westControl').value),
+        min_year: this.minValue,
+        max_year: this.maxValue,
+        include_NULL: this.includeNullSites,
+        satellite_align: this.optimalAlignment,
+      },
+      items,
+    };
+
+    console.log('filterParameters', filterParameters);
+    let filterParametersX = {
       north: parseFloat(this.mapForm.get('northControl').value),
       south: parseFloat(this.mapForm.get('southControl').value),
       east: parseFloat(this.mapForm.get('eastControl').value),
@@ -146,10 +214,7 @@ export class MapOptionsComponent implements OnInit {
       includeNull: this.includeNullSites,
       satelliteAlign: this.optimalAlignment,
     };
-    //this.mapLayersService.filterWqSample3(true, filterParameters);
-    this.mapLayersService.filterWqSample2_TEST3(filterParameters);
-
-    // this.markersService.testMarkers();
+    this.mapLayersService.filterWqSample(filterParameters);
   }
 
   public displayMapFilters(display: Boolean) {

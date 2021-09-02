@@ -24,7 +24,7 @@
   </div>
   <div class="mapLayers" id="mapLayersID">
     <label class="radioContainer" id="radioContainerResize0"
-      >Streets
+      >Street
       <input
         id="streetRadio"
         (change)="newBasemap()"
@@ -35,7 +35,7 @@
       <span class="radioCheckmark" id="radioCheckmarkOuter0"></span>
     </label>
     <label class="radioContainer" id="radioContainerResize1"
-      >Imagery
+      >Satellite Imagery
       <input
         type="radio"
         name="radio"
@@ -74,7 +74,11 @@
       <div style="margin-left: 10px">
         <mat-form-field appearance="fill">
           <mat-label>Parameters</mat-label>
-          <mat-select formControlName="parameterControl" multiple>
+          <mat-select
+            (ngModelChange)="parameterSelected()"
+            formControlName="parameterControl"
+            multiple
+          >
             <mat-option
               *ngFor="let parameter of parameterTypes$ | async"
               [value]="parameter.pcode"
@@ -86,9 +90,9 @@
           <mat-label>Methods</mat-label>
           <mat-select formControlName="methodControl" multiple>
             <mat-option
-              *ngFor="let method of methodsList"
-              [value]="method.code"
-              >{{ method.name }}</mat-option
+              *ngFor="let method of matchingMcodes"
+              [value]="method.mcode"
+              >{{ method.short_name }}</mat-option
             >
           </mat-select>
         </mat-form-field>

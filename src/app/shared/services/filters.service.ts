@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class FiltersService {
   parameterTypes$: Observable<any>;
   methodTypes$: Observable<any>;
+  pcodeToMcode$: Observable<any>;
 
   constructor(private httpClient: HttpClient) {
     this.parameterTypes$ = httpClient
@@ -19,11 +20,17 @@ export class FiltersService {
         shareReplay(1),
         tap(() => console.log('aftersharing'))
       );
-    /* this.methodTypes$ = httpClient
+    this.methodTypes$ = httpClient
       .get('http://127.0.0.1:5005/get_mcode_shortname/')
       .pipe(
         shareReplay(1),
         tap(() => console.log('aftersharing'))
-      ); */
+      );
+    this.pcodeToMcode$ = httpClient
+      .get('http://127.0.0.1:5005/pcode_to_mcode/')
+      .pipe(
+        shareReplay(1),
+        tap(() => console.log('aftersharing'))
+      );
   }
 }

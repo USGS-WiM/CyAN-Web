@@ -53,92 +53,58 @@ export class MapLayersService {
   public filterWqSampleSubject = new BehaviorSubject<any>(undefined);
   filterWqSample$ = this.filterWqSampleSubject.asObservable();
 
-  public filterWqSample2_TEST3(options: {
-    north: number;
-    south: number;
-    east: number;
-    west: number;
-    pcode: [];
-    mcode: [];
-    minYear: number;
-    maxYear: number;
-    includeNull: Boolean;
-    satelliteAlign: Boolean;
-  }): Subscription {
-    //remove previous points from map
-    this.filterWqSampleSubject.next(undefined);
-    //reset the sites layer
-    this.mapWQSites = L.markerClusterGroup({
-      showCoverageOnHover: false,
-      maxClusterRadius: 40,
-      iconCreateFunction: function (cluster) {
-        var markers = cluster.getAllChildMarkers();
-        var html =
-          '<div style="text-align: center; margin-top: 7px; color: gray">' +
-          markers.length +
-          '</div>';
-        return L.divIcon({
-          html: html,
-          className: 'allSiteIcon',
-          iconSize: L.point(32, 32),
-        });
-      },
-    });
-    //if one of the bounding boxes is blank, don't constrain the query in that direction
-    if (isNaN(options.south)) {
-      options.south = -90;
-    }
-    if (isNaN(options.north)) {
-      options.north = 90;
-    }
-    if (isNaN(options.east)) {
-      options.east = 180;
-    }
-    if (isNaN(options.west)) {
-      options.west = -180;
-    }
+  public filterWqSample(options: {
+    meta: {
+      north: number;
+      south: number;
+      east: number;
+      west: number;
+      min_year: number;
+      max_year: number;
+      include_NULL: Boolean;
+      satellite_align: Boolean;
+    };
+    items: {};
+  }) {
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
-    ///////////////// Update this later to use url base from app.settings.ts ////////////////////////////
-    const url =
-      APP_SETTINGS.wqPoints +
-      '/?minlat=' +
-      options.south +
-      '&maxlat=' +
-      options.north +
-      '&minlong=' +
-      options.west +
-      '&maxlong=' +
-      options.east;
-    return this.httpClient.get(url).subscribe((res: any[]) => {
-      if (res.length === 0) {
-        this.snackBar.open('No sites match your query.', 'OK', {
-          duration: 4000,
-          verticalPosition: 'top',
-        });
-      } else {
-        for (let i = 0; i < res.length; i++) {
-          //taking too long, so limit to the first 10 for now
-          // for (let i = 0; i < 1000; i++) {
-          let date = res[i].date_time_group;
-          let formattedDate = Number(moment(date).format('YYYY'));
-          if (options.minYear <= formattedDate) {
-            if (options.maxYear >= formattedDate) {
-              //console.log('results', res[i]);
-              let lat = Number(res[i].latitude);
-              let lng = Number(res[i].longitude);
-              L.marker([lat, lng], {
-                icon: L.divIcon({
-                  className: 'allSiteIcon',
-                }),
-              }).addTo(this.mapWQSites);
-            }
+
+    //if one of the bounding boxes is blank, don't constrain the query in that direction
+    if (isNaN(options.meta.south)) {
+      options.meta.south = -90;
+    }
+    if (isNaN(options.meta.north)) {
+      options.meta.north = 90;
+    }
+    if (isNaN(options.meta.east)) {
+      options.meta.east = 180;
+    }
+    if (isNaN(options.meta.west)) {
+      options.meta.west = -180;
+    }
+
+    return this.httpClient
+      .post('http://127.0.0.1:5005/json_query', options)
+      .subscribe((res: any[]) => {
+        if (res.length === 0) {
+          this.snackBar.open('No sites match your query.', 'OK', {
+            duration: 4000,
+            verticalPosition: 'top',
+          });
+        } else {
+          for (let i = 0; i < res.length; i++) {
+            let lat = Number(res[i].latitude);
+            let lng = Number(res[i].longitude);
+            L.marker([lat, lng], {
+              icon: L.divIcon({
+                className: 'allSiteIcon',
+              }),
+            }).addTo(this.mapWQSites);
           }
+          this.filterWqSampleSubject.next(this.mapWQSites);
+          base.classList.remove('initial-loader');
         }
-        this.filterWqSampleSubject.next(this.mapWQSites);
-        base.classList.remove('initial-loader');
-      }
-    });
+      });
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
