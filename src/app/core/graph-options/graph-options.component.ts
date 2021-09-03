@@ -56,6 +56,9 @@ export class GraphOptionsComponent implements OnInit {
   public flaggedPointIndices: Array<number> = [];
   graphSelectionsForm: FormGroup;
   public bivariatePlot: any;
+  public optimalAlignment: Boolean = false;
+  public filterQueryX;
+  public filterQueryY;
 
   constructor(
     private filterService: FiltersService,
@@ -246,19 +249,70 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public populateGraphData() {
-    let paramX = this.graphSelectionsForm.get('ParametersX').value;
-    let methodsX = this.graphSelectionsForm.get('MethodsX').value;
+    this.createQuery('xAxis');
+    this.createQuery('yAxis');
+    //this.graphSelectionsService.filterGraphPoints(this.filterQueryX, this.filterQueryY);
+  }
 
-    let paramY = this.graphSelectionsForm.get('ParametersY').value;
-    let methodsY = this.graphSelectionsForm.get('MethodsY').value;
-
-    let filterParameters = {
-      paramX: paramX,
-      methodsX: methodsX,
-      paramY: paramY,
-      methodsY: methodsY,
-    };
-    this.graphSelectionsService.filterGraphPoints(filterParameters);
+  public createQuery(axis) {
+    let tempP;
+    let tempM;
+    if (axis == 'xAxis') {
+      tempP = this.graphSelectionsForm.get('ParametersX').value;
+      tempM = this.graphSelectionsForm.get('MethodsX').value;
+    }
+    if (axis == 'yAxis') {
+      tempP = this.graphSelectionsForm.get('ParametersY').value;
+      tempM = this.graphSelectionsForm.get('MethodsY').value;
+    }
+    let items = new Object();
+    for (let i = 0; i < tempP.length; i++) {
+      let matchMcodes = [];
+      for (let pcode in this.pcodeToMcode) {
+        if (pcode == tempP[i]) {
+          let currentMcodes = [];
+          currentMcodes.push(this.pcodeToMcode[pcode]);
+          for (let y = 0; y < currentMcodes.length; y++) {
+            for (let x = 0; x < tempM.length; x++) {
+              if (currentMcodes[y] == tempM[x]) {
+                matchMcodes.push(currentMcodes[y]);
+              }
+            }
+          }
+        }
+      }
+      items[tempP[i]] = matchMcodes[0];
+    }
+    if (axis == 'XAxis') {
+      this.filterQueryX = {
+        meta: {
+          north: 90,
+          south: -90,
+          east: 180,
+          west: -180,
+          min_year: this.minValue,
+          max_year: this.maxValue,
+          include_NULL: false,
+          satellite_align: this.optimalAlignment,
+        },
+        items,
+      };
+    }
+    if (axis == 'YAxis') {
+      this.filterQueryY = {
+        meta: {
+          north: 90,
+          south: -90,
+          east: 180,
+          west: -180,
+          min_year: this.minValue,
+          max_year: this.maxValue,
+          include_NULL: false,
+          satellite_align: this.optimalAlignment,
+        },
+        items,
+      };
+    }
   }
 
   public resizeDivs() {

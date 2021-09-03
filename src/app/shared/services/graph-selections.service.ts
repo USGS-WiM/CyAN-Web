@@ -34,7 +34,165 @@ export class GraphSelectionsService {
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
-  public filterGraphPoints(options: {
+  public filterGraphPoints(graphFilters: {
+    north: number;
+    south: number;
+    east: number;
+    west: number;
+    min_year: number;
+    max_year: number;
+    include_NULL: Boolean;
+    satellite_align: Boolean;
+    paramX: [];
+    paramY: [];
+    methodsX: [];
+    methodsY: [];
+  }) {
+    let base = document.getElementById('base');
+    base.classList.add('initial-loader');
+    this.graphPointsXSubject.next(undefined);
+    this.graphPointsYSubject.next(undefined);
+    let tempResultsX = [];
+    let tempResultsY = [];
+    let resultsX = [];
+    let resultsY = [];
+    let valuesX = [];
+    let valuesY = [];
+    let allDataX = [];
+    let allDataY = [];
+    let sid = [];
+    const url =
+      APP_SETTINGS.wqPoints +
+      '/?minlat=' +
+      -90 +
+      '&maxlat=' +
+      90 +
+      '&minlong=' +
+      -180 +
+      '&maxlong=' +
+      180;
+    return this.httpClient.get(url).subscribe((res: any[]) => {
+      if (res.length === 0) {
+        this.snackBar.open('No points match your query.', 'OK', {
+          duration: 4000,
+          verticalPosition: 'top',
+        });
+      } else {
+        for (let i = 0; i < res.length; i++) {
+          if (graphFilters.paramY == res[i].pcode) {
+            if (graphFilters.methodsY == res[i].mcode) {
+              tempResultsY.push(res[i]);
+            }
+          }
+          if (graphFilters.paramX == res[i].pcode) {
+            if (graphFilters.methodsX == res[i].mcode) {
+              tempResultsX.push(res[i]);
+            }
+          }
+        }
+        for (let i = 0; i < tempResultsX.length; i++) {
+          for (let x = 0; x < tempResultsY.length; x++) {
+            if (tempResultsY[x].sid == tempResultsX[i].sid) {
+              valuesX.push(tempResultsX[i].result);
+              valuesY.push(tempResultsY[x].result);
+              allDataX.push(tempResultsX[i]);
+              allDataY.push(tempResultsY[x]);
+              sid.push(tempResultsY[x].sid);
+            }
+          }
+        }
+        this.graphPointsXSubject.next(valuesX);
+        this.graphPointsYSubject.next(valuesY);
+        this.allGraphDataYSubject.next(allDataY);
+        this.allGraphDataXSubject.next(allDataX);
+        this.sidSubject.next(sid);
+      }
+
+      base.classList.remove('initial-loader');
+    });
+  }
+
+  public filterGraphPointsX(graphFilters: {
+    north: number;
+    south: number;
+    east: number;
+    west: number;
+    min_year: number;
+    max_year: number;
+    include_NULL: Boolean;
+    satellite_align: Boolean;
+    paramX: [];
+    paramY: [];
+    methodsX: [];
+    methodsY: [];
+  }) {
+    let base = document.getElementById('base');
+    base.classList.add('initial-loader');
+    this.graphPointsXSubject.next(undefined);
+    this.graphPointsYSubject.next(undefined);
+    let tempResultsX = [];
+    let tempResultsY = [];
+    let resultsX = [];
+    let resultsY = [];
+    let valuesX = [];
+    let valuesY = [];
+    let allDataX = [];
+    let allDataY = [];
+    let sid = [];
+    const url =
+      APP_SETTINGS.wqPoints +
+      '/?minlat=' +
+      -90 +
+      '&maxlat=' +
+      90 +
+      '&minlong=' +
+      -180 +
+      '&maxlong=' +
+      180;
+    return this.httpClient
+      .post('http://127.0.0.1:5005/json_query', graphFilters)
+      .subscribe((res: any[]) => {
+        if (res.length === 0) {
+          this.snackBar.open('No points match your query.', 'OK', {
+            duration: 4000,
+            verticalPosition: 'top',
+          });
+        } else {
+          for (let i = 0; i < res.length; i++) {
+            if (graphFilters.paramY == res[i].pcode) {
+              if (graphFilters.methodsY == res[i].mcode) {
+                tempResultsY.push(res[i]);
+              }
+            }
+            if (graphFilters.paramX == res[i].pcode) {
+              if (graphFilters.methodsX == res[i].mcode) {
+                tempResultsX.push(res[i]);
+              }
+            }
+          }
+          for (let i = 0; i < tempResultsX.length; i++) {
+            for (let x = 0; x < tempResultsY.length; x++) {
+              if (tempResultsY[x].sid == tempResultsX[i].sid) {
+                valuesX.push(tempResultsX[i].result);
+                valuesY.push(tempResultsY[x].result);
+                allDataX.push(tempResultsX[i]);
+                allDataY.push(tempResultsY[x]);
+                sid.push(tempResultsY[x].sid);
+              }
+            }
+          }
+          this.graphPointsXSubject.next(valuesX);
+          this.graphPointsYSubject.next(valuesY);
+          this.allGraphDataYSubject.next(allDataY);
+          this.allGraphDataXSubject.next(allDataX);
+          this.sidSubject.next(sid);
+        }
+
+        base.classList.remove('initial-loader');
+      });
+  }
+
+  public filterGraphPointsXX(options: {
     paramX: string;
     methodsX: [];
     paramY: string;
