@@ -34,7 +34,7 @@ export class GraphSelectionsService {
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
-  public filterGraphPoints(graphFilters: {
+  public filterGraphPointsOld(graphFilters: {
     north: number;
     south: number;
     east: number;
@@ -112,7 +112,7 @@ export class GraphSelectionsService {
     });
   }
 
-  public filterGraphPointsX(graphFilters: {
+  public filterGraphPoints(graphFilters: {
     north: number;
     south: number;
     east: number;

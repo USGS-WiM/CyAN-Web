@@ -70,7 +70,6 @@ export class GraphOptionsComponent implements OnInit {
 
     //this.allGraphDataX$ = this.filterService.allGraphDataX$;
 
-    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     // this.sid$ = this.filterService.sid$;
   }
   @HostListener('window:resize')
@@ -254,7 +253,7 @@ export class GraphOptionsComponent implements OnInit {
     //this.graphSelectionsService.filterGraphPoints(this.filterQueryX, this.filterQueryY);
   }
 
-  public createQuery(axis) {
+  public createQuery(axis: string) {
     let tempP;
     let tempM;
     if (axis == 'xAxis') {
@@ -266,24 +265,22 @@ export class GraphOptionsComponent implements OnInit {
       tempM = this.graphSelectionsForm.get('MethodsY').value;
     }
     let items = new Object();
-    for (let i = 0; i < tempP.length; i++) {
-      let matchMcodes = [];
-      for (let pcode in this.pcodeToMcode) {
-        if (pcode == tempP[i]) {
-          let currentMcodes = [];
-          currentMcodes.push(this.pcodeToMcode[pcode]);
-          for (let y = 0; y < currentMcodes.length; y++) {
-            for (let x = 0; x < tempM.length; x++) {
-              if (currentMcodes[y] == tempM[x]) {
-                matchMcodes.push(currentMcodes[y]);
-              }
+    let matchMcodes = [];
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempP) {
+        let currentMcodes = [];
+        currentMcodes.push(this.pcodeToMcode[pcode]);
+        for (let y = 0; y < currentMcodes.length; y++) {
+          for (let x = 0; x < tempM.length; x++) {
+            if (currentMcodes[y] == tempM[x]) {
+              matchMcodes.push(currentMcodes[y]);
             }
           }
         }
       }
-      items[tempP[i]] = matchMcodes[0];
     }
-    if (axis == 'XAxis') {
+    items[tempP] = matchMcodes[0];
+    if (axis === 'xAxis') {
       this.filterQueryX = {
         meta: {
           north: 90,
@@ -298,7 +295,7 @@ export class GraphOptionsComponent implements OnInit {
         items,
       };
     }
-    if (axis == 'YAxis') {
+    if (axis === 'yAxis') {
       this.filterQueryY = {
         meta: {
           north: 90,

@@ -186,6 +186,7 @@ export class MapOptionsComponent implements OnInit {
         }
       }
       items[tempP[i]] = matchMcodes[0];
+      console.log('map items', items);
     }
     let filterParameters = {
       meta: {
