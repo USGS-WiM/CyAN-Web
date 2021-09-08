@@ -25,6 +25,18 @@ export class GraphSelectionsService {
   public allGraphDataXSubject = new BehaviorSubject<any>(undefined);
   allGraphDataX$ = this.allGraphDataXSubject.asObservable();
 
+  public tempResultsYSubject = new BehaviorSubject<any>(undefined);
+  tempResultsY$ = this.tempResultsYSubject.asObservable();
+
+  public tempResultsXSubject = new BehaviorSubject<any>(undefined);
+  tempResultsX$ = this.tempResultsXSubject.asObservable();
+
+  public resultsReadySubject = new BehaviorSubject<any>(undefined);
+  resultsReady$ = this.resultsReadySubject.asObservable();
+  /*public updateFlags(flags) {
+    this.flagsSubject.next(flags);
+  } */
+
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
   public updateFlags(flags) {
@@ -112,26 +124,32 @@ export class GraphSelectionsService {
     });
   }
 
-  public filterGraphPoints(graphFilters: {
-    north: number;
-    south: number;
-    east: number;
-    west: number;
-    min_year: number;
-    max_year: number;
-    include_NULL: Boolean;
-    satellite_align: Boolean;
-    paramX: [];
-    paramY: [];
-    methodsX: [];
-    methodsY: [];
-  }) {
+  public filterGraphPoints(
+    /* graphFilters: {
+      meta: {
+        north: number;
+        south: number;
+        east: number;
+        west: number;
+        min_year: number;
+        max_year: number;
+        include_NULL: false;
+        satellite_align: boolean;
+      };
+      items;
+    },
+    axis: string */
+    tempResultsX,
+    tempResultsY
+  ) {
+    console.log('tempResultsX', tempResultsX);
+    console.log('tempResultsY', tempResultsY);
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
     this.graphPointsXSubject.next(undefined);
     this.graphPointsYSubject.next(undefined);
-    let tempResultsX = [];
-    let tempResultsY = [];
+    //  let tempResultsX = [];
+    // let tempResultsY = [];
     let resultsX = [];
     let resultsY = [];
     let valuesX = [];
@@ -139,25 +157,18 @@ export class GraphSelectionsService {
     let allDataX = [];
     let allDataY = [];
     let sid = [];
-    const url =
-      APP_SETTINGS.wqPoints +
-      '/?minlat=' +
-      -90 +
-      '&maxlat=' +
-      90 +
-      '&minlong=' +
-      -180 +
-      '&maxlong=' +
-      180;
-    return this.httpClient
+
+    /* return this.httpClient
       .post('http://127.0.0.1:5005/json_query', graphFilters)
       .subscribe((res: any[]) => {
+        console.log('res', res);
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {
             duration: 4000,
             verticalPosition: 'top',
           });
-        } else {
+        } else { */
+    /*
           for (let i = 0; i < res.length; i++) {
             if (graphFilters.paramY == res[i].pcode) {
               if (graphFilters.methodsY == res[i].mcode) {
@@ -169,27 +180,73 @@ export class GraphSelectionsService {
                 tempResultsX.push(res[i]);
               }
             }
-          }
-          for (let i = 0; i < tempResultsX.length; i++) {
-            for (let x = 0; x < tempResultsY.length; x++) {
-              if (tempResultsY[x].sid == tempResultsX[i].sid) {
-                valuesX.push(tempResultsX[i].result);
-                valuesY.push(tempResultsY[x].result);
-                allDataX.push(tempResultsX[i]);
-                allDataY.push(tempResultsY[x]);
-                sid.push(tempResultsY[x].sid);
-              }
-            }
-          }
-          this.graphPointsXSubject.next(valuesX);
-          this.graphPointsYSubject.next(valuesY);
-          this.allGraphDataYSubject.next(allDataY);
-          this.allGraphDataXSubject.next(allDataX);
-          this.sidSubject.next(sid);
+          } */
+    for (let i = 0; i < tempResultsX.length; i++) {
+      for (let x = 0; x < tempResultsY.length; x++) {
+        if (tempResultsY[x].sid == tempResultsX[i].sid) {
+          valuesX.push(tempResultsX[i].result);
+          valuesY.push(tempResultsY[x].result);
+          allDataX.push(tempResultsX[i]);
+          allDataY.push(tempResultsY[x]);
+          sid.push(tempResultsY[x].sid);
         }
+      }
+    }
+    this.graphPointsYSubject.next(valuesY);
+    this.allGraphDataYSubject.next(allDataY);
 
-        base.classList.remove('initial-loader');
+    this.graphPointsXSubject.next(valuesX);
+    this.allGraphDataXSubject.next(allDataX);
+    this.sidSubject.next(sid);
+
+    console.log('valuesY', valuesY);
+    console.log('valuesX', valuesX);
+
+    base.classList.remove('initial-loader');
+    // });
+  }
+
+  public getTempArrays(
+    graphFilters: {
+      meta: {
+        north: number;
+        south: number;
+        east: number;
+        west: number;
+        min_year: number;
+        max_year: number;
+        include_NULL: false;
+        satellite_align: boolean;
+      };
+      items;
+    },
+    axis: string
+  ) {
+    this.resultsReadySubject.next(false);
+    return this.httpClient
+      .post('http://127.0.0.1:5005/json_query', graphFilters)
+      .subscribe((res: any[]) => {
+        console.log('res', res);
+        if (res.length === 0) {
+          this.snackBar.open('No points match your query.', 'OK', {
+            duration: 4000,
+            verticalPosition: 'top',
+          });
+        } else {
+          if (axis === 'xAxis') {
+            this.tempResultsXSubject.next(res);
+          }
+          if (axis === 'yAxis') {
+            this.tempResultsYSubject.next(res);
+            this.resultsReadySubject.next(true);
+          }
+        }
       });
+  }
+
+  public testFunction(one, two) {
+    console.log('one', one);
+    console.log('two', two);
   }
 
   public filterGraphPointsXX(options: {

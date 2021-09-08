@@ -94,21 +94,20 @@ export class GraphOptionsComponent implements OnInit {
 
     this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
       this.currentXaxisValues = points;
-    });
-    this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
-      this.currentYaxisValues = points;
-      //  setTimeout(() => {
-      // }, 2000);
-      if (this.currentYaxisValues) {
-        if (this.currentYaxisValues.length > 0) {
-          for (let i = 0; i < this.currentYaxisValues.length; i++) {
-            this.pointColors.push('rgb(242, 189, 161)');
-          }
-          this.showGraph = true;
-        }
-      }
+      this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
+        this.currentYaxisValues = points;
 
-      this.createGraph();
+        if (this.currentYaxisValues) {
+          if (this.currentYaxisValues.length > 0) {
+            for (let i = 0; i < this.currentYaxisValues.length; i++) {
+              this.pointColors.push('rgb(242, 189, 161)');
+            }
+            this.showGraph = true;
+
+            this.createGraph();
+          }
+        }
+      });
     });
   }
 
@@ -237,8 +236,6 @@ export class GraphOptionsComponent implements OnInit {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
       }
     });
-    console.log('flaggedXData', flaggedXData);
-    console.log('flaggedYData', flaggedYData);
   }
 
   public clickPlotData() {
@@ -250,7 +247,25 @@ export class GraphOptionsComponent implements OnInit {
   public populateGraphData() {
     this.createQuery('xAxis');
     this.createQuery('yAxis');
-    //this.graphSelectionsService.filterGraphPoints(this.filterQueryX, this.filterQueryY);
+    this.graphSelectionsService.getTempArrays(this.filterQueryX, 'xAxis');
+    this.graphSelectionsService.getTempArrays(this.filterQueryY, 'yAxis');
+    let xData;
+    let yData;
+    this.graphSelectionsService.resultsReadySubject.subscribe((ready) => {
+      if (ready === true) {
+        this.graphSelectionsService.tempResultsXSubject.subscribe(
+          (resultsX) => {
+            xData = resultsX;
+            this.graphSelectionsService.tempResultsYSubject.subscribe(
+              (resultsY) => {
+                yData = resultsY;
+                this.graphSelectionsService.filterGraphPoints(xData, yData);
+              }
+            );
+          }
+        );
+      }
+    });
   }
 
   public createQuery(axis: string) {

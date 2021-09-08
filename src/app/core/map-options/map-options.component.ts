@@ -149,10 +149,7 @@ export class MapOptionsComponent implements OnInit {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
         if (pcode == tempParameter[0][x]) {
-          console.log('pcode', tempParameter[0][x]);
-          console.log('mcode', this.pcodeToMcode[pcode]);
           mcodes.push(this.pcodeToMcode[pcode]);
-          console.log('mcodes!!!', mcodes);
           for (let i = 0; i < this.mcodeShortName.length; i++) {
             for (let x = 0; x < mcodes[0].length; x++) {
               if (mcodes[0][x] == this.mcodeShortName[i].mcode) {
