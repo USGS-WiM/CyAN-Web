@@ -162,6 +162,14 @@
         >Limit to map extent
       </mat-checkbox>
     </div>
+    <div
+      style="margin-left: 10px; margin-top: 10px"
+      aria-label="Checking this box will filter points that have optimal satellite alignment"
+    >
+      <mat-checkbox class="example-margin" [disableRipple]="true"
+        >Optimal satellite alignment
+      </mat-checkbox>
+    </div>
     <button
       class="plotDataBtn dataBtn"
       (click)="clickPlotData()"

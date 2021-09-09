@@ -294,6 +294,14 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  public clickSatAlign(satAlignChecked: MatCheckboxChange) {
+    if (satAlignChecked.checked) {
+      this.optimalAlignment = true;
+    } else {
+      this.optimalAlignment = false;
+    }
+  }
+
   public createQuery(axis: string) {
     let tempP;
     let tempM;
