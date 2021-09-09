@@ -5,6 +5,7 @@ import { Options } from '@angular-slider/ngx-slider';
 import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
 import { Observable } from 'rxjs/Observable';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-graph-options',
@@ -59,6 +60,8 @@ export class GraphOptionsComponent implements OnInit {
   public optimalAlignment: Boolean = false;
   public filterQueryX;
   public filterQueryY;
+  public xAxisType = 'scatter';
+  public yAxisType = 'scatter';
 
   constructor(
     private filterService: FiltersService,
@@ -105,6 +108,9 @@ export class GraphOptionsComponent implements OnInit {
             this.showGraph = true;
 
             this.createGraph();
+
+            let base = document.getElementById('base');
+            base.classList.remove('initial-loader');
           }
         }
       });
@@ -170,9 +176,11 @@ export class GraphOptionsComponent implements OnInit {
         size: 18,
       },
       xaxis: {
+        type: this.xAxisType,
         // rangemode: 'tozero',
       },
       yaxis: {
+        type: this.yAxisType,
         // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -239,6 +247,8 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public clickPlotData() {
+    let base = document.getElementById('base');
+    base.classList.add('initial-loader');
     this.showGraph = false;
     this.populateGraphData();
     this.resizeDivs();
@@ -266,6 +276,22 @@ export class GraphOptionsComponent implements OnInit {
         );
       }
     });
+  }
+
+  public applyLogX(logXChecked: MatCheckboxChange) {
+    if (logXChecked.checked) {
+      this.xAxisType = 'log';
+    } else {
+      this.xAxisType = 'scatter';
+    }
+  }
+
+  public applyLogY(logYChecked: MatCheckboxChange) {
+    if (logYChecked.checked) {
+      this.yAxisType = 'log';
+    } else {
+      this.yAxisType = 'scatter';
+    }
   }
 
   public createQuery(axis: string) {

@@ -255,8 +255,6 @@ export class GraphSelectionsService {
     paramY: string;
     methodsY: [];
   }) {
-    let base = document.getElementById('base');
-    base.classList.add('initial-loader');
     this.graphPointsXSubject.next(undefined);
     this.graphPointsYSubject.next(undefined);
     let tempResultsX = [];
@@ -314,8 +312,6 @@ export class GraphSelectionsService {
         this.allGraphDataXSubject.next(allDataX);
         this.sidSubject.next(sid);
       }
-
-      base.classList.remove('initial-loader');
     });
   }
 
