@@ -183,7 +183,6 @@ export class MapOptionsComponent implements OnInit {
         }
       }
       items[tempP[i]] = matchMcodes[0];
-      console.log('map items', items);
     }
     let filterParameters = {
       meta: {
@@ -197,20 +196,6 @@ export class MapOptionsComponent implements OnInit {
         satellite_align: this.optimalAlignment,
       },
       items,
-    };
-
-    console.log('filterParameters', filterParameters);
-    let filterParametersX = {
-      north: parseFloat(this.mapForm.get('northControl').value),
-      south: parseFloat(this.mapForm.get('southControl').value),
-      east: parseFloat(this.mapForm.get('eastControl').value),
-      west: parseFloat(this.mapForm.get('westControl').value),
-      pcode: this.codeForm.get('parameterControl').value,
-      mcode: this.codeForm.get('methodControl').value,
-      minYear: this.minValue,
-      maxYear: this.maxValue,
-      includeNull: this.includeNullSites,
-      satelliteAlign: this.optimalAlignment,
     };
     this.mapLayersService.filterWqSample(filterParameters);
   }

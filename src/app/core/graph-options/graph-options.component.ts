@@ -50,6 +50,7 @@ export class GraphOptionsComponent implements OnInit {
   public matchingMcodesX = [];
   public pcodeToMcode;
   public mcodeShortName;
+  public parameterTypes;
   public currentXaxisValues = [];
   public currentYaxisValues = [];
   // public sid = [];
@@ -62,6 +63,8 @@ export class GraphOptionsComponent implements OnInit {
   public filterQueryY;
   public xAxisType = 'scatter';
   public yAxisType = 'scatter';
+  public yAxisTitle = '';
+  public xAxisTitle = '';
 
   constructor(
     private filterService: FiltersService,
@@ -90,6 +93,9 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+    this.parameterTypes$.subscribe(
+      (parameters) => (this.parameterTypes = parameters)
+    );
 
     /* this.graphSelectionsService.sidSubject.subscribe((sid) => {
       this.sid = sid;
@@ -177,10 +183,16 @@ export class GraphOptionsComponent implements OnInit {
       },
       xaxis: {
         type: this.xAxisType,
+        title: {
+          text: this.xAxisTitle,
+        },
         // rangemode: 'tozero',
       },
       yaxis: {
         type: this.yAxisType,
+        title: {
+          text: this.yAxisTitle,
+        },
         // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -244,6 +256,9 @@ export class GraphOptionsComponent implements OnInit {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
       }
     });
+
+    console.log('flaggedXData', flaggedXData);
+    console.log('flaggedYData', flaggedYData);
   }
 
   public clickPlotData() {
@@ -329,6 +344,16 @@ export class GraphOptionsComponent implements OnInit {
       }
     }
     items[tempP] = matchMcodes[0];
+    for (let i = 0; i < this.parameterTypes.length; i++) {
+      if (tempP === this.parameterTypes[i].pcode) {
+        if (axis === 'yAxis') {
+          this.yAxisTitle = this.parameterTypes[i].short_name;
+        }
+        if (axis === 'xAxis') {
+          this.xAxisTitle = this.parameterTypes[i].short_name;
+        }
+      }
+    }
     if (axis === 'xAxis') {
       this.filterQueryX = {
         meta: {
