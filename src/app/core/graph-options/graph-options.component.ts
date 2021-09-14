@@ -5,6 +5,7 @@ import { Options } from '@angular-slider/ngx-slider';
 import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
 import { Observable } from 'rxjs/Observable';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-graph-options',
@@ -49,6 +50,7 @@ export class GraphOptionsComponent implements OnInit {
   public matchingMcodesX = [];
   public pcodeToMcode;
   public mcodeShortName;
+  public parameterTypes;
   public currentXaxisValues = [];
   public currentYaxisValues = [];
   // public sid = [];
@@ -56,6 +58,13 @@ export class GraphOptionsComponent implements OnInit {
   public flaggedPointIndices: Array<number> = [];
   graphSelectionsForm: FormGroup;
   public bivariatePlot: any;
+  public optimalAlignment: Boolean = false;
+  public filterQueryX;
+  public filterQueryY;
+  public xAxisType = 'scatter';
+  public yAxisType = 'scatter';
+  public yAxisTitle = '';
+  public xAxisTitle = '';
 
   constructor(
     private filterService: FiltersService,
@@ -67,7 +76,6 @@ export class GraphOptionsComponent implements OnInit {
 
     //this.allGraphDataX$ = this.filterService.allGraphDataX$;
 
-    this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     // this.sid$ = this.filterService.sid$;
   }
   @HostListener('window:resize')
@@ -85,6 +93,9 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+    this.parameterTypes$.subscribe(
+      (parameters) => (this.parameterTypes = parameters)
+    );
 
     /* this.graphSelectionsService.sidSubject.subscribe((sid) => {
       this.sid = sid;
@@ -92,21 +103,23 @@ export class GraphOptionsComponent implements OnInit {
 
     this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
       this.currentXaxisValues = points;
-    });
-    this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
-      this.currentYaxisValues = points;
-      //  setTimeout(() => {
-      // }, 2000);
-      if (this.currentYaxisValues) {
-        if (this.currentYaxisValues.length > 0) {
-          for (let i = 0; i < this.currentYaxisValues.length; i++) {
-            this.pointColors.push('rgb(242, 189, 161)');
-          }
-          this.showGraph = true;
-        }
-      }
+      this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
+        this.currentYaxisValues = points;
 
-      this.createGraph();
+        if (this.currentYaxisValues) {
+          if (this.currentYaxisValues.length > 0) {
+            for (let i = 0; i < this.currentYaxisValues.length; i++) {
+              this.pointColors.push('rgb(242, 189, 161)');
+            }
+            this.showGraph = true;
+
+            this.createGraph();
+
+            let base = document.getElementById('base');
+            base.classList.remove('initial-loader');
+          }
+        }
+      });
     });
   }
 
@@ -169,9 +182,17 @@ export class GraphOptionsComponent implements OnInit {
         size: 18,
       },
       xaxis: {
+        type: this.xAxisType,
+        title: {
+          text: this.xAxisTitle,
+        },
         // rangemode: 'tozero',
       },
       yaxis: {
+        type: this.yAxisType,
+        title: {
+          text: this.yAxisTitle,
+        },
         // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -235,30 +256,134 @@ export class GraphOptionsComponent implements OnInit {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
       }
     });
+
     console.log('flaggedXData', flaggedXData);
     console.log('flaggedYData', flaggedYData);
   }
 
   public clickPlotData() {
+    let base = document.getElementById('base');
+    base.classList.add('initial-loader');
     this.showGraph = false;
     this.populateGraphData();
     this.resizeDivs();
   }
 
   public populateGraphData() {
-    let paramX = this.graphSelectionsForm.get('ParametersX').value;
-    let methodsX = this.graphSelectionsForm.get('MethodsX').value;
+    this.createQuery('xAxis');
+    this.createQuery('yAxis');
+    this.graphSelectionsService.getTempArrays(this.filterQueryX, 'xAxis');
+    this.graphSelectionsService.getTempArrays(this.filterQueryY, 'yAxis');
+    let xData;
+    let yData;
+    this.graphSelectionsService.resultsReadySubject.subscribe((ready) => {
+      if (ready === true) {
+        this.graphSelectionsService.tempResultsXSubject.subscribe(
+          (resultsX) => {
+            xData = resultsX;
+            this.graphSelectionsService.tempResultsYSubject.subscribe(
+              (resultsY) => {
+                yData = resultsY;
+                this.graphSelectionsService.filterGraphPoints(xData, yData);
+              }
+            );
+          }
+        );
+      }
+    });
+  }
 
-    let paramY = this.graphSelectionsForm.get('ParametersY').value;
-    let methodsY = this.graphSelectionsForm.get('MethodsY').value;
+  public applyLogX(logXChecked: MatCheckboxChange) {
+    if (logXChecked.checked) {
+      this.xAxisType = 'log';
+    } else {
+      this.xAxisType = 'scatter';
+    }
+  }
 
-    let filterParameters = {
-      paramX: paramX,
-      methodsX: methodsX,
-      paramY: paramY,
-      methodsY: methodsY,
-    };
-    this.graphSelectionsService.filterGraphPoints(filterParameters);
+  public applyLogY(logYChecked: MatCheckboxChange) {
+    if (logYChecked.checked) {
+      this.yAxisType = 'log';
+    } else {
+      this.yAxisType = 'scatter';
+    }
+  }
+
+  public clickSatAlign(satAlignChecked: MatCheckboxChange) {
+    if (satAlignChecked.checked) {
+      this.optimalAlignment = true;
+    } else {
+      this.optimalAlignment = false;
+    }
+  }
+
+  public createQuery(axis: string) {
+    let tempP;
+    let tempM;
+    if (axis == 'xAxis') {
+      tempP = this.graphSelectionsForm.get('ParametersX').value;
+      tempM = this.graphSelectionsForm.get('MethodsX').value;
+    }
+    if (axis == 'yAxis') {
+      tempP = this.graphSelectionsForm.get('ParametersY').value;
+      tempM = this.graphSelectionsForm.get('MethodsY').value;
+    }
+    let items = new Object();
+    let matchMcodes = [];
+    for (let pcode in this.pcodeToMcode) {
+      if (pcode == tempP) {
+        let currentMcodes = [];
+        currentMcodes.push(this.pcodeToMcode[pcode]);
+        for (let y = 0; y < currentMcodes.length; y++) {
+          for (let x = 0; x < tempM.length; x++) {
+            if (currentMcodes[y] == tempM[x]) {
+              matchMcodes.push(currentMcodes[y]);
+            }
+          }
+        }
+      }
+    }
+    items[tempP] = matchMcodes[0];
+    for (let i = 0; i < this.parameterTypes.length; i++) {
+      if (tempP === this.parameterTypes[i].pcode) {
+        if (axis === 'yAxis') {
+          this.yAxisTitle = this.parameterTypes[i].short_name;
+        }
+        if (axis === 'xAxis') {
+          this.xAxisTitle = this.parameterTypes[i].short_name;
+        }
+      }
+    }
+    if (axis === 'xAxis') {
+      this.filterQueryX = {
+        meta: {
+          north: 90,
+          south: -90,
+          east: 180,
+          west: -180,
+          min_year: this.minValue,
+          max_year: this.maxValue,
+          include_NULL: false,
+          satellite_align: this.optimalAlignment,
+        },
+        items,
+      };
+    }
+    if (axis === 'yAxis') {
+      this.filterQueryY = {
+        meta: {
+          north: 90,
+          south: -90,
+          east: 180,
+          west: -180,
+          min_year: this.minValue,
+          max_year: this.maxValue,
+          include_NULL: false,
+          satellite_align: this.optimalAlignment,
+        },
+        items,
+      };
+    }
   }
 
   public resizeDivs() {

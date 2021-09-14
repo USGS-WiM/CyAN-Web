@@ -57,7 +57,7 @@
     <form [formGroup]="graphSelectionsForm">
       <div>
         <div style="margin-left: 10px">
-          Y-Axis <br />
+          X-Axis <br />
           <mat-form-field
             appearance="fill"
             aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's x-axis."
@@ -92,7 +92,7 @@
       <div style="height: 10px"></div>
       <div>
         <div style="margin-left: 10px">
-          X-Axis <br />
+          Y-Axis <br />
           <mat-form-field
             appearance="fill"
             aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's y-axis."
@@ -141,6 +141,7 @@
       <mat-checkbox
         class="example-margin"
         [disableRipple]="true"
+        (change)="applyLogX($event)"
         aria-label="Checking this box will add a logarithmic scale to the x-axis "
         >x
       </mat-checkbox>
@@ -148,6 +149,7 @@
       <mat-checkbox
         class="example-margin"
         [disableRipple]="true"
+        (change)="applyLogY($event)"
         aria-label="Checking this box will add a logarithmic scale to the y-axis "
         >y
       </mat-checkbox>
@@ -158,6 +160,15 @@
     >
       <mat-checkbox class="example-margin" [disableRipple]="true"
         >Limit to map extent
+      </mat-checkbox>
+    </div>
+    <div
+      style="margin-left: 10px; margin-top: 10px"
+      aria-label="Checking this box will filter points that have optimal satellite alignment"
+      (change)="clickSatAlign($event)"
+    >
+      <mat-checkbox class="example-margin" [disableRipple]="true"
+        >Optimal satellite alignment
       </mat-checkbox>
     </div>
     <button

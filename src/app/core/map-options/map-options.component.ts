@@ -149,10 +149,7 @@ export class MapOptionsComponent implements OnInit {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
         if (pcode == tempParameter[0][x]) {
-          console.log('pcode', tempParameter[0][x]);
-          console.log('mcode', this.pcodeToMcode[pcode]);
           mcodes.push(this.pcodeToMcode[pcode]);
-          console.log('mcodes!!!', mcodes);
           for (let i = 0; i < this.mcodeShortName.length; i++) {
             for (let x = 0; x < mcodes[0].length; x++) {
               if (mcodes[0][x] == this.mcodeShortName[i].mcode) {
@@ -199,20 +196,6 @@ export class MapOptionsComponent implements OnInit {
         satellite_align: this.optimalAlignment,
       },
       items,
-    };
-
-    console.log('filterParameters', filterParameters);
-    let filterParametersX = {
-      north: parseFloat(this.mapForm.get('northControl').value),
-      south: parseFloat(this.mapForm.get('southControl').value),
-      east: parseFloat(this.mapForm.get('eastControl').value),
-      west: parseFloat(this.mapForm.get('westControl').value),
-      pcode: this.codeForm.get('parameterControl').value,
-      mcode: this.codeForm.get('methodControl').value,
-      minYear: this.minValue,
-      maxYear: this.maxValue,
-      includeNull: this.includeNullSites,
-      satelliteAlign: this.optimalAlignment,
     };
     this.mapLayersService.filterWqSample(filterParameters);
   }
