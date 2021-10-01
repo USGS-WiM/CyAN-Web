@@ -67,11 +67,6 @@ export class MapOptionsComponent implements OnInit {
   };
 
   Parameters = new FormControl();
-  parameterList: any[] = [
-    { name: 'Phosphorus', code: 123 },
-    { name: 'Dissolved Oxygen', code: 456 },
-    { name: 'pH', code: 789 },
-  ];
 
   Methods = new FormControl();
   methodsList: any[] = [
@@ -167,23 +162,28 @@ export class MapOptionsComponent implements OnInit {
     let items = new Object();
     let tempP = this.codeForm.get('parameterControl').value;
     let tempM = this.codeForm.get('methodControl').value;
-    for (let i = 0; i < tempP.length; i++) {
-      let matchMcodes = [];
-      for (let pcode in this.pcodeToMcode) {
-        if (pcode == tempP[i]) {
-          let currentMcodes = [];
-          currentMcodes.push(this.pcodeToMcode[pcode]);
-          for (let y = 0; y < currentMcodes.length; y++) {
-            for (let x = 0; x < tempM.length; x++) {
-              if (currentMcodes[y] == tempM[x]) {
-                matchMcodes.push(currentMcodes[y]);
+    if (tempP) {
+      for (let i = 0; i < tempP.length; i++) {
+        let matchMcodes = [];
+        for (let pcode in this.pcodeToMcode) {
+          if (pcode == tempP[i]) {
+            let currentMcodes = [];
+            currentMcodes.push(this.pcodeToMcode[pcode]);
+            for (let y = 0; y < currentMcodes.length; y++) {
+              if (tempM) {
+                for (let x = 0; x < tempM.length; x++) {
+                  if (currentMcodes[y] == tempM[x]) {
+                    matchMcodes.push(currentMcodes[y]);
+                  }
+                }
               }
             }
           }
         }
+        items[tempP[i]] = matchMcodes[0];
       }
-      items[tempP[i]] = matchMcodes[0];
     }
+    console.log('map items', items);
     let filterParameters = {
       meta: {
         north: parseFloat(this.mapForm.get('northControl').value),

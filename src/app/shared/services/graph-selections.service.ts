@@ -44,8 +44,29 @@ export class GraphSelectionsService {
   sid$ = this.sidSubject.asObservable();
 
   public filterGraphPoints(tempResultsX, tempResultsY) {
+    console.log('tempResultsX', tempResultsX.length);
+    console.log('tempResultsY', tempResultsY.length);
+
+    /*
+    let test = [];
+        for (let i = 0; i < tempResultsY.length; i++) {
+          test.push(tempResultsY[i].sid);
+        }
+    for (let i = 0; i < tempResultsY.length; i++) {
+      test.push(tempResultsY[i].sid);
+    }
+    console.log('test', test);
+    for (let x = 0; x < test.length; x++) {
+      for (let i = 0; i < test.length; i++) {
+        if (test[x] === test[i]) {
+          if (x !== i) {
+          //  console.log('found a match', test[x], test[i], x, i);
+          }
+        }
+      }
+    } */
+
     let base = document.getElementById('base');
-    base.classList.add('initial-loader');
     this.graphPointsXSubject.next(undefined);
     this.graphPointsYSubject.next(undefined);
     let valuesX = [];
@@ -53,6 +74,7 @@ export class GraphSelectionsService {
     let allDataX = [];
     let allDataY = [];
     let sid = [];
+
     if (tempResultsX && tempResultsY) {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {
@@ -69,7 +91,6 @@ export class GraphSelectionsService {
 
     this.graphPointsYSubject.next(valuesY);
     this.allGraphDataYSubject.next(allDataY);
-
     this.graphPointsXSubject.next(valuesX);
     this.allGraphDataXSubject.next(allDataX);
     this.sidSubject.next(sid);
@@ -92,10 +113,12 @@ export class GraphSelectionsService {
     },
     axis: string
   ) {
+    console.log('graphFilters', graphFilters);
     this.resultsReadySubject.next(false);
     return this.httpClient
       .post('http://127.0.0.1:5005/json_query', graphFilters)
       .subscribe((res: any[]) => {
+        console.log('reached graph results', res);
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {
             duration: 4000,

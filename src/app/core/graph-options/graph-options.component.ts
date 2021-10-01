@@ -15,14 +15,6 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 export class GraphOptionsComponent implements OnInit {
   public secondTrace: Boolean = false;
 
-  parameterList: string[] = [
-    'Phosphorus',
-    'Dissolved Oxygen',
-    'pH',
-    'Nitrogen',
-    'Chloride',
-  ];
-
   //Parameters for creating the year slider
   minValue: number = 1975;
   maxValue: number = 2021;
@@ -65,6 +57,7 @@ export class GraphOptionsComponent implements OnInit {
   public yAxisType = 'scatter';
   public yAxisTitle = '';
   public xAxisTitle = '';
+  public autotickEnabled: Boolean = true;
 
   constructor(
     private filterService: FiltersService,
@@ -105,16 +98,13 @@ export class GraphOptionsComponent implements OnInit {
       this.currentXaxisValues = points;
       this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
         this.currentYaxisValues = points;
-
         if (this.currentYaxisValues) {
           if (this.currentYaxisValues.length > 0) {
             for (let i = 0; i < this.currentYaxisValues.length; i++) {
               this.pointColors.push('rgb(242, 189, 161)');
             }
             this.showGraph = true;
-
             this.createGraph();
-
             let base = document.getElementById('base');
             base.classList.remove('initial-loader');
           }
@@ -182,6 +172,7 @@ export class GraphOptionsComponent implements OnInit {
         size: 18,
       },
       xaxis: {
+        autotick: this.autotickEnabled,
         type: this.xAxisType,
         title: {
           text: this.xAxisTitle,
@@ -189,6 +180,7 @@ export class GraphOptionsComponent implements OnInit {
         // rangemode: 'tozero',
       },
       yaxis: {
+        autotick: this.autotickEnabled,
         type: this.yAxisType,
         title: {
           text: this.yAxisTitle,
@@ -262,11 +254,24 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public clickPlotData() {
-    let base = document.getElementById('base');
-    base.classList.add('initial-loader');
-    this.showGraph = false;
-    this.populateGraphData();
-    this.resizeDivs();
+    let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
+    let tempP_Y = this.graphSelectionsForm.get('ParametersY').value;
+    let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
+    let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
+    if (
+      tempP_X === null ||
+      tempP_Y === null ||
+      tempM_X == null ||
+      tempM_Y == null
+    ) {
+      console.log('no parameter');
+    } else {
+      let base = document.getElementById('base');
+      base.classList.add('initial-loader');
+      this.showGraph = false;
+      this.populateGraphData();
+      this.resizeDivs();
+    }
   }
 
   public populateGraphData() {
@@ -296,16 +301,20 @@ export class GraphOptionsComponent implements OnInit {
   public applyLogX(logXChecked: MatCheckboxChange) {
     if (logXChecked.checked) {
       this.xAxisType = 'log';
+      this.autotickEnabled = false;
     } else {
       this.xAxisType = 'scatter';
+      this.autotickEnabled = true;
     }
   }
 
   public applyLogY(logYChecked: MatCheckboxChange) {
     if (logYChecked.checked) {
       this.yAxisType = 'log';
+      this.autotickEnabled = false;
     } else {
       this.yAxisType = 'scatter';
+      this.autotickEnabled = true;
     }
   }
 
@@ -320,24 +329,40 @@ export class GraphOptionsComponent implements OnInit {
   public createQuery(axis: string) {
     let tempP;
     let tempM;
+
+    let matchMcodes = [];
     if (axis == 'xAxis') {
       tempP = this.graphSelectionsForm.get('ParametersX').value;
       tempM = this.graphSelectionsForm.get('MethodsX').value;
+      if (!tempM) {
+        for (let i = 0; i < this.matchingMcodesX.length; i++) {
+          console.log('this.matchingMcodes', this.matchingMcodesX[i].mcode);
+          matchMcodes.push(this.matchingMcodesX[i].mcode);
+        }
+      }
     }
     if (axis == 'yAxis') {
       tempP = this.graphSelectionsForm.get('ParametersY').value;
       tempM = this.graphSelectionsForm.get('MethodsY').value;
+      if (!tempM) {
+        for (let i = 0; i < this.matchingMcodesY.length; i++) {
+          console.log('this.matchingMcodes', this.matchingMcodesX[i].mcode);
+          matchMcodes.push(this.matchingMcodesX[i].mcode);
+        }
+      }
     }
+
     let items = new Object();
-    let matchMcodes = [];
     for (let pcode in this.pcodeToMcode) {
       if (pcode == tempP) {
         let currentMcodes = [];
         currentMcodes.push(this.pcodeToMcode[pcode]);
         for (let y = 0; y < currentMcodes.length; y++) {
-          for (let x = 0; x < tempM.length; x++) {
-            if (currentMcodes[y] == tempM[x]) {
-              matchMcodes.push(currentMcodes[y]);
+          if (tempM) {
+            for (let x = 0; x < tempM.length; x++) {
+              if (currentMcodes[y] == tempM[x]) {
+                matchMcodes.push(currentMcodes[y]);
+              }
             }
           }
         }
@@ -354,6 +379,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     }
+    console.log('items', items);
     if (axis === 'xAxis') {
       this.filterQueryX = {
         meta: {
