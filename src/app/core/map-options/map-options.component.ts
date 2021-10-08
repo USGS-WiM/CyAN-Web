@@ -57,8 +57,8 @@ export class MapOptionsComponent implements OnInit {
         'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
     }
   );
-  minValue: number = 1975;
-  maxValue: number = 2021;
+  minYear: number = 1975;
+  maxYear: number = 2021;
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
@@ -183,15 +183,14 @@ export class MapOptionsComponent implements OnInit {
         items[tempP[i]] = matchMcodes[0];
       }
     }
-    console.log('map items', items);
     let filterParameters = {
       meta: {
         north: parseFloat(this.mapForm.get('northControl').value),
         south: parseFloat(this.mapForm.get('southControl').value),
         east: parseFloat(this.mapForm.get('eastControl').value),
         west: parseFloat(this.mapForm.get('westControl').value),
-        min_year: this.minValue,
-        max_year: this.maxValue,
+        min_year: this.minYear,
+        max_year: this.maxYear,
         include_NULL: this.includeNullSites,
         satellite_align: this.optimalAlignment,
       },

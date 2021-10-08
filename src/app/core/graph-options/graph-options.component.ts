@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
 import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
@@ -14,11 +14,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./../core.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
-  public secondTrace: Boolean = false;
+  //Overall display
+  public graphOptionsVisible: Boolean = true;
+  public showGraph = false;
+  public bivariatePlot: any;
 
-  //Parameters for creating the year slider
-  minValue: number = 1975;
-  maxValue: number = 2021;
+  //Graph options
+  graphSelectionsForm: FormGroup;
+  public optimalAlignment: Boolean = false;
+  minYear: number = 1975;
+  maxYear: number = 2021;
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
@@ -26,34 +31,36 @@ export class GraphOptionsComponent implements OnInit {
     animate: false,
   };
 
-  public graphHeight: Number;
-  public graphWidth: Number;
-  public graphMargins: Number;
-  public graphOptionsVisible: Boolean = true;
-  public showGraph = false;
+  //Intermediate data
+  public matchingMcodesY = [];
+  public matchingMcodesX = [];
+
+  //Data sent to service
+  public filterQueryX;
+  public filterQueryY;
+
+  //Data retrieved from service
+  public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public pcodeToMcode$: Observable<any[]>;
+  public pcodeToMcode;
+  public mcodeShortName;
+  public parameterTypes;
+
+  //Graph data
   public xDataTrace1;
   public yDataTrace1;
   public xDataTrace2;
   public yDataTrace2;
-  public parameterTypes$: Observable<any[]>;
-  public methodTypes$: Observable<any[]>;
-  public pcodeToMcode$: Observable<any[]>;
-  // public sid$: Observable<any[]>;
-  public matchingMcodesY = [];
-  public matchingMcodesX = [];
-  public pcodeToMcode;
-  public mcodeShortName;
-  public parameterTypes;
   public currentXaxisValues = [];
   public currentYaxisValues = [];
-  // public sid = [];
-  public pointColors = [];
   public flaggedPointIndices: Array<number> = [];
-  graphSelectionsForm: FormGroup;
-  public bivariatePlot: any;
-  public optimalAlignment: Boolean = false;
-  public filterQueryX;
-  public filterQueryY;
+
+  //Graph layout
+  public graphHeight: Number;
+  public graphWidth: Number;
+  public graphMargins: Number;
+  public pointColors = [];
   public xAxisType = 'scatter';
   public yAxisType = 'scatter';
   public yAxisTitle = '';
@@ -68,24 +75,27 @@ export class GraphOptionsComponent implements OnInit {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
-
-    //this.allGraphDataX$ = this.filterService.allGraphDataX$;
-
-    // this.sid$ = this.filterService.sid$;
   }
+
+  //Reset the css (via resizeDivs()) when the window is resized
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
+    //Create the forms for Graph Options
     this.graphSelectionsForm = new FormGroup({
       ParametersX: new FormControl(),
       MethodsX: new FormControl(),
       ParametersY: new FormControl(),
       MethodsY: new FormControl(),
     });
+
+    //Set the display according to the initial screen dimensions
     this.resizeDivs();
+
+    //Get the data to populate the dropdowns in Graph Options
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
     this.parameterTypes$.subscribe(
@@ -96,17 +106,21 @@ export class GraphOptionsComponent implements OnInit {
       this.sid = sid;
     }); */
 
+    //Reset the x and y values displayed on the graph whenever the values change in the service
     this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
       this.currentXaxisValues = points;
       this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
         this.currentYaxisValues = points;
         if (this.currentYaxisValues) {
           if (this.currentYaxisValues.length > 0) {
+            //Since the point colors changed when flagged, we begin by setting the color of each point individually
             for (let i = 0; i < this.currentYaxisValues.length; i++) {
               this.pointColors.push('rgb(242, 189, 161)');
             }
-            this.showGraph = true;
+            //Create and display graph
             this.createGraph();
+            this.showGraph = true;
+            //Remove the WIM loader to view graph
             let base = document.getElementById('base');
             base.classList.remove('initial-loader');
           }
@@ -266,7 +280,6 @@ export class GraphOptionsComponent implements OnInit {
       tempM_X == null ||
       tempM_Y == null
     ) {
-      console.log('no parameter');
       this.snackBar.open(
         'Please select a parameter and at least one method for each axis.',
         'OK',
@@ -348,7 +361,6 @@ export class GraphOptionsComponent implements OnInit {
       tempM = this.graphSelectionsForm.get('MethodsX').value;
       if (!tempM) {
         for (let i = 0; i < this.matchingMcodesX.length; i++) {
-          console.log('this.matchingMcodes', this.matchingMcodesX[i].mcode);
           matchMcodes.push(this.matchingMcodesX[i].mcode);
         }
       }
@@ -358,7 +370,6 @@ export class GraphOptionsComponent implements OnInit {
       tempM = this.graphSelectionsForm.get('MethodsY').value;
       if (!tempM) {
         for (let i = 0; i < this.matchingMcodesY.length; i++) {
-          console.log('this.matchingMcodes', this.matchingMcodesX[i].mcode);
           matchMcodes.push(this.matchingMcodesX[i].mcode);
         }
       }
@@ -387,11 +398,10 @@ export class GraphOptionsComponent implements OnInit {
           this.yAxisTitle = this.parameterTypes[i].short_name;
         }
         if (axis === 'xAxis') {
-          this.xAxisTitle = this.parameterTypes[i].short_name;
+          this.xAxisTitle = this.parameterTypes[i].short_name.toString(); // + " " + this.parameterTypes[i].unit;
         }
       }
     }
-    console.log('items', items);
     if (axis === 'xAxis') {
       this.filterQueryX = {
         meta: {
@@ -399,8 +409,8 @@ export class GraphOptionsComponent implements OnInit {
           south: -90,
           east: 180,
           west: -180,
-          min_year: this.minValue,
-          max_year: this.maxValue,
+          min_year: this.minYear,
+          max_year: this.maxYear,
           include_NULL: false,
           satellite_align: this.optimalAlignment,
         },
@@ -414,8 +424,8 @@ export class GraphOptionsComponent implements OnInit {
           south: -90,
           east: 180,
           west: -180,
-          min_year: this.minValue,
-          max_year: this.maxValue,
+          min_year: this.minYear,
+          max_year: this.maxYear,
           include_NULL: false,
           satellite_align: this.optimalAlignment,
         },

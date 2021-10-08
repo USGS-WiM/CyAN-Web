@@ -83,11 +83,10 @@ export class MapLayersService {
       options.meta.west = -180;
     }
 
-    console.log('options', options);
-
     return this.httpClient
       .post('http://127.0.0.1:5005/json_query', options)
       .subscribe((res: any[]) => {
+        console.log('res', res);
         if (res.length === 0) {
           this.snackBar.open('No sites match your query.', 'OK', {
             duration: 4000,
