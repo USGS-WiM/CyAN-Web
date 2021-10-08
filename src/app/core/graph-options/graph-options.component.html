@@ -64,7 +64,7 @@
           >
             <mat-label>Parameter</mat-label>
             <mat-select
-              (ngModelChange)="parameterX()"
+              (ngModelChange)="populateMcodeDropdown('xaxis')"
               formControlName="ParametersX"
             >
               <mat-option
@@ -99,7 +99,7 @@
           >
             <mat-label>Parameter</mat-label>
             <mat-select
-              (ngModelChange)="parameterY()"
+              (ngModelChange)="populateMcodeDropdown('yaxis')"
               formControlName="ParametersY"
             >
               <mat-option

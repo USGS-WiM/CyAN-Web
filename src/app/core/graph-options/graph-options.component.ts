@@ -20,7 +20,12 @@ export class GraphOptionsComponent implements OnInit {
   public bivariatePlot: any;
 
   //Graph options
-  graphSelectionsForm: FormGroup;
+  graphSelectionsForm = new FormGroup({
+    ParametersX: new FormControl(),
+    MethodsX: new FormControl(),
+    ParametersY: new FormControl(),
+    MethodsY: new FormControl(),
+  });
   public optimalAlignment: Boolean = false;
   minYear: number = 1975;
   maxYear: number = 2021;
@@ -84,17 +89,13 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //Create the forms for Graph Options
-    this.graphSelectionsForm = new FormGroup({
-      ParametersX: new FormControl(),
-      MethodsX: new FormControl(),
-      ParametersY: new FormControl(),
-      MethodsY: new FormControl(),
-    });
-
     //Set the display according to the initial screen dimensions
     this.resizeDivs();
 
+    this.initiateGraphService();
+  }
+
+  public initiateGraphService() {
     //Get the data to populate the dropdowns in Graph Options
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
@@ -129,16 +130,34 @@ export class GraphOptionsComponent implements OnInit {
     });
   }
 
-  public parameterX() {
-    this.matchingMcodesX = [];
-    let tempParameter = this.graphSelectionsForm.get('ParametersX').value;
+  //When a parameter is selected, this function is called to populate the Methods dropdown
+  public populateMcodeDropdown(axis) {
+    let formName = '';
+    if (axis === 'xaxis') {
+      console.log('made it to xaxis');
+      this.matchingMcodesX = [];
+      formName = 'ParametersX';
+    }
+    if (axis === 'yaxis') {
+      this.matchingMcodesY = [];
+      formName = 'ParametersY';
+    }
+    //Get the parameter code from the dropdown selection
+    let tempParameter = this.graphSelectionsForm.get(formName).value;
     for (let pcode in this.pcodeToMcode) {
       if (pcode == tempParameter) {
+        //get list of corresponding mcodes
         let mcodes = this.pcodeToMcode[pcode];
+        //match the mcode to the mcode short names to populate dropdown
         for (let i = 0; i < this.mcodeShortName.length; i++) {
           for (let x = 0; x < mcodes.length; x++) {
             if (mcodes[x] == this.mcodeShortName[i].mcode) {
-              this.matchingMcodesX.push(this.mcodeShortName[i]);
+              if (axis === 'xaxis') {
+                this.matchingMcodesX.push(this.mcodeShortName[i]);
+              }
+              if (axis === 'yaxis') {
+                this.matchingMcodesY.push(this.mcodeShortName[i]);
+              }
             }
           }
         }
@@ -146,30 +165,17 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
-  public parameterY() {
-    this.matchingMcodesY = [];
-    let tempParameter = this.graphSelectionsForm.get('ParametersY').value;
-    for (let pcode in this.pcodeToMcode) {
-      if (pcode == tempParameter) {
-        let mcodes = this.pcodeToMcode[pcode];
-        for (let i = 0; i < this.mcodeShortName.length; i++) {
-          for (let x = 0; x < mcodes.length; x++) {
-            if (mcodes[x] == this.mcodeShortName[i].mcode) {
-              this.matchingMcodesY.push(this.mcodeShortName[i]);
-            }
-          }
-        }
-      }
-    }
-  }
-
+  //Called when minimize options is clicked
+  //Shrinks Graph Options panel into a button and expands the graph
   public collapseGraphOptions(collapsed: Boolean) {
     this.graphOptionsVisible = collapsed;
     this.resizeDivs();
   }
 
   public createGraph() {
+    //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
+
     var trace1 = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
@@ -193,7 +199,6 @@ export class GraphOptionsComponent implements OnInit {
         title: {
           text: this.xAxisTitle,
         },
-        // rangemode: 'tozero',
       },
       yaxis: {
         autotick: this.autotickEnabled,
@@ -201,7 +206,6 @@ export class GraphOptionsComponent implements OnInit {
         title: {
           text: this.yAxisTitle,
         },
-        // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -218,28 +222,43 @@ export class GraphOptionsComponent implements OnInit {
       },
     };
 
+    //build the graph
     Plotly.newPlot(this.bivariatePlot, data, layout, {
       displaylogo: false,
     });
 
+    this.flagPoint();
+  }
+
+  //Change color of flagged point and add x & y data to arrays
+  public flagPoint() {
     let tempIndex = [];
-    this.bivariatePlot.on('plotly_click', (data) => {
-      var pn = '',
-        tn = '',
+    this.bivariatePlot.on('plotly_click', (selectedPoints) => {
+      console.log('selectedPoints', selectedPoints);
+      var pointNum = '',
+        curveNum = '',
         colors = [];
-      for (var i = 0; i < data.points.length; i++) {
-        pn = data.points[i].pointNumber;
-        tn = data.points[i].curveNumber;
-        colors = data.points[i].data.marker.color;
-        tempIndex.push(data.points[i].pointIndex);
+      for (var i = 0; i < selectedPoints.points.length; i++) {
+        pointNum = selectedPoints.points[i].pointNumber;
+        curveNum = selectedPoints.points[i].curveNumber;
+        colors = selectedPoints.points[i].data.marker.color;
+        tempIndex.push(selectedPoints.points[i].pointIndex);
         if (this.flaggedPointIndices == undefined) {
           this.flaggedPointIndices = [];
         }
-        this.flaggedPointIndices.push(data.points[i].pointIndex);
+        this.flaggedPointIndices.push(selectedPoints.points[i].pointIndex);
       }
-      colors[pn] = 'rgb(104, 121, 128)';
+      console.log('colors[pointNum]', colors[pointNum]);
+
+      if (colors[pointNum] === 'rgb(104, 121, 128)') {
+        colors[pointNum] = 'rgb(242, 189, 161)';
+        console.log('change once');
+      } else {
+        colors[pointNum] = 'rgb(104, 121, 128)';
+        console.log('change twice');
+      }
       var update = { marker: { color: colors, size: 16 } };
-      Plotly.restyle('graph', update, [tn]);
+      Plotly.restyle('graph', update, [curveNum]);
     });
   }
 
