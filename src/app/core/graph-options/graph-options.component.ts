@@ -6,6 +6,7 @@ import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
 import { Observable } from 'rxjs/Observable';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-graph-options',
@@ -61,7 +62,8 @@ export class GraphOptionsComponent implements OnInit {
 
   constructor(
     private filterService: FiltersService,
-    private graphSelectionsService: GraphSelectionsService
+    private graphSelectionsService: GraphSelectionsService,
+    public snackBar: MatSnackBar
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
@@ -265,6 +267,14 @@ export class GraphOptionsComponent implements OnInit {
       tempM_Y == null
     ) {
       console.log('no parameter');
+      this.snackBar.open(
+        'Please select a parameter and at least one method for each axis.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
     } else {
       let base = document.getElementById('base');
       base.classList.add('initial-loader');
@@ -273,6 +283,8 @@ export class GraphOptionsComponent implements OnInit {
       this.resizeDivs();
     }
   }
+
+  public selectOptionsWarning() {}
 
   public populateGraphData() {
     this.createQuery('xAxis');
