@@ -8,8 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
-
-import { MarkersService } from 'src/app/shared/services/markers.service';
+import 'leaflet.markercluster';
 
 @Component({
   selector: 'app-map-options',
@@ -117,8 +116,7 @@ export class MapOptionsComponent implements OnInit {
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
     private filterService: FiltersService,
-    public snackBar: MatSnackBar,
-    private markersService: MarkersService
+    public snackBar: MatSnackBar
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
