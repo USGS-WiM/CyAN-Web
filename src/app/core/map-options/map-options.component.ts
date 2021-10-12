@@ -9,6 +9,8 @@ import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
 
+import { MarkersService } from 'src/app/shared/services/markers.service';
+
 @Component({
   selector: 'app-map-options',
   templateUrl: './map-options.component.html',
@@ -107,7 +109,8 @@ export class MapOptionsComponent implements OnInit {
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
     private filterService: FiltersService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private markersService: MarkersService
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
