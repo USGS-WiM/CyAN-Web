@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { catchError, map, tap, shareReplay } from 'rxjs/operators';
-import { of } from 'rxjs';
-import { throwError } from 'rxjs';
+import { tap, shareReplay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
+import { APP_SETTINGS } from 'src/app/app.settings';
 
 @Injectable({
   providedIn: 'root',
@@ -14,23 +13,17 @@ export class FiltersService {
   pcodeToMcode$: Observable<any>;
 
   constructor(private httpClient: HttpClient) {
-    this.parameterTypes$ = httpClient
-      .get('http://127.0.0.1:5005/get_pcode_shortname/')
-      .pipe(
-        shareReplay(1),
-        tap(() => console.log('aftersharing'))
-      );
-    this.methodTypes$ = httpClient
-      .get('http://127.0.0.1:5005/get_mcode_shortname/')
-      .pipe(
-        shareReplay(1),
-        tap(() => console.log('aftersharing'))
-      );
-    this.pcodeToMcode$ = httpClient
-      .get('http://127.0.0.1:5005/pcode_to_mcode/')
-      .pipe(
-        shareReplay(1),
-        tap(() => console.log('aftersharing'))
-      );
+    this.parameterTypes$ = httpClient.get(APP_SETTINGS.pcodeShortnameURL).pipe(
+      shareReplay(1),
+      tap(() => console.log('aftersharing'))
+    );
+    this.methodTypes$ = httpClient.get(APP_SETTINGS.mcodeShortnameURL).pipe(
+      shareReplay(1),
+      tap(() => console.log('aftersharing'))
+    );
+    this.pcodeToMcode$ = httpClient.get(APP_SETTINGS.pcodeToMcodeURL).pipe(
+      shareReplay(1),
+      tap(() => console.log('aftersharing'))
+    );
   }
 }

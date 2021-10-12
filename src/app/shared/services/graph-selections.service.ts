@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -93,7 +90,7 @@ export class GraphSelectionsService {
   ) {
     this.resultsReadySubject.next(false);
     return this.httpClient
-      .post('http://127.0.0.1:5005/json_query', graphFilters)
+      .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {

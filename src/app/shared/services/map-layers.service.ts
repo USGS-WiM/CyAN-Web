@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs';
-import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
-import * as moment from 'moment';
+import { APP_SETTINGS } from '../../app.settings';
 
 @Injectable({
   providedIn: 'root',
@@ -51,7 +49,6 @@ export class MapLayersService {
     };
     items: {};
   }) {
-    console.log('options', options);
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
@@ -86,9 +83,8 @@ export class MapLayersService {
     }
 
     return this.httpClient
-      .post('http://127.0.0.1:5005/json_query', options)
+      .post(APP_SETTINGS.wqDataURL, options)
       .subscribe((res: any[]) => {
-        console.log('res', res);
         if (res.length === 0) {
           this.snackBar.open('No sites match your query.', 'OK', {
             duration: 4000,
