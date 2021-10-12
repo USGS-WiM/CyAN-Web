@@ -1,9 +1,8 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
-import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FiltersService } from '../../shared/services/filters.service';
@@ -16,16 +15,25 @@ import * as L from 'leaflet';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
+  //Layout
+  public mapFilters: Boolean = true;
+  public mapLayerOptions: Boolean = true;
+
+  //Data from map service
   public parameterTypes$: Observable<any[]>;
   public methodTypes$: Observable<any[]>;
   public pcodeToMcode$: Observable<any[]>;
   public pcodeToMcode;
   public mcodeShortName;
+
+  //Intermediate data
   public matchingMcodes = [];
-  public mapForm: FormGroup;
-  public codeForm: FormGroup;
-  public mapFilters: Boolean = true;
-  public mapLayerOptions: Boolean = true;
+
+  //Map options
+  public paramMethodForm: FormGroup;
+  Parameters = new FormControl();
+  Methods = new FormControl();
+  public boundingBoxForm: FormGroup;
   public northBounds: number;
   public southBounds: number;
   public eastBounds: number;
@@ -36,28 +44,6 @@ export class MapOptionsComponent implements OnInit {
   public nullDataChecked: Boolean = false;
   public optimalAlignment: Boolean = false;
   public nullCheckboxElement = document.getElementById('nullCheckbox');
-  public osm = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      maxZoom: 18,
-      minZoom: 3,
-      attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }
-  );
-  public grayscale = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-    {
-      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-    }
-  );
-  public imagery = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    {
-      attribution:
-        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-    }
-  );
   minYear: number = 1975;
   maxYear: number = 2021;
   timeOptions: Options = {
@@ -66,17 +52,6 @@ export class MapOptionsComponent implements OnInit {
     animate: false,
     barDimension: 210,
   };
-
-  Parameters = new FormControl();
-
-  Methods = new FormControl();
-  methodsList: any[] = [
-    { name: 'Method 1', code: 'abc' },
-    { name: 'Method 2', code: 'def' },
-    { name: 'Method 3', code: 'ghi' },
-    { name: 'Method 4', code: 'jkl' },
-  ];
-
   States = new FormControl();
   stateList: string[] = [
     'Alabama',
@@ -104,11 +79,33 @@ export class MapOptionsComponent implements OnInit {
     'Marshall Islands',
   ];
 
+  //Basemap layers
+  public osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      maxZoom: 18,
+      minZoom: 3,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }
+  );
+  public grayscale = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    }
+  );
+  public imagery = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution:
+        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    }
+  );
+
   constructor(
-    private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
-    private markersService: MarkersService,
     private filterService: FiltersService,
     public snackBar: MatSnackBar
   ) {
@@ -123,13 +120,13 @@ export class MapOptionsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.mapForm = new FormGroup({
+    this.boundingBoxForm = new FormGroup({
       northControl: new FormControl(),
       southControl: new FormControl(),
       eastControl: new FormControl(),
       westControl: new FormControl(),
     });
-    this.codeForm = new FormGroup({
+    this.paramMethodForm = new FormGroup({
       parameterControl: new FormControl(),
       methodControl: new FormControl(),
     });
@@ -141,7 +138,7 @@ export class MapOptionsComponent implements OnInit {
   public parameterSelected() {
     this.matchingMcodes = [];
     let tempParameter = [];
-    tempParameter.push(this.codeForm.get('parameterControl').value);
+    tempParameter.push(this.paramMethodForm.get('parameterControl').value);
     for (let x = 0; x < tempParameter[0].length; x++) {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
@@ -161,8 +158,8 @@ export class MapOptionsComponent implements OnInit {
 
   public runFilters() {
     if (
-      this.codeForm.get('parameterControl').value == null ||
-      this.codeForm.get('methodControl').value == null
+      this.paramMethodForm.get('parameterControl').value == null ||
+      this.paramMethodForm.get('methodControl').value == null
     ) {
       this.snackBar.open(
         'Please select at least one parameter and method.',
@@ -173,8 +170,8 @@ export class MapOptionsComponent implements OnInit {
         }
       );
     } else if (
-      this.codeForm.get('parameterControl').value.length == 0 ||
-      this.codeForm.get('methodControl').value.length == 0
+      this.paramMethodForm.get('parameterControl').value.length == 0 ||
+      this.paramMethodForm.get('methodControl').value.length == 0
     ) {
       this.snackBar.open(
         'Please select at least one parameter and method.',
@@ -188,8 +185,8 @@ export class MapOptionsComponent implements OnInit {
       //format pcodes with their corresponding mcodes so they're compatible in the http request
       let items = new Object();
       //get the codes from the first two selections (parameters and methods)
-      let tempP = this.codeForm.get('parameterControl').value;
-      let tempM = this.codeForm.get('methodControl').value;
+      let tempP = this.paramMethodForm.get('parameterControl').value;
+      let tempM = this.paramMethodForm.get('methodControl').value;
       if (tempP) {
         for (let i = 0; i < tempP.length; i++) {
           let matchMcodes = [];
@@ -213,10 +210,10 @@ export class MapOptionsComponent implements OnInit {
       }
       let filterParameters = {
         meta: {
-          north: parseFloat(this.mapForm.get('northControl').value),
-          south: parseFloat(this.mapForm.get('southControl').value),
-          east: parseFloat(this.mapForm.get('eastControl').value),
-          west: parseFloat(this.mapForm.get('westControl').value),
+          north: parseFloat(this.boundingBoxForm.get('northControl').value),
+          south: parseFloat(this.boundingBoxForm.get('southControl').value),
+          east: parseFloat(this.boundingBoxForm.get('eastControl').value),
+          west: parseFloat(this.boundingBoxForm.get('westControl').value),
           min_year: this.minYear,
           max_year: this.maxYear,
           include_NULL: this.includeNullSites,
@@ -459,17 +456,16 @@ export class MapOptionsComponent implements OnInit {
         }
       });
 
-      this.mapForm.get('northControl').setValue(this.northBounds);
-      this.mapForm.get('southControl').setValue(this.southBounds);
-      this.mapForm.get('eastControl').setValue(this.eastBounds);
-      this.mapForm.get('westControl').setValue(this.westBounds);
+      this.boundingBoxForm.get('northControl').setValue(this.northBounds);
+      this.boundingBoxForm.get('southControl').setValue(this.southBounds);
+      this.boundingBoxForm.get('eastControl').setValue(this.eastBounds);
+      this.boundingBoxForm.get('westControl').setValue(this.westBounds);
     }
     if (!boundsChecked) {
-      let testVal: number;
-      this.mapForm.get('northControl').setValue(testVal);
-      this.mapForm.get('southControl').setValue('');
-      this.mapForm.get('eastControl').setValue('');
-      this.mapForm.get('westControl').setValue('');
+      this.boundingBoxForm.get('northControl').setValue('');
+      this.boundingBoxForm.get('southControl').setValue('');
+      this.boundingBoxForm.get('eastControl').setValue('');
+      this.boundingBoxForm.get('westControl').setValue('');
     }
   }
 

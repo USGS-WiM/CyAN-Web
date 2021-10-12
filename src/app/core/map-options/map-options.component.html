@@ -84,7 +84,7 @@
         >minimize</mat-icon
       >
     </div>
-    <form [formGroup]="codeForm">
+    <form [formGroup]="paramMethodForm">
       <div style="margin-left: 10px">
         <mat-form-field appearance="fill">
           <mat-label>Parameters</mat-label>
@@ -156,7 +156,7 @@
       >
         Use map bounds
       </button>
-      <form class="boundingBoxForm" [formGroup]="mapForm">
+      <form class="boundingBoxForm" [formGroup]="boundingBoxForm">
         <div class="flex-container">
           <mat-form-field
             class="boundingBoxFullWidth"
