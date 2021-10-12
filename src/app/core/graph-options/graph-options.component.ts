@@ -91,7 +91,6 @@ export class GraphOptionsComponent implements OnInit {
   ngOnInit(): void {
     //Set the display according to the initial screen dimensions
     this.resizeDivs();
-
     this.initiateGraphService();
   }
 
@@ -248,11 +247,11 @@ export class GraphOptionsComponent implements OnInit {
         }
         this.flaggedPointIndices.push(selectedPoints.points[i].pointIndex);
       }
-      console.log('colors[pointNum]', colors[pointNum]);
 
+      //If the point is currently flagged, change the color back to its original state
       if (colors[pointNum] === 'rgb(104, 121, 128)') {
         colors[pointNum] = 'rgb(242, 189, 161)';
-        console.log('change once');
+        //If the point isn't already flagged, change the color to blue-gray
       } else {
         colors[pointNum] = 'rgb(104, 121, 128)';
         console.log('change twice');

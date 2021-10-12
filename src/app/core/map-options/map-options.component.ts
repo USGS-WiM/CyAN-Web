@@ -172,9 +172,22 @@ export class MapOptionsComponent implements OnInit {
           verticalPosition: 'top',
         }
       );
+    } else if (
+      this.codeForm.get('parameterControl').value.length == 0 ||
+      this.codeForm.get('methodControl').value.length == 0
+    ) {
+      this.snackBar.open(
+        'Please select at least one parameter and method.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
     } else {
       //format pcodes with their corresponding mcodes so they're compatible in the http request
       let items = new Object();
+      //get the codes from the first two selections (parameters and methods)
       let tempP = this.codeForm.get('parameterControl').value;
       let tempM = this.codeForm.get('methodControl').value;
       if (tempP) {
@@ -184,18 +197,18 @@ export class MapOptionsComponent implements OnInit {
             if (pcode == tempP[i]) {
               let currentMcodes = [];
               currentMcodes.push(this.pcodeToMcode[pcode]);
-              for (let y = 0; y < currentMcodes.length; y++) {
+              for (let y = 0; y < currentMcodes[0].length; y++) {
                 if (tempM) {
                   for (let x = 0; x < tempM.length; x++) {
-                    if (currentMcodes[y] == tempM[x]) {
-                      matchMcodes.push(currentMcodes[y]);
+                    if (currentMcodes[0][y] == tempM[x]) {
+                      matchMcodes.push(currentMcodes[0][y]);
                     }
                   }
                 }
               }
             }
           }
-          items[tempP[i]] = matchMcodes[0];
+          items[tempP[i]] = matchMcodes;
         }
       }
       let filterParameters = {

@@ -51,6 +51,7 @@ export class MapLayersService {
     };
     items: {};
   }) {
+    console.log('options', options);
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
