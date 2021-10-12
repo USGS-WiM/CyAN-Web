@@ -5,6 +5,7 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
@@ -108,7 +109,8 @@ export class MapOptionsComponent implements OnInit {
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
     private markersService: MarkersService,
-    private filterService: FiltersService
+    private filterService: FiltersService,
+    public snackBar: MatSnackBar
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
@@ -158,45 +160,59 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public runFilters() {
-    //format pcodes with their corresponding mcodes so they're compatible in the http request
-    let items = new Object();
-    let tempP = this.codeForm.get('parameterControl').value;
-    let tempM = this.codeForm.get('methodControl').value;
-    if (tempP) {
-      for (let i = 0; i < tempP.length; i++) {
-        let matchMcodes = [];
-        for (let pcode in this.pcodeToMcode) {
-          if (pcode == tempP[i]) {
-            let currentMcodes = [];
-            currentMcodes.push(this.pcodeToMcode[pcode]);
-            for (let y = 0; y < currentMcodes.length; y++) {
-              if (tempM) {
-                for (let x = 0; x < tempM.length; x++) {
-                  if (currentMcodes[y] == tempM[x]) {
-                    matchMcodes.push(currentMcodes[y]);
+    if (
+      this.codeForm.get('parameterControl').value == null ||
+      this.codeForm.get('methodControl').value == null
+    ) {
+      this.snackBar.open(
+        'Please select at least one parameter and method.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    } else {
+      //format pcodes with their corresponding mcodes so they're compatible in the http request
+      let items = new Object();
+      let tempP = this.codeForm.get('parameterControl').value;
+      let tempM = this.codeForm.get('methodControl').value;
+      if (tempP) {
+        for (let i = 0; i < tempP.length; i++) {
+          let matchMcodes = [];
+          for (let pcode in this.pcodeToMcode) {
+            if (pcode == tempP[i]) {
+              let currentMcodes = [];
+              currentMcodes.push(this.pcodeToMcode[pcode]);
+              for (let y = 0; y < currentMcodes.length; y++) {
+                if (tempM) {
+                  for (let x = 0; x < tempM.length; x++) {
+                    if (currentMcodes[y] == tempM[x]) {
+                      matchMcodes.push(currentMcodes[y]);
+                    }
                   }
                 }
               }
             }
           }
+          items[tempP[i]] = matchMcodes[0];
         }
-        items[tempP[i]] = matchMcodes[0];
       }
+      let filterParameters = {
+        meta: {
+          north: parseFloat(this.mapForm.get('northControl').value),
+          south: parseFloat(this.mapForm.get('southControl').value),
+          east: parseFloat(this.mapForm.get('eastControl').value),
+          west: parseFloat(this.mapForm.get('westControl').value),
+          min_year: this.minYear,
+          max_year: this.maxYear,
+          include_NULL: this.includeNullSites,
+          satellite_align: this.optimalAlignment,
+        },
+        items,
+      };
+      this.mapLayersService.filterWqSample(filterParameters);
     }
-    let filterParameters = {
-      meta: {
-        north: parseFloat(this.mapForm.get('northControl').value),
-        south: parseFloat(this.mapForm.get('southControl').value),
-        east: parseFloat(this.mapForm.get('eastControl').value),
-        west: parseFloat(this.mapForm.get('westControl').value),
-        min_year: this.minYear,
-        max_year: this.maxYear,
-        include_NULL: this.includeNullSites,
-        satellite_align: this.optimalAlignment,
-      },
-      items,
-    };
-    this.mapLayersService.filterWqSample(filterParameters);
   }
 
   public displayMapFilters(display: Boolean) {
