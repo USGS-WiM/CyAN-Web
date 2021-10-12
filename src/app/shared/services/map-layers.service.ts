@@ -36,6 +36,7 @@ export class MapLayersService {
   public filterWqSampleSubject = new BehaviorSubject<any>(undefined);
   filterWqSample$ = this.filterWqSampleSubject.asObservable();
 
+  //Get map data from service and populate water quality layer
   public filterWqSample(options: {
     meta: {
       north: number;

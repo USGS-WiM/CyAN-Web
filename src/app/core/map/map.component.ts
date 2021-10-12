@@ -15,10 +15,8 @@ export class MapComponent implements AfterViewInit {
   public eastBounds: number;
   public westBounds: number;
   public currentPoints;
-
-  mapScale;
-  latitude;
-  longitude;
+  public latitude: number;
+  public longitude: number;
 
   constructor(
     private componentDisplayService: ComponentDisplayService,
@@ -52,10 +50,6 @@ export class MapComponent implements AfterViewInit {
 
     L.control.scale({ position: 'bottomright' }).addTo(this.map);
     this.map.whenReady(() => {
-      const mapZoom = this.map.getZoom();
-      //const tempMapScale = APP_UTILITIES.SCALE_LOOKUP(this.map.getZoom());
-      // this.zoomLevel = mapZoom;
-      //this.mapScale = tempMapScale;
       const initMapCenter = this.map.getCenter();
       this.latitude = initMapCenter.lat.toFixed(4);
       this.longitude = initMapCenter.lng.toFixed(4);

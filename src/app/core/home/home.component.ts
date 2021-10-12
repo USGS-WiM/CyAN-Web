@@ -1,5 +1,4 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
-import { ComponentDisplayService } from '../../shared/services/component-display.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +6,7 @@ import { ComponentDisplayService } from '../../shared/services/component-display
   styleUrls: ['./../core.component.scss'],
 })
 export class HomeComponent implements AfterViewInit {
-  constructor(private componentDisplayService: ComponentDisplayService) {}
+  constructor() {}
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -28,11 +27,6 @@ export class HomeComponent implements AfterViewInit {
   }
 
   public changeLayout(homeLayout: Boolean) {
-    /*
-    this.componentDisplayService.getHomeLayout(homeLayout);
-    this.componentDisplayService.homeLayoutSubject.subscribe((res) => {
-      this.showHomeLayout = res;
-    }); */
     this.showHomeLayout = homeLayout;
     if (homeLayout === true) {
       this.showMap = false;

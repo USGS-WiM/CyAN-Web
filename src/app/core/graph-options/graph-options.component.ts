@@ -254,13 +254,14 @@ export class GraphOptionsComponent implements OnInit {
         //If the point isn't already flagged, change the color to blue-gray
       } else {
         colors[pointNum] = 'rgb(104, 121, 128)';
-        console.log('change twice');
       }
       var update = { marker: { color: colors, size: 16 } };
       Plotly.restyle('graph', update, [curveNum]);
     });
   }
 
+  //Called when user clicks the flag button
+  //Retreives indicies of flagged data, get the corresponding data, and adds those data to x and y arrays
   public createFlags() {
     let flaggedIndices;
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
@@ -283,15 +284,19 @@ export class GraphOptionsComponent implements OnInit {
       }
     });
 
+    //No fancy download yet; so displaying data in console for now
     console.log('flaggedXData', flaggedXData);
     console.log('flaggedYData', flaggedYData);
   }
 
+  //Called when user clicks 'Plot Data'
   public clickPlotData() {
+    //Get parameter and method user selections
     let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
     let tempP_Y = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
+    //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X === null ||
       tempP_Y === null ||
@@ -307,6 +312,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       );
     } else {
+      //Add the WIM loader while graph is being created
       let base = document.getElementById('base');
       base.classList.add('initial-loader');
       this.showGraph = false;
@@ -315,15 +321,16 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
-  public selectOptionsWarning() {}
-
+  //Retreive data from service and put it in a format that can be used to populate graph
   public populateGraphData() {
     this.createQuery('xAxis');
     this.createQuery('yAxis');
+    //getTempArrays retrieves the x and y data from the service, whereas filterGraphPoints matches x-y coordinates and returns data ready to be plotted
     this.graphSelectionsService.getTempArrays(this.filterQueryX, 'xAxis');
     this.graphSelectionsService.getTempArrays(this.filterQueryY, 'yAxis');
     let xData;
     let yData;
+    //don't call filterGraphPoints until both the x and y data have finished being populated
     this.graphSelectionsService.resultsReadySubject.subscribe((ready) => {
       if (ready === true) {
         this.graphSelectionsService.tempResultsXSubject.subscribe(
@@ -341,6 +348,7 @@ export class GraphOptionsComponent implements OnInit {
     });
   }
 
+  //Called when user checks or unchecks x-axis log box
   public applyLogX(logXChecked: MatCheckboxChange) {
     if (logXChecked.checked) {
       this.xAxisType = 'log';
@@ -351,6 +359,7 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Called when user checks or unchecks y-axis log box
   public applyLogY(logYChecked: MatCheckboxChange) {
     if (logYChecked.checked) {
       this.yAxisType = 'log';
@@ -361,6 +370,7 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Called when user checks or unchecks satellite alignment box
   public clickSatAlign(satAlignChecked: MatCheckboxChange) {
     if (satAlignChecked.checked) {
       this.optimalAlignment = true;
@@ -369,6 +379,7 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //formats user selections into an object that's used to retreive data from the service
   public createQuery(axis: string) {
     let tempP;
     let tempM;
@@ -409,7 +420,9 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     }
+    //Populate the 'items' object (parameters & methods) in the query object
     items[tempP] = matchMcodes[0];
+    //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
       if (tempP === this.parameterTypes[i].pcode) {
         if (axis === 'yAxis') {
@@ -420,6 +433,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     }
+    //Create separate query objects for x and y data
     if (axis === 'xAxis') {
       this.filterQueryX = {
         meta: {
@@ -458,7 +472,6 @@ export class GraphOptionsComponent implements OnInit {
     let windowWidth = window.innerWidth;
 
     this.graphHeight = 0.7 * window.innerHeight;
-    // this.graphWidth = 0.5 * window.innerWidth;
 
     let graphOptionsBackgroundID = document.getElementById(
       'graphOptionsBackgroundID'

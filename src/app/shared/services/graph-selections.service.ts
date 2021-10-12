@@ -33,6 +33,7 @@ export class GraphSelectionsService {
 
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
+
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
   }
@@ -40,6 +41,7 @@ export class GraphSelectionsService {
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
+  //Match x data with y data and use them to populate graph
   public filterGraphPoints(tempResultsX, tempResultsY) {
     let base = document.getElementById('base');
     this.graphPointsXSubject.next(undefined);
@@ -72,6 +74,7 @@ export class GraphSelectionsService {
     base.classList.remove('initial-loader');
   }
 
+  //Retreive x and y data from service
   public getTempArrays(
     graphFilters: {
       meta: {
