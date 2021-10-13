@@ -18,6 +18,7 @@ export class GraphOptionsComponent implements OnInit {
   public graphOptionsVisible: Boolean = true;
   public showGraph = false;
   public bivariatePlot: any;
+  public alreadyGraphed: Boolean = false;
 
   //Graph options
   graphSelectionsForm = new FormGroup({
@@ -107,25 +108,47 @@ export class GraphOptionsComponent implements OnInit {
     }); */
 
     //Reset the x and y values displayed on the graph whenever the values change in the service
-    this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
-      this.currentXaxisValues = points;
-      this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
-        this.currentYaxisValues = points;
-        if (this.currentYaxisValues) {
-          if (this.currentYaxisValues.length > 0) {
-            //Since the point colors changed when flagged, we begin by setting the color of each point individually
-            for (let i = 0; i < this.currentYaxisValues.length; i++) {
-              this.pointColors.push('rgb(242, 189, 161)');
+    this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+      if (makeGraph === true && this.alreadyGraphed === false) {
+        this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+          this.currentXaxisValues = points;
+          this.graphSelectionsService.graphPointsYSubject.subscribe(
+            (points) => {
+              this.currentYaxisValues = points;
+              if (this.currentYaxisValues && this.currentXaxisValues) {
+                if (
+                  this.currentYaxisValues.length > 0 &&
+                  this.currentXaxisValues.length > 0
+                ) {
+                  this.alreadyGraphed = true;
+                  //Since the point colors changed when flagged, we begin by setting the color of each point individually
+                  for (let i = 0; i < this.currentYaxisValues.length; i++) {
+                    this.pointColors.push('rgb(242, 189, 161)');
+                  }
+                  //Create and display graph
+                  this.createGraph();
+                  this.showGraph = true;
+                  //Remove the WIM loader to view graph
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                }
+              }
+              if (!this.currentYaxisValues || !this.currentXaxisValues) {
+                if (this.alreadyGraphed === false) {
+                  this.alreadyGraphed = true;
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                  this.showGraph = false;
+                  this.snackBar.open('TEST TEST TEST.', 'OK', {
+                    duration: 4000,
+                    verticalPosition: 'top',
+                  });
+                }
+              }
             }
-            //Create and display graph
-            this.createGraph();
-            this.showGraph = true;
-            //Remove the WIM loader to view graph
-            let base = document.getElementById('base');
-            base.classList.remove('initial-loader');
-          }
-        }
-      });
+          );
+        });
+      }
     });
   }
 
@@ -133,7 +156,6 @@ export class GraphOptionsComponent implements OnInit {
   public populateMcodeDropdown(axis) {
     let formName = '';
     if (axis === 'xaxis') {
-      console.log('made it to xaxis');
       this.matchingMcodesX = [];
       formName = 'ParametersX';
     }
@@ -291,6 +313,7 @@ export class GraphOptionsComponent implements OnInit {
 
   //Called when user clicks 'Plot Data'
   public clickPlotData() {
+    this.alreadyGraphed = false;
     //Get parameter and method user selections
     let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
     let tempP_Y = this.graphSelectionsForm.get('ParametersY').value;
@@ -384,44 +407,19 @@ export class GraphOptionsComponent implements OnInit {
     let tempP;
     let tempM;
 
-    let matchMcodes = [];
     if (axis == 'xAxis') {
       tempP = this.graphSelectionsForm.get('ParametersX').value;
       tempM = this.graphSelectionsForm.get('MethodsX').value;
-      if (!tempM) {
-        for (let i = 0; i < this.matchingMcodesX.length; i++) {
-          matchMcodes.push(this.matchingMcodesX[i].mcode);
-        }
-      }
     }
     if (axis == 'yAxis') {
       tempP = this.graphSelectionsForm.get('ParametersY').value;
       tempM = this.graphSelectionsForm.get('MethodsY').value;
-      if (!tempM) {
-        for (let i = 0; i < this.matchingMcodesY.length; i++) {
-          matchMcodes.push(this.matchingMcodesX[i].mcode);
-        }
-      }
     }
 
     let items = new Object();
-    for (let pcode in this.pcodeToMcode) {
-      if (pcode == tempP) {
-        let currentMcodes = [];
-        currentMcodes.push(this.pcodeToMcode[pcode]);
-        for (let y = 0; y < currentMcodes.length; y++) {
-          if (tempM) {
-            for (let x = 0; x < tempM.length; x++) {
-              if (currentMcodes[y] == tempM[x]) {
-                matchMcodes.push(currentMcodes[y]);
-              }
-            }
-          }
-        }
-      }
-    }
     //Populate the 'items' object (parameters & methods) in the query object
-    items[tempP] = matchMcodes[0];
+    items[tempP] = tempM;
+    console.log('items[tempP]', items[tempP]);
     //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
       if (tempP === this.parameterTypes[i].pcode) {
@@ -539,7 +537,8 @@ export class GraphOptionsComponent implements OnInit {
       this.graphMargins = 80;
     }
     if (windowWidth < 1200 || windowHeight < 450) {
-      this.graphMargins = 20;
+      //commenting this out for now because shrinking the margins make the axes titles overlap with the tick marks
+      //this.graphMargins = 20;
     }
 
     if (this.showGraph) {

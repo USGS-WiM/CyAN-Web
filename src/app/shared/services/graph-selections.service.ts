@@ -31,6 +31,9 @@ export class GraphSelectionsService {
   public resultsReadySubject = new BehaviorSubject<any>(undefined);
   resultsReady$ = this.resultsReadySubject.asObservable();
 
+  public makeGraphSubject = new BehaviorSubject<any>(undefined);
+  makeGraph$ = this.makeGraphSubject.asObservable();
+
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
 
@@ -40,6 +43,9 @@ export class GraphSelectionsService {
 
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
+
+  public ready = 0;
+  public makeGraph = false;
 
   //Match x data with y data and use them to populate graph
   public filterGraphPoints(tempResultsX, tempResultsY) {
@@ -51,7 +57,8 @@ export class GraphSelectionsService {
     let allDataX = [];
     let allDataY = [];
     let sid = [];
-
+    let done = false;
+    this.makeGraphSubject.next(false);
     if (tempResultsX && tempResultsY) {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {
@@ -61,17 +68,37 @@ export class GraphSelectionsService {
             allDataX.push(tempResultsX[i]);
             allDataY.push(tempResultsY[x]);
             sid.push(tempResultsY[x].sid);
+            if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
+              done = true;
+            }
           }
         }
       }
     }
-
-    this.graphPointsYSubject.next(valuesY);
-    this.allGraphDataYSubject.next(allDataY);
-    this.graphPointsXSubject.next(valuesX);
-    this.allGraphDataXSubject.next(allDataX);
-    this.sidSubject.next(sid);
+    //   if (done) {
+    if (valuesX.length > 0 && valuesY.length > 0) {
+      this.graphPointsYSubject.next(valuesY);
+      this.allGraphDataYSubject.next(allDataY);
+      this.graphPointsXSubject.next(valuesX);
+      this.allGraphDataXSubject.next(allDataX);
+      this.sidSubject.next(sid);
+      this.makeGraphSubject.next(true);
+      console.log('valuesX', valuesX);
+      console.log('valuesY', valuesY);
+    } else {
+      console.log('valuesX', valuesX);
+      console.log('valuesY', valuesY);
+      this.snackBar.open(
+        'No matching sites for your selected parameters.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    }
     base.classList.remove('initial-loader');
+    //  }
   }
 
   //Retreive x and y data from service
@@ -91,10 +118,12 @@ export class GraphSelectionsService {
     },
     axis: string
   ) {
+    console.log('graphFilters', graphFilters);
     this.resultsReadySubject.next(false);
     return this.httpClient
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
+        console.log('res.length', res.length, res);
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {
             duration: 4000,
@@ -103,10 +132,17 @@ export class GraphSelectionsService {
         } else {
           if (axis === 'xAxis') {
             this.tempResultsXSubject.next(res);
+            this.ready += 1;
+            console.log('res.length: x', res.length);
           }
           if (axis === 'yAxis') {
             this.tempResultsYSubject.next(res);
+            this.ready += 1;
+            console.log('res.length: y', res.length);
+          }
+          if (this.ready == 2) {
             this.resultsReadySubject.next(true);
+            this.ready = 0;
           }
         }
       });
