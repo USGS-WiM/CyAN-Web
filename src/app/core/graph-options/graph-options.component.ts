@@ -255,7 +255,6 @@ export class GraphOptionsComponent implements OnInit {
   public flagPoint() {
     let tempIndex = [];
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
-      console.log('selectedPoints', selectedPoints);
       var pointNum = '',
         curveNum = '',
         colors = [];
@@ -354,21 +353,26 @@ export class GraphOptionsComponent implements OnInit {
     let xData;
     let yData;
     //don't call filterGraphPoints until both the x and y data have finished being populated
-    this.graphSelectionsService.resultsReadySubject.subscribe((ready) => {
+    /* this.graphSelectionsService.getTempArraysReadySubject.subscribe((ready) => {
       if (ready === true) {
+        console.log('getTempArrays is done (graph-options)');
         this.graphSelectionsService.tempResultsXSubject.subscribe(
           (resultsX) => {
             xData = resultsX;
             this.graphSelectionsService.tempResultsYSubject.subscribe(
               (resultsY) => {
                 yData = resultsY;
+                console.log('xData', xData, 'yData', yData);
                 this.graphSelectionsService.filterGraphPoints(xData, yData);
+                this.graphSelectionsService.getTempArraysReadySubject.next(
+                  false
+                );
               }
             );
           }
         );
       }
-    });
+    }); */
   }
 
   //Called when user checks or unchecks x-axis log box
@@ -419,7 +423,6 @@ export class GraphOptionsComponent implements OnInit {
     let items = new Object();
     //Populate the 'items' object (parameters & methods) in the query object
     items[tempP] = tempM;
-    console.log('items[tempP]', items[tempP]);
     //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
       if (tempP === this.parameterTypes[i].pcode) {

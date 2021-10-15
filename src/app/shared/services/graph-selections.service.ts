@@ -28,11 +28,14 @@ export class GraphSelectionsService {
   public tempResultsXSubject = new BehaviorSubject<any>(undefined);
   tempResultsX$ = this.tempResultsXSubject.asObservable();
 
-  public resultsReadySubject = new BehaviorSubject<any>(undefined);
-  resultsReady$ = this.resultsReadySubject.asObservable();
+  public getTempArraysReadySubject = new BehaviorSubject<any>(undefined);
+  getTempArraysReady$ = this.getTempArraysReadySubject.asObservable();
 
   public makeGraphSubject = new BehaviorSubject<any>(undefined);
   makeGraph$ = this.makeGraphSubject.asObservable();
+
+  public filterGraphPointsDoneSubject = new BehaviorSubject<any>(undefined);
+  filterGraphPointsDone$ = this.filterGraphPointsDoneSubject.asObservable();
 
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
@@ -47,59 +50,15 @@ export class GraphSelectionsService {
   public ready = 0;
   public makeGraph = false;
 
-  //Match x data with y data and use them to populate graph
-  public filterGraphPoints(tempResultsX, tempResultsY) {
-    let base = document.getElementById('base');
-    this.graphPointsXSubject.next(undefined);
-    this.graphPointsYSubject.next(undefined);
-    let valuesX = [];
-    let valuesY = [];
-    let allDataX = [];
-    let allDataY = [];
-    let sid = [];
-    let done = false;
-    this.makeGraphSubject.next(false);
-    if (tempResultsX && tempResultsY) {
-      for (let i = 0; i < tempResultsX.length; i++) {
-        for (let x = 0; x < tempResultsY.length; x++) {
-          if (tempResultsY[x].sid == tempResultsX[i].sid) {
-            valuesX.push(tempResultsX[i].result);
-            valuesY.push(tempResultsY[x].result);
-            allDataX.push(tempResultsX[i]);
-            allDataY.push(tempResultsY[x]);
-            sid.push(tempResultsY[x].sid);
-            if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
-              done = true;
-            }
-          }
-        }
-      }
-    }
-    //   if (done) {
-    if (valuesX.length > 0 && valuesY.length > 0) {
-      this.graphPointsYSubject.next(valuesY);
-      this.allGraphDataYSubject.next(allDataY);
-      this.graphPointsXSubject.next(valuesX);
-      this.allGraphDataXSubject.next(allDataX);
-      this.sidSubject.next(sid);
-      this.makeGraphSubject.next(true);
-      console.log('valuesX', valuesX);
-      console.log('valuesY', valuesY);
-    } else {
-      console.log('valuesX', valuesX);
-      console.log('valuesY', valuesY);
-      this.snackBar.open(
-        'No matching sites for your selected parameters.',
-        'OK',
-        {
-          duration: 4000,
-          verticalPosition: 'top',
-        }
-      );
-    }
-    base.classList.remove('initial-loader');
-    //  }
-  }
+  public valuesX = [];
+  public valuesY = [];
+  public allDataX = [];
+  public allDataY = [];
+
+  public rawX;
+  public rawY;
+
+  public sid = [];
 
   //Retreive x and y data from service
   public getTempArrays(
@@ -119,11 +78,11 @@ export class GraphSelectionsService {
     axis: string
   ) {
     console.log('graphFilters', graphFilters);
-    this.resultsReadySubject.next(false);
+    // this.getTempArraysReadySubject.next(false);
     return this.httpClient
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
-        console.log('res.length', res.length, res);
+        console.log('res', res, 'axis', axis);
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {
             duration: 4000,
@@ -131,20 +90,78 @@ export class GraphSelectionsService {
           });
         } else {
           if (axis === 'xAxis') {
+            this.rawX = res;
             this.tempResultsXSubject.next(res);
             this.ready += 1;
-            console.log('res.length: x', res.length);
+            console.log('this.ready (x)', this.ready);
           }
           if (axis === 'yAxis') {
+            console.log('this.ready (y)', this.ready);
+            this.rawY = res;
             this.tempResultsYSubject.next(res);
             this.ready += 1;
-            console.log('res.length: y', res.length);
           }
           if (this.ready == 2) {
-            this.resultsReadySubject.next(true);
+            console.log('getTempArrays is done (graph-selections.service)');
+            //  this.getTempArraysReadySubject.next(true);
             this.ready = 0;
+            this.filterGraphPoints(this.rawX, this.rawY);
           }
         }
       });
+  }
+
+  //Match x data with y data and use them to populate graph
+  public filterGraphPoints(tempResultsX, tempResultsY) {
+    this.graphPointsXSubject.next(undefined);
+    this.graphPointsYSubject.next(undefined);
+    this.valuesX = [];
+    this.valuesY = [];
+    this.allDataX = [];
+    this.allDataY = [];
+    this.sid = [];
+    console.log('made it to filterGraphPts');
+    //  this.makeGraphSubject.next(false);
+    if (tempResultsX && tempResultsY) {
+      for (let i = 0; i < tempResultsX.length; i++) {
+        for (let x = 0; x < tempResultsY.length; x++) {
+          if (tempResultsY[x].sid == tempResultsX[i].sid) {
+            this.valuesX.push(tempResultsX[i].result);
+            this.valuesY.push(tempResultsY[x].result);
+            this.allDataX.push(tempResultsX[i]);
+            this.allDataY.push(tempResultsY[x]);
+            this.sid.push(tempResultsY[x].sid);
+            if (x > tempResultsY.length - 1 && i > tempResultsX.length - 1) {
+              console.log('made it');
+              this.finalGraphValues();
+            }
+          }
+        }
+      }
+    }
+  }
+  public finalGraphValues() {
+    //   if (done) {
+    if (this.valuesX.length > 0 && this.valuesY.length > 0) {
+      this.graphPointsYSubject.next(this.valuesY);
+      this.allGraphDataYSubject.next(this.allDataY);
+      this.graphPointsXSubject.next(this.valuesX);
+      this.allGraphDataXSubject.next(this.allDataX);
+      this.sidSubject.next(this.sid);
+      this.makeGraphSubject.next(true);
+    } else {
+      this.snackBar.open(
+        'No matching sites for your selected parameters.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    }
+
+    let base = document.getElementById('base');
+    base.classList.remove('initial-loader');
+    //  }
   }
 }
