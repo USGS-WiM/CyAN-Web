@@ -158,8 +158,12 @@
       style="margin-left: 10px; margin-top: 10px"
       aria-label="Checking this box will filter points using the current map extent"
     >
-      <mat-checkbox class="example-margin" [disableRipple]="true"
-        >Limit to map extent
+      <mat-checkbox
+        class="example-margin"
+        [disableRipple]="true"
+        (change)="applyBoundingBox($event)"
+        >Limit by bounds <br />
+        specified in map options
       </mat-checkbox>
     </div>
     <div

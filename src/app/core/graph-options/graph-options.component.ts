@@ -4,6 +4,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
 import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { Observable } from 'rxjs/Observable';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,6 +29,7 @@ export class GraphOptionsComponent implements OnInit {
     MethodsY: new FormControl(),
   });
   public optimalAlignment: Boolean = false;
+  public useBoundingBox: Boolean = false;
   minYear: number = 1975;
   maxYear: number = 2021;
   timeOptions: Options = {
@@ -36,6 +38,10 @@ export class GraphOptionsComponent implements OnInit {
     barDimension: 210,
     animate: false,
   };
+  north: number;
+  south: number;
+  east: number;
+  west: number;
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -76,7 +82,8 @@ export class GraphOptionsComponent implements OnInit {
   constructor(
     private filterService: FiltersService,
     private graphSelectionsService: GraphSelectionsService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private componentDisplayService: ComponentDisplayService
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
@@ -139,10 +146,6 @@ export class GraphOptionsComponent implements OnInit {
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
                   this.showGraph = false;
-                  this.snackBar.open('TEST TEST TEST.', 'OK', {
-                    duration: 4000,
-                    verticalPosition: 'top',
-                  });
                 }
               }
             }
@@ -350,29 +353,6 @@ export class GraphOptionsComponent implements OnInit {
     //getTempArrays retrieves the x and y data from the service, whereas filterGraphPoints matches x-y coordinates and returns data ready to be plotted
     this.graphSelectionsService.getTempArrays(this.filterQueryX, 'xAxis');
     this.graphSelectionsService.getTempArrays(this.filterQueryY, 'yAxis');
-    let xData;
-    let yData;
-    //don't call filterGraphPoints until both the x and y data have finished being populated
-    /* this.graphSelectionsService.getTempArraysReadySubject.subscribe((ready) => {
-      if (ready === true) {
-        console.log('getTempArrays is done (graph-options)');
-        this.graphSelectionsService.tempResultsXSubject.subscribe(
-          (resultsX) => {
-            xData = resultsX;
-            this.graphSelectionsService.tempResultsYSubject.subscribe(
-              (resultsY) => {
-                yData = resultsY;
-                console.log('xData', xData, 'yData', yData);
-                this.graphSelectionsService.filterGraphPoints(xData, yData);
-                this.graphSelectionsService.getTempArraysReadySubject.next(
-                  false
-                );
-              }
-            );
-          }
-        );
-      }
-    }); */
   }
 
   //Called when user checks or unchecks x-axis log box
@@ -394,6 +374,34 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       this.yAxisType = 'scatter';
       this.autotickEnabled = true;
+    }
+  }
+
+  public applyBoundingBox(boundingBoxChecked: MatCheckboxChange) {
+    if (boundingBoxChecked.checked) {
+      this.useBoundingBox = true;
+      this.componentDisplayService.storeNorthSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.north = coordinate;
+        }
+      });
+      this.componentDisplayService.storeSouthSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.south = coordinate;
+        }
+      });
+      this.componentDisplayService.storeEastSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.east = coordinate;
+        }
+      });
+      this.componentDisplayService.storeWestSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.west = coordinate;
+        }
+      });
+    } else {
+      this.useBoundingBox = false;
     }
   }
 
@@ -436,34 +444,66 @@ export class GraphOptionsComponent implements OnInit {
     }
     //Create separate query objects for x and y data
     if (axis === 'xAxis') {
-      this.filterQueryX = {
-        meta: {
-          north: 90,
-          south: -90,
-          east: 180,
-          west: -180,
-          min_year: this.minYear,
-          max_year: this.maxYear,
-          include_NULL: false,
-          satellite_align: this.optimalAlignment,
-        },
-        items,
-      };
+      if (this.useBoundingBox) {
+        this.filterQueryX = {
+          meta: {
+            north: this.north,
+            south: this.south,
+            east: this.east,
+            west: this.west,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      } else {
+        this.filterQueryX = {
+          meta: {
+            north: 90,
+            south: -90,
+            east: 180,
+            west: -180,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      }
     }
     if (axis === 'yAxis') {
-      this.filterQueryY = {
-        meta: {
-          north: 90,
-          south: -90,
-          east: 180,
-          west: -180,
-          min_year: this.minYear,
-          max_year: this.maxYear,
-          include_NULL: false,
-          satellite_align: this.optimalAlignment,
-        },
-        items,
-      };
+      if (this.useBoundingBox) {
+        this.filterQueryY = {
+          meta: {
+            north: this.north,
+            south: this.south,
+            east: this.east,
+            west: this.west,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      } else {
+        this.filterQueryY = {
+          meta: {
+            north: 90,
+            south: -90,
+            east: 180,
+            west: -180,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      }
     }
   }
 

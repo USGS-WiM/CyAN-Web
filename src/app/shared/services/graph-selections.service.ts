@@ -126,32 +126,12 @@ export class GraphSelectionsService {
     if (tempResultsX && tempResultsY) {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {
-          console.log(
-            'tempResultsY[x].sid',
-            tempResultsY[x].sid,
-            'x',
-            x,
-            'tempResultsX[i].sid',
-            tempResultsX[i].sid,
-            'i',
-            i
-          );
           if (tempResultsY[x].sid == tempResultsX[i].sid) {
             this.valuesX.push(tempResultsX[i].result);
             this.valuesY.push(tempResultsY[x].result);
             this.allDataX.push(tempResultsX[i]);
             this.allDataY.push(tempResultsY[x]);
             this.sid.push(tempResultsY[x].sid);
-            console.log(
-              'x',
-              x,
-              'tempResultsY.length',
-              tempResultsY.length,
-              'i',
-              i,
-              'tempResultsX.length',
-              tempResultsX.length
-            );
           }
           if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
             console.log('made it');

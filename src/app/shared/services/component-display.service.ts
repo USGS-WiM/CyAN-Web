@@ -54,4 +54,36 @@ export class ComponentDisplayService {
   public getWestBounds(west: number) {
     this.westBoundsSubject.next(west);
   }
+
+  //for storing what's in the map options: north
+  public storeNorthSubject = new BehaviorSubject<number>(undefined);
+  storeNorthBounds$ = this.storeNorthSubject.asObservable();
+
+  public getStoreNorthBounds(north: number) {
+    this.storeNorthSubject.next(north);
+  }
+
+  //for storing what's in the map options: south
+  public storeSouthSubject = new BehaviorSubject<number>(undefined);
+  storeSouthBounds$ = this.storeSouthSubject.asObservable();
+
+  public getStoreSouthBounds(south: number) {
+    this.storeSouthSubject.next(south);
+  }
+
+  //for storing what's in the map options: east
+  public storeEastSubject = new BehaviorSubject<number>(undefined);
+  storeEastBounds$ = this.storeEastSubject.asObservable();
+
+  public getStoreEastBounds(north: number) {
+    this.storeEastSubject.next(north);
+  }
+
+  //for storing what's in the map options: west
+  public storeWestSubject = new BehaviorSubject<number>(undefined);
+  storeWestBounds$ = this.storeWestSubject.asObservable();
+
+  public getStoreWestBounds(south: number) {
+    this.storeWestSubject.next(south);
+  }
 }

@@ -518,6 +518,31 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
+  public storeNorth() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreNorthBounds(
+      parseFloat(this.boundingBoxForm.get('northControl').value)
+    );
+  }
+  public storeSouth() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreSouthBounds(
+      parseFloat(this.boundingBoxForm.get('southControl').value)
+    );
+  }
+  public storeEast() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreEastBounds(
+      parseFloat(this.boundingBoxForm.get('eastControl').value)
+    );
+  }
+  public storeWest() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreWestBounds(
+      parseFloat(this.boundingBoxForm.get('westControl').value)
+    );
+  }
+
   public populateMapBounds(boundsChecked: Boolean) {
     if (boundsChecked) {
       this.componentDisplayService.northBoundsSubject.subscribe((lat) => {
@@ -545,6 +570,12 @@ export class MapOptionsComponent implements OnInit {
       this.boundingBoxForm.get('southControl').setValue(this.southBounds);
       this.boundingBoxForm.get('eastControl').setValue(this.eastBounds);
       this.boundingBoxForm.get('westControl').setValue(this.westBounds);
+
+      //Setting these variables so they can be used to populate graph options if that checkbox is selected
+      this.componentDisplayService.getStoreNorthBounds(this.northBounds);
+      this.componentDisplayService.getStoreSouthBounds(this.southBounds);
+      this.componentDisplayService.getStoreEastBounds(this.eastBounds);
+      this.componentDisplayService.getStoreWestBounds(this.westBounds);
     }
     if (!boundsChecked) {
       this.boundingBoxForm.get('northControl').setValue('');
