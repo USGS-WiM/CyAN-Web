@@ -13,7 +13,7 @@ export class FiltersService {
   pcodeToMcode$: Observable<any>;
 
   constructor(private httpClient: HttpClient) {
-    //Each of these is used to retreive data for populating dropdown menus
+    //Each of these is used to retrieve data for populating dropdown menus
     this.parameterTypes$ = httpClient.get(APP_SETTINGS.pcodeShortnameURL).pipe(
       shareReplay(1),
       tap(() => console.log('aftersharing'))

@@ -60,7 +60,7 @@ export class GraphSelectionsService {
 
   public sid = [];
 
-  //Retreive x and y data from service
+  //Retrieve x and y data from service
   public getTempArrays(
     graphFilters: {
       meta: {

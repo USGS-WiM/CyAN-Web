@@ -285,7 +285,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Called when user clicks the flag button
-  //Retreives indicies of flagged data, get the corresponding data, and adds those data to x and y arrays
+  //Retrieves indicies of flagged data, get the corresponding data, and adds those data to x and y arrays
   public createFlags() {
     let flaggedIndices;
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
@@ -346,7 +346,7 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
-  //Retreive data from service and put it in a format that can be used to populate graph
+  //retrieve data from service and put it in a format that can be used to populate graph
   public populateGraphData() {
     this.createQuery('xAxis');
     this.createQuery('yAxis');
@@ -414,7 +414,7 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
-  //formats user selections into an object that's used to retreive data from the service
+  //formats user selections into an object that's used to retrieve data from the service
   public createQuery(axis: string) {
     let tempP;
     let tempM;

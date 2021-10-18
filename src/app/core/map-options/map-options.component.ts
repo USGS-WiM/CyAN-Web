@@ -165,7 +165,7 @@ export class MapOptionsComponent implements OnInit {
   }
 
   //This is called when 'Filter' button is clicked
-  //It formats the user's selections into an object that can be used to retreive data from the service
+  //It formats the user's selections into an object that can be used to retrieve data from the service
   public runFilters() {
     //Users must select at least one parameter and at least one method
     if (
@@ -220,7 +220,7 @@ export class MapOptionsComponent implements OnInit {
           items[tempP[i]] = matchMcodes;
         }
       }
-      //Create the object used to retreive data from the service
+      //Create the object used to retrieve data from the service
       let filterParameters = {
         meta: {
           north: parseFloat(this.boundingBoxForm.get('northControl').value),
