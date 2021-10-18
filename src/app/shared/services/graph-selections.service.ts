@@ -78,7 +78,7 @@ export class GraphSelectionsService {
     axis: string
   ) {
     console.log('graphFilters', graphFilters);
-    // this.getTempArraysReadySubject.next(false);
+    console.log('this.ready', this.ready);
     return this.httpClient
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
@@ -88,6 +88,9 @@ export class GraphSelectionsService {
             duration: 4000,
             verticalPosition: 'top',
           });
+          this.ready = 0;
+          let base = document.getElementById('base');
+          base.classList.remove('initial-loader');
         } else {
           if (axis === 'xAxis') {
             this.rawX = res;
@@ -103,7 +106,6 @@ export class GraphSelectionsService {
           }
           if (this.ready == 2) {
             console.log('getTempArrays is done (graph-selections.service)');
-            //  this.getTempArraysReadySubject.next(true);
             this.ready = 0;
             this.filterGraphPoints(this.rawX, this.rawY);
           }
@@ -121,27 +123,56 @@ export class GraphSelectionsService {
     this.allDataY = [];
     this.sid = [];
     console.log('made it to filterGraphPts');
-    //  this.makeGraphSubject.next(false);
     if (tempResultsX && tempResultsY) {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {
+          console.log(
+            'tempResultsY[x].sid',
+            tempResultsY[x].sid,
+            'x',
+            x,
+            'tempResultsX[i].sid',
+            tempResultsX[i].sid,
+            'i',
+            i
+          );
           if (tempResultsY[x].sid == tempResultsX[i].sid) {
             this.valuesX.push(tempResultsX[i].result);
             this.valuesY.push(tempResultsY[x].result);
             this.allDataX.push(tempResultsX[i]);
             this.allDataY.push(tempResultsY[x]);
             this.sid.push(tempResultsY[x].sid);
-            if (x > tempResultsY.length - 1 && i > tempResultsX.length - 1) {
-              console.log('made it');
-              this.finalGraphValues();
-            }
+            console.log(
+              'x',
+              x,
+              'tempResultsY.length',
+              tempResultsY.length,
+              'i',
+              i,
+              'tempResultsX.length',
+              tempResultsX.length
+            );
+          }
+          if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
+            console.log('made it');
+            this.finalGraphValues();
           }
         }
       }
+    } else {
+      this.snackBar.open(
+        'No matching sites for your selected parameters.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+      let base = document.getElementById('base');
+      base.classList.remove('initial-loader');
     }
   }
   public finalGraphValues() {
-    //   if (done) {
     if (this.valuesX.length > 0 && this.valuesY.length > 0) {
       this.graphPointsYSubject.next(this.valuesY);
       this.allGraphDataYSubject.next(this.allDataY);
@@ -159,9 +190,7 @@ export class GraphSelectionsService {
         }
       );
     }
-
     let base = document.getElementById('base');
     base.classList.remove('initial-loader');
-    //  }
   }
 }
