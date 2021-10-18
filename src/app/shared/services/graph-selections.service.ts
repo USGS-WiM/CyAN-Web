@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
@@ -31,11 +28,18 @@ export class GraphSelectionsService {
   public tempResultsXSubject = new BehaviorSubject<any>(undefined);
   tempResultsX$ = this.tempResultsXSubject.asObservable();
 
-  public resultsReadySubject = new BehaviorSubject<any>(undefined);
-  resultsReady$ = this.resultsReadySubject.asObservable();
+  public getTempArraysReadySubject = new BehaviorSubject<any>(undefined);
+  getTempArraysReady$ = this.getTempArraysReadySubject.asObservable();
+
+  public makeGraphSubject = new BehaviorSubject<any>(undefined);
+  makeGraph$ = this.makeGraphSubject.asObservable();
+
+  public filterGraphPointsDoneSubject = new BehaviorSubject<any>(undefined);
+  filterGraphPointsDone$ = this.filterGraphPointsDoneSubject.asObservable();
 
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
+
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
   }
@@ -43,39 +47,20 @@ export class GraphSelectionsService {
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
-  public filterGraphPoints(tempResultsX, tempResultsY) {
-    let base = document.getElementById('base');
-    base.classList.add('initial-loader');
-    this.graphPointsXSubject.next(undefined);
-    this.graphPointsYSubject.next(undefined);
-    let valuesX = [];
-    let valuesY = [];
-    let allDataX = [];
-    let allDataY = [];
-    let sid = [];
-    if (tempResultsX && tempResultsY) {
-      for (let i = 0; i < tempResultsX.length; i++) {
-        for (let x = 0; x < tempResultsY.length; x++) {
-          if (tempResultsY[x].sid == tempResultsX[i].sid) {
-            valuesX.push(tempResultsX[i].result);
-            valuesY.push(tempResultsY[x].result);
-            allDataX.push(tempResultsX[i]);
-            allDataY.push(tempResultsY[x]);
-            sid.push(tempResultsY[x].sid);
-          }
-        }
-      }
-    }
+  public ready = 0;
+  public makeGraph = false;
 
-    this.graphPointsYSubject.next(valuesY);
-    this.allGraphDataYSubject.next(allDataY);
+  public valuesX = [];
+  public valuesY = [];
+  public allDataX = [];
+  public allDataY = [];
 
-    this.graphPointsXSubject.next(valuesX);
-    this.allGraphDataXSubject.next(allDataX);
-    this.sidSubject.next(sid);
-    base.classList.remove('initial-loader');
-  }
+  public rawX;
+  public rawY;
 
+  public sid = [];
+
+  //Retrieve x and y data from service
   public getTempArrays(
     graphFilters: {
       meta: {
@@ -92,24 +77,100 @@ export class GraphSelectionsService {
     },
     axis: string
   ) {
-    this.resultsReadySubject.next(false);
+    console.log('graphFilters', graphFilters);
+    console.log('this.ready', this.ready);
     return this.httpClient
-      .post('http://127.0.0.1:5005/json_query', graphFilters)
+      .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
+        console.log('res', res, 'axis', axis);
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {
             duration: 4000,
             verticalPosition: 'top',
           });
+          this.ready = 0;
+          let base = document.getElementById('base');
+          base.classList.remove('initial-loader');
         } else {
           if (axis === 'xAxis') {
+            this.rawX = res;
             this.tempResultsXSubject.next(res);
+            this.ready += 1;
+            console.log('this.ready (x)', this.ready);
           }
           if (axis === 'yAxis') {
+            console.log('this.ready (y)', this.ready);
+            this.rawY = res;
             this.tempResultsYSubject.next(res);
-            this.resultsReadySubject.next(true);
+            this.ready += 1;
+          }
+          if (this.ready == 2) {
+            console.log('getTempArrays is done (graph-selections.service)');
+            this.ready = 0;
+            this.filterGraphPoints(this.rawX, this.rawY);
           }
         }
       });
+  }
+
+  //Match x data with y data and use them to populate graph
+  public filterGraphPoints(tempResultsX, tempResultsY) {
+    this.graphPointsXSubject.next(undefined);
+    this.graphPointsYSubject.next(undefined);
+    this.valuesX = [];
+    this.valuesY = [];
+    this.allDataX = [];
+    this.allDataY = [];
+    this.sid = [];
+    console.log('made it to filterGraphPts');
+    if (tempResultsX && tempResultsY) {
+      for (let i = 0; i < tempResultsX.length; i++) {
+        for (let x = 0; x < tempResultsY.length; x++) {
+          if (tempResultsY[x].sid == tempResultsX[i].sid) {
+            this.valuesX.push(tempResultsX[i].result);
+            this.valuesY.push(tempResultsY[x].result);
+            this.allDataX.push(tempResultsX[i]);
+            this.allDataY.push(tempResultsY[x]);
+            this.sid.push(tempResultsY[x].sid);
+          }
+          if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
+            console.log('made it');
+            this.finalGraphValues();
+          }
+        }
+      }
+    } else {
+      this.snackBar.open(
+        'No matching sites for your selected parameters.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+      let base = document.getElementById('base');
+      base.classList.remove('initial-loader');
+    }
+  }
+  public finalGraphValues() {
+    if (this.valuesX.length > 0 && this.valuesY.length > 0) {
+      this.graphPointsYSubject.next(this.valuesY);
+      this.allGraphDataYSubject.next(this.allDataY);
+      this.graphPointsXSubject.next(this.valuesX);
+      this.allGraphDataXSubject.next(this.allDataX);
+      this.sidSubject.next(this.sid);
+      this.makeGraphSubject.next(true);
+    } else {
+      this.snackBar.open(
+        'No matching sites for your selected parameters.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    }
+    let base = document.getElementById('base');
+    base.classList.remove('initial-loader');
   }
 }

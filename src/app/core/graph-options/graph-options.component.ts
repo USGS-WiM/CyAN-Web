@@ -1,11 +1,13 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
 import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { Observable } from 'rxjs/Observable';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-graph-options',
@@ -13,84 +15,95 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
   styleUrls: ['./../core.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
-  public secondTrace: Boolean = false;
+  //Overall display
+  public graphOptionsVisible: Boolean = true;
+  public showGraph = false;
+  public bivariatePlot: any;
+  public alreadyGraphed: Boolean = false;
 
-  parameterList: string[] = [
-    'Phosphorus',
-    'Dissolved Oxygen',
-    'pH',
-    'Nitrogen',
-    'Chloride',
-  ];
-
-  //Parameters for creating the year slider
-  minValue: number = 1975;
-  maxValue: number = 2021;
+  //Graph options
+  graphSelectionsForm = new FormGroup({
+    ParametersX: new FormControl(),
+    MethodsX: new FormControl(),
+    ParametersY: new FormControl(),
+    MethodsY: new FormControl(),
+  });
+  public optimalAlignment: Boolean = false;
+  public useBoundingBox: Boolean = false;
+  minYear: number = 1975;
+  maxYear: number = 2021;
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
     barDimension: 210,
     animate: false,
   };
+  north: number = 90;
+  south: number = -90;
+  east: number = 180;
+  west: number = -180;
 
-  public graphHeight: Number;
-  public graphWidth: Number;
-  public graphMargins: Number;
-  public graphOptionsVisible: Boolean = true;
-  public showGraph = false;
+  //Intermediate data
+  public matchingMcodesY = [];
+  public matchingMcodesX = [];
+
+  //Data sent to service
+  public filterQueryX;
+  public filterQueryY;
+
+  //Data retrieved from service
+  public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public pcodeToMcode$: Observable<any[]>;
+  public pcodeToMcode;
+  public mcodeShortName;
+  public parameterTypes;
+
+  //Graph data
   public xDataTrace1;
   public yDataTrace1;
   public xDataTrace2;
   public yDataTrace2;
-  public parameterTypes$: Observable<any[]>;
-  public methodTypes$: Observable<any[]>;
-  public pcodeToMcode$: Observable<any[]>;
-  // public sid$: Observable<any[]>;
-  public matchingMcodesY = [];
-  public matchingMcodesX = [];
-  public pcodeToMcode;
-  public mcodeShortName;
-  public parameterTypes;
   public currentXaxisValues = [];
   public currentYaxisValues = [];
-  // public sid = [];
-  public pointColors = [];
   public flaggedPointIndices: Array<number> = [];
-  graphSelectionsForm: FormGroup;
-  public bivariatePlot: any;
-  public optimalAlignment: Boolean = false;
-  public filterQueryX;
-  public filterQueryY;
+
+  //Graph layout
+  public graphHeight: Number;
+  public graphWidth: Number;
+  public graphMargins: Number;
+  public pointColors = [];
   public xAxisType = 'scatter';
   public yAxisType = 'scatter';
   public yAxisTitle = '';
   public xAxisTitle = '';
+  public autotickEnabled: Boolean = true;
 
   constructor(
     private filterService: FiltersService,
-    private graphSelectionsService: GraphSelectionsService
+    private graphSelectionsService: GraphSelectionsService,
+    public snackBar: MatSnackBar,
+    private componentDisplayService: ComponentDisplayService
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
-
-    //this.allGraphDataX$ = this.filterService.allGraphDataX$;
-
-    // this.sid$ = this.filterService.sid$;
   }
+
+  //Reset the css (via resizeDivs()) when the window is resized
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
-    this.graphSelectionsForm = new FormGroup({
-      ParametersX: new FormControl(),
-      MethodsX: new FormControl(),
-      ParametersY: new FormControl(),
-      MethodsY: new FormControl(),
-    });
+    //Set the display according to the initial screen dimensions
     this.resizeDivs();
+    this.initiateGraphService();
+  }
+
+  public initiateGraphService() {
+    //Get the data to populate the dropdowns in Graph Options
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
     this.parameterTypes$.subscribe(
@@ -101,38 +114,74 @@ export class GraphOptionsComponent implements OnInit {
       this.sid = sid;
     }); */
 
-    this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
-      this.currentXaxisValues = points;
-      this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
-        this.currentYaxisValues = points;
-
-        if (this.currentYaxisValues) {
-          if (this.currentYaxisValues.length > 0) {
-            for (let i = 0; i < this.currentYaxisValues.length; i++) {
-              this.pointColors.push('rgb(242, 189, 161)');
+    //Reset the x and y values displayed on the graph whenever the values change in the service
+    this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+      if (makeGraph === true && this.alreadyGraphed === false) {
+        this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+          this.currentXaxisValues = points;
+          this.graphSelectionsService.graphPointsYSubject.subscribe(
+            (points) => {
+              this.currentYaxisValues = points;
+              if (this.currentYaxisValues && this.currentXaxisValues) {
+                if (
+                  this.currentYaxisValues.length > 0 &&
+                  this.currentXaxisValues.length > 0
+                ) {
+                  this.alreadyGraphed = true;
+                  //Since the point colors changed when flagged, we begin by setting the color of each point individually
+                  for (let i = 0; i < this.currentYaxisValues.length; i++) {
+                    this.pointColors.push('rgb(242, 189, 161)');
+                  }
+                  //Create and display graph
+                  this.createGraph();
+                  this.showGraph = true;
+                  //Remove the WIM loader to view graph
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                }
+              }
+              if (!this.currentYaxisValues || !this.currentXaxisValues) {
+                if (this.alreadyGraphed === false) {
+                  this.alreadyGraphed = true;
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                  this.showGraph = false;
+                }
+              }
             }
-            this.showGraph = true;
-
-            this.createGraph();
-
-            let base = document.getElementById('base');
-            base.classList.remove('initial-loader');
-          }
-        }
-      });
+          );
+        });
+      }
     });
   }
 
-  public parameterX() {
-    this.matchingMcodesX = [];
-    let tempParameter = this.graphSelectionsForm.get('ParametersX').value;
+  //When a parameter is selected, this function is called to populate the Methods dropdown
+  public populateMcodeDropdown(axis) {
+    let formName = '';
+    if (axis === 'xaxis') {
+      this.matchingMcodesX = [];
+      formName = 'ParametersX';
+    }
+    if (axis === 'yaxis') {
+      this.matchingMcodesY = [];
+      formName = 'ParametersY';
+    }
+    //Get the parameter code from the dropdown selection
+    let tempParameter = this.graphSelectionsForm.get(formName).value;
     for (let pcode in this.pcodeToMcode) {
       if (pcode == tempParameter) {
+        //get list of corresponding mcodes
         let mcodes = this.pcodeToMcode[pcode];
+        //match the mcode to the mcode short names to populate dropdown
         for (let i = 0; i < this.mcodeShortName.length; i++) {
           for (let x = 0; x < mcodes.length; x++) {
             if (mcodes[x] == this.mcodeShortName[i].mcode) {
-              this.matchingMcodesX.push(this.mcodeShortName[i]);
+              if (axis === 'xaxis') {
+                this.matchingMcodesX.push(this.mcodeShortName[i]);
+              }
+              if (axis === 'yaxis') {
+                this.matchingMcodesY.push(this.mcodeShortName[i]);
+              }
             }
           }
         }
@@ -140,30 +189,17 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
-  public parameterY() {
-    this.matchingMcodesY = [];
-    let tempParameter = this.graphSelectionsForm.get('ParametersY').value;
-    for (let pcode in this.pcodeToMcode) {
-      if (pcode == tempParameter) {
-        let mcodes = this.pcodeToMcode[pcode];
-        for (let i = 0; i < this.mcodeShortName.length; i++) {
-          for (let x = 0; x < mcodes.length; x++) {
-            if (mcodes[x] == this.mcodeShortName[i].mcode) {
-              this.matchingMcodesY.push(this.mcodeShortName[i]);
-            }
-          }
-        }
-      }
-    }
-  }
-
+  //Called when minimize options is clicked
+  //Shrinks Graph Options panel into a button and expands the graph
   public collapseGraphOptions(collapsed: Boolean) {
     this.graphOptionsVisible = collapsed;
     this.resizeDivs();
   }
 
   public createGraph() {
+    //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
+
     var trace1 = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
@@ -182,18 +218,18 @@ export class GraphOptionsComponent implements OnInit {
         size: 18,
       },
       xaxis: {
+        autotick: this.autotickEnabled,
         type: this.xAxisType,
         title: {
           text: this.xAxisTitle,
         },
-        // rangemode: 'tozero',
       },
       yaxis: {
+        autotick: this.autotickEnabled,
         type: this.yAxisType,
         title: {
           text: this.yAxisTitle,
         },
-        // rangemode: 'tozero',
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -210,31 +246,46 @@ export class GraphOptionsComponent implements OnInit {
       },
     };
 
+    //build the graph
     Plotly.newPlot(this.bivariatePlot, data, layout, {
       displaylogo: false,
     });
 
+    this.flagPoint();
+  }
+
+  //Change color of flagged point and add x & y data to arrays
+  public flagPoint() {
     let tempIndex = [];
-    this.bivariatePlot.on('plotly_click', (data) => {
-      var pn = '',
-        tn = '',
+    this.bivariatePlot.on('plotly_click', (selectedPoints) => {
+      var pointNum = '',
+        curveNum = '',
         colors = [];
-      for (var i = 0; i < data.points.length; i++) {
-        pn = data.points[i].pointNumber;
-        tn = data.points[i].curveNumber;
-        colors = data.points[i].data.marker.color;
-        tempIndex.push(data.points[i].pointIndex);
+      for (var i = 0; i < selectedPoints.points.length; i++) {
+        pointNum = selectedPoints.points[i].pointNumber;
+        curveNum = selectedPoints.points[i].curveNumber;
+        colors = selectedPoints.points[i].data.marker.color;
+        tempIndex.push(selectedPoints.points[i].pointIndex);
         if (this.flaggedPointIndices == undefined) {
           this.flaggedPointIndices = [];
         }
-        this.flaggedPointIndices.push(data.points[i].pointIndex);
+        this.flaggedPointIndices.push(selectedPoints.points[i].pointIndex);
       }
-      colors[pn] = 'rgb(104, 121, 128)';
+
+      //If the point is currently flagged, change the color back to its original state
+      if (colors[pointNum] === 'rgb(104, 121, 128)') {
+        colors[pointNum] = 'rgb(242, 189, 161)';
+        //If the point isn't already flagged, change the color to blue-gray
+      } else {
+        colors[pointNum] = 'rgb(104, 121, 128)';
+      }
       var update = { marker: { color: colors, size: 16 } };
-      Plotly.restyle('graph', update, [tn]);
+      Plotly.restyle('graph', update, [curveNum]);
     });
   }
 
+  //Called when user clicks the flag button
+  //Retrieves indicies of flagged data, get the corresponding data, and adds those data to x and y arrays
   public createFlags() {
     let flaggedIndices;
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
@@ -257,58 +308,104 @@ export class GraphOptionsComponent implements OnInit {
       }
     });
 
+    //No fancy download yet; so displaying data in console for now
     console.log('flaggedXData', flaggedXData);
     console.log('flaggedYData', flaggedYData);
   }
 
+  //Called when user clicks 'Plot Data'
   public clickPlotData() {
-    let base = document.getElementById('base');
-    base.classList.add('initial-loader');
-    this.showGraph = false;
-    this.populateGraphData();
-    this.resizeDivs();
+    this.alreadyGraphed = false;
+    //Get parameter and method user selections
+    let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
+    let tempP_Y = this.graphSelectionsForm.get('ParametersY').value;
+    let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
+    let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
+    //If any parameter or method is left blank, prompt user to make a selection
+    if (
+      tempP_X === null ||
+      tempP_Y === null ||
+      tempM_X == null ||
+      tempM_Y == null
+    ) {
+      this.snackBar.open(
+        'Please select a parameter and at least one method for each axis.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    } else {
+      //Add the WIM loader while graph is being created
+      let base = document.getElementById('base');
+      base.classList.add('initial-loader');
+      this.showGraph = false;
+      this.populateGraphData();
+      this.resizeDivs();
+    }
   }
 
+  //retrieve data from service and put it in a format that can be used to populate graph
   public populateGraphData() {
     this.createQuery('xAxis');
     this.createQuery('yAxis');
+    //getTempArrays retrieves the x and y data from the service, whereas filterGraphPoints matches x-y coordinates and returns data ready to be plotted
     this.graphSelectionsService.getTempArrays(this.filterQueryX, 'xAxis');
     this.graphSelectionsService.getTempArrays(this.filterQueryY, 'yAxis');
-    let xData;
-    let yData;
-    this.graphSelectionsService.resultsReadySubject.subscribe((ready) => {
-      if (ready === true) {
-        this.graphSelectionsService.tempResultsXSubject.subscribe(
-          (resultsX) => {
-            xData = resultsX;
-            this.graphSelectionsService.tempResultsYSubject.subscribe(
-              (resultsY) => {
-                yData = resultsY;
-                this.graphSelectionsService.filterGraphPoints(xData, yData);
-              }
-            );
-          }
-        );
-      }
-    });
   }
 
+  //Called when user checks or unchecks x-axis log box
   public applyLogX(logXChecked: MatCheckboxChange) {
     if (logXChecked.checked) {
       this.xAxisType = 'log';
+      this.autotickEnabled = false;
     } else {
       this.xAxisType = 'scatter';
+      this.autotickEnabled = true;
     }
   }
 
+  //Called when user checks or unchecks y-axis log box
   public applyLogY(logYChecked: MatCheckboxChange) {
     if (logYChecked.checked) {
       this.yAxisType = 'log';
+      this.autotickEnabled = false;
     } else {
       this.yAxisType = 'scatter';
+      this.autotickEnabled = true;
     }
   }
 
+  public applyBoundingBox(boundingBoxChecked: MatCheckboxChange) {
+    if (boundingBoxChecked.checked) {
+      this.useBoundingBox = true;
+      this.componentDisplayService.storeNorthSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.north = coordinate;
+        }
+      });
+      this.componentDisplayService.storeSouthSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.south = coordinate;
+        }
+      });
+      this.componentDisplayService.storeEastSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.east = coordinate;
+        }
+      });
+      this.componentDisplayService.storeWestSubject.subscribe((coordinate) => {
+        if (coordinate) {
+          this.west = coordinate;
+        }
+      });
+    } else {
+      this.useBoundingBox = false;
+    }
+  }
+
+  //Called when user checks or unchecks satellite alignment box
   public clickSatAlign(satAlignChecked: MatCheckboxChange) {
     if (satAlignChecked.checked) {
       this.optimalAlignment = true;
@@ -317,9 +414,11 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //formats user selections into an object that's used to retrieve data from the service
   public createQuery(axis: string) {
     let tempP;
     let tempM;
+
     if (axis == 'xAxis') {
       tempP = this.graphSelectionsForm.get('ParametersX').value;
       tempM = this.graphSelectionsForm.get('MethodsX').value;
@@ -328,61 +427,83 @@ export class GraphOptionsComponent implements OnInit {
       tempP = this.graphSelectionsForm.get('ParametersY').value;
       tempM = this.graphSelectionsForm.get('MethodsY').value;
     }
+
     let items = new Object();
-    let matchMcodes = [];
-    for (let pcode in this.pcodeToMcode) {
-      if (pcode == tempP) {
-        let currentMcodes = [];
-        currentMcodes.push(this.pcodeToMcode[pcode]);
-        for (let y = 0; y < currentMcodes.length; y++) {
-          for (let x = 0; x < tempM.length; x++) {
-            if (currentMcodes[y] == tempM[x]) {
-              matchMcodes.push(currentMcodes[y]);
-            }
-          }
-        }
-      }
-    }
-    items[tempP] = matchMcodes[0];
+    //Populate the 'items' object (parameters & methods) in the query object
+    items[tempP] = tempM;
+    //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
       if (tempP === this.parameterTypes[i].pcode) {
         if (axis === 'yAxis') {
           this.yAxisTitle = this.parameterTypes[i].short_name;
         }
         if (axis === 'xAxis') {
-          this.xAxisTitle = this.parameterTypes[i].short_name;
+          this.xAxisTitle = this.parameterTypes[i].short_name.toString(); // + " " + this.parameterTypes[i].unit;
         }
       }
     }
+    //Create separate query objects for x and y data
     if (axis === 'xAxis') {
-      this.filterQueryX = {
-        meta: {
-          north: 90,
-          south: -90,
-          east: 180,
-          west: -180,
-          min_year: this.minValue,
-          max_year: this.maxValue,
-          include_NULL: false,
-          satellite_align: this.optimalAlignment,
-        },
-        items,
-      };
+      if (this.useBoundingBox) {
+        this.filterQueryX = {
+          meta: {
+            north: this.north,
+            south: this.south,
+            east: this.east,
+            west: this.west,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      } else {
+        this.filterQueryX = {
+          meta: {
+            north: 90,
+            south: -90,
+            east: 180,
+            west: -180,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      }
     }
     if (axis === 'yAxis') {
-      this.filterQueryY = {
-        meta: {
-          north: 90,
-          south: -90,
-          east: 180,
-          west: -180,
-          min_year: this.minValue,
-          max_year: this.maxValue,
-          include_NULL: false,
-          satellite_align: this.optimalAlignment,
-        },
-        items,
-      };
+      if (this.useBoundingBox) {
+        this.filterQueryY = {
+          meta: {
+            north: this.north,
+            south: this.south,
+            east: this.east,
+            west: this.west,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      } else {
+        this.filterQueryY = {
+          meta: {
+            north: 90,
+            south: -90,
+            east: 180,
+            west: -180,
+            min_year: this.minYear,
+            max_year: this.maxYear,
+            include_NULL: false,
+            satellite_align: this.optimalAlignment,
+          },
+          items,
+        };
+      }
     }
   }
 
@@ -392,7 +513,6 @@ export class GraphOptionsComponent implements OnInit {
     let windowWidth = window.innerWidth;
 
     this.graphHeight = 0.7 * window.innerHeight;
-    // this.graphWidth = 0.5 * window.innerWidth;
 
     let graphOptionsBackgroundID = document.getElementById(
       'graphOptionsBackgroundID'
@@ -460,7 +580,8 @@ export class GraphOptionsComponent implements OnInit {
       this.graphMargins = 80;
     }
     if (windowWidth < 1200 || windowHeight < 450) {
-      this.graphMargins = 20;
+      //commenting this out for now because shrinking the margins make the axes titles overlap with the tick marks
+      //this.graphMargins = 20;
     }
 
     if (this.showGraph) {

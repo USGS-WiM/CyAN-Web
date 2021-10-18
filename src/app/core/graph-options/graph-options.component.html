@@ -64,7 +64,7 @@
           >
             <mat-label>Parameter</mat-label>
             <mat-select
-              (ngModelChange)="parameterX()"
+              (ngModelChange)="populateMcodeDropdown('xaxis')"
               formControlName="ParametersX"
             >
               <mat-option
@@ -99,7 +99,7 @@
           >
             <mat-label>Parameter</mat-label>
             <mat-select
-              (ngModelChange)="parameterY()"
+              (ngModelChange)="populateMcodeDropdown('yaxis')"
               formControlName="ParametersY"
             >
               <mat-option
@@ -131,8 +131,8 @@
       aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph."
     >
       <ngx-slider
-        [(value)]="minValue"
-        [(highValue)]="maxValue"
+        [(value)]="minYear"
+        [(highValue)]="maxYear"
         [options]="timeOptions"
       ></ngx-slider>
     </div>
@@ -158,8 +158,12 @@
       style="margin-left: 10px; margin-top: 10px"
       aria-label="Checking this box will filter points using the current map extent"
     >
-      <mat-checkbox class="example-margin" [disableRipple]="true"
-        >Limit to map extent
+      <mat-checkbox
+        class="example-margin"
+        [disableRipple]="true"
+        (change)="applyBoundingBox($event)"
+        >Limit by bounds <br />
+        specified in map options
       </mat-checkbox>
     </div>
     <div

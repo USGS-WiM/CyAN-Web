@@ -1,13 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs';
-import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
-import { catchError, tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
-import * as moment from 'moment';
+import { APP_SETTINGS } from '../../app.settings';
 
 @Injectable({
   providedIn: 'root',
@@ -15,22 +13,7 @@ import * as moment from 'moment';
 export class MapLayersService {
   public wqPointList;
   // Markers for All Sites Layers
-  public mapWQSites = L.markerClusterGroup({
-    showCoverageOnHover: false,
-    maxClusterRadius: 40,
-    iconCreateFunction: function (cluster) {
-      var markers = cluster.getAllChildMarkers();
-      var html =
-        '<div style="text-align: center; margin-top: 7px; color: gray">' +
-        markers.length +
-        '</div>';
-      return L.divIcon({
-        html: html,
-        className: 'allSiteIcon',
-        iconSize: L.point(32, 32),
-      });
-    },
-  });
+  public mapWQSites;
   constructor(private httpClient: HttpClient, public snackBar: MatSnackBar) {}
 
   //Basemap Display
@@ -53,6 +36,7 @@ export class MapLayersService {
   public filterWqSampleSubject = new BehaviorSubject<any>(undefined);
   filterWqSample$ = this.filterWqSampleSubject.asObservable();
 
+  //Get map data from service and populate water quality layer
   public filterWqSample(options: {
     meta: {
       north: number;
@@ -66,6 +50,22 @@ export class MapLayersService {
     };
     items: {};
   }) {
+    this.mapWQSites = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 40,
+      iconCreateFunction: function (cluster) {
+        var markers = cluster.getAllChildMarkers();
+        var html =
+          '<div style="text-align: center; margin-top: 7px; color: gray">' +
+          markers.length +
+          '</div>';
+        return L.divIcon({
+          html: html,
+          className: 'allSiteIcon',
+          iconSize: L.point(32, 32),
+        });
+      },
+    });
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
 
@@ -84,7 +84,7 @@ export class MapLayersService {
     }
 
     return this.httpClient
-      .post('http://127.0.0.1:5005/json_query', options)
+      .post(APP_SETTINGS.wqDataURL, options)
       .subscribe((res: any[]) => {
         if (res.length === 0) {
           this.snackBar.open('No sites match your query.', 'OK', {

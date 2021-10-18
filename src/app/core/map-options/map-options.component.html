@@ -84,7 +84,7 @@
         >minimize</mat-icon
       >
     </div>
-    <form [formGroup]="codeForm">
+    <form [formGroup]="paramMethodForm">
       <div style="margin-left: 10px">
         <mat-form-field appearance="fill">
           <mat-label>Parameters</mat-label>
@@ -122,8 +122,8 @@
       aria-label="This is a slider filter. It determines the minimum and maximum years of the points displayed in the map"
     >
       <ngx-slider
-        [(value)]="minValue"
-        [(highValue)]="maxValue"
+        [(value)]="minYear"
+        [(highValue)]="maxYear"
         [options]="timeOptions"
       ></ngx-slider>
     </div>
@@ -156,7 +156,7 @@
       >
         Use map bounds
       </button>
-      <form class="boundingBoxForm" [formGroup]="mapForm">
+      <form class="boundingBoxForm" [formGroup]="boundingBoxForm">
         <div class="flex-container">
           <mat-form-field
             class="boundingBoxFullWidth"
@@ -165,7 +165,12 @@
             aria-label="Enter the northern coordinate for the points to be displayed in the map"
           >
             <mat-label>North</mat-label>
-            <input matInput #northControl formControlName="northControl" />
+            <input
+              (change)="storeNorth()"
+              matInput
+              #northControl
+              formControlName="northControl"
+            />
           </mat-form-field>
           <mat-form-field
             class="boundingBoxFullWidth"
@@ -173,7 +178,11 @@
             aria-label="Enter the southern coordinate for the points to be displayed in the map"
           >
             <mat-label>South</mat-label>
-            <input matInput formControlName="southControl" />
+            <input
+              (change)="storeSouth()"
+              matInput
+              formControlName="southControl"
+            />
           </mat-form-field>
         </div>
         <div class="flex-container">
@@ -184,7 +193,11 @@
             aria-label="Enter the eastern coordinate for the points to be displayed in the map"
           >
             <mat-label>East</mat-label>
-            <input matInput formControlName="eastControl" />
+            <input
+              (change)="storeEast()"
+              matInput
+              formControlName="eastControl"
+            />
           </mat-form-field>
           <mat-form-field
             class="boundingBoxFullWidth"
@@ -192,7 +205,11 @@
             aria-label="Enter the western coordinate for the points to be displayed in the map"
           >
             <mat-label>West</mat-label>
-            <input matInput formControlName="westControl" />
+            <input
+              (change)="storeWest()"
+              matInput
+              formControlName="westControl"
+            />
           </mat-form-field>
         </div>
       </form>

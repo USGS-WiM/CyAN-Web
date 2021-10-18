@@ -1,13 +1,14 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
-import { MarkersService } from 'src/app/shared/services/markers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
+import 'leaflet.markercluster';
 
 @Component({
   selector: 'app-map-options',
@@ -15,16 +16,33 @@ import * as L from 'leaflet';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
+  //Layout
+  public mapFilters: Boolean = true;
+  public mapLayerOptions: Boolean = true;
+
+  //Data from map service
   public parameterTypes$: Observable<any[]>;
   public methodTypes$: Observable<any[]>;
   public pcodeToMcode$: Observable<any[]>;
   public pcodeToMcode;
   public mcodeShortName;
+
+  //Intermediate data
   public matchingMcodes = [];
-  public mapForm: FormGroup;
-  public codeForm: FormGroup;
-  public mapFilters: Boolean = true;
-  public mapLayerOptions: Boolean = true;
+
+  //Map options
+  public paramMethodForm = new FormGroup({
+    parameterControl: new FormControl(),
+    methodControl: new FormControl(),
+  });
+  Parameters = new FormControl();
+  Methods = new FormControl();
+  public boundingBoxForm = new FormGroup({
+    northControl: new FormControl(),
+    southControl: new FormControl(),
+    eastControl: new FormControl(),
+    westControl: new FormControl(),
+  });
   public northBounds: number;
   public southBounds: number;
   public eastBounds: number;
@@ -35,52 +53,14 @@ export class MapOptionsComponent implements OnInit {
   public nullDataChecked: Boolean = false;
   public optimalAlignment: Boolean = false;
   public nullCheckboxElement = document.getElementById('nullCheckbox');
-  public osm = L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-    {
-      maxZoom: 18,
-      minZoom: 3,
-      attribution:
-        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }
-  );
-  public grayscale = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-    {
-      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
-    }
-  );
-  public imagery = L.tileLayer(
-    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-    {
-      attribution:
-        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-    }
-  );
-  minValue: number = 1975;
-  maxValue: number = 2021;
+  minYear: number = 1975;
+  maxYear: number = 2021;
   timeOptions: Options = {
     floor: 1975,
     ceil: 2021,
     animate: false,
     barDimension: 210,
   };
-
-  Parameters = new FormControl();
-  parameterList: any[] = [
-    { name: 'Phosphorus', code: 123 },
-    { name: 'Dissolved Oxygen', code: 456 },
-    { name: 'pH', code: 789 },
-  ];
-
-  Methods = new FormControl();
-  methodsList: any[] = [
-    { name: 'Method 1', code: 'abc' },
-    { name: 'Method 2', code: 'def' },
-    { name: 'Method 3', code: 'ghi' },
-    { name: 'Method 4', code: 'jkl' },
-  ];
-
   States = new FormControl();
   stateList: string[] = [
     'Alabama',
@@ -108,12 +88,35 @@ export class MapOptionsComponent implements OnInit {
     'Marshall Islands',
   ];
 
+  //Basemap layers
+  public osm = L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      maxZoom: 18,
+      minZoom: 3,
+      attribution:
+        '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }
+  );
+  public grayscale = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+    }
+  );
+  public imagery = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+      attribution:
+        'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    }
+  );
+
   constructor(
-    private formBuilder: FormBuilder,
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
-    private markersService: MarkersService,
-    private filterService: FiltersService
+    private filterService: FiltersService,
+    public snackBar: MatSnackBar
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
@@ -121,30 +124,29 @@ export class MapOptionsComponent implements OnInit {
   }
 
   @HostListener('window:resize')
+
+  //Resize the display whenever the window changes size
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
-    this.mapForm = new FormGroup({
-      northControl: new FormControl(),
-      southControl: new FormControl(),
-      eastControl: new FormControl(),
-      westControl: new FormControl(),
-    });
-    this.codeForm = new FormGroup({
-      parameterControl: new FormControl(),
-      methodControl: new FormControl(),
-    });
     this.resizeDivs();
+    this.populateDropdowns();
+  }
+
+  //Get data from the service to populate options for dropdown menus
+  public populateDropdowns() {
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
   }
 
+  //This is called whenever the parameter selection changes
+  //It takes the selected parameters and uses them to populate Methods with corresponding methods
   public parameterSelected() {
     this.matchingMcodes = [];
     let tempParameter = [];
-    tempParameter.push(this.codeForm.get('parameterControl').value);
+    tempParameter.push(this.paramMethodForm.get('parameterControl').value);
     for (let x = 0; x < tempParameter[0].length; x++) {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
@@ -162,62 +164,170 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
+  //This is called when 'Filter' button is clicked
+  //It formats the user's selections into an object that can be used to retrieve data from the service
   public runFilters() {
-    //format pcodes with their corresponding mcodes so they're compatible in the http request
-    let items = new Object();
-    let tempP = this.codeForm.get('parameterControl').value;
-    let tempM = this.codeForm.get('methodControl').value;
-    for (let i = 0; i < tempP.length; i++) {
-      let matchMcodes = [];
-      for (let pcode in this.pcodeToMcode) {
-        if (pcode == tempP[i]) {
-          let currentMcodes = [];
-          currentMcodes.push(this.pcodeToMcode[pcode]);
-          for (let y = 0; y < currentMcodes.length; y++) {
-            for (let x = 0; x < tempM.length; x++) {
-              if (currentMcodes[y] == tempM[x]) {
-                matchMcodes.push(currentMcodes[y]);
+    //Users must select at least one parameter and at least one method
+    if (
+      this.paramMethodForm.get('parameterControl').value == null ||
+      this.paramMethodForm.get('methodControl').value == null
+    ) {
+      this.snackBar.open(
+        'Please select at least one parameter and method.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    } else if (
+      this.paramMethodForm.get('parameterControl').value.length == 0 ||
+      this.paramMethodForm.get('methodControl').value.length == 0
+    ) {
+      this.snackBar.open(
+        'Please select at least one parameter and method.',
+        'OK',
+        {
+          duration: 4000,
+          verticalPosition: 'top',
+        }
+      );
+    } else {
+      //format pcodes with their corresponding mcodes so they're compatible in the http request
+      let items = new Object();
+      //get the codes from the first two selections (parameters and methods)
+      let tempP = this.paramMethodForm.get('parameterControl').value;
+      let tempM = this.paramMethodForm.get('methodControl').value;
+      if (tempP) {
+        for (let i = 0; i < tempP.length; i++) {
+          let matchMcodes = [];
+          for (let pcode in this.pcodeToMcode) {
+            if (pcode == tempP[i]) {
+              let currentMcodes = [];
+              currentMcodes.push(this.pcodeToMcode[pcode]);
+              for (let y = 0; y < currentMcodes[0].length; y++) {
+                if (tempM) {
+                  //Match selected mcodes with their pcodes
+                  for (let x = 0; x < tempM.length; x++) {
+                    if (currentMcodes[0][y] == tempM[x]) {
+                      matchMcodes.push(currentMcodes[0][y]);
+                    }
+                  }
+                }
               }
             }
           }
+          items[tempP[i]] = matchMcodes;
         }
       }
-      items[tempP[i]] = matchMcodes[0];
+      //Create the object used to retrieve data from the service
+      let filterParameters = {
+        meta: {
+          north: parseFloat(this.boundingBoxForm.get('northControl').value),
+          south: parseFloat(this.boundingBoxForm.get('southControl').value),
+          east: parseFloat(this.boundingBoxForm.get('eastControl').value),
+          west: parseFloat(this.boundingBoxForm.get('westControl').value),
+          min_year: this.minYear,
+          max_year: this.maxYear,
+          include_NULL: this.includeNullSites,
+          satellite_align: this.optimalAlignment,
+        },
+        items,
+      };
+      this.mapLayersService.filterWqSample(filterParameters);
     }
-    let filterParameters = {
-      meta: {
-        north: parseFloat(this.mapForm.get('northControl').value),
-        south: parseFloat(this.mapForm.get('southControl').value),
-        east: parseFloat(this.mapForm.get('eastControl').value),
-        west: parseFloat(this.mapForm.get('westControl').value),
-        min_year: this.minValue,
-        max_year: this.maxValue,
-        include_NULL: this.includeNullSites,
-        satellite_align: this.optimalAlignment,
-      },
-      items,
-    };
-    this.mapLayersService.filterWqSample(filterParameters);
   }
 
+  //This is called when a user minimizes/maximizes Map Options
   public displayMapFilters(display: Boolean) {
     this.mapFilters = display;
     //because toggling the panels changes the layout, resize elements as necessary
     this.resizeDivs();
   }
 
+  //This is called when a user minimizes/maximizes Base Map Options
   public displayMapLayerOptions(display: Boolean) {
     this.mapLayerOptions = display;
     //because toggling the panels changes the layout, resize elements as necessary
     this.resizeDivs();
   }
 
-  public changeBasemap(selectedBasemap: string) {
-    if (selectedBasemap === 'streets') {
+  //Warn user that including null values is probably a bad idea
+  public nullwarning(nullChecked: MatCheckboxChange) {
+    this.nullDataChecked = false;
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
+    if (nullChecked.checked) {
+      this.showNullWarning = true;
+      mapLayersOptions.classList.add('disableClick');
+      mapOptionsContainer.classList.add('disableClick');
+    } else {
+      this.showNullWarning = false;
+      mapOptionsContainer.classList.remove('disableClick');
+      mapLayersOptions.classList.remove('disableClick');
     }
-    if (selectedBasemap === 'imagery') {
+  }
+
+  //This is called when a user selects 'Yes' or 'No' in the null warning popup
+  public submitNullWarning(showNullSites: Boolean) {
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
+
+    //When an option is selected, enable the Map Options panel
+    mapLayersOptions.classList.remove('disableClick');
+    mapOptionsContainer.classList.remove('disableClick');
+
+    let nullCheckboxElement = document.getElementById(
+      'nullCheckbox'
+    ) as HTMLInputElement;
+
+    //Keep the checkbox checked or remove the check, depending on the user selection
+    this.showNullWarning = false;
+    if (showNullSites) {
+      this.includeNullSites = true;
+      this.nullDataChecked = true;
+    } else {
+      nullCheckboxElement.classList.remove('mat-checkbox-checked');
+      this.includeNullSites = false;
+      this.nullDataChecked = false;
     }
-    if (selectedBasemap === 'grayscale') {
+  }
+
+  //This is called when a user checks/unchecks the satellite alignment option
+  public clickSatelliteAlignment(satelliteAlignChecked: MatCheckboxChange) {
+    if (satelliteAlignChecked.checked) {
+      this.optimalAlignment = true;
+    } else {
+      this.optimalAlignment = false;
+    }
+  }
+
+  //This is called when the base map changes
+  //Add the new basemap; remove the old
+  public newBasemap() {
+    let streetRadioBtn = document.getElementById(
+      'streetRadio'
+    ) as HTMLInputElement;
+    let imageryRadioBtn = document.getElementById(
+      'imageryRadio'
+    ) as HTMLInputElement;
+    let grayscaleRadioBtn = document.getElementById(
+      'grayscaleRadio'
+    ) as HTMLInputElement;
+    if (streetRadioBtn.checked) {
+      this.mapLayersService.getBasemap(this.osm);
+      this.mapLayersService.removeBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.grayscale);
+    }
+    if (imageryRadioBtn.checked) {
+      this.mapLayersService.getBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.osm);
+      this.mapLayersService.removeBasemap(this.grayscale);
+    }
+    if (grayscaleRadioBtn.checked) {
+      this.mapLayersService.getBasemap(this.grayscale);
+      this.mapLayersService.removeBasemap(this.imagery);
+      this.mapLayersService.removeBasemap(this.osm);
     }
   }
 
@@ -408,6 +518,31 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
+  public storeNorth() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreNorthBounds(
+      parseFloat(this.boundingBoxForm.get('northControl').value)
+    );
+  }
+  public storeSouth() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreSouthBounds(
+      parseFloat(this.boundingBoxForm.get('southControl').value)
+    );
+  }
+  public storeEast() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreEastBounds(
+      parseFloat(this.boundingBoxForm.get('eastControl').value)
+    );
+  }
+  public storeWest() {
+    //Setting these variables so they can be used to populate graph options if that checkbox is selected
+    this.componentDisplayService.getStoreWestBounds(
+      parseFloat(this.boundingBoxForm.get('westControl').value)
+    );
+  }
+
   public populateMapBounds(boundsChecked: Boolean) {
     if (boundsChecked) {
       this.componentDisplayService.northBoundsSubject.subscribe((lat) => {
@@ -431,89 +566,22 @@ export class MapOptionsComponent implements OnInit {
         }
       });
 
-      this.mapForm.get('northControl').setValue(this.northBounds);
-      this.mapForm.get('southControl').setValue(this.southBounds);
-      this.mapForm.get('eastControl').setValue(this.eastBounds);
-      this.mapForm.get('westControl').setValue(this.westBounds);
+      this.boundingBoxForm.get('northControl').setValue(this.northBounds);
+      this.boundingBoxForm.get('southControl').setValue(this.southBounds);
+      this.boundingBoxForm.get('eastControl').setValue(this.eastBounds);
+      this.boundingBoxForm.get('westControl').setValue(this.westBounds);
+
+      //Setting these variables so they can be used to populate graph options if that checkbox is selected
+      this.componentDisplayService.getStoreNorthBounds(this.northBounds);
+      this.componentDisplayService.getStoreSouthBounds(this.southBounds);
+      this.componentDisplayService.getStoreEastBounds(this.eastBounds);
+      this.componentDisplayService.getStoreWestBounds(this.westBounds);
     }
     if (!boundsChecked) {
-      let testVal: number;
-      this.mapForm.get('northControl').setValue(testVal);
-      this.mapForm.get('southControl').setValue('');
-      this.mapForm.get('eastControl').setValue('');
-      this.mapForm.get('westControl').setValue('');
-    }
-  }
-
-  public nullwarning(nullChecked: MatCheckboxChange) {
-    this.nullDataChecked = false;
-    let mapLayersOptions = document.getElementById('mapLayersOptions');
-    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
-    if (nullChecked.checked) {
-      this.showNullWarning = true;
-      mapLayersOptions.classList.add('disableClick');
-      mapOptionsContainer.classList.add('disableClick');
-    } else {
-      this.showNullWarning = false;
-      mapOptionsContainer.classList.remove('disableClick');
-      mapLayersOptions.classList.remove('disableClick');
-    }
-  }
-
-  public submitNullWarning(showNullSites: Boolean) {
-    let mapLayersOptions = document.getElementById('mapLayersOptions');
-    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
-
-    mapLayersOptions.classList.remove('disableClick');
-    mapOptionsContainer.classList.remove('disableClick');
-
-    let nullCheckboxElement = document.getElementById(
-      'nullCheckbox'
-    ) as HTMLInputElement;
-    // nullCheckboxElement.checked = true;
-    this.showNullWarning = false;
-    if (showNullSites) {
-      this.includeNullSites = true;
-      this.nullDataChecked = true;
-    } else {
-      nullCheckboxElement.classList.remove('mat-checkbox-checked');
-      this.includeNullSites = false;
-      this.nullDataChecked = false;
-    }
-  }
-
-  public clickSatelliteAlignment(satelliteAlignChecked: MatCheckboxChange) {
-    if (satelliteAlignChecked.checked) {
-      this.optimalAlignment = true;
-    } else {
-      this.optimalAlignment = false;
-    }
-  }
-
-  public newBasemap() {
-    let streetRadioBtn = document.getElementById(
-      'streetRadio'
-    ) as HTMLInputElement;
-    let imageryRadioBtn = document.getElementById(
-      'imageryRadio'
-    ) as HTMLInputElement;
-    let grayscaleRadioBtn = document.getElementById(
-      'grayscaleRadio'
-    ) as HTMLInputElement;
-    if (streetRadioBtn.checked) {
-      this.mapLayersService.getBasemap(this.osm);
-      this.mapLayersService.removeBasemap(this.imagery);
-      this.mapLayersService.removeBasemap(this.grayscale);
-    }
-    if (imageryRadioBtn.checked) {
-      this.mapLayersService.getBasemap(this.imagery);
-      this.mapLayersService.removeBasemap(this.osm);
-      this.mapLayersService.removeBasemap(this.grayscale);
-    }
-    if (grayscaleRadioBtn.checked) {
-      this.mapLayersService.getBasemap(this.grayscale);
-      this.mapLayersService.removeBasemap(this.imagery);
-      this.mapLayersService.removeBasemap(this.osm);
+      this.boundingBoxForm.get('northControl').setValue('');
+      this.boundingBoxForm.get('southControl').setValue('');
+      this.boundingBoxForm.get('eastControl').setValue('');
+      this.boundingBoxForm.get('westControl').setValue('');
     }
   }
 }

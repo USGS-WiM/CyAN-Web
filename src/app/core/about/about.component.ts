@@ -1,7 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 
-//import { ComponentDisplayService } from '../../../app/shared/services/component-display.service.spec';
-
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
