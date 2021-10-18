@@ -38,10 +38,10 @@ export class GraphOptionsComponent implements OnInit {
     barDimension: 210,
     animate: false,
   };
-  north: number;
-  south: number;
-  east: number;
-  west: number;
+  north: number = 90;
+  south: number = -90;
+  east: number = 180;
+  west: number = -180;
 
   //Intermediate data
   public matchingMcodesY = [];
