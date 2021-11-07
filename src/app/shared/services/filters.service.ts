@@ -11,6 +11,7 @@ export class FiltersService {
   parameterTypes$: Observable<any>;
   methodTypes$: Observable<any>;
   pcodeToMcode$: Observable<any>;
+  regions$: Observable<any>;
 
   constructor(private httpClient: HttpClient) {
     //Each of these is used to retrieve data for populating dropdown menus
@@ -23,6 +24,10 @@ export class FiltersService {
       tap(() => console.log('aftersharing'))
     );
     this.pcodeToMcode$ = httpClient.get(APP_SETTINGS.pcodeToMcodeURL).pipe(
+      shareReplay(1),
+      tap(() => console.log('aftersharing'))
+    );
+    this.regions$ = httpClient.get(APP_SETTINGS.regionListURL).pipe(
       shareReplay(1),
       tap(() => console.log('aftersharing'))
     );

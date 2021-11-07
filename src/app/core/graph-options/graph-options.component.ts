@@ -42,6 +42,7 @@ export class GraphOptionsComponent implements OnInit {
   south: number = -90;
   east: number = 180;
   west: number = -180;
+  regions: any[];
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -400,6 +401,11 @@ export class GraphOptionsComponent implements OnInit {
           this.west = coordinate;
         }
       });
+      this.componentDisplayService.storeRegionSubject.subscribe((region) => {
+        if (region) {
+          this.regions = region;
+        }
+      });
     } else {
       this.useBoundingBox = false;
     }
@@ -430,6 +436,15 @@ export class GraphOptionsComponent implements OnInit {
 
     let items = new Object();
     //Populate the 'items' object (parameters & methods) in the query object
+    console.log('tempM', tempM);
+    /*
+    if (tempM.length === 2) {
+      //create a separate query for each method
+
+      for (let i=0; i<tempM.length; i++ ) {
+        items[i].
+      }
+    } */
     items[tempP] = tempM;
     //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
@@ -445,6 +460,9 @@ export class GraphOptionsComponent implements OnInit {
     //Create separate query objects for x and y data
     if (axis === 'xAxis') {
       if (this.useBoundingBox) {
+        if (this.regions == undefined) {
+          this.regions = [];
+        }
         this.filterQueryX = {
           meta: {
             north: this.north,
@@ -455,6 +473,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: this.regions,
           },
           items,
         };
@@ -469,6 +488,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: [],
           },
           items,
         };
@@ -476,6 +496,9 @@ export class GraphOptionsComponent implements OnInit {
     }
     if (axis === 'yAxis') {
       if (this.useBoundingBox) {
+        if (this.regions == undefined) {
+          this.regions = [];
+        }
         this.filterQueryY = {
           meta: {
             north: this.north,
@@ -486,6 +509,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: this.regions,
           },
           items,
         };
@@ -500,6 +524,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: [],
           },
           items,
         };

@@ -86,4 +86,12 @@ export class ComponentDisplayService {
   public getStoreWestBounds(south: number) {
     this.storeWestSubject.next(south);
   }
+
+  //for storing what's in the map options: region
+  public storeRegionSubject = new BehaviorSubject<any[]>(undefined);
+  storeRegion$ = this.storeWestSubject.asObservable();
+
+  public getStoreRegionSubject(region: any[]) {
+    this.storeRegionSubject.next(region);
+  }
 }

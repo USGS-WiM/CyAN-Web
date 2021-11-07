@@ -47,9 +47,11 @@ export class MapLayersService {
       max_year: number;
       include_NULL: Boolean;
       satellite_align: Boolean;
+      region: any[];
     };
     items: {};
   }) {
+    console.log('map options', options);
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,

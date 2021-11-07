@@ -72,6 +72,7 @@ export class GraphSelectionsService {
         max_year: number;
         include_NULL: false;
         satellite_align: boolean;
+        region: any[];
       };
       items;
     },
