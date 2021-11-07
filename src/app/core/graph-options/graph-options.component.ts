@@ -68,6 +68,7 @@ export class GraphOptionsComponent implements OnInit {
   public currentXaxisValues = [];
   public currentYaxisValues = [];
   public flaggedPointIndices: Array<number> = [];
+  public allGraphData;
 
   //Graph layout
   public graphHeight: Number;
@@ -118,7 +119,31 @@ export class GraphOptionsComponent implements OnInit {
     //Reset the x and y values displayed on the graph whenever the values change in the service
     this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
       if (makeGraph === true && this.alreadyGraphed === false) {
-        this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+        this.currentXaxisValues = [];
+        this.currentYaxisValues = [];
+        this.graphSelectionsService.allGraphDataY$.subscribe((allYdata) => {
+          this.graphSelectionsService.allGraphDataX$.subscribe((allXdata) => {
+            for (let i = 0; i < allXdata.length; i++) {
+              this.currentXaxisValues.push(allXdata[i].result);
+            }
+          });
+          for (let i = 0; i < allYdata.length; i++) {
+            this.currentYaxisValues.push(allYdata[i].result);
+          }
+          this.alreadyGraphed = true;
+          //Since the point colors changed when flagged, we begin by setting the color of each point individually
+          for (let i = 0; i < this.currentYaxisValues.length; i++) {
+            this.pointColors.push('rgb(242, 189, 161)');
+          }
+          //Create and display graph
+          this.createGraph();
+          this.showGraph = true;
+          //Remove the WIM loader to view graph
+          let base = document.getElementById('base');
+          base.classList.remove('initial-loader');
+        });
+        /* this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+          console.log('points', points);
           this.currentXaxisValues = points;
           this.graphSelectionsService.graphPointsYSubject.subscribe(
             (points) => {
@@ -151,7 +176,7 @@ export class GraphOptionsComponent implements OnInit {
               }
             }
           );
-        });
+        }); */
       }
     });
   }
@@ -303,6 +328,7 @@ export class GraphOptionsComponent implements OnInit {
       }
     });
     this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+      console.log('allGraphDataXSubject', data);
       tempXData = data;
       for (let i = 0; i < this.flaggedPointIndices.length; i++) {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
