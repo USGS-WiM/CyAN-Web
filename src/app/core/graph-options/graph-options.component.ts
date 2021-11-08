@@ -31,7 +31,7 @@ export class GraphOptionsComponent implements OnInit {
   methodComboForm = new FormGroup({
     methodCombo: new FormControl(),
   });
-  public methodsToDisplay = ['one', 'two', 'three', 'four', 'five', 'six'];
+  public methodsToDisplay: string[];
   public methodComboSelections: string[];
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
