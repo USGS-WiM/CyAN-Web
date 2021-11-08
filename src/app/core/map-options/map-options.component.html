@@ -128,17 +128,23 @@
       ></ngx-slider>
     </div>
     <div style="margin-left: 10px; margin-top: 10px">
-      <mat-form-field
-        appearance="fill"
-        aria-label="This is a dropdown menu containing U.S. states and territories."
-      >
-        <mat-label>States</mat-label>
-        <mat-select [formControl]="States" multiple>
-          <mat-option *ngFor="let state of stateList" [value]="state">{{
-            state
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
+      <form [formGroup]="regionForm">
+        <mat-form-field
+          appearance="fill"
+          aria-label="This is a dropdown menu containing geographic regions."
+        >
+          <mat-label>Regions</mat-label>
+          <mat-select
+            formControlName="regionControl"
+            multiple
+            (ngModelChange)="regionSelected()"
+          >
+            <mat-option *ngFor="let region of regions" [value]="region">{{
+              region
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
       <button
         style="
           font-size: 15px;
@@ -154,7 +160,7 @@
         (click)="populateMapBounds(true)"
         aria-label="Clicking this button will populate the bounding box with the current map extent"
       >
-        Use map bounds
+        Populate map bounds
       </button>
       <form class="boundingBoxForm" [formGroup]="boundingBoxForm">
         <div class="flex-container">

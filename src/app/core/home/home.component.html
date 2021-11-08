@@ -2,29 +2,6 @@
   <div>
     <div class="flex-container" style="width: 280px">
       <div
-        class="landingPgBtns"
-        style="
-          background-color: white;
-          height: 60px;
-          width: 200px;
-          margin-left: 0px;
-          color: white;
-        "
-        [hidden]="!showHomeLayout || !fullHomeScreen"
-      >
-        <div
-          style="background-color: rgb(22, 104, 49); width: 150px; height: 60px"
-        >
-          <a href="https://www.usgs.gov/" target="_blank">
-            <img
-              alt="United States Geological Survey Logo. White wavey lines with a green background next to the letters USGS. Their motto, Science for a changing world, is written across the bottom. Clicking on this logo leads to the USGS homepage."
-              style="width: 145px; margin-top: 4px"
-              src="../../../assets/USGS_White_web.png"
-            />
-          </a>
-        </div>
-      </div>
-      <div
         [hidden]="!showFullCyanHomeBtn"
         aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page."
       >
@@ -45,7 +22,40 @@
           </div>
         </div>
       </div>
-
+      <div
+        class="landingPgBtns"
+        style="
+          background-color: white;
+          height: 60px;
+          width: 650px;
+          margin-left: 0px;
+          color: white;
+        "
+        [hidden]="!showHomeLayout || !fullHomeScreen"
+      >
+        <div
+          style="
+            background-color: rgb(22, 104, 49);
+            width: 160px;
+            height: 60px;
+            margin-left: 0px;
+            text-align: left;
+          "
+        >
+          <a href="https://www.usgs.gov/" target="_blank">
+            <img
+              alt="United States Geological Survey Logo. White wavey lines with a green background next to the letters USGS. Their motto, Science for a changing world, is written across the bottom. Clicking on this logo leads to the USGS homepage."
+              style="
+                width: 145px;
+                margin-top: 4px;
+                margin-left: 10px;
+                text-align: left;
+              "
+              src="../../../assets/USGS_White_web.png"
+            />
+          </a>
+        </div>
+      </div>
       <div [hidden]="showHomeLayout">
         <div class="flex-child flex-container">
           <div [hidden]="windowWidthResize">

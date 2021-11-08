@@ -28,6 +28,11 @@ export class GraphOptionsComponent implements OnInit {
     ParametersY: new FormControl(),
     MethodsY: new FormControl(),
   });
+  methodComboForm = new FormGroup({
+    methodCombo: new FormControl(),
+  });
+  public methodsToDisplay: string[];
+  public methodComboSelections: string[];
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
   minYear: number = 1975;
@@ -42,6 +47,7 @@ export class GraphOptionsComponent implements OnInit {
   south: number = -90;
   east: number = 180;
   west: number = -180;
+  regions: any[];
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -67,6 +73,7 @@ export class GraphOptionsComponent implements OnInit {
   public currentXaxisValues = [];
   public currentYaxisValues = [];
   public flaggedPointIndices: Array<number> = [];
+  public allGraphData;
 
   //Graph layout
   public graphHeight: Number;
@@ -302,6 +309,7 @@ export class GraphOptionsComponent implements OnInit {
       }
     });
     this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+      console.log('allGraphDataXSubject', data);
       tempXData = data;
       for (let i = 0; i < this.flaggedPointIndices.length; i++) {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
@@ -315,6 +323,10 @@ export class GraphOptionsComponent implements OnInit {
 
   //Called when user clicks 'Plot Data'
   public clickPlotData() {
+    console.log(
+      'value of method combo',
+      this.methodComboForm.get('methodCombo').value
+    );
     this.alreadyGraphed = false;
     //Get parameter and method user selections
     let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
@@ -377,7 +389,45 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Populate the method combination dropdown according to the selected methods
+  public methodSelectionChanged() {
+    this.methodsToDisplay = [];
+    this.methodComboSelections = [];
+    this.methodComboForm.get('methodCombo').setValue(null);
+    let tempMethodsX = this.graphSelectionsForm.get('MethodsX').value;
+    let tempMethodsY = this.graphSelectionsForm.get('MethodsY').value;
+    if (tempMethodsY) {
+      if (tempMethodsX) {
+        for (let i = 0; i < tempMethodsX.length; i++) {
+          for (let x = 0; x < tempMethodsY.length; x++) {
+            let newMethodCombo = tempMethodsX[i] + ' & ' + tempMethodsY[x];
+            this.methodsToDisplay.push(newMethodCombo);
+          }
+        }
+      }
+    }
+  }
+
+  //Limit method combo selection to a max of 3
+  public methodComboChanged() {
+    console.log('this.methodComboSelections', this.methodComboSelections);
+    if (this.methodComboForm.get('methodCombo').value.length < 4) {
+      this.methodComboSelections =
+        this.methodComboForm.get('methodCombo').value;
+    } else {
+      this.methodComboForm
+        .get('methodCombo')
+        .setValue(this.methodComboSelections);
+      this.snackBar.open('Select a maximum of 3 method combinations.', 'OK', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
+    }
+  }
+
+  //Get bounding box and region selection from map options
   public applyBoundingBox(boundingBoxChecked: MatCheckboxChange) {
+    //Map options bounding box selections
     if (boundingBoxChecked.checked) {
       this.useBoundingBox = true;
       this.componentDisplayService.storeNorthSubject.subscribe((coordinate) => {
@@ -398,6 +448,12 @@ export class GraphOptionsComponent implements OnInit {
       this.componentDisplayService.storeWestSubject.subscribe((coordinate) => {
         if (coordinate) {
           this.west = coordinate;
+        }
+      });
+      //Map option region selection
+      this.componentDisplayService.storeRegionSubject.subscribe((region) => {
+        if (region) {
+          this.regions = region;
         }
       });
     } else {
@@ -445,6 +501,9 @@ export class GraphOptionsComponent implements OnInit {
     //Create separate query objects for x and y data
     if (axis === 'xAxis') {
       if (this.useBoundingBox) {
+        if (this.regions == undefined) {
+          this.regions = [];
+        }
         this.filterQueryX = {
           meta: {
             north: this.north,
@@ -455,6 +514,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: this.regions,
           },
           items,
         };
@@ -469,6 +529,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: [],
           },
           items,
         };
@@ -476,6 +537,9 @@ export class GraphOptionsComponent implements OnInit {
     }
     if (axis === 'yAxis') {
       if (this.useBoundingBox) {
+        if (this.regions == undefined) {
+          this.regions = [];
+        }
         this.filterQueryY = {
           meta: {
             north: this.north,
@@ -486,6 +550,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: this.regions,
           },
           items,
         };
@@ -500,6 +565,7 @@ export class GraphOptionsComponent implements OnInit {
             max_year: this.maxYear,
             include_NULL: false,
             satellite_align: this.optimalAlignment,
+            region: [],
           },
           items,
         };

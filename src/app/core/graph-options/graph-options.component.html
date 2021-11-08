@@ -79,7 +79,11 @@
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis."
           >
             <mat-label>Methods</mat-label>
-            <mat-select formControlName="MethodsX" multiple>
+            <mat-select
+              formControlName="MethodsX"
+              multiple
+              (ngModelChange)="methodSelectionChanged()"
+            >
               <mat-option
                 *ngFor="let method of this.matchingMcodesX"
                 [value]="method.mcode"
@@ -114,7 +118,11 @@
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis."
           >
             <mat-label>Methods</mat-label>
-            <mat-select formControlName="MethodsY" multiple>
+            <mat-select
+              formControlName="MethodsY"
+              multiple
+              (ngModelChange)="methodSelectionChanged()"
+            >
               <mat-option
                 *ngFor="let method of matchingMcodesY"
                 [value]="method.mcode"
@@ -162,7 +170,7 @@
         class="example-margin"
         [disableRipple]="true"
         (change)="applyBoundingBox($event)"
-        >Limit by bounds <br />
+        >Limit by study area <br />
         specified in map options
       </mat-checkbox>
     </div>
@@ -174,6 +182,33 @@
       <mat-checkbox class="example-margin" [disableRipple]="true"
         >Optimal satellite alignment
       </mat-checkbox>
+    </div>
+    <div
+      style="margin-left: 10px; margin-top: 10px"
+      aria-label="Choose up to 3 method combinations to display in different colors"
+    >
+      <form
+        [formGroup]="methodComboForm"
+        matTooltip="Choose up to 3 method combinations to highlight"
+      >
+        <mat-form-field
+          appearance="fill"
+          aria-label="This is a dropdown menu containing options which method combinations to highlight."
+        >
+          <mat-label>Method Combinations</mat-label>
+          <mat-select
+            formControlName="methodCombo"
+            multiple
+            (selectionChange)="methodComboChanged()"
+          >
+            <mat-option
+              *ngFor="let method of methodsToDisplay"
+              [value]="method"
+              >{{ method }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </form>
     </div>
     <button
       class="plotDataBtn dataBtn"

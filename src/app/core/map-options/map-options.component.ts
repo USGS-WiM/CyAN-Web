@@ -24,8 +24,10 @@ export class MapOptionsComponent implements OnInit {
   public parameterTypes$: Observable<any[]>;
   public methodTypes$: Observable<any[]>;
   public pcodeToMcode$: Observable<any[]>;
+  public regions$: Observable<any[]>;
   public pcodeToMcode;
   public mcodeShortName;
+  public regions;
 
   //Intermediate data
   public matchingMcodes = [];
@@ -35,8 +37,6 @@ export class MapOptionsComponent implements OnInit {
     parameterControl: new FormControl(),
     methodControl: new FormControl(),
   });
-  Parameters = new FormControl();
-  Methods = new FormControl();
   public boundingBoxForm = new FormGroup({
     northControl: new FormControl(),
     southControl: new FormControl(),
@@ -61,32 +61,9 @@ export class MapOptionsComponent implements OnInit {
     animate: false,
     barDimension: 210,
   };
-  States = new FormControl();
-  stateList: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado',
-    'Connecticut',
-    'Delaware',
-    'District of Columbia',
-    'Federated States of Micronesia',
-    'Florida',
-    'Georgia',
-    'Guam',
-    'Hawaii',
-    'Idaho',
-    'Illinois',
-    'Indiana',
-    'Iowa',
-    'Kansas',
-    'Kentucky',
-    'Louisiana',
-    'Maine',
-    'Marshall Islands',
-  ];
+  public regionForm = new FormGroup({
+    regionControl: new FormControl(),
+  });
 
   //Basemap layers
   public osm = L.tileLayer(
@@ -121,6 +98,7 @@ export class MapOptionsComponent implements OnInit {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
+    this.regions$ = this.filterService.regions$;
   }
 
   @HostListener('window:resize')
@@ -139,6 +117,7 @@ export class MapOptionsComponent implements OnInit {
   public populateDropdowns() {
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+    this.regions$.subscribe((codes) => (this.regions = codes));
   }
 
   //This is called whenever the parameter selection changes
@@ -162,6 +141,14 @@ export class MapOptionsComponent implements OnInit {
         }
       }
     }
+  }
+
+  //This is called whenever the region selection changes
+  //Used to store the region selected in a way that can be accessed through Graph Options
+  public regionSelected() {
+    this.componentDisplayService.getStoreRegionSubject(
+      this.regionForm.get('regionControl').value
+    );
   }
 
   //This is called when 'Filter' button is clicked
@@ -231,6 +218,7 @@ export class MapOptionsComponent implements OnInit {
           max_year: this.maxYear,
           include_NULL: this.includeNullSites,
           satellite_align: this.optimalAlignment,
+          region: this.regionForm.get('regionControl').value,
         },
         items,
       };

@@ -72,6 +72,7 @@ export class GraphSelectionsService {
         max_year: number;
         include_NULL: false;
         satellite_align: boolean;
+        region: any[];
       };
       items;
     },
@@ -134,7 +135,6 @@ export class GraphSelectionsService {
             this.sid.push(tempResultsY[x].sid);
           }
           if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
-            console.log('made it');
             this.finalGraphValues();
           }
         }
