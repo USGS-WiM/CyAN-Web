@@ -413,6 +413,25 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Populate the method combination dropdown according to the selected methods
+  public methodSelectionChanged() {
+    this.methodsToDisplay = [];
+    this.methodComboSelections = [];
+    this.methodComboForm.get('methodCombo').setValue(null);
+    let tempMethodsX = this.graphSelectionsForm.get('MethodsX').value;
+    let tempMethodsY = this.graphSelectionsForm.get('MethodsY').value;
+    if (tempMethodsY) {
+      if (tempMethodsX) {
+        for (let i = 0; i < tempMethodsX.length; i++) {
+          for (let x = 0; x < tempMethodsY.length; x++) {
+            let newMethodCombo = tempMethodsX[i] + ' & ' + tempMethodsY[x];
+            this.methodsToDisplay.push(newMethodCombo);
+          }
+        }
+      }
+    }
+  }
+
   public methodComboChanged() {
     console.log('this.methodComboSelections', this.methodComboSelections);
     if (this.methodComboForm.get('methodCombo').value.length < 4) {

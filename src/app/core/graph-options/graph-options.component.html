@@ -79,7 +79,11 @@
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis."
           >
             <mat-label>Methods</mat-label>
-            <mat-select formControlName="MethodsX" multiple>
+            <mat-select
+              formControlName="MethodsX"
+              multiple
+              (ngModelChange)="methodSelectionChanged()"
+            >
               <mat-option
                 *ngFor="let method of this.matchingMcodesX"
                 [value]="method.mcode"
@@ -114,7 +118,11 @@
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis."
           >
             <mat-label>Methods</mat-label>
-            <mat-select formControlName="MethodsY" multiple>
+            <mat-select
+              formControlName="MethodsY"
+              multiple
+              (ngModelChange)="methodSelectionChanged()"
+            >
               <mat-option
                 *ngFor="let method of matchingMcodesY"
                 [value]="method.mcode"
