@@ -28,6 +28,11 @@ export class GraphOptionsComponent implements OnInit {
     ParametersY: new FormControl(),
     MethodsY: new FormControl(),
   });
+  methodComboForm = new FormGroup({
+    methodCombo: new FormControl(),
+  });
+  public methodsToDisplay = ['one', 'two', 'three', 'four', 'five', 'six'];
+  public methodComboSelections: string[];
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
   minYear: number = 1975;
@@ -342,6 +347,10 @@ export class GraphOptionsComponent implements OnInit {
 
   //Called when user clicks 'Plot Data'
   public clickPlotData() {
+    console.log(
+      'value of method combo',
+      this.methodComboForm.get('methodCombo').value
+    );
     this.alreadyGraphed = false;
     //Get parameter and method user selections
     let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
@@ -401,6 +410,22 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       this.yAxisType = 'scatter';
       this.autotickEnabled = true;
+    }
+  }
+
+  public methodComboChanged() {
+    console.log('this.methodComboSelections', this.methodComboSelections);
+    if (this.methodComboForm.get('methodCombo').value.length < 4) {
+      this.methodComboSelections =
+        this.methodComboForm.get('methodCombo').value;
+    } else {
+      this.methodComboForm
+        .get('methodCombo')
+        .setValue(this.methodComboSelections);
+      this.snackBar.open('Select a maximum of 3 method combinations.', 'OK', {
+        duration: 2000,
+        verticalPosition: 'top',
+      });
     }
   }
 
