@@ -432,6 +432,7 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Limit method combo selection to a max of 3
   public methodComboChanged() {
     console.log('this.methodComboSelections', this.methodComboSelections);
     if (this.methodComboForm.get('methodCombo').value.length < 4) {
@@ -448,7 +449,9 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Get bounding box and region selection from map options
   public applyBoundingBox(boundingBoxChecked: MatCheckboxChange) {
+    //Map options bounding box selections
     if (boundingBoxChecked.checked) {
       this.useBoundingBox = true;
       this.componentDisplayService.storeNorthSubject.subscribe((coordinate) => {
@@ -471,6 +474,7 @@ export class GraphOptionsComponent implements OnInit {
           this.west = coordinate;
         }
       });
+      //Map option region selection
       this.componentDisplayService.storeRegionSubject.subscribe((region) => {
         if (region) {
           this.regions = region;
@@ -506,15 +510,6 @@ export class GraphOptionsComponent implements OnInit {
 
     let items = new Object();
     //Populate the 'items' object (parameters & methods) in the query object
-    console.log('tempM', tempM);
-    /*
-    if (tempM.length === 2) {
-      //create a separate query for each method
-
-      for (let i=0; i<tempM.length; i++ ) {
-        items[i].
-      }
-    } */
     items[tempP] = tempM;
     //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
