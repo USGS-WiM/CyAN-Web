@@ -40,6 +40,15 @@ export class GraphSelectionsService {
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
 
+  public methodCombo1Subject = new BehaviorSubject<any>(undefined);
+  methodCombo1$ = this.methodCombo1Subject.asObservable();
+
+  public methodCombo2Subject = new BehaviorSubject<any>(undefined);
+  methodCombo2$ = this.methodCombo2Subject.asObservable();
+
+  public methodCombo3Subject = new BehaviorSubject<any>(undefined);
+  methodCombo3$ = this.methodCombo3Subject.asObservable();
+
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
   }
