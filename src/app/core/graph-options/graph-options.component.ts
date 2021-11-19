@@ -147,7 +147,6 @@ export class GraphOptionsComponent implements OnInit {
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
                   graphOptionsBackgroundID.classList.remove('disableClick');
-                  graphFilters.classList.remove('disableClick');
                 }
               }
               if (!this.currentYaxisValues || !this.currentXaxisValues) {
@@ -157,7 +156,6 @@ export class GraphOptionsComponent implements OnInit {
                   base.classList.remove('initial-loader');
                   this.showGraph = false;
                   graphOptionsBackgroundID.classList.remove('disableClick');
-                  graphFilters.classList.remove('disableClick');
                 }
               }
             }
@@ -355,9 +353,7 @@ export class GraphOptionsComponent implements OnInit {
       let graphOptionsBackgroundID = document.getElementById(
         'graphOptionsBackgroundID'
       );
-      let graphFilters = document.getElementById('graphFilters');
       graphOptionsBackgroundID.classList.add('disableClick');
-      graphFilters.classList.add('disableClick');
       this.showGraph = false;
       this.populateGraphData();
       this.resizeDivs();

@@ -94,9 +94,7 @@ export class GraphSelectionsService {
           let graphOptionsBackgroundID = document.getElementById(
             'graphOptionsBackgroundID'
           );
-          let graphFilters = document.getElementById('graphFilters');
           graphOptionsBackgroundID.classList.remove('disableClick');
-          graphFilters.classList.remove('disableClick');
         } else {
           if (axis === 'xAxis') {
             this.rawX = res;
@@ -154,9 +152,7 @@ export class GraphSelectionsService {
       let graphOptionsBackgroundID = document.getElementById(
         'graphOptionsBackgroundID'
       );
-      let graphFilters = document.getElementById('graphFilters');
       graphOptionsBackgroundID.classList.remove('disableClick');
-      graphFilters.classList.remove('disableClick');
     }
   }
   public finalGraphValues() {
