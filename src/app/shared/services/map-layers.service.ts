@@ -92,6 +92,8 @@ export class MapLayersService {
             duration: 4000,
             verticalPosition: 'top',
           });
+
+          base.classList.remove('initial-loader');
         } else {
           for (let i = 0; i < res.length; i++) {
             let lat = Number(res[i].latitude);
@@ -104,6 +106,8 @@ export class MapLayersService {
           }
           this.filterWqSampleSubject.next(this.mapWQSites);
           base.classList.remove('initial-loader');
+          let mapDownloadBtn = document.getElementById('mapDownloadBtn');
+          mapDownloadBtn.classList.remove('disabledDataBtn');
         }
       });
   }
