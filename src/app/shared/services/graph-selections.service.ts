@@ -79,7 +79,6 @@ export class GraphSelectionsService {
     axis: string
   ) {
     console.log('graphFilters', graphFilters);
-    console.log('this.ready', this.ready);
     return this.httpClient
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
@@ -97,16 +96,13 @@ export class GraphSelectionsService {
             this.rawX = res;
             this.tempResultsXSubject.next(res);
             this.ready += 1;
-            console.log('this.ready (x)', this.ready);
           }
           if (axis === 'yAxis') {
-            console.log('this.ready (y)', this.ready);
             this.rawY = res;
             this.tempResultsYSubject.next(res);
             this.ready += 1;
           }
           if (this.ready == 2) {
-            console.log('getTempArrays is done (graph-selections.service)');
             this.ready = 0;
             this.filterGraphPoints(this.rawX, this.rawY);
           }
@@ -123,7 +119,6 @@ export class GraphSelectionsService {
     this.allDataX = [];
     this.allDataY = [];
     this.sid = [];
-    console.log('made it to filterGraphPts');
     if (tempResultsX && tempResultsY) {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {

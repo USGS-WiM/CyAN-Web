@@ -306,7 +306,6 @@ export class GraphOptionsComponent implements OnInit {
       }
     });
     this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-      console.log('allGraphDataXSubject', data);
       tempXData = data;
       for (let i = 0; i < this.flaggedPointIndices.length; i++) {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
