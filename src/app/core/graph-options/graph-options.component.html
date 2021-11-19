@@ -200,7 +200,8 @@
         <mat-icon>cloud_download</mat-icon>
       </button>
       <button
-        class="downloadBtn dataBtn"
+        class="downloadBtn dataBtn disabledDataBtn"
+        id="flagBtn"
         (click)="createFlags()"
         matTooltip="CSV of flagged data"
         aria-label="Clicking this button will download a CSV of the flagged data"

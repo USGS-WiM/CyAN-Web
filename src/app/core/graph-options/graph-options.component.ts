@@ -295,6 +295,16 @@ export class GraphOptionsComponent implements OnInit {
       }
       var update = { marker: { color: colors, size: 16 } };
       Plotly.restyle('graph', update, [curveNum]);
+
+      //Disable/enable flag button
+      let flagBtn = document.getElementById('flagBtn');
+      if (this.flaggedPointIndices) {
+        if (this.flaggedPointIndices.length > 0) {
+          flagBtn.classList.remove('disabledDataBtn');
+        }
+      } else {
+        flagBtn.classList.add('disabledDataBtn');
+      }
     });
   }
 
