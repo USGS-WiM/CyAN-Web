@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class APP_SETTINGS {
   public static get wqDataURL() {
-    return 'http://127.0.0.1:5005/json_query';
+    return 'http://127.0.0.1:5005/json_query_map';
   }
   public static get pcodeShortnameURL() {
     return 'http://127.0.0.1:5005/get_pcode_shortname/';
