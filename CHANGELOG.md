@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Map marker clusters
 - WIM favicon
 - Disable graph options while graph is loading
+- Disable flag/download buttons when there are no data to download
 
 ### Changed
 

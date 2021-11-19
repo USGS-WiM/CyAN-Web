@@ -151,6 +151,10 @@
   vertical-align: middle;
   border: none;
 }
+.disabledDataBtn {
+  background-color: rgb(185, 185, 185) !important;
+  pointer-events: none;
+}
 /* end: data buttons */
 
 /* start: map panels */

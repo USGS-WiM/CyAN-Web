@@ -94,7 +94,11 @@ export class GraphSelectionsService {
           let graphOptionsBackgroundID = document.getElementById(
             'graphOptionsBackgroundID'
           );
+          let graphDataDownloadBtn = document.getElementById(
+            'graphDataDownloadBtn'
+          );
           graphOptionsBackgroundID.classList.remove('disableClick');
+          graphDataDownloadBtn.classList.remove('disabledDataBtn');
         } else {
           if (axis === 'xAxis') {
             this.rawX = res;
@@ -152,7 +156,11 @@ export class GraphSelectionsService {
       let graphOptionsBackgroundID = document.getElementById(
         'graphOptionsBackgroundID'
       );
+      let graphDataDownloadBtn = document.getElementById(
+        'graphDataDownloadBtn'
+      );
       graphOptionsBackgroundID.classList.remove('disableClick');
+      graphDataDownloadBtn.classList.remove('disabledDataBtn');
     }
   }
   public finalGraphValues() {

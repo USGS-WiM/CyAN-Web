@@ -123,7 +123,9 @@ export class GraphOptionsComponent implements OnInit {
       let graphOptionsBackgroundID = document.getElementById(
         'graphOptionsBackgroundID'
       );
-      let graphFilters = document.getElementById('graphFilters');
+      let graphDataDownloadBtn = document.getElementById(
+        'graphDataDownloadBtn'
+      );
       if (makeGraph === true && this.alreadyGraphed === false) {
         this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
           this.currentXaxisValues = points;
@@ -147,6 +149,7 @@ export class GraphOptionsComponent implements OnInit {
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
                   graphOptionsBackgroundID.classList.remove('disableClick');
+                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
                 }
               }
               if (!this.currentYaxisValues || !this.currentXaxisValues) {
@@ -156,6 +159,7 @@ export class GraphOptionsComponent implements OnInit {
                   base.classList.remove('initial-loader');
                   this.showGraph = false;
                   graphOptionsBackgroundID.classList.remove('disableClick');
+                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
                 }
               }
             }
@@ -349,11 +353,15 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       //Add the WIM loader while graph is being created
       let base = document.getElementById('base');
+      let graphDataDownloadBtn = document.getElementById(
+        'graphDataDownloadBtn'
+      );
       base.classList.add('initial-loader');
       let graphOptionsBackgroundID = document.getElementById(
         'graphOptionsBackgroundID'
       );
       graphOptionsBackgroundID.classList.add('disableClick');
+      graphDataDownloadBtn.classList.add('disabledDataBtn');
       this.showGraph = false;
       this.populateGraphData();
       this.resizeDivs();
