@@ -28,9 +28,6 @@ export class GraphOptionsComponent implements OnInit {
     ParametersY: new FormControl(),
     MethodsY: new FormControl(),
   });
-  methodComboForm = new FormGroup({
-    methodCombo: new FormControl(),
-  });
   public methodsToDisplay: string[];
   public methodComboSelections: string[];
   public optimalAlignment: Boolean = false;
@@ -309,7 +306,6 @@ export class GraphOptionsComponent implements OnInit {
       }
     });
     this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-      console.log('allGraphDataXSubject', data);
       tempXData = data;
       for (let i = 0; i < this.flaggedPointIndices.length; i++) {
         flaggedXData.push(tempXData[this.flaggedPointIndices[i]]);
@@ -323,10 +319,6 @@ export class GraphOptionsComponent implements OnInit {
 
   //Called when user clicks 'Plot Data'
   public clickPlotData() {
-    console.log(
-      'value of method combo',
-      this.methodComboForm.get('methodCombo').value
-    );
     this.alreadyGraphed = false;
     //Get parameter and method user selections
     let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
@@ -393,7 +385,6 @@ export class GraphOptionsComponent implements OnInit {
   public methodSelectionChanged() {
     this.methodsToDisplay = [];
     this.methodComboSelections = [];
-    this.methodComboForm.get('methodCombo').setValue(null);
     let tempMethodsX = this.graphSelectionsForm.get('MethodsX').value;
     let tempMethodsY = this.graphSelectionsForm.get('MethodsY').value;
     if (tempMethodsY) {
@@ -405,23 +396,6 @@ export class GraphOptionsComponent implements OnInit {
           }
         }
       }
-    }
-  }
-
-  //Limit method combo selection to a max of 3
-  public methodComboChanged() {
-    console.log('this.methodComboSelections', this.methodComboSelections);
-    if (this.methodComboForm.get('methodCombo').value.length < 4) {
-      this.methodComboSelections =
-        this.methodComboForm.get('methodCombo').value;
-    } else {
-      this.methodComboForm
-        .get('methodCombo')
-        .setValue(this.methodComboSelections);
-      this.snackBar.open('Select a maximum of 3 method combinations.', 'OK', {
-        duration: 2000,
-        verticalPosition: 'top',
-      });
     }
   }
 

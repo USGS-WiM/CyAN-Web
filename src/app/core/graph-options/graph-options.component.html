@@ -183,33 +183,6 @@
         >Optimal satellite alignment
       </mat-checkbox>
     </div>
-    <div
-      style="margin-left: 10px; margin-top: 10px"
-      aria-label="Choose up to 3 method combinations to display in different colors"
-    >
-      <form
-        [formGroup]="methodComboForm"
-        matTooltip="Choose up to 3 method combinations to highlight"
-      >
-        <mat-form-field
-          appearance="fill"
-          aria-label="This is a dropdown menu containing options which method combinations to highlight."
-        >
-          <mat-label>Method Combinations</mat-label>
-          <mat-select
-            formControlName="methodCombo"
-            multiple
-            (selectionChange)="methodComboChanged()"
-          >
-            <mat-option
-              *ngFor="let method of methodsToDisplay"
-              [value]="method"
-              >{{ method }}</mat-option
-            >
-          </mat-select>
-        </mat-form-field>
-      </form>
-    </div>
     <button
       class="plotDataBtn dataBtn"
       (click)="clickPlotData()"
