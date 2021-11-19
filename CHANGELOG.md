@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Placeholders for map filter options
 - About template
 - Landing view
+- Map options
+- Graph options
+- Map marker clusters
+- WIM favicon
 
 ### Changed
 
