@@ -133,78 +133,80 @@
         </div>
       </div>
     </form>
-    <div
-      class="custom-slider"
-      style="margin-left: 10px"
-      aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph."
-    >
-      <ngx-slider
-        [(value)]="minYear"
-        [(highValue)]="maxYear"
-        [options]="timeOptions"
-      ></ngx-slider>
+    <div id="graphFilters">
+      <div
+        class="custom-slider"
+        style="margin-left: 10px"
+        aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph."
+      >
+        <ngx-slider
+          [(value)]="minYear"
+          [(highValue)]="maxYear"
+          [options]="timeOptions"
+        ></ngx-slider>
+      </div>
+      <div style="margin-left: 10px; margin-top: 10px">
+        Log Scale &nbsp;
+        <mat-checkbox
+          class="example-margin"
+          [disableRipple]="true"
+          (change)="applyLogX($event)"
+          aria-label="Checking this box will add a logarithmic scale to the x-axis "
+          >x
+        </mat-checkbox>
+        &nbsp;
+        <mat-checkbox
+          class="example-margin"
+          [disableRipple]="true"
+          (change)="applyLogY($event)"
+          aria-label="Checking this box will add a logarithmic scale to the y-axis "
+          >y
+        </mat-checkbox>
+      </div>
+      <div
+        style="margin-left: 10px; margin-top: 10px"
+        aria-label="Checking this box will filter points using the current map extent"
+      >
+        <mat-checkbox
+          class="example-margin"
+          [disableRipple]="true"
+          (change)="applyBoundingBox($event)"
+          >Limit by study area <br />
+          specified in map options
+        </mat-checkbox>
+      </div>
+      <div
+        style="margin-left: 10px; margin-top: 10px"
+        aria-label="Checking this box will filter points that have optimal satellite alignment"
+        (change)="clickSatAlign($event)"
+      >
+        <mat-checkbox class="example-margin" [disableRipple]="true"
+          >Optimal satellite alignment
+        </mat-checkbox>
+      </div>
+      <button
+        class="plotDataBtn dataBtn"
+        (click)="clickPlotData()"
+        aria-label="Clicking this button will create a graph using the points defined by the user-defined filters"
+      >
+        Plot Data
+      </button>
+      <button
+        class="downloadBtn dataBtn"
+        matTooltip="CSV of all data"
+        aria-label="Clicking this button will download a CSV of the filtered points"
+      >
+        <mat-icon>cloud_download</mat-icon>
+      </button>
+      <button
+        class="downloadBtn dataBtn"
+        (click)="createFlags()"
+        matTooltip="CSV of flagged data"
+        aria-label="Clicking this button will download a CSV of the flagged data"
+      >
+        <mat-icon>flag</mat-icon>
+      </button>
     </div>
-    <div style="margin-left: 10px; margin-top: 10px">
-      Log Scale &nbsp;
-      <mat-checkbox
-        class="example-margin"
-        [disableRipple]="true"
-        (change)="applyLogX($event)"
-        aria-label="Checking this box will add a logarithmic scale to the x-axis "
-        >x
-      </mat-checkbox>
-      &nbsp;
-      <mat-checkbox
-        class="example-margin"
-        [disableRipple]="true"
-        (change)="applyLogY($event)"
-        aria-label="Checking this box will add a logarithmic scale to the y-axis "
-        >y
-      </mat-checkbox>
-    </div>
-    <div
-      style="margin-left: 10px; margin-top: 10px"
-      aria-label="Checking this box will filter points using the current map extent"
-    >
-      <mat-checkbox
-        class="example-margin"
-        [disableRipple]="true"
-        (change)="applyBoundingBox($event)"
-        >Limit by study area <br />
-        specified in map options
-      </mat-checkbox>
-    </div>
-    <div
-      style="margin-left: 10px; margin-top: 10px"
-      aria-label="Checking this box will filter points that have optimal satellite alignment"
-      (change)="clickSatAlign($event)"
-    >
-      <mat-checkbox class="example-margin" [disableRipple]="true"
-        >Optimal satellite alignment
-      </mat-checkbox>
-    </div>
-    <button
-      class="plotDataBtn dataBtn"
-      (click)="clickPlotData()"
-      aria-label="Clicking this button will create a graph using the points defined by the user-defined filters"
-    >
-      Plot Data
-    </button>
-    <button
-      class="downloadBtn dataBtn"
-      matTooltip="CSV of all data"
-      aria-label="Clicking this button will download a CSV of the filtered points"
-    >
-      <mat-icon>cloud_download</mat-icon>
-    </button>
-    <button
-      class="downloadBtn dataBtn"
-      (click)="createFlags()"
-      matTooltip="CSV of flagged data"
-      aria-label="Clicking this button will download a CSV of the flagged data"
-    >
-      <mat-icon>flag</mat-icon>
-    </button>
   </div>
   <div
     class="graphBackground marginTopFullHeight"

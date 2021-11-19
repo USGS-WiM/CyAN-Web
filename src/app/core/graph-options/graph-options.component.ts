@@ -120,6 +120,10 @@ export class GraphOptionsComponent implements OnInit {
 
     //Reset the x and y values displayed on the graph whenever the values change in the service
     this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+      let graphOptionsBackgroundID = document.getElementById(
+        'graphOptionsBackgroundID'
+      );
+      let graphFilters = document.getElementById('graphFilters');
       if (makeGraph === true && this.alreadyGraphed === false) {
         this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
           this.currentXaxisValues = points;
@@ -142,6 +146,7 @@ export class GraphOptionsComponent implements OnInit {
                   //Remove the WIM loader to view graph
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
+                  graphOptionsBackgroundID.classList.remove('disableClick');
                 }
               }
               if (!this.currentYaxisValues || !this.currentXaxisValues) {
@@ -150,6 +155,7 @@ export class GraphOptionsComponent implements OnInit {
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
                   this.showGraph = false;
+                  graphOptionsBackgroundID.classList.remove('disableClick');
                 }
               }
             }
@@ -344,6 +350,10 @@ export class GraphOptionsComponent implements OnInit {
       //Add the WIM loader while graph is being created
       let base = document.getElementById('base');
       base.classList.add('initial-loader');
+      let graphOptionsBackgroundID = document.getElementById(
+        'graphOptionsBackgroundID'
+      );
+      graphOptionsBackgroundID.classList.add('disableClick');
       this.showGraph = false;
       this.populateGraphData();
       this.resizeDivs();

@@ -91,6 +91,10 @@ export class GraphSelectionsService {
           this.ready = 0;
           let base = document.getElementById('base');
           base.classList.remove('initial-loader');
+          let graphOptionsBackgroundID = document.getElementById(
+            'graphOptionsBackgroundID'
+          );
+          graphOptionsBackgroundID.classList.remove('disableClick');
         } else {
           if (axis === 'xAxis') {
             this.rawX = res;
@@ -145,6 +149,10 @@ export class GraphSelectionsService {
       );
       let base = document.getElementById('base');
       base.classList.remove('initial-loader');
+      let graphOptionsBackgroundID = document.getElementById(
+        'graphOptionsBackgroundID'
+      );
+      graphOptionsBackgroundID.classList.remove('disableClick');
     }
   }
   public finalGraphValues() {
@@ -164,8 +172,9 @@ export class GraphSelectionsService {
           verticalPosition: 'top',
         }
       );
+
+      let graphOptions = document.getElementById('graphOptionsBackgroundID');
+      graphOptions.classList.remove('disableClick');
     }
-    let base = document.getElementById('base');
-    base.classList.remove('initial-loader');
   }
 }
