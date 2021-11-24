@@ -127,7 +127,7 @@
   line-height: 35px;
 }
 .plotDataBtn {
-  width: 110px;
+  width: 115px;
   line-height: 35px;
 }
 .downloadBtn {
@@ -135,11 +135,11 @@
   line-height: 3px;
 }
 .mapFilterBtn {
-  width: 55px;
+  width: 100px;
   line-height: 35px;
 }
 .dataBtn {
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 5px;
   color: white;
   cursor: pointer;
@@ -150,6 +150,7 @@
   text-align: center;
   vertical-align: middle;
   border: none;
+  font-weight: bold;
 }
 .disabledDataBtn {
   background-color: rgb(185, 185, 185) !important;
@@ -252,7 +253,7 @@
   position: relative;
 }
 .optionsBackgroundHeightSmall {
-  height: 685px;
+  height: 615px;
 }
 .optionsMarginRightLarge {
   margin-right: 60px;
