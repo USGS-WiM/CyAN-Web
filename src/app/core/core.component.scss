@@ -1,10 +1,10 @@
 /* Start nav buttons */
 /* nav buttons - universal */
 .mapBtnFullMargin {
-  margin-left: 150px;
+  margin-left: 0px;
 }
 .mapBtnSmallMargin {
-  margin-left: 50px;
+  margin-left: 0px;
 }
 .infoBtnColor {
   background-color: #f2bda1;
@@ -31,22 +31,24 @@
   font-size: 30px;
   vertical-align: middle;
   line-height: 60px;
-  margin-left: 150px;
 }
 .infoBtn {
-  height: 120px;
-  width: 650px;
+  height: 210px;
+  width: 600px;
   vertical-align: middle;
   line-height: 40px;
   border: none;
 }
 .mapGraphBtn {
-  height: 200px;
-  width: 325px;
+  height: 150px;
+  width: 200px;
   font-size: 20px;
 }
+.mapGraphBtnGap {
+  margin-top: -150px;
+}
 .mapGraphIconFullScreen {
-  font-size: 80px;
+  font-size: 75px;
   margin-left: -55px;
 }
 .landingPgBtns {
@@ -58,28 +60,19 @@
 
 /* Start small home screen nav buttons */
 .infoBtnSmallScreen {
-  width: 250px;
-}
-.mapBtnSmallScreen {
-  width: 100px;
-}
-.graphBtnSmallScreen {
-  width: 120px;
+  height: 210px;
+  width: 400px;
+  vertical-align: middle;
+  line-height: 40px;
+  border: none;
 }
 .smScreenLandingBtns {
   line-height: 25px;
   border: none;
-  height: 70px;
   position: relative;
   cursor: pointer;
   text-align: left;
   vertical-align: middle;
-}
-.mapGraphTitleSmScreen {
-  font-size: 20px;
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
 }
 .mapGraphIconSmallScreen {
   margin-left: 10px;
@@ -311,7 +304,7 @@
   height: calc(98vh - 65px);
 }
 .marginLeftFullWidth {
-  margin-left: 150px;
+  margin-left: 160px;
 }
 .marginLeftSmallWidth {
   margin-left: 0px;

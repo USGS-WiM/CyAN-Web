@@ -69,50 +69,34 @@ export class HomeComponent implements AfterViewInit {
 
   public resizeDivs() {
     //get window dimensions
-    let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;
 
     let homeBtnFullID = document.getElementById('homeBtnFullID');
-    let infoBtnFullID = document.getElementById('infoBtnFullID');
     let mapBtnFullID = document.getElementById('mapBtnFullID');
+    let mapGraphID = document.getElementById('mapGraphID');
     if (windowWidth < 800 && !this.showHomeLayout) {
       this.showFullCyanHomeBtn = false;
     }
     if (windowWidth > 800 || this.showHomeLayout) {
       this.showFullCyanHomeBtn = true;
     }
-    if (windowWidth < 720) {
-      if (windowWidth > 605) {
-        homeBtnFullID.classList.remove('marginLeftFullWidth');
-        homeBtnFullID.classList.add('marginLeftSmallWidth');
-
-        infoBtnFullID.classList.remove('marginLeftFullWidth');
-        infoBtnFullID.classList.add('marginLeftSmallWidth');
-
-        mapBtnFullID.classList.remove('mapBtnFullMargin');
-        mapBtnFullID.classList.add('mapBtnSmallMargin');
-      }
-      if (windowWidth < 605) {
-        this.fullHomeScreen = false;
-        homeBtnFullID.classList.remove('marginLeftFullWidth');
-        homeBtnFullID.classList.add('marginLeftSmallWidth');
-      }
+    if (windowWidth < 1000) {
+      this.fullHomeScreen = false;
+      mapGraphID.classList.remove('mapGraphBtnGap');
     }
-    if (windowWidth > 605) {
+    if (windowWidth > 1000) {
       this.fullHomeScreen = true;
-    }
-    if (windowWidth > 720) {
-      homeBtnFullID.classList.add('marginLeftFullWidth');
-      homeBtnFullID.classList.remove('marginLeftSmallWidth');
 
-      infoBtnFullID.classList.add('marginLeftFullWidth');
-      infoBtnFullID.classList.remove('marginLeftSmallWidth');
+      mapGraphID.classList.add('mapGraphBtnGap');
 
       mapBtnFullID.classList.add('mapBtnFullMargin');
       mapBtnFullID.classList.remove('mapBtnSmallMargin');
     }
     if (this.showHomeLayout) {
       homeBtnFullID.classList.remove('marginLeftFullWidth');
+    }
+    if (!this.showHomeLayout) {
+      homeBtnFullID.classList.add('marginLeftFullWidth');
     }
   }
 }
