@@ -1,6 +1,30 @@
 <div id="base">
   <div>
-    <div class="flex-container" style="width: 280px">
+    <div class="flex-container" style="width: 1500px">
+      <div
+        class="landingPgBtns"
+        style="
+          background-color: rgb(22, 104, 49);
+          width: 160px;
+          height: 60px;
+          margin-left: 0px;
+          text-align: left;
+        "
+      >
+        <a href="https://www.usgs.gov/" target="_blank">
+          <img
+            alt="United States Geological Survey Logo. White wavey lines with a green background next to the letters USGS. Their motto, Science for a changing world, is written across the bottom. Clicking on this logo leads to the USGS homepage."
+            style="
+              width: 150px;
+              margin-top: 4px;
+              margin-left: 5px;
+              margin-right: 5px;
+              text-align: left;
+            "
+            src="../../../assets/USGS_White_web.png"
+          />
+        </a>
+      </div>
       <div
         [hidden]="!showFullCyanHomeBtn"
         aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page."
@@ -23,37 +47,32 @@
         </div>
       </div>
       <div
-        class="landingPgBtns"
-        style="
-          background-color: white;
-          height: 60px;
-          width: 650px;
-          margin-left: 0px;
-          color: white;
-        "
+        class="landingPgBtns infoBtn infoBtnColor"
         [hidden]="!showHomeLayout || !fullHomeScreen"
+        (click)="clickInfo()"
+        id="infoBtnFullID"
+        aria-label="This is an orange button featuring a white info icon (i with a circle around it). Clicking on this button will lead to the info page."
       >
+        <p style="font-size: 30px; margin-top: 40px">
+          <mat-icon
+            style="font-size: 32px; margin-left: -20px; margin-right: 10px"
+            >info</mat-icon
+          >
+          Cyanobacteria Assessment Network <br />
+          Field Exploratory Lakes Database
+        </p>
         <div
           style="
-            background-color: rgb(22, 104, 49);
-            width: 160px;
-            height: 60px;
-            margin-left: 0px;
-            text-align: left;
+            line-height: 15px;
+            margin-top: 20px;
+            color: rgb(104, 90, 90);
+            font-size: 20px;
           "
         >
-          <a href="https://www.usgs.gov/" target="_blank">
-            <img
-              alt="United States Geological Survey Logo. White wavey lines with a green background next to the letters USGS. Their motto, Science for a changing world, is written across the bottom. Clicking on this logo leads to the USGS homepage."
-              style="
-                width: 145px;
-                margin-top: 4px;
-                margin-left: 10px;
-                text-align: left;
-              "
-              src="../../../assets/USGS_White_web.png"
-            />
-          </a>
+          <p>Explore, compare, & evaluate</p>
+          <p style="line-height: 10px">
+            water quality data related to harmful algal blooms
+          </p>
         </div>
       </div>
       <div [hidden]="showHomeLayout">
@@ -120,23 +139,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="landingPgBtns infoBtn marginLeftFullWidth infoBtnColor"
-      [hidden]="!showHomeLayout || !fullHomeScreen"
-      (click)="clickInfo()"
-      id="infoBtnFullID"
-      aria-label="This is an orange button featuring a white info icon (i with a circle around it). Clicking on this button will lead to the info page."
-    >
-      <div style="height: 20px"></div>
-      <p style="font-size: 30px">
-        <mat-icon
-          style="font-size: 32px; margin-left: -20px; margin-right: 10px"
-          >info</mat-icon
-        >
-        Cyanobacteria Assessment Network <br />
-        Field Exploratory Lakes Database
-      </p>
-    </div>
+
     <div [hidden]="fullHomeScreen || !showHomeLayout">
       <div
         (click)="clickInfo()"
@@ -161,7 +164,7 @@
       <app-about></app-about>
     </div>
     <div [hidden]="!fullHomeScreen">
-      <div class="flex-container" style="width: 200px">
+      <div class="flex-container" style="width: 200px; margin-top: -150px">
         <div class="flex-child">
           <div
             class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor"
