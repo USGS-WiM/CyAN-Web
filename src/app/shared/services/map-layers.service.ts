@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
 import { APP_SETTINGS } from '../../app.settings';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,11 @@ export class MapLayersService {
   public wqPointList;
   // Markers for All Sites Layers
   public mapWQSites;
-  constructor(private httpClient: HttpClient, public snackBar: MatSnackBar) {}
+  constructor(
+    private httpClient: HttpClient,
+    public snackBar: MatSnackBar,
+    public componentDisplayService: ComponentDisplayService
+  ) {}
 
   //Basemap Display
   //Add basemap
@@ -55,7 +60,6 @@ export class MapLayersService {
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
-
       spiderfyOnMaxZoom: false,
       iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
@@ -70,14 +74,30 @@ export class MapLayersService {
         });
       },
     });
-    this.mapWQSites.on('clusterclick', function (a) {
-      console.log('a', a);
+
+    let mapData = [];
+    this.mapWQSites.on('clusterclick', (cluster) => {
+      /*console.log('a', a);
       console.log('northEast', a.target._topClusterLevel._bounds._northEast);
       console.log('southWest', a.target._topClusterLevel._bounds._southWest);
-      console.log('this.mapWQSites', this.mapWQSites);
-      //your code here that eventually opens a popup
+      console.log('this.mapWQSites', this.mapWQSites); */
+      let northCoords;
+      let southCoords;
+      let eastCoords;
+      let westCoords;
+      this.componentDisplayService.northBoundsSubject.subscribe(
+        (coord: number) => (northCoords = coord)
+      );
+      this.componentDisplayService.southBoundsSubject.subscribe(
+        (coord: number) => (southCoords = coord)
+      );
+      this.componentDisplayService.eastBoundsSubject.subscribe(
+        (coord: number) => (eastCoords = coord)
+      );
+      this.componentDisplayService.westBoundsSubject.subscribe(
+        (coord: number) => (westCoords = coord)
+      );
     });
-    console.log('this.mapWQSites', this.mapWQSites);
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
 
@@ -109,6 +129,8 @@ export class MapLayersService {
           for (let i = 0; i < res.length; i++) {
             let lat = Number(res[i].latitude);
             let lng = Number(res[i].longitude);
+            mapData['lat'].push(res[i].latitude);
+            mapData['lng'].push(res[i].longitude);
             L.marker([lat, lng], {
               icon: L.divIcon({
                 className: 'allSiteIcon',
