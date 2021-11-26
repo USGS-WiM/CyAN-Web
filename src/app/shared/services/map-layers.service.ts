@@ -55,6 +55,8 @@ export class MapLayersService {
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
+
+      spiderfyOnMaxZoom: false,
       iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
         var html =
@@ -68,6 +70,14 @@ export class MapLayersService {
         });
       },
     });
+    this.mapWQSites.on('clusterclick', function (a) {
+      console.log('a', a);
+      console.log('northEast', a.target._topClusterLevel._bounds._northEast);
+      console.log('southWest', a.target._topClusterLevel._bounds._southWest);
+      console.log('this.mapWQSites', this.mapWQSites);
+      //your code here that eventually opens a popup
+    });
+    console.log('this.mapWQSites', this.mapWQSites);
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
 
