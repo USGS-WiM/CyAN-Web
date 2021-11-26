@@ -80,24 +80,14 @@ export class HomeComponent implements AfterViewInit {
     if (windowWidth > 800 || this.showHomeLayout) {
       this.showFullCyanHomeBtn = true;
     }
-    if (windowWidth < 720) {
-      if (windowWidth > 605) {
-        homeBtnFullID.classList.remove('marginLeftFullWidth');
-        homeBtnFullID.classList.add('marginLeftSmallWidth');
-
-        mapBtnFullID.classList.remove('mapBtnFullMargin');
-        mapBtnFullID.classList.add('mapBtnSmallMargin');
-      }
-      if (windowWidth < 605) {
-        this.fullHomeScreen = false;
-        homeBtnFullID.classList.remove('marginLeftFullWidth');
-        homeBtnFullID.classList.add('marginLeftSmallWidth');
-      }
+    if (windowWidth < 1000) {
+      this.fullHomeScreen = false;
+      homeBtnFullID.classList.remove('marginLeftFullWidth');
+      homeBtnFullID.classList.add('marginLeftSmallWidth');
     }
-    if (windowWidth > 605) {
+    if (windowWidth > 1000) {
       this.fullHomeScreen = true;
-    }
-    if (windowWidth > 720) {
+
       homeBtnFullID.classList.add('marginLeftFullWidth');
       homeBtnFullID.classList.remove('marginLeftSmallWidth');
 
