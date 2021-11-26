@@ -164,6 +164,12 @@
     <div [hidden]="!showInfo">
       <app-about></app-about>
     </div>
+    <div [hidden]="!showMap">
+      <app-map-options></app-map-options>
+    </div>
+    <div [hidden]="!showGraph">
+      <app-graph-options></app-graph-options>
+    </div>
     <div [hidden]="!fullHomeScreen">
       <div class="flex-container" style="width: 200px; margin-top: -150px">
         <div class="flex-child">
@@ -238,11 +244,5 @@
         </div>
       </div>
     </div>
-  </div>
-  <div [hidden]="!showMap">
-    <app-map-options></app-map-options>
-  </div>
-  <div [hidden]="!showGraph">
-    <app-graph-options></app-graph-options>
   </div>
 </div>
