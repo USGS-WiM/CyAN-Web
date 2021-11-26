@@ -44,6 +44,9 @@
   width: 200px;
   font-size: 20px;
 }
+.mapGraphBtnGap {
+  margin-top: -150px;
+}
 .mapGraphIconFullScreen {
   font-size: 75px;
   margin-left: -55px;
@@ -63,12 +66,6 @@
   line-height: 40px;
   border: none;
 }
-.mapBtnSmallScreen {
-  width: 100px;
-}
-.graphBtnSmallScreen {
-  width: 120px;
-}
 .smScreenLandingBtns {
   line-height: 25px;
   border: none;
@@ -76,12 +73,6 @@
   cursor: pointer;
   text-align: left;
   vertical-align: middle;
-}
-.mapGraphTitleSmScreen {
-  font-size: 20px;
-  margin-top: 20px;
-  margin-left: 10px;
-  margin-right: 20px;
 }
 .mapGraphIconSmallScreen {
   margin-left: 10px;

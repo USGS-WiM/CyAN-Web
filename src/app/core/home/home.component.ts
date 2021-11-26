@@ -73,6 +73,7 @@ export class HomeComponent implements AfterViewInit {
 
     let homeBtnFullID = document.getElementById('homeBtnFullID');
     let mapBtnFullID = document.getElementById('mapBtnFullID');
+    let mapGraphID = document.getElementById('mapGraphID');
     if (windowWidth < 800 && !this.showHomeLayout) {
       this.showFullCyanHomeBtn = false;
     }
@@ -81,9 +82,12 @@ export class HomeComponent implements AfterViewInit {
     }
     if (windowWidth < 1000) {
       this.fullHomeScreen = false;
+      mapGraphID.classList.remove('mapGraphBtnGap');
     }
     if (windowWidth > 1000) {
       this.fullHomeScreen = true;
+
+      mapGraphID.classList.add('mapGraphBtnGap');
 
       mapBtnFullID.classList.add('mapBtnFullMargin');
       mapBtnFullID.classList.remove('mapBtnSmallMargin');
