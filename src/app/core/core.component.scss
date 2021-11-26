@@ -57,7 +57,11 @@
 
 /* Start small home screen nav buttons */
 .infoBtnSmallScreen {
-  width: 250px;
+  height: 210px;
+  width: 400px;
+  vertical-align: middle;
+  line-height: 40px;
+  border: none;
 }
 .mapBtnSmallScreen {
   width: 100px;
@@ -68,7 +72,6 @@
 .smScreenLandingBtns {
   line-height: 25px;
   border: none;
-  height: 70px;
   position: relative;
   cursor: pointer;
   text-align: left;

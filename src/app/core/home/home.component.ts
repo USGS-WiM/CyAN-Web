@@ -69,7 +69,6 @@ export class HomeComponent implements AfterViewInit {
 
   public resizeDivs() {
     //get window dimensions
-    let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;
 
     let homeBtnFullID = document.getElementById('homeBtnFullID');
@@ -82,20 +81,18 @@ export class HomeComponent implements AfterViewInit {
     }
     if (windowWidth < 1000) {
       this.fullHomeScreen = false;
-      homeBtnFullID.classList.remove('marginLeftFullWidth');
-      homeBtnFullID.classList.add('marginLeftSmallWidth');
     }
     if (windowWidth > 1000) {
       this.fullHomeScreen = true;
-
-      homeBtnFullID.classList.add('marginLeftFullWidth');
-      homeBtnFullID.classList.remove('marginLeftSmallWidth');
 
       mapBtnFullID.classList.add('mapBtnFullMargin');
       mapBtnFullID.classList.remove('mapBtnSmallMargin');
     }
     if (this.showHomeLayout) {
       homeBtnFullID.classList.remove('marginLeftFullWidth');
+    }
+    if (!this.showHomeLayout) {
+      homeBtnFullID.classList.add('marginLeftFullWidth');
     }
   }
 }

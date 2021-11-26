@@ -2,7 +2,7 @@
   <div>
     <div class="flex-container" style="width: 1500px">
       <div
-        [hidden]="!showHomeLayout || !fullHomeScreen"
+        [hidden]="!showHomeLayout"
         class="landingPgBtns"
         style="
           background-color: rgb(22, 104, 49);
@@ -33,7 +33,7 @@
         <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
           <div
             id="homeBtnFullID"
-            class="landingPgBtns homeBtn homeBtnColor"
+            class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth"
             (click)="clickHome()"
             [hidden]="!showFullCyanHomeBtn"
           >
@@ -140,7 +140,6 @@
         </div>
       </div>
     </div>
-
     <div [hidden]="fullHomeScreen || !showHomeLayout">
       <div
         (click)="clickInfo()"
@@ -170,7 +169,7 @@
     <div [hidden]="!showGraph">
       <app-graph-options></app-graph-options>
     </div>
-    <div [hidden]="!fullHomeScreen">
+    <div [hidden]="!showHomeLayout">
       <div class="flex-container" style="width: 200px; margin-top: -150px">
         <div class="flex-child">
           <div
@@ -197,49 +196,6 @@
               Graph
             </p>
             <mat-icon class="mapGraphIconFullScreen"> scatter_plot</mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div [hidden]="fullHomeScreen || !showHomeLayout">
-      <div
-        class="flex-container"
-        style="width: 200px"
-        [hidden]="!showHomeLayout"
-      >
-        <div class="flex-child">
-          <div
-            class="
-              smScreenLandingBtns
-              mapBtnSmallScreen
-              mapBtnColor
-              flex-container
-            "
-            [hidden]="!showHomeLayout"
-            (click)="clickMap()"
-            aria-label="This is a gray button featuring a map icon> Clicking on this button will lead to the the map and map filters."
-          >
-            <br />
-            <mat-icon class="mapGraphIconSmallScreen"> map</mat-icon>
-            <p class="mapGraphTitleSmScreen">Map</p>
-          </div>
-        </div>
-        <div class="flex-child">
-          <div
-            class="
-              smScreenLandingBtns
-              graphBtnSmallScreen
-              graphBtnColor
-              flex-container
-            "
-            [hidden]="!showHomeLayout"
-            (click)="clickGraph()"
-            aria-label="This is a blue button featuring three dots meant to represent a graph. Clicking on this button will lead to the graph and graph filters."
-          >
-            <br />
-            <mat-icon class="mapGraphIconSmallScreen"> scatter_plot</mat-icon>
-            <div class="flex-child"></div>
-            <p class="mapGraphTitleSmScreen">Graph</p>
           </div>
         </div>
       </div>
