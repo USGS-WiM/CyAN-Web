@@ -56,3 +56,15 @@
   justify-content: flex-end;
   margin-right: 10px;
 }
+
+.leaflet-popup-tip-container {
+  width: 0px !important;
+  height: 0px;
+  display: none;
+}
+
+.custom .leaflet-popup-tip,
+.custom .leaflet-popup-content-wrapper {
+  background: #8a8a8a;
+  color: #000000;
+}
