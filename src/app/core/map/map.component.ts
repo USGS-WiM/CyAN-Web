@@ -120,28 +120,30 @@ export class MapComponent implements AfterViewInit {
                         }
                       }
                     }
-                    let popupContent = '<b> Parameters </b><br/> <hr>';
+                    let popupContent =
+                      '<b> Water Samples </b><br/> <hr> <table> <tr> <th>Parameter &nbsp</th> <th>Quantity &nbsp</th> <th>Mean Value &nbsp</th> </tr>';
                     let totalSamples = matchingPoints.length;
                     for (let i = 0; i < pCodeSummary.length; i++) {
                       popupContent =
                         popupContent +
-                        '<b>' +
+                        '<tr><td>' +
                         pCodeSummary[i].pCode +
-                        '</b>' +
-                        ': ' +
+                        '</td><td>' +
                         pCodeSummary[i].count.toString() +
-                        ' samples, ' +
+                        '</td><td>' +
                         (
                           Math.round(pCodeSummary[i].result * 100) / 100
                         ).toString() +
-                        ' mean value' +
-                        '<br/>';
+                        '</td>';
+                      if (i === pCodeSummary.length - 1) {
+                        popupContent = popupContent + '</tr></table>';
+                      }
                     }
 
                     console.log('pCodeSummary', pCodeSummary);
                     let centerLatLng = this.map.getCenter();
                     this.map.openPopup(popupContent, centerLatLng, {
-                      className: 'mypopup',
+                      className: 'custom',
                     });
                   }
                 }, 1000);
