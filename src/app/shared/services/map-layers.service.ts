@@ -77,6 +77,7 @@ export class MapLayersService {
 
     let mapDataObject = [];
     let mapData;
+
     this.mapWQSites.on('clusterclick', (cluster) => {
       setTimeout(() => {
         //Created this timeout because otherwise it returns the data of the full screen before it zooms to the clicked point
@@ -117,34 +118,26 @@ export class MapLayersService {
           }
         }
         pCodes.sort();
-        let pCodeSummary_temp = new Object();
-        let pCodeSummary = new Object();
+        let pCodeSummary = [];
         let tempCode;
         let count = 0;
         for (let i = 0; i < pCodes.length; i++) {
-          if (pCodes[i] === tempCode) {
-            count += 1;
-            if (i === pCodes.length - 1) {
-              console.log('made it');
-              pCodeSummary_temp['pCode'] = tempCode;
-              pCodeSummary_temp['count'] = count;
-              pCodeSummary = pCodeSummary_temp;
-            }
-          }
           if (pCodes[i] !== tempCode) {
             if (i === 0) {
               console.log('first round');
               count = 1;
             }
             if (i !== 0) {
-              pCodeSummary_temp['pCode'] = tempCode;
-              pCodeSummary_temp['count'] = count;
-              pCodeSummary = pCodeSummary_temp;
+              pCodeSummary.push({ pCode: tempCode, count: count });
               count = 0;
             }
           }
+          if (i === pCodes.length - 1) {
+            pCodeSummary.push({ pCode: tempCode, count: count });
+          }
 
           tempCode = pCodes[i];
+          count += 1;
         }
         console.log('matchingPoints', matchingPoints);
         console.log('pCodeSummary', pCodeSummary);
