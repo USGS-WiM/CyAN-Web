@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as L from 'leaflet';
 import { APP_SETTINGS } from '../../app.settings';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,11 @@ export class MapLayersService {
   public wqPointList;
   // Markers for All Sites Layers
   public mapWQSites;
-  constructor(private httpClient: HttpClient, public snackBar: MatSnackBar) {}
+  constructor(
+    private httpClient: HttpClient,
+    public snackBar: MatSnackBar,
+    public componentDisplayService: ComponentDisplayService
+  ) {}
 
   //Basemap Display
   //Add basemap
@@ -36,6 +41,9 @@ export class MapLayersService {
   public filterWqSampleSubject = new BehaviorSubject<any>(undefined);
   filterWqSample$ = this.filterWqSampleSubject.asObservable();
 
+  public mapQueryResultsSubject = new BehaviorSubject<any>(undefined);
+  mapQueryResults$ = this.mapQueryResultsSubject.asObservable();
+
   //Get map data from service and populate water quality layer
   public filterWqSample(options: {
     meta: {
@@ -55,6 +63,7 @@ export class MapLayersService {
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
+      spiderfyOnMaxZoom: false,
       iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
         var html =
@@ -68,6 +77,9 @@ export class MapLayersService {
         });
       },
     });
+
+    let mapData;
+
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
 
@@ -96,9 +108,12 @@ export class MapLayersService {
 
           base.classList.remove('initial-loader');
         } else {
+          mapData = res;
+          console.log('map results', res);
           for (let i = 0; i < res.length; i++) {
             let lat = Number(res[i].latitude);
             let lng = Number(res[i].longitude);
+
             L.marker([lat, lng], {
               icon: L.divIcon({
                 className: 'allSiteIcon',
@@ -106,6 +121,7 @@ export class MapLayersService {
             }).addTo(this.mapWQSites);
           }
           this.filterWqSampleSubject.next(this.mapWQSites);
+          this.mapQueryResultsSubject.next(mapData);
           base.classList.remove('initial-loader');
           let mapDownloadBtn = document.getElementById('mapDownloadBtn');
           mapDownloadBtn.classList.remove('disabledDataBtn');
