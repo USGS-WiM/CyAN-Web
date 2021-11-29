@@ -49,8 +49,7 @@ export class MapComponent implements AfterViewInit {
               this.currentPoints.on('clusterclick', (cluster) => {
                 setTimeout(() => {
                   //Created this timeout because otherwise it returns the data of the full screen before it zooms to the clicked point
-                  //Should probably create some variable (observable?) and an observable at the zoomend thing where if they're both true, then teh following code is triggered
-                  //Still need to create a popup
+                  //Should probably create some variable (observable?) and an observable at the zoomend thing where if they're both true, then the following code is triggered to remove timeout
                   let northCoords;
                   let southCoords;
                   let eastCoords;
