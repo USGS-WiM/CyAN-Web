@@ -219,10 +219,10 @@ export class GraphOptionsComponent implements OnInit {
       y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
-      name: 'Sample 1',
+      //name: 'Sample 1',
       // text: this.sid,
       textposition: 'bottom center',
-      marker: { size: 12, color: this.pointColors },
+      marker: { size: 12, color: this.pointColors, symbol: 'circle-open' },
     };
 
     var data = [trace1];
@@ -247,7 +247,7 @@ export class GraphOptionsComponent implements OnInit {
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
-      showlegend: true,
+      showlegend: false,
       legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
       modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
