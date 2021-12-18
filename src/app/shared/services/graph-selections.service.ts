@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,12 @@ export class GraphSelectionsService {
 
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
+
+  public minDateSubject = new BehaviorSubject<any>(undefined);
+  minDate$ = this.minDateSubject.asObservable();
+
+  public maxDateSubject = new BehaviorSubject<any>(undefined);
+  maxDate$ = this.maxDateSubject.asObservable();
 
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
@@ -96,6 +103,30 @@ export class GraphSelectionsService {
           );
           graphOptionsBackgroundID.classList.remove('disableClick');
         } else {
+          //find the min and max date of the dataset so that it can be included in the graph metadata download
+          let minDate;
+          let maxDate;
+          for (let i = 0; i < res.length; i++) {
+            let currentDate = res[i].date_time_group;
+            if (i === 0) {
+              minDate = currentDate;
+              maxDate = currentDate;
+            }
+            if (currentDate < minDate) {
+              minDate = currentDate;
+            }
+            if (currentDate > maxDate) {
+              maxDate = currentDate;
+            }
+            //on the last iteration, format and save the min and max date
+            if (i == res.length - 1) {
+              maxDate = moment(maxDate).format('MM-DD-YYYY');
+              minDate = moment(minDate).format('MM-DD-YYYY');
+              this.maxDateSubject.next(maxDate);
+              this.minDateSubject.next(minDate);
+            }
+          }
+
           if (axis === 'xAxis') {
             this.rawX = res;
             this.tempResultsXSubject.next(res);
