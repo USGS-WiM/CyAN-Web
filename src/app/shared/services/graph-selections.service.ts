@@ -103,6 +103,7 @@ export class GraphSelectionsService {
           );
           graphOptionsBackgroundID.classList.remove('disableClick');
         } else {
+          //find the min and max date of the dataset so that it can be included in the graph metadata download
           let minDate;
           let maxDate;
           for (let i = 0; i < res.length; i++) {
@@ -117,6 +118,7 @@ export class GraphSelectionsService {
             if (currentDate > maxDate) {
               maxDate = currentDate;
             }
+            //on the last iteration, format and save the min and max date
             if (i == res.length - 1) {
               maxDate = moment(maxDate).format('MM-DD-YYYY');
               minDate = moment(minDate).format('MM-DD-YYYY');

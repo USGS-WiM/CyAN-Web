@@ -637,6 +637,7 @@ export class GraphOptionsComponent implements OnInit {
       ],
     ];
 
+    //Create and download a csv of the graph metadata
     //The following code was adapted from this example:
     //https://www.delftstack.com/howto/javascript/export-javascript-csv/
     graphMetadata.forEach(function (rowArray) {
