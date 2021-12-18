@@ -206,17 +206,17 @@
   height: 575px;
 }
 .mapFiltersSmallHeight {
-  height: calc(98vh - 200px);
+  height: calc(95vh - 200px);
   overflow-y: scroll;
   min-height: 100px;
 }
 .mapFiltersMedHeight {
-  height: calc(98vh - 130px);
+  height: calc(95vh - 130px);
   overflow-y: scroll;
   min-height: 100px;
 }
 .mapFiltersMLHeight {
-  height: calc(98vh - 175px);
+  height: calc(95vh - 175px);
   overflow-y: scroll;
   min-height: 100px;
 }
@@ -247,6 +247,11 @@
 }
 .optionsBackgroundHeightSmall {
   height: 615px;
+}
+.optionsBackgroundResponsive {
+  height: calc(95vh - 80px);
+  overflow-y: scroll;
+  min-height: 100px;
 }
 .optionsMarginRightLarge {
   margin-right: 60px;
