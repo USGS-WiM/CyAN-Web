@@ -196,6 +196,7 @@
         class="downloadBtn dataBtn disabledDataBtn"
         matTooltip="CSV of all data"
         aria-label="Clicking this button will download a CSV of the filtered points"
+        (click)="graphDataDownload()"
       >
         <mat-icon>cloud_download</mat-icon>
       </button>

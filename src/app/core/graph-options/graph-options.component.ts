@@ -575,6 +575,82 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //creates a csv containing all of the user-defined filters
+  public graphDataDownload() {
+    let maxDateReturned;
+    let minDateReturned;
+    this.graphSelectionsService.maxDateSubject.subscribe(
+      (maxDate) => (maxDateReturned = maxDate)
+    );
+    this.graphSelectionsService.minDateSubject.subscribe(
+      (minDate) => (minDateReturned = minDate)
+    );
+
+    let graphMetadataContent = 'data:text/csv;charset=utf-8,';
+
+    //Remove commas so they don't interfere with the csv format
+    let formattedRegion = String(this.filterQueryX.meta.region);
+    formattedRegion = formattedRegion.replace(/,/g, '; ');
+    let formattedMcodeX = String(
+      this.graphSelectionsForm.get('MethodsX').value
+    );
+    formattedMcodeX = formattedMcodeX.replace(/,/g, '; ');
+    let formattedMcodeY = String(
+      this.graphSelectionsForm.get('MethodsY').value
+    );
+    formattedMcodeY = formattedMcodeY.replace(/,/g, '; ');
+
+    let graphMetadata = [
+      [
+        'North',
+        'South',
+        'East',
+        'West',
+        'Min_Year_Selected',
+        'Max_Year_Selected',
+        'Min_Date_Returned',
+        'Max_Date_Returned',
+        'Include_Null',
+        'Region',
+        'Optimal_Alignment',
+        'X_Parameter',
+        'X_Method',
+        'Y_Parameter',
+        'Y_Method',
+      ],
+      [
+        this.filterQueryX.meta.north,
+        this.filterQueryX.meta.south,
+        this.filterQueryX.meta.east,
+        this.filterQueryX.meta.west,
+        this.filterQueryX.meta.min_year,
+        this.filterQueryX.meta.max_year,
+        minDateReturned,
+        maxDateReturned,
+        this.filterQueryX.meta.include_NULL,
+        formattedRegion,
+        this.filterQueryX.meta.satellite_align,
+        this.graphSelectionsForm.get('ParametersX').value,
+        formattedMcodeX,
+        this.graphSelectionsForm.get('ParametersY').value,
+        formattedMcodeY,
+      ],
+    ];
+
+    //The following code was adapted from this example:
+    //https://www.delftstack.com/howto/javascript/export-javascript-csv/
+    graphMetadata.forEach(function (rowArray) {
+      let row = rowArray.join(',');
+      graphMetadataContent += row + '\r\n';
+    });
+    let encodedUri = encodeURI(graphMetadataContent);
+    let link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'graph_metadata.csv');
+    document.body.appendChild(link);
+    link.click();
+  }
+
   public resizeDivs() {
     //get window dimensions
     let windowHeight = window.innerHeight;
