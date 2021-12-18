@@ -223,6 +223,13 @@ export class MapOptionsComponent implements OnInit {
         items,
       };
       this.mapLayersService.filterWqSample(filterParameters);
+
+      //minimize panels if the screen width is small
+      let windowWidth = window.innerWidth;
+      if (windowWidth < 800) {
+        this.displayMapLayerOptions(false);
+        this.displayMapFilters(false);
+      }
     }
   }
 
@@ -370,7 +377,7 @@ export class MapOptionsComponent implements OnInit {
     }
     //initiate the filter points scroll depending on the height of the screen and whether the Map Layers panel is collapsed
     if (
-      (this.mapLayerOptions && windowHeight < 788) ||
+      (this.mapLayerOptions && windowHeight < 830) ||
       (!this.mapLayerOptions && windowHeight < 710)
     ) {
       //if the filters panel is open, decrease the spacing above collapsed Map Filters
@@ -416,7 +423,7 @@ export class MapOptionsComponent implements OnInit {
     }
     //remove the filter points scroll depending on the height of the screen and whether the Map Layers panel is collapsed
     if (
-      (this.mapLayerOptions && windowHeight > 788) ||
+      (this.mapLayerOptions && windowHeight > 830) ||
       (!this.mapLayerOptions && windowHeight > 710)
     ) {
       mapPointFilterDiv.classList.add('mapFiltersFullHeight');
