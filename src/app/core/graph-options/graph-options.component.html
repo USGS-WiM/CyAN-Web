@@ -1,24 +1,16 @@
 <div class="flex-container">
-  <div
-    class="graphOptionsBackgroundMini marginLeftFullWidth marginTopFullHeight"
-    [hidden]="graphOptionsVisible"
-    (click)="collapseGraphOptions(true)"
-    style="margin-right: 5px"
-    id="graphOptionsCollapsedID"
-    aria-label="clicking here will maximize the panel that contains the graph filters"
-  >
-    <div
-      style="
+  <div class="graphOptionsBackgroundMini marginLeftFullWidth marginTopFullHeight" [hidden]="graphOptionsVisible"
+    (click)="collapseGraphOptions(true)" style="margin-right: 5px" id="graphOptionsCollapsedID"
+    aria-label="clicking here will maximize the panel that contains the graph filters">
+    <div style="
         text-align: right;
         margin-right: 10px;
         margin-top: 15px;
         transform: rotate(270deg);
-      "
-    >
+      ">
       <mat-icon matTooltip="maximize">maximize</mat-icon>
     </div>
-    <div
-      style="
+    <div style="
         transform: rotate(270deg);
         font-size: 20px;
         text-align: center;
@@ -27,68 +19,37 @@
         margin-left: -45px;
         margin-top: 50px;
         color: rgb(163, 152, 152);
-      "
-    >
+      ">
       Graph Options
     </div>
   </div>
 
   <div
-    class="
-      optionsBackground
-      marginLeftFullWidth
-      marginTopFullHeight
-      optionsMarginRightLarge
-      optionsBackgroundHeightSmall
-    "
-    id="graphOptionsBackgroundID"
-    [hidden]="!graphOptionsVisible"
-  >
+    class="optionsBackground marginLeftFullWidth marginTopFullHeight optionsMarginRightLarge optionsBackgroundHeightSmall"
+    id="graphOptionsBackgroundID" [hidden]="!graphOptionsVisible">
     <div style="text-align: right; margin-right: 10px">
-      <mat-icon
-        matTooltip="minimize"
-        style="cursor: pointer"
-        (click)="collapseGraphOptions(false)"
-        aria-label="clicking here will maximize the panel that contains graph options"
-        >minimize</mat-icon
-      >
+      <mat-icon matTooltip="minimize" style="cursor: pointer" (click)="collapseGraphOptions(false)"
+        aria-label="clicking here will maximize the panel that contains graph options">minimize</mat-icon>
     </div>
     <div style="height: 10px"></div>
     <form [formGroup]="graphSelectionsForm">
       <div>
         <div style="margin-left: 10px">
           X-Axis <br />
-          <mat-form-field
-            appearance="fill"
-            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's x-axis."
-          >
+          <mat-form-field appearance="fill"
+            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's x-axis.">
             <mat-label>Parameter</mat-label>
-            <mat-select
-              (ngModelChange)="populateMcodeDropdown('xaxis')"
-              formControlName="ParametersX"
-            >
-              <mat-option
-                *ngFor="let parameter of this.parameterTypes$ | async"
-                [value]="parameter.pcode"
-                >{{ parameter.short_name }}</mat-option
-              >
+            <mat-select (ngModelChange)="populateMcodeDropdown('xaxis')" formControlName="ParametersX">
+              <mat-option *ngFor="let parameter of this.parameterTypes$ | async" [value]="parameter.pcode">{{
+                parameter.short_name }}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field
-            appearance="fill"
-            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis."
-          >
+          <mat-form-field appearance="fill"
+            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
             <mat-label>Methods</mat-label>
-            <mat-select
-              formControlName="MethodsX"
-              multiple
-              (ngModelChange)="methodSelectionChanged()"
-            >
-              <mat-option
-                *ngFor="let method of this.matchingMcodesX"
-                [value]="method.mcode"
-                >{{ method.short_name }}</mat-option
-              >
+            <mat-select formControlName="MethodsX" multiple (ngModelChange)="methodSelectionChanged()">
+              <mat-option *ngFor="let method of this.matchingMcodesX" [value]="method.mcode">{{ method.short_name }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -97,126 +58,91 @@
       <div>
         <div style="margin-left: 10px">
           Y-Axis <br />
-          <mat-form-field
-            appearance="fill"
-            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's y-axis."
-          >
+          <mat-form-field appearance="fill"
+            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's y-axis.">
             <mat-label>Parameter</mat-label>
-            <mat-select
-              (ngModelChange)="populateMcodeDropdown('yaxis')"
-              formControlName="ParametersY"
-            >
-              <mat-option
-                *ngFor="let parameter of this.parameterTypes$ | async"
-                [value]="parameter.pcode"
-                >{{ parameter.short_name }}</mat-option
-              >
+            <mat-select (ngModelChange)="populateMcodeDropdown('yaxis')" formControlName="ParametersY">
+              <mat-option *ngFor="let parameter of this.parameterTypes$ | async" [value]="parameter.pcode">{{
+                parameter.short_name }}</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field
-            appearance="fill"
-            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis."
-          >
+          <mat-form-field appearance="fill"
+            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis.">
             <mat-label>Methods</mat-label>
-            <mat-select
-              formControlName="MethodsY"
-              multiple
-              (ngModelChange)="methodSelectionChanged()"
-            >
-              <mat-option
-                *ngFor="let method of matchingMcodesY"
-                [value]="method.mcode"
-                >{{ method.short_name }}</mat-option
-              >
+            <mat-select formControlName="MethodsY" multiple (ngModelChange)="methodSelectionChanged()">
+              <mat-option *ngFor="let method of matchingMcodesY" [value]="method.mcode">{{ method.short_name }}
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
       </div>
     </form>
     <div id="graphFilters">
-      <div
-        class="custom-slider"
-        style="margin-left: 10px"
-        aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph."
-      >
-        <ngx-slider
-          [(value)]="minYear"
-          [(highValue)]="maxYear"
-          [options]="timeOptions"
-        ></ngx-slider>
+      <div class="custom-slider" style="margin-left: 10px"
+        aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph.">
+        <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions"></ngx-slider>
       </div>
       <div style="margin-left: 10px; margin-top: 10px">
         Log Scale &nbsp;
-        <mat-checkbox
-          class="example-margin"
-          [disableRipple]="true"
-          (change)="applyLogX($event)"
-          aria-label="Checking this box will add a logarithmic scale to the x-axis "
-          >x
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogX($event)"
+          aria-label="Checking this box will add a logarithmic scale to the x-axis ">x
         </mat-checkbox>
         &nbsp;
-        <mat-checkbox
-          class="example-margin"
-          [disableRipple]="true"
-          (change)="applyLogY($event)"
-          aria-label="Checking this box will add a logarithmic scale to the y-axis "
-          >y
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogY($event)"
+          aria-label="Checking this box will add a logarithmic scale to the y-axis ">y
         </mat-checkbox>
       </div>
-      <div
-        style="margin-left: 10px; margin-top: 10px"
-        aria-label="Checking this box will filter points using the current map extent"
-      >
-        <mat-checkbox
-          class="example-margin"
-          [disableRipple]="true"
-          (change)="applyBoundingBox($event)"
-          >Limit by study area <br />
+      <div style="margin-left: 10px; margin-top: 10px"
+        aria-label="Checking this box will filter points using the current map extent">
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)">Limit by study
+          area <br />
           specified in map options
         </mat-checkbox>
       </div>
-      <div
-        style="margin-left: 10px; margin-top: 10px"
+      <div style="margin-left: 10px; margin-top: 10px"
         aria-label="Checking this box will filter points that have optimal satellite alignment"
-        (change)="clickSatAlign($event)"
-      >
-        <mat-checkbox class="example-margin" [disableRipple]="true"
-          >Optimal satellite alignment
+        (change)="clickSatAlign($event)">
+        <mat-checkbox class="example-margin" [disableRipple]="true">Optimal satellite alignment
         </mat-checkbox>
       </div>
-      <button
-        class="plotDataBtn dataBtn"
-        (click)="clickPlotData()"
-        aria-label="Clicking this button will create a graph using the points defined by the user-defined filters"
-      >
+      <button class="plotDataBtn dataBtn" (click)="clickPlotData()"
+        aria-label="Clicking this button will create a graph using the points defined by the user-defined filters">
         Create Graph
       </button>
-      <button
-        id="graphDataDownloadBtn"
-        class="downloadBtn dataBtn disabledDataBtn"
-        matTooltip="CSV of all data"
-        aria-label="Clicking this button will download a CSV of the filtered points"
-        (click)="graphDataDownload()"
-      >
+      <button id="graphDataDownloadBtn" class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download Metadata"
+        aria-label="Clicking this button will download a CSV of the filtered points" (click)="graphDataDownload()">
         <mat-icon>cloud_download</mat-icon>
       </button>
-      <button
-        class="downloadBtn dataBtn disabledDataBtn"
-        id="flagBtn"
-        (click)="createFlags()"
-        matTooltip="CSV of flagged data"
-        aria-label="Clicking this button will download a CSV of the flagged data"
-      >
+      <button class="downloadBtn dataBtn disabledDataBtn" id="flagBtn" (click)="createFlags()"
+        matTooltip="CSV of flagged data" aria-label="Clicking this button will download a CSV of the flagged data">
         <mat-icon>flag</mat-icon>
       </button>
     </div>
   </div>
-  <div
-    class="graphBackground marginTopFullHeight"
-    id="graphBackgroundID"
-    [hidden]="!showGraph"
-    aria-label="This is a graph displaying the points that were filtered using the menu located to the left of this graph"
-  >
+  <div class="graphBackground marginTopFullHeight" id="graphBackgroundID" [hidden]="!showGraph"
+    aria-label="This is a graph displaying the points that were filtered using the menu located to the left of this graph">
+    <div class="optionModal" [hidden]=" !showFlagOptions">
+      <div style="margin-left: 10px; margin-top: 10px"
+        aria-label="Checking this box will flag the X-Axis data from this point">
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)">X-Axis
+        </mat-checkbox>
+      </div>
+      <div style="margin-left: 10px; margin-top: 10px"
+        aria-label="Checking this box will flag the Y-Axis data from this point" (change)="clickSatAlign($event)">
+        <mat-checkbox class="example-margin" [disableRipple]="true">Y-Axis
+        </mat-checkbox>
+      </div>
+
+      <button class="mapFilterBtn dataBtn" style="margin-left: 0px" (click)="submitFlagSelections()"
+        aria-label="Click this button to save flag options">
+        Save
+      </button>
+      <button class="mapFilterBtn dataBtn" (click)="exitFlagOptions()"
+        aria-label="Click this button to close the flag options modal without saving changes">
+        Cancel
+      </button>
+    </div>
     <div id="graph"></div>
   </div>
+
 </div>

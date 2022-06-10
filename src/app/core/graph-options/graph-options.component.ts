@@ -46,6 +46,9 @@ export class GraphOptionsComponent implements OnInit {
   west: number = -180;
   regions: any[];
 
+  //flags
+  showFlagOptions: Boolean = false;
+
   //Intermediate data
   public matchingMcodesY = [];
   public matchingMcodesX = [];
@@ -268,16 +271,29 @@ export class GraphOptionsComponent implements OnInit {
     this.flagPoint();
   }
 
+  flagOptions() {
+    this.showFlagOptions = true;
+  }
+  exitFlagOptions() {
+    this.showFlagOptions = false;
+  }
+  submitFlagSelections() {
+    //do something
+  }
+
   //Change color of flagged point and add x & y data to arrays
   public flagPoint() {
+    let unflaggedColor = 'rgb(242, 189, 161)';
+    let flaggedColor = 'rgb(104, 121, 128)';
     let tempIndex = [];
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
-      var pointNum = '',
-        curveNum = '',
+      this.flagOptions();
+      let pointNum = '',
+        //curveNum = '',
         colors = [];
       for (var i = 0; i < selectedPoints.points.length; i++) {
         pointNum = selectedPoints.points[i].pointNumber;
-        curveNum = selectedPoints.points[i].curveNumber;
+        //curveNum = selectedPoints.points[i].curveNumber;
         colors = selectedPoints.points[i].data.marker.color;
         tempIndex.push(selectedPoints.points[i].pointIndex);
         if (this.flaggedPointIndices == undefined) {
@@ -286,15 +302,18 @@ export class GraphOptionsComponent implements OnInit {
         this.flaggedPointIndices.push(selectedPoints.points[i].pointIndex);
       }
 
+      console.log('COLORS', colors);
       //If the point is currently flagged, change the color back to its original state
-      if (colors[pointNum] === 'rgb(104, 121, 128)') {
-        colors[pointNum] = 'rgb(242, 189, 161)';
+      if (colors[pointNum] === flaggedColor) {
+        colors[pointNum] = unflaggedColor;
         //If the point isn't already flagged, change the color to blue-gray
       } else {
-        colors[pointNum] = 'rgb(104, 121, 128)';
+        colors[pointNum] = flaggedColor;
       }
-      var update = { marker: { color: colors, size: 16 } };
-      Plotly.restyle('graph', update, [curveNum]);
+      var update = {
+        marker: { color: colors, size: 12, symbol: 'circle-open' },
+      };
+      Plotly.restyle('graph', update);
 
       //Disable/enable flag button
       let flagBtn = document.getElementById('flagBtn');
