@@ -124,15 +124,16 @@
     <div class="optionModal" [hidden]=" !showFlagOptions">
       <div style="margin-left: 10px; margin-top: 10px"
         aria-label="Checking this box will flag the X-Axis data from this point">
-        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)">X-Axis
+        <mat-checkbox id="xCheckbox" class="example-margin" [disableRipple]="true"
+          (change)="checkFlagOptions($event, 'x')">X-Axis
         </mat-checkbox>
       </div>
       <div style="margin-left: 10px; margin-top: 10px"
-        aria-label="Checking this box will flag the Y-Axis data from this point" (change)="clickSatAlign($event)">
-        <mat-checkbox class="example-margin" [disableRipple]="true">Y-Axis
+        aria-label="Checking this box will flag the Y-Axis data from this point">
+        <mat-checkbox id="yCheckbox" class=" example-margin" [disableRipple]="true"
+          (change)="checkFlagOptions($event, 'y')">Y-Axis
         </mat-checkbox>
       </div>
-
       <button class="mapFilterBtn dataBtn" style="margin-left: 0px" (click)="submitFlagSelections()"
         aria-label="Click this button to save flag options">
         Save
@@ -144,5 +145,4 @@
     </div>
     <div id="graph"></div>
   </div>
-
 </div>
