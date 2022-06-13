@@ -51,6 +51,10 @@ export class GraphOptionsComponent implements OnInit {
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
   clickedPoint;
+  public axisFlagForm = new FormGroup({
+    xFlagControl: new FormControl(),
+    yFlagControl: new FormControl(),
+  });
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -275,10 +279,15 @@ export class GraphOptionsComponent implements OnInit {
     this.clickPoint();
   }
 
-  exitFlagOptions() {
+  closeFlagOptions() {
+    //Close flag options modal
     this.showFlagOptions = false;
-  }
 
+    //Reset form
+    this.axisFlagForm.get('xFlagControl').setValue(null);
+    this.axisFlagForm.get('yFlagControl').setValue(null);
+  }
+  /* 
   //This function is triggered when a checkbox in the optionModal is checked/unchecked
   checkFlagOptions(axisChecked, axis: String) {
     //If x-axis checkbox is selected, change var to true
@@ -300,7 +309,7 @@ export class GraphOptionsComponent implements OnInit {
     if (axisChecked.checked == false && axis == 'y') {
       this.yAxisChecked = false;
     }
-  }
+  } */
 
   submitFlagSelections() {
     /*
@@ -315,7 +324,11 @@ export class GraphOptionsComponent implements OnInit {
     let flaggedXData = [];
     let flaggedYData = [];
 
-    if (this.xAxisChecked) {
+    //X and Y both checked
+    if (
+      this.axisFlagForm.get('xFlagControl').value &&
+      this.axisFlagForm.get('yFlagControl').value
+    ) {
       let pointNum = '',
         //curveNum = '',
         colors = [];
@@ -332,12 +345,13 @@ export class GraphOptionsComponent implements OnInit {
       }
 
       //If the point is currently flagged, change the color back to its original state
-      if (colors[pointNum] === flaggedColor) {
+      /* if (colors[pointNum] === flaggedColor) {
         colors[pointNum] = unflaggedColor;
         //If the point isn't already flagged, change the color to blue-gray
       } else {
         colors[pointNum] = flaggedColor;
-      }
+      } */
+      colors[pointNum] = flaggedColor;
       var update = {
         marker: { color: colors, size: 12, symbol: 'circle-open' },
       };
@@ -352,7 +366,11 @@ export class GraphOptionsComponent implements OnInit {
       });
     }
 
-    if (this.yAxisChecked) {
+    //Y checked; x not checked
+    if (
+      this.axisFlagForm.get('yFlagControl').value &&
+      !this.axisFlagForm.get('xFlagControl').value
+    ) {
       let pointNum = '',
         //curveNum = '',
         colors = [];
@@ -369,12 +387,98 @@ export class GraphOptionsComponent implements OnInit {
       }
 
       //If the point is currently flagged, change the color back to its original state
-      if (colors[pointNum] === flaggedColor) {
+      /*  if (colors[pointNum] === flaggedColor) {
         colors[pointNum] = unflaggedColor;
         //If the point isn't already flagged, change the color to blue-gray
       } else {
         colors[pointNum] = flaggedColor;
+      } */
+      colors[pointNum] = flaggedColor;
+      var update = {
+        marker: { color: colors, size: 12, symbol: 'circle-open' },
+      };
+      Plotly.restyle('graph', update);
+      let tempYData;
+      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+        tempYData = data;
+        for (let i = 0; i < this.yFlaggedPointIndices.length; i++) {
+          flaggedYData.push(tempYData[this.yFlaggedPointIndices[i]]);
+          console.log('flaggedYData inside', flaggedYData);
+        }
+      });
+    }
+
+    //X checked; Y not checked
+    if (
+      !this.axisFlagForm.get('yFlagControl').value &&
+      this.axisFlagForm.get('xFlagControl').value
+    ) {
+      let pointNum = '',
+        //curveNum = '',
+        colors = [];
+      for (let i = 0; i < this.clickedPoint.points.length; i++) {
+        console.log('colors', colors, 'i', i);
+        pointNum = this.clickedPoint.points[i].pointNumber;
+        //curveNum = selectedPoints.points[i].curveNumber;
+        colors = this.clickedPoint.points[i].data.marker.color;
+        tempIndex.push(this.clickedPoint.points[i].pointIndex);
+        if (this.yFlaggedPointIndices == undefined) {
+          this.yFlaggedPointIndices = [];
+        }
+        this.yFlaggedPointIndices.push(this.clickedPoint.points[i].pointIndex);
       }
+
+      //If the point is currently flagged, change the color back to its original state
+      /* if (colors[pointNum] === flaggedColor) {
+        colors[pointNum] = unflaggedColor;
+        //If the point isn't already flagged, change the color to blue-gray
+      } else {
+        colors[pointNum] = flaggedColor;
+      } */
+
+      colors[pointNum] = flaggedColor;
+      var update = {
+        marker: { color: colors, size: 12, symbol: 'circle-open' },
+      };
+      Plotly.restyle('graph', update);
+      let tempYData;
+      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+        tempYData = data;
+        for (let i = 0; i < this.yFlaggedPointIndices.length; i++) {
+          flaggedYData.push(tempYData[this.yFlaggedPointIndices[i]]);
+          console.log('flaggedYData inside', flaggedYData);
+        }
+      });
+    }
+
+    //Neither X nor y checked
+    if (
+      !this.axisFlagForm.get('yFlagControl').value &&
+      !this.axisFlagForm.get('xFlagControl').value
+    ) {
+      let pointNum = '',
+        //curveNum = '',
+        colors = [];
+      for (let i = 0; i < this.clickedPoint.points.length; i++) {
+        console.log('colors', colors, 'i', i);
+        pointNum = this.clickedPoint.points[i].pointNumber;
+        //curveNum = selectedPoints.points[i].curveNumber;
+        colors = this.clickedPoint.points[i].data.marker.color;
+        tempIndex.push(this.clickedPoint.points[i].pointIndex);
+        if (this.yFlaggedPointIndices == undefined) {
+          this.yFlaggedPointIndices = [];
+        }
+        this.yFlaggedPointIndices.push(this.clickedPoint.points[i].pointIndex);
+      }
+
+      //If the point is currently flagged, change the color back to its original state
+      /*  if (colors[pointNum] === flaggedColor) {
+        colors[pointNum] = unflaggedColor;
+        //If the point isn't already flagged, change the color to blue-gray
+      } else {
+        colors[pointNum] = flaggedColor;
+      } */
+      colors[pointNum] = unflaggedColor;
       var update = {
         marker: { color: colors, size: 12, symbol: 'circle-open' },
       };
@@ -391,13 +495,8 @@ export class GraphOptionsComponent implements OnInit {
     //No fancy download yet; so displaying data in console for now
     console.log('flaggedXData', flaggedXData);
     console.log('flaggedYData', flaggedYData);
-    this.showFlagOptions = false;
 
-    let xCheckbox = document.getElementById('xCheckbox');
-    let yCheckbox = document.getElementById('yCheckbox');
-    console.log('xCheckbox', xCheckbox);
-    xCheckbox.classList.remove('mat-checkbox-checked');
-    yCheckbox.classList.remove('mat-checkbox-checked');
+    this.closeFlagOptions();
   }
 
   //Change color of flagged point and add x & y data to arrays
