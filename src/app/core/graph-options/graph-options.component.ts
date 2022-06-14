@@ -366,12 +366,16 @@ export class GraphOptionsComponent implements OnInit {
     let xFlaggedColor = 'rgb(255, 0, 255)';
     let yFlaggedColor = 'rgb(0, 204, 204)';
 
+    //Symbols for flagged vs unflagged
+    let unflaggedSymbol = 'circle-open';
+    let flaggedSymbol = 'cirlce';
+
     //X and Y both checked
     if (
       this.axisFlagForm.get('xFlagControl').value &&
       this.axisFlagForm.get('yFlagControl').value
     ) {
-      this.updateGraph(xyFlaggedColor, 'both', 'circle');
+      this.updateGraph(xyFlaggedColor, 'both', flaggedSymbol);
     }
 
     //Y checked; x not checked
@@ -379,7 +383,7 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('yFlagControl').value &&
       !this.axisFlagForm.get('xFlagControl').value
     ) {
-      this.updateGraph(yFlaggedColor, 'y', 'circle');
+      this.updateGraph(yFlaggedColor, 'y', flaggedSymbol);
     }
 
     //X checked; Y not checked
@@ -387,7 +391,7 @@ export class GraphOptionsComponent implements OnInit {
       !this.axisFlagForm.get('yFlagControl').value &&
       this.axisFlagForm.get('xFlagControl').value
     ) {
-      this.updateGraph(xFlaggedColor, 'x', 'circle');
+      this.updateGraph(xFlaggedColor, 'x', flaggedSymbol);
     }
 
     //Neither X nor y checked
@@ -395,7 +399,7 @@ export class GraphOptionsComponent implements OnInit {
       !this.axisFlagForm.get('yFlagControl').value &&
       !this.axisFlagForm.get('xFlagControl').value
     ) {
-      this.updateGraph(unflaggedColor, 'none', 'circle-open');
+      this.updateGraph(unflaggedColor, 'none', unflaggedSymbol);
     }
 
     //Close flag modal and clear selections
