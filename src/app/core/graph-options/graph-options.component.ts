@@ -289,6 +289,21 @@ export class GraphOptionsComponent implements OnInit {
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
+
+    //Disable/enable flag button
+    let flagBtn = document.getElementById('flagBtn');
+    if (this.flaggedPointIndices.x) {
+      if (this.flaggedPointIndices.x.length > 0) {
+        flagBtn.classList.remove('disabledDataBtn');
+      }
+    }
+    if (this.flaggedPointIndices.y) {
+      if (this.flaggedPointIndices.y.length > 0) {
+        flagBtn.classList.remove('disabledDataBtn');
+      }
+    } else {
+      flagBtn.classList.add('disabledDataBtn');
+    }
   }
 
   updateGraph(color: String, axis: String, symbol: String) {
@@ -412,21 +427,6 @@ export class GraphOptionsComponent implements OnInit {
       this.clickedPoint = selectedPoints;
       //Open flag options modal
       this.showFlagOptions = true;
-
-      //Disable/enable flag button
-      let flagBtn = document.getElementById('flagBtn');
-      if (this.xFlaggedPointIndices) {
-        if (this.xFlaggedPointIndices.length > 0) {
-          flagBtn.classList.remove('disabledDataBtn');
-        }
-      }
-      if (this.yFlaggedPointIndices) {
-        if (this.yFlaggedPointIndices.length > 0) {
-          flagBtn.classList.remove('disabledDataBtn');
-        }
-      } else {
-        flagBtn.classList.add('disabledDataBtn');
-      }
     });
   }
 
@@ -449,10 +449,6 @@ export class GraphOptionsComponent implements OnInit {
         flaggedXData.push(tempXData[this.xFlaggedPointIndices[i]]);
       }
     });
-
-    //No fancy download yet; so displaying data in console for now
-    console.log('flaggedXData', flaggedXData);
-    console.log('flaggedYData', flaggedYData);
   }
 
   //Called when user clicks 'Plot Data'
