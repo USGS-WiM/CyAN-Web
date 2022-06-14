@@ -89,6 +89,7 @@ export class GraphOptionsComponent implements OnInit {
   public graphWidth: Number;
   public graphMargins: Number;
   public pointColors = [];
+  public pointSymbols = [];
   public xAxisType = 'scatter';
   public yAxisType = 'scatter';
   public yAxisTitle = '';
@@ -153,6 +154,7 @@ export class GraphOptionsComponent implements OnInit {
                   //Since the point colors changed when flagged, we begin by setting the color of each point individually
                   for (let i = 0; i < this.currentYaxisValues.length; i++) {
                     this.pointColors.push('rgb(242, 189, 161)');
+                    this.pointSymbols.push('circle-open');
                   }
                   //Create and display graph
                   this.createGraph();
@@ -234,7 +236,7 @@ export class GraphOptionsComponent implements OnInit {
       //name: 'Sample 1',
       // text: this.sid,
       textposition: 'bottom center',
-      marker: { size: 12, color: this.pointColors, symbol: 'circle-open' },
+      marker: { size: 12, color: this.pointColors, symbol: this.pointSymbols },
     };
 
     var data = [trace1];
@@ -289,15 +291,22 @@ export class GraphOptionsComponent implements OnInit {
     this.axisFlagForm.get('yFlagControl').setValue(null);
   }
 
-  updateGraph(color: String, axis: String) {
+  updateGraph(color: String, axis: String, symbol: String) {
     let tempIndex = [];
     let flaggedData = [];
     let pointNum = '';
     let colors: [];
+    let symbols: [];
 
     for (let i = 0; i < this.clickedPoint.points.length; i++) {
       pointNum = this.clickedPoint.points[i].pointNumber;
       colors = this.clickedPoint.points[i].data.marker.color;
+      console.log(
+        'this.clickedPoint.points[i].data.marker',
+        this.clickedPoint.points[i].data.marker
+      );
+      symbols = this.clickedPoint.points[i].data.marker.symbol;
+      console.log('symbols', symbols);
       tempIndex.push(this.clickedPoint.points[i].pointIndex);
       if (axis == 'x' || axis == 'both') {
         if (!this.flaggedPointIndices.x) {
@@ -315,10 +324,11 @@ export class GraphOptionsComponent implements OnInit {
 
     //Change the color of the point at the correct index
     colors[pointNum] = color;
+    symbols[pointNum] = symbol;
 
     //New styling for new plot
     var update = {
-      marker: { color: colors, size: 12, symbol: 'circle-open' },
+      marker: { color: colors, size: 12, symbol: symbols },
     };
 
     //Change the color on the graph
@@ -352,16 +362,16 @@ export class GraphOptionsComponent implements OnInit {
   submitFlagSelections() {
     //Colors for all 4 flagging options
     let unflaggedColor = 'rgb(242, 189, 161)';
-    let xyFlaggedColor = 'rgb(255, 128, 0)';
+    let xyFlaggedColor = 'rgb(0, 153, 0)';
     let xFlaggedColor = 'rgb(255, 0, 255)';
-    let yFlaggedColor = 'rgb(0, 0, 0)';
+    let yFlaggedColor = 'rgb(0, 204, 204)';
 
     //X and Y both checked
     if (
       this.axisFlagForm.get('xFlagControl').value &&
       this.axisFlagForm.get('yFlagControl').value
     ) {
-      this.updateGraph(xyFlaggedColor, 'both');
+      this.updateGraph(xyFlaggedColor, 'both', 'circle');
     }
 
     //Y checked; x not checked
@@ -369,7 +379,7 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('yFlagControl').value &&
       !this.axisFlagForm.get('xFlagControl').value
     ) {
-      this.updateGraph(yFlaggedColor, 'y');
+      this.updateGraph(yFlaggedColor, 'y', 'circle');
     }
 
     //X checked; Y not checked
@@ -377,7 +387,7 @@ export class GraphOptionsComponent implements OnInit {
       !this.axisFlagForm.get('yFlagControl').value &&
       this.axisFlagForm.get('xFlagControl').value
     ) {
-      this.updateGraph(xFlaggedColor, 'x');
+      this.updateGraph(xFlaggedColor, 'x', 'circle');
     }
 
     //Neither X nor y checked
@@ -385,7 +395,7 @@ export class GraphOptionsComponent implements OnInit {
       !this.axisFlagForm.get('yFlagControl').value &&
       !this.axisFlagForm.get('xFlagControl').value
     ) {
-      this.updateGraph(unflaggedColor, 'none');
+      this.updateGraph(unflaggedColor, 'none', 'circle-open');
     }
 
     //Close flag modal and clear selections
