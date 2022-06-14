@@ -47,6 +47,7 @@ export class GraphOptionsComponent implements OnInit {
   regions: any[];
 
   //flags
+  flaggedData: Array<Object> = [];
   showFlagOptions: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
@@ -107,7 +108,7 @@ export class GraphOptionsComponent implements OnInit {
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
   }
 
-  //Reset the css (via resizeDivs()) when the window is resized
+  //Adjust the css (via resizeDivs()) when the window is resized
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -151,6 +152,8 @@ export class GraphOptionsComponent implements OnInit {
                   this.currentXaxisValues.length > 0
                 ) {
                   this.alreadyGraphed = true;
+                  this.pointColors = [];
+                  this.pointSymbols = [];
                   //Since the point colors changed when flagged, we begin by setting the color of each point individually
                   for (let i = 0; i < this.currentYaxisValues.length; i++) {
                     this.pointColors.push('rgb(242, 189, 161)');
@@ -308,7 +311,7 @@ export class GraphOptionsComponent implements OnInit {
 
   updateGraph(color: String, axis: String, symbol: String) {
     let tempIndex = [];
-    let flaggedData = [];
+    let tempFlaggedData = [];
     let pointNum = '';
     let colors: [];
     let symbols: [];
@@ -316,13 +319,9 @@ export class GraphOptionsComponent implements OnInit {
     for (let i = 0; i < this.clickedPoint.points.length; i++) {
       pointNum = this.clickedPoint.points[i].pointNumber;
       colors = this.clickedPoint.points[i].data.marker.color;
-      console.log(
-        'this.clickedPoint.points[i].data.marker',
-        this.clickedPoint.points[i].data.marker
-      );
       symbols = this.clickedPoint.points[i].data.marker.symbol;
-      console.log('symbols', symbols);
       tempIndex.push(this.clickedPoint.points[i].pointIndex);
+
       if (axis == 'x' || axis == 'both') {
         if (!this.flaggedPointIndices.x) {
           this.flaggedPointIndices.x = [];
@@ -350,27 +349,30 @@ export class GraphOptionsComponent implements OnInit {
     Plotly.restyle('graph', update);
 
     let tempData;
-    if (axis == 'x' || axis == 'both') {
-      //Get all of the data corresponding with the flagged point
-      this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-        tempData = data;
-        for (let i = 0; i < this.flaggedPointIndices.x.length; i++) {
-          flaggedData.push(tempData[this.flaggedPointIndices.x[i]]);
-        }
-      });
-    }
-    if (axis == 'y' || axis == 'both') {
-      //Get all of the data corresponding with the flagged point
-      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-        tempData = data;
-        for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
-          flaggedData.push(tempData[this.flaggedPointIndices.y[i]]);
-        }
-      });
-    }
+    //  if (axis == 'x' || axis == 'both') {
+    //Get all of the data corresponding with the flagged point
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+      tempData = data;
+      for (let i = 0; i < this.flaggedPointIndices.x.length; i++) {
+        console.log('x-axis data added');
+        tempFlaggedData.push(tempData[this.flaggedPointIndices.x[i]]);
+      }
+    });
+    //   }
+    //  if (axis == 'y' || axis == 'both') {
+    //Get all of the data corresponding with the flagged point
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+      tempData = data;
+      for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
+        console.log('y-axis data added');
+        tempFlaggedData.push(tempData[this.flaggedPointIndices.y[i]]);
+      }
+    });
+    //  }
 
+    this.flaggedData.push(tempFlaggedData);
     //No fancy download yet; displaying data in console for now
-    console.log('flaggedData', flaggedData);
+    console.log('flaggedData', this.flaggedData);
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
@@ -495,6 +497,14 @@ export class GraphOptionsComponent implements OnInit {
       if (windowWidth < 800) {
         this.collapseGraphOptions(false);
       }
+    }
+
+    //Discard old parameter indicies when a new graph is generated
+    if (this.flaggedPointIndices.x) {
+      this.flaggedPointIndices.x = [];
+    }
+    if (this.flaggedPointIndices.y) {
+      this.flaggedPointIndices.y = [];
     }
   }
 
