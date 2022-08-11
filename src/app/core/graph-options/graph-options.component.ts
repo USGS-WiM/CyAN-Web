@@ -309,36 +309,44 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Called whenever a flag is selected/deselected
   updateGraph(color: String, axis: String, symbol: String) {
-    let tempIndex = [];
-    let tempFlaggedData = [];
-    let pointNum = '';
+    let pointIndex = '';
     let colors: [];
     let symbols: [];
 
+    //clickedPoints contains info about the click point: index of the point in the array created for this graph, the x and y values, and the marker display
     for (let i = 0; i < this.clickedPoint.points.length; i++) {
-      pointNum = this.clickedPoint.points[i].pointNumber;
+      //unique id/index for selecte dpoint for this specific graph
+      pointIndex = this.clickedPoint.points[i].pointIndex;
+      //data.marker.color = marker color array for all points in rgb
       colors = this.clickedPoint.points[i].data.marker.color;
+      //data.marker.symbol = array of shapes for all points
       symbols = this.clickedPoint.points[i].data.marker.symbol;
-      tempIndex.push(this.clickedPoint.points[i].pointIndex);
 
+      //x and y data are flagged separately; need to keep track of which axis was flagged
       if (axis == 'x' || axis == 'both') {
         if (!this.flaggedPointIndices.x) {
+          //if there are no x-axis flags, create empty array
           this.flaggedPointIndices.x = [];
         }
+        //add new x-axis index to the array
         this.flaggedPointIndices.x.push(this.clickedPoint.points[i].pointIndex);
       }
       if (axis == 'y' || axis == 'both') {
         if (!this.flaggedPointIndices.y) {
+          //if there are no y-axis flags, create empty array
           this.flaggedPointIndices.y = [];
         }
+        //add new y-axis index to the array
         this.flaggedPointIndices.y.push(this.clickedPoint.points[i].pointIndex);
       }
     }
 
-    //Change the color of the point at the correct index
-    colors[pointNum] = color;
-    symbols[pointNum] = symbol;
+    //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
+    colors[pointIndex] = color;
+    //Change the symbol of the point at the correct index (flagged pts become filled circles; unflagged becomes hollow circle)
+    symbols[pointIndex] = symbol;
 
     //New styling for new plot
     var update = {
@@ -349,29 +357,30 @@ export class GraphOptionsComponent implements OnInit {
     Plotly.restyle('graph', update);
 
     let tempData;
-    //  if (axis == 'x' || axis == 'both') {
-    //Get all of the data corresponding with the flagged point
-    this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-      tempData = data;
-      for (let i = 0; i < this.flaggedPointIndices.x.length; i++) {
-        console.log('x-axis data added');
-        tempFlaggedData.push(tempData[this.flaggedPointIndices.x[i]]);
-      }
-    });
-    //   }
-    //  if (axis == 'y' || axis == 'both') {
-    //Get all of the data corresponding with the flagged point
-    this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-      tempData = data;
-      for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
-        console.log('y-axis data added');
-        tempFlaggedData.push(tempData[this.flaggedPointIndices.y[i]]);
-      }
-    });
-    //  }
+    if (axis == 'x' || axis == 'both') {
+      //Get all of the data corresponding with the flagged point
+      this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+        tempData = data;
+        this.flaggedData.push(
+          tempData[
+            this.flaggedPointIndices.x[this.flaggedPointIndices.x.length - 1]
+          ]
+        );
+        //  }
+      });
+    }
+    if (axis == 'y' || axis == 'both') {
+      //Get all of the data corresponding with the flagged point
+      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+        tempData = data;
+        this.flaggedData.push(
+          tempData[
+            this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
+          ]
+        );
+      });
+    }
 
-    this.flaggedData.push(tempFlaggedData);
-    //No fancy download yet; displaying data in console for now
     console.log('flaggedData', this.flaggedData);
   }
 
