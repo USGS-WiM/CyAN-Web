@@ -47,6 +47,7 @@ export class GraphOptionsComponent implements OnInit {
   regions: any[];
 
   //flags
+  flaggedData: Array<Object> = [];
   showFlagOptions: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
@@ -107,7 +108,7 @@ export class GraphOptionsComponent implements OnInit {
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
   }
 
-  //Reset the css (via resizeDivs()) when the window is resized
+  //Adjust the css (via resizeDivs()) when the window is resized
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -151,6 +152,8 @@ export class GraphOptionsComponent implements OnInit {
                   this.currentXaxisValues.length > 0
                 ) {
                   this.alreadyGraphed = true;
+                  this.pointColors = [];
+                  this.pointSymbols = [];
                   //Since the point colors changed when flagged, we begin by setting the color of each point individually
                   for (let i = 0; i < this.currentYaxisValues.length; i++) {
                     this.pointColors.push('rgb(242, 189, 161)');
@@ -306,40 +309,44 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  //Called whenever a flag is selected/deselected
   updateGraph(color: String, axis: String, symbol: String) {
-    let tempIndex = [];
-    let flaggedData = [];
-    let pointNum = '';
+    let pointIndex = '';
     let colors: [];
     let symbols: [];
 
+    //clickedPoints contains info about the click point: index of the point in the array created for this graph, the x and y values, and the marker display
     for (let i = 0; i < this.clickedPoint.points.length; i++) {
-      pointNum = this.clickedPoint.points[i].pointNumber;
+      //unique id/index for selecte dpoint for this specific graph
+      pointIndex = this.clickedPoint.points[i].pointIndex;
+      //data.marker.color = marker color array for all points in rgb
       colors = this.clickedPoint.points[i].data.marker.color;
-      console.log(
-        'this.clickedPoint.points[i].data.marker',
-        this.clickedPoint.points[i].data.marker
-      );
+      //data.marker.symbol = array of shapes for all points
       symbols = this.clickedPoint.points[i].data.marker.symbol;
-      console.log('symbols', symbols);
-      tempIndex.push(this.clickedPoint.points[i].pointIndex);
+
+      //x and y data are flagged separately; need to keep track of which axis was flagged
       if (axis == 'x' || axis == 'both') {
         if (!this.flaggedPointIndices.x) {
+          //if there are no x-axis flags, create empty array
           this.flaggedPointIndices.x = [];
         }
+        //add new x-axis index to the array
         this.flaggedPointIndices.x.push(this.clickedPoint.points[i].pointIndex);
       }
       if (axis == 'y' || axis == 'both') {
         if (!this.flaggedPointIndices.y) {
+          //if there are no y-axis flags, create empty array
           this.flaggedPointIndices.y = [];
         }
+        //add new y-axis index to the array
         this.flaggedPointIndices.y.push(this.clickedPoint.points[i].pointIndex);
       }
     }
 
-    //Change the color of the point at the correct index
-    colors[pointNum] = color;
-    symbols[pointNum] = symbol;
+    //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
+    colors[pointIndex] = color;
+    //Change the symbol of the point at the correct index (flagged pts become filled circles; unflagged becomes hollow circle)
+    symbols[pointIndex] = symbol;
 
     //New styling for new plot
     var update = {
@@ -354,23 +361,27 @@ export class GraphOptionsComponent implements OnInit {
       //Get all of the data corresponding with the flagged point
       this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
         tempData = data;
-        for (let i = 0; i < this.flaggedPointIndices.x.length; i++) {
-          flaggedData.push(tempData[this.flaggedPointIndices.x[i]]);
-        }
+        this.flaggedData.push(
+          tempData[
+            this.flaggedPointIndices.x[this.flaggedPointIndices.x.length - 1]
+          ]
+        );
+        //  }
       });
     }
     if (axis == 'y' || axis == 'both') {
       //Get all of the data corresponding with the flagged point
       this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
         tempData = data;
-        for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
-          flaggedData.push(tempData[this.flaggedPointIndices.y[i]]);
-        }
+        this.flaggedData.push(
+          tempData[
+            this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
+          ]
+        );
       });
     }
 
-    //No fancy download yet; displaying data in console for now
-    console.log('flaggedData', flaggedData);
+    console.log('flaggedData', this.flaggedData);
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
@@ -495,6 +506,14 @@ export class GraphOptionsComponent implements OnInit {
       if (windowWidth < 800) {
         this.collapseGraphOptions(false);
       }
+    }
+
+    //Discard old parameter indicies when a new graph is generated
+    if (this.flaggedPointIndices.x) {
+      this.flaggedPointIndices.x = [];
+    }
+    if (this.flaggedPointIndices.y) {
+      this.flaggedPointIndices.y = [];
     }
   }
 
