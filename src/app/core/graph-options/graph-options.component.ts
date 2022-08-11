@@ -341,6 +341,26 @@ export class GraphOptionsComponent implements OnInit {
         //add new y-axis index to the array
         this.flaggedPointIndices.y.push(this.clickedPoint.points[i].pointIndex);
       }
+      if (axis == 'none') {
+        if (this.flaggedPointIndices.y) {
+          for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
+            if (pointIndex == this.flaggedPointIndices.y.length[i]) {
+              this.flaggedPointIndices.y = this.flaggedPointIndices.y.splice(
+                i,
+                1
+              );
+            }
+          }
+        }
+        if (this.flaggedPointIndices.x) {
+          if (pointIndex == this.flaggedPointIndices.x.length[i]) {
+            this.flaggedPointIndices.x = this.flaggedPointIndices.x.splice(
+              i,
+              1
+            );
+          }
+        }
+      }
     }
 
     //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
@@ -379,6 +399,14 @@ export class GraphOptionsComponent implements OnInit {
           ]
         );
       });
+    }
+    if (axis == 'x' || axis == 'none') {
+      //remove y value
+      //identify by matching rcodes?
+    }
+    if (axis == 'y' || axis == 'none') {
+      //remove x value
+      //identify by matching rcodes?
     }
 
     console.log('flaggedData', this.flaggedData);
