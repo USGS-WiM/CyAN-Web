@@ -405,15 +405,18 @@ export class GraphOptionsComponent implements OnInit {
       //remove y value from this.flaggedData
       //identify by matching rcodes?
       this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-        console.log('here are the things in tempData:', tempData);
-        console.log('specific point in tempData', tempData[pointIndex]);
+        console.log('ydata', data);
         //need to get the rcode from the tempData[pointIndex] and match it to the rcode in flaggedData, and then remove it!
         tempData = data;
-        this.flaggedData.push(
+        console.log('this.graphSelectionsService.allGraphDataYSubject', data);
+        console.log('here are the things in tempData:', tempData);
+        console.log('specific point in tempData', tempData[pointIndex]);
+
+        /*  this.flaggedData.push(
           tempData[
             this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
           ]
-        );
+        ); */
       });
     }
     if (axis == 'y' || axis == 'none') {
