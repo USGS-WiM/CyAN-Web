@@ -410,10 +410,7 @@ export class GraphOptionsComponent implements OnInit {
           let rcodeToRemove = pointToRemove.rcode;
           for (let i = 0; i < this.flaggedData.length; i++) {
             if (rcodeToRemove == this.flaggedData[i].rcode) {
-              console.log('to remove', this.flaggedData[i]);
-              console.log('before', this.flaggedData);
-              this.flaggedData = this.flaggedData.splice(i, 1);
-              console.log('after', this.flaggedData);
+              this.flaggedData.splice(i, 1);
             }
           }
         });
@@ -427,10 +424,7 @@ export class GraphOptionsComponent implements OnInit {
         let rcodeToRemove = pointToRemove.rcode;
         for (let i = 0; i < this.flaggedData.length; i++) {
           if (rcodeToRemove == this.flaggedData[i].rcode) {
-            console.log('to remove', this.flaggedData[i]);
-            console.log('before', this.flaggedData);
-            this.flaggedData = this.flaggedData.splice(i, 1);
-            console.log('after', this.flaggedData);
+            this.flaggedData.splice(i, 1);
           }
         }
       });
