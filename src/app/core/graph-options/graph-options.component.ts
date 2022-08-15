@@ -246,6 +246,9 @@ export class GraphOptionsComponent implements OnInit {
       if (this.flaggedData) {
         for (let i = 0; i < this.flaggedData.length; i++) {
           for (let j = 0; j < ydata.length; j++) {
+            console.log('this.flaggedData[i]', this.flaggedData[i]);
+            console.log('this.flaggedData[i].rcode', this.flaggedData[i].rcode);
+            console.log('ydata[j].rcode', ydata[j].rcode);
             if (this.flaggedData[i].rcode == ydata[j].rcode) {
               console.log('Found a match in the y axis!', this.flaggedData[i]);
               colors[j] = this.yFlaggedColor;
