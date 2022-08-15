@@ -169,6 +169,9 @@ export class GraphOptionsComponent implements OnInit {
                   }
                   //Create and display graph
                   this.createGraph();
+
+                  //Check for flags
+                  this.checkForFlags();
                   this.showGraph = true;
                   //Remove the WIM loader to view graph
                   let base = document.getElementById('base');
@@ -236,6 +239,8 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public checkForFlags() {
+    let colors = this.pointColors;
+    let symbols = this.pointSymbols;
     //check for flags in the y-axis
     this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
       if (this.flaggedData) {
@@ -243,6 +248,15 @@ export class GraphOptionsComponent implements OnInit {
           for (let j = 0; j < ydata.length; j++) {
             if (this.flaggedData[i].rcode == ydata[j].rcode) {
               console.log('Found a match in the y axis!', this.flaggedData[i]);
+              colors[j] = this.yFlaggedColor;
+              symbols[j] = this.flaggedSymbol;
+              //New styling for new plot
+              var update = {
+                marker: { color: colors, size: 12, symbol: symbols },
+              };
+
+              //Change the color on the graph
+              Plotly.restyle('graph', update);
             }
           }
         }
@@ -256,6 +270,16 @@ export class GraphOptionsComponent implements OnInit {
           for (let j = 0; j < xdata.length; j++) {
             if (this.flaggedData[i].rcode == xdata[j].rcode) {
               console.log('Found a match in the xaxis!', this.flaggedData[i]);
+              console.log('Found a match in the y axis!', this.flaggedData[i]);
+              colors[j] = this.xFlaggedColor;
+              symbols[j] = this.flaggedSymbol;
+              //New styling for new plot
+              var update = {
+                marker: { color: colors, size: 12, symbol: symbols },
+              };
+
+              //Change the color on the graph
+              Plotly.restyle('graph', update);
             }
           }
         }
@@ -264,8 +288,6 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public createGraph() {
-    this.checkForFlags();
-
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
