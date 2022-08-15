@@ -89,19 +89,19 @@ export class GraphOptionsComponent implements OnInit {
   public graphHeight: Number;
   public graphWidth: Number;
   public graphMargins: Number;
-  public pointColors = [];
-  public pointSymbols = [];
   public xAxisType = 'scatter';
   public yAxisType = 'scatter';
   public yAxisTitle = '';
   public xAxisTitle = '';
   public autotickEnabled: Boolean = true;
   //Colors for all 4 flagging options
+  public pointColors = [];
   public unflaggedColor: string = 'rgb(242, 189, 161)';
   public xyFlaggedColor: string = 'rgb(0, 153, 0)';
   public xFlaggedColor: string = 'rgb(255, 0, 255)';
   public yFlaggedColor: string = 'rgb(0, 204, 204)';
   //Symbols for flagged vs unflagged
+  public pointSymbols = [];
   public unflaggedSymbol: string = 'circle-open';
   public flaggedSymbol: string = 'cirlce';
 
@@ -235,7 +235,37 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
+  public checkForFlags() {
+    //check for flags in the y-axis
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+      if (this.flaggedData) {
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          for (let j = 0; j < ydata.length; j++) {
+            if (this.flaggedData[i].rcode == ydata[j].rcode) {
+              console.log('Found a match in the y axis!', this.flaggedData[i]);
+            }
+          }
+        }
+      }
+    });
+
+    //check for flags in the x-axis
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+      if (this.flaggedData) {
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          for (let j = 0; j < xdata.length; j++) {
+            if (this.flaggedData[i].rcode == xdata[j].rcode) {
+              console.log('Found a match in the xaxis!', this.flaggedData[i]);
+            }
+          }
+        }
+      }
+    });
+  }
+
   public createGraph() {
+    this.checkForFlags();
+
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
