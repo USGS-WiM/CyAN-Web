@@ -47,7 +47,8 @@ export class GraphOptionsComponent implements OnInit {
   regions: any[];
 
   //flags
-  flaggedData: Array<Object> = [];
+  //flaggedData: Array<Object> = [];
+  flaggedData = [];
   showFlagOptions: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
@@ -341,6 +342,26 @@ export class GraphOptionsComponent implements OnInit {
         //add new y-axis index to the array
         this.flaggedPointIndices.y.push(this.clickedPoint.points[i].pointIndex);
       }
+      if (axis == 'none') {
+        if (this.flaggedPointIndices.y) {
+          for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
+            if (pointIndex == this.flaggedPointIndices.y.length[i]) {
+              this.flaggedPointIndices.y = this.flaggedPointIndices.y.splice(
+                i,
+                1
+              );
+            }
+          }
+        }
+        if (this.flaggedPointIndices.x) {
+          if (pointIndex == this.flaggedPointIndices.x.length[i]) {
+            this.flaggedPointIndices.x = this.flaggedPointIndices.x.splice(
+              i,
+              1
+            );
+          }
+        }
+      }
     }
 
     //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
@@ -380,8 +401,34 @@ export class GraphOptionsComponent implements OnInit {
         );
       });
     }
-
-    console.log('flaggedData', this.flaggedData);
+    //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
+    //if neither are selected, ensure that neither are in the flaggedData array
+    if (axis == 'x' || axis == 'none') {
+      if (this.flaggedData) {
+        this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+          let pointToRemove = ydata[pointIndex];
+          let rcodeToRemove = pointToRemove.rcode;
+          for (let i = 0; i < this.flaggedData.length; i++) {
+            if (rcodeToRemove == this.flaggedData[i].rcode) {
+              this.flaggedData.splice(i, 1);
+            }
+          }
+        });
+      }
+    }
+    //if only the y-axis is selected, make sure the x-value at that point isn't in the flaggedData array
+    //if neither are selected, ensure that neither are in the flaggedData array
+    if (axis == 'y' || axis == 'none') {
+      this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+        let pointToRemove = xdata[pointIndex];
+        let rcodeToRemove = pointToRemove.rcode;
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          if (rcodeToRemove == this.flaggedData[i].rcode) {
+            this.flaggedData.splice(i, 1);
+          }
+        }
+      });
+    }
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
