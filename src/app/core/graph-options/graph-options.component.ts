@@ -56,6 +56,17 @@ export class GraphOptionsComponent implements OnInit {
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
   });
+  public flags$: Observable<any[]>;
+  //Colors for all 4 flagging options
+  public pointColors = [];
+  public unflaggedColor: string = 'rgb(242, 189, 161)';
+  public xyFlaggedColor: string = 'rgb(0, 153, 0)';
+  public xFlaggedColor: string = 'rgb(255, 0, 255)';
+  public yFlaggedColor: string = 'rgb(0, 204, 204)';
+  //Symbols for flagged vs unflagged
+  public pointSymbols = [];
+  public unflaggedSymbol: string = 'circle-open';
+  public flaggedSymbol: string = 'cirlce';
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -94,16 +105,6 @@ export class GraphOptionsComponent implements OnInit {
   public yAxisTitle = '';
   public xAxisTitle = '';
   public autotickEnabled: Boolean = true;
-  //Colors for all 4 flagging options
-  public pointColors = [];
-  public unflaggedColor: string = 'rgb(242, 189, 161)';
-  public xyFlaggedColor: string = 'rgb(0, 153, 0)';
-  public xFlaggedColor: string = 'rgb(255, 0, 255)';
-  public yFlaggedColor: string = 'rgb(0, 204, 204)';
-  //Symbols for flagged vs unflagged
-  public pointSymbols = [];
-  public unflaggedSymbol: string = 'circle-open';
-  public flaggedSymbol: string = 'cirlce';
 
   constructor(
     private filterService: FiltersService,
@@ -241,23 +242,23 @@ export class GraphOptionsComponent implements OnInit {
   public checkForFlags() {
     let colors = this.pointColors;
     let symbols = this.pointSymbols;
+
+    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
+      console.log('flags', flags);
+    });
+
     //check for flags in the y-axis
     this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
       if (this.flaggedData) {
         for (let i = 0; i < this.flaggedData.length; i++) {
           for (let j = 0; j < ydata.length; j++) {
-            console.log('this.flaggedData[i]', this.flaggedData[i]);
-            console.log('this.flaggedData[i].rcode', this.flaggedData[i].rcode);
-            console.log('ydata[j].rcode', ydata[j].rcode);
             if (this.flaggedData[i].rcode == ydata[j].rcode) {
-              console.log('Found a match in the y axis!', this.flaggedData[i]);
               colors[j] = this.yFlaggedColor;
               symbols[j] = this.flaggedSymbol;
               //New styling for new plot
               var update = {
                 marker: { color: colors, size: 12, symbol: symbols },
               };
-
               //Change the color on the graph
               Plotly.restyle('graph', update);
             }
@@ -272,15 +273,12 @@ export class GraphOptionsComponent implements OnInit {
         for (let i = 0; i < this.flaggedData.length; i++) {
           for (let j = 0; j < xdata.length; j++) {
             if (this.flaggedData[i].rcode == xdata[j].rcode) {
-              console.log('Found a match in the xaxis!', this.flaggedData[i]);
-              console.log('Found a match in the y axis!', this.flaggedData[i]);
               colors[j] = this.xFlaggedColor;
               symbols[j] = this.flaggedSymbol;
               //New styling for new plot
               var update = {
                 marker: { color: colors, size: 12, symbol: symbols },
               };
-
               //Change the color on the graph
               Plotly.restyle('graph', update);
             }
@@ -449,6 +447,10 @@ export class GraphOptionsComponent implements OnInit {
             this.flaggedPointIndices.x[this.flaggedPointIndices.x.length - 1]
           ]
         );
+        this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+        this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
+          console.log('stuff', stuff);
+        });
         //  }
       });
     }
@@ -461,6 +463,10 @@ export class GraphOptionsComponent implements OnInit {
             this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
           ]
         );
+        this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+        this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
+          console.log('stuff', stuff);
+        });
       });
     }
     //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array

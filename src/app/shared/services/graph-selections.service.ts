@@ -85,11 +85,9 @@ export class GraphSelectionsService {
     },
     axis: string
   ) {
-    console.log('graphFilters', graphFilters);
     return this.httpClient
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
-        console.log('res', res, 'axis', axis);
         if (res.length === 0) {
           this.snackBar.open('No points match your query.', 'OK', {
             duration: 4000,
