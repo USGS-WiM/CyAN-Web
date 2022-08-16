@@ -172,7 +172,7 @@ export class GraphOptionsComponent implements OnInit {
                   this.createGraph();
 
                   //Check for flags
-                  this.checkForFlags();
+                  //this.checkForFlags();
                   this.showGraph = true;
                   //Remove the WIM loader to view graph
                   let base = document.getElementById('base');
@@ -239,6 +239,7 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
+  /*
   public checkForFlags() {
     let colors = this.pointColors;
     let symbols = this.pointSymbols;
@@ -265,7 +266,7 @@ export class GraphOptionsComponent implements OnInit {
           }
         }
       }
-    });
+    }); 
 
     //check for flags in the x-axis
     this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
@@ -286,7 +287,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     });
-  }
+  } */
 
   public createGraph() {
     //Designate div to put graph
@@ -375,6 +376,7 @@ export class GraphOptionsComponent implements OnInit {
     let pointIndex = '';
     let colors: [];
     let symbols: [];
+    let updateGraphCalled = true;
 
     //clickedPoints contains info about the click point: index of the point in the array created for this graph, the x and y values, and the marker display
     for (let i = 0; i < this.clickedPoint.points.length; i++) {
@@ -441,44 +443,51 @@ export class GraphOptionsComponent implements OnInit {
     if (axis == 'x' || axis == 'both') {
       //Get all of the data corresponding with the flagged point
       this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-        tempData = data;
-        this.flaggedData.push(
-          tempData[
-            this.flaggedPointIndices.x[this.flaggedPointIndices.x.length - 1]
-          ]
-        );
-        this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-        this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
-          console.log('stuff', stuff);
-        });
-        //  }
+        if (updateGraphCalled) {
+          tempData = data;
+          this.flaggedData.push(
+            tempData[
+              this.flaggedPointIndices.x[this.flaggedPointIndices.x.length - 1]
+            ]
+          );
+          this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+          this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
+            console.log('stuff', stuff);
+          });
+          //  }
+        }
       });
     }
     if (axis == 'y' || axis == 'both') {
       //Get all of the data corresponding with the flagged point
       this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-        tempData = data;
-        this.flaggedData.push(
-          tempData[
-            this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
-          ]
-        );
-        this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-        this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
-          console.log('stuff', stuff);
-        });
+        if (updateGraphCalled) {
+          tempData = data;
+          this.flaggedData.push(
+            tempData[
+              this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
+            ]
+          );
+          this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+          this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
+            console.log('stuff', stuff);
+          });
+        }
       });
     }
+    console.log('this.flaggedData', this.flaggedData);
     //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
     //if neither are selected, ensure that neither are in the flaggedData array
     if (axis == 'x' || axis == 'none') {
       if (this.flaggedData) {
         this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
-          let pointToRemove = ydata[pointIndex];
-          let rcodeToRemove = pointToRemove.rcode;
-          for (let i = 0; i < this.flaggedData.length; i++) {
-            if (rcodeToRemove == this.flaggedData[i].rcode) {
-              this.flaggedData.splice(i, 1);
+          if (updateGraphCalled) {
+            let pointToRemove = ydata[pointIndex];
+            let rcodeToRemove = pointToRemove.rcode;
+            for (let i = 0; i < this.flaggedData.length; i++) {
+              if (rcodeToRemove == this.flaggedData[i].rcode) {
+                this.flaggedData.splice(i, 1);
+              }
             }
           }
         });
@@ -488,15 +497,18 @@ export class GraphOptionsComponent implements OnInit {
     //if neither are selected, ensure that neither are in the flaggedData array
     if (axis == 'y' || axis == 'none') {
       this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
-        let pointToRemove = xdata[pointIndex];
-        let rcodeToRemove = pointToRemove.rcode;
-        for (let i = 0; i < this.flaggedData.length; i++) {
-          if (rcodeToRemove == this.flaggedData[i].rcode) {
-            this.flaggedData.splice(i, 1);
+        if (updateGraphCalled) {
+          let pointToRemove = xdata[pointIndex];
+          let rcodeToRemove = pointToRemove.rcode;
+          for (let i = 0; i < this.flaggedData.length; i++) {
+            if (rcodeToRemove == this.flaggedData[i].rcode) {
+              this.flaggedData.splice(i, 1);
+            }
           }
         }
       });
     }
+    updateGraphCalled = false;
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal

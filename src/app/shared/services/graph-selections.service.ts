@@ -41,6 +41,9 @@ export class GraphSelectionsService {
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
 
+  public flagIndex = new BehaviorSubject<any>(undefined);
+  flagIndex$ = this.flagIndex.asObservable();
+
   public minDateSubject = new BehaviorSubject<any>(undefined);
   minDate$ = this.minDateSubject.asObservable();
 
@@ -156,6 +159,10 @@ export class GraphSelectionsService {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {
           if (tempResultsY[x].sid == tempResultsX[i].sid) {
+            console.log('this.flags', this.flagsSubject.value);
+            if (this.flagsSubject.value) {
+              for (let j = 0; j < this.flagsSubject.value.length; j++) {}
+            }
             this.valuesX.push(tempResultsX[i].result);
             this.valuesY.push(tempResultsY[x].result);
             this.allDataX.push(tempResultsX[i]);
