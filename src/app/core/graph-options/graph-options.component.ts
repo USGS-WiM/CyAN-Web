@@ -239,6 +239,7 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
+  //Leaving this in here for now, in case it's useful later
   /*
   public checkForFlags() {
     let colors = this.pointColors;
@@ -451,10 +452,6 @@ export class GraphOptionsComponent implements OnInit {
             ]
           );
           this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-          this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
-            console.log('stuff', stuff);
-          });
-          //  }
         }
       });
     }
@@ -469,9 +466,6 @@ export class GraphOptionsComponent implements OnInit {
             ]
           );
           this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-          this.graphSelectionsService.flagsSubject.subscribe((stuff) => {
-            console.log('stuff', stuff);
-          });
         }
       });
     }
@@ -487,6 +481,7 @@ export class GraphOptionsComponent implements OnInit {
             for (let i = 0; i < this.flaggedData.length; i++) {
               if (rcodeToRemove == this.flaggedData[i].rcode) {
                 this.flaggedData.splice(i, 1);
+                this.graphSelectionsService.flagsSubject.next(this.flaggedData);
               }
             }
           }
@@ -503,6 +498,7 @@ export class GraphOptionsComponent implements OnInit {
           for (let i = 0; i < this.flaggedData.length; i++) {
             if (rcodeToRemove == this.flaggedData[i].rcode) {
               this.flaggedData.splice(i, 1);
+              this.graphSelectionsService.flagsSubject.next(this.flaggedData);
             }
           }
         }
