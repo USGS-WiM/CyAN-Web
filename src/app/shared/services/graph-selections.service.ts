@@ -41,8 +41,11 @@ export class GraphSelectionsService {
   public flagsSubject = new BehaviorSubject<any>(undefined);
   flags$ = this.flagsSubject.asObservable();
 
-  public flagIndex = new BehaviorSubject<any>(undefined);
-  flagIndex$ = this.flagIndex.asObservable();
+  public flagIndexX = new BehaviorSubject<any>(undefined);
+  flagIndexX$ = this.flagIndexX.asObservable();
+
+  public flagIndexY = new BehaviorSubject<any>(undefined);
+  flagIndexY$ = this.flagIndexY.asObservable();
 
   public minDateSubject = new BehaviorSubject<any>(undefined);
   minDate$ = this.minDateSubject.asObservable();
@@ -155,13 +158,21 @@ export class GraphSelectionsService {
     this.allDataX = [];
     this.allDataY = [];
     this.sid = [];
+    let flagX = [];
+    let flagY = [];
     if (tempResultsX && tempResultsY) {
       for (let i = 0; i < tempResultsX.length; i++) {
         for (let x = 0; x < tempResultsY.length; x++) {
           if (tempResultsY[x].sid == tempResultsX[i].sid) {
-            console.log('this.flags', this.flagsSubject.value);
             if (this.flagsSubject.value) {
-              for (let j = 0; j < this.flagsSubject.value.length; j++) {}
+              for (let j = 0; j < this.flagsSubject.value.length; j++) {
+                if (this.flagsSubject.value[j].rcode == tempResultsX[i].rcode) {
+                  flagX.push(i);
+                }
+                if (this.flagsSubject.value[j].rcode == tempResultsY[x].rcode) {
+                  flagY.push(x);
+                }
+              }
             }
             this.valuesX.push(tempResultsX[i].result);
             this.valuesY.push(tempResultsY[x].result);
@@ -170,6 +181,8 @@ export class GraphSelectionsService {
             this.sid.push(tempResultsY[x].sid);
           }
           if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
+            this.flagIndexX.next(flagX);
+            this.flagIndexY.next(flagY);
             this.finalGraphValues();
           }
         }

@@ -48,6 +48,8 @@ export class GraphOptionsComponent implements OnInit {
 
   //flags
   flaggedData = [];
+  oldFlagsX = [];
+  oldFlagsY = [];
   showFlagOptions: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
@@ -136,6 +138,12 @@ export class GraphOptionsComponent implements OnInit {
     this.parameterTypes$.subscribe(
       (parameters) => (this.parameterTypes = parameters)
     );
+    this.graphSelectionsService.flagIndexX.subscribe((xFlags) => {
+      this.oldFlagsX = xFlags;
+    });
+    this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
+      this.oldFlagsY = yFlags;
+    });
 
     /* this.graphSelectionsService.sidSubject.subscribe((sid) => {
       this.sid = sid;
@@ -165,9 +173,37 @@ export class GraphOptionsComponent implements OnInit {
                   this.pointSymbols = [];
                   //Since the point colors changed when flagged, we begin by setting the color of each point individually
                   for (let i = 0; i < this.currentYaxisValues.length; i++) {
-                    this.pointColors.push('rgb(242, 189, 161)');
-                    this.pointSymbols.push('circle-open');
+                    let foundX = false;
+                    let foundY = false;
+                    let foundXY = false;
+                    for (let j = 0; j < this.oldFlagsX.length; j++) {
+                      for (let k = 0; k < this.oldFlagsY.length; k++) {
+                        if (i == this.oldFlagsX[j] && i !== this.oldFlagsY[k]) {
+                          foundX = true;
+                        }
+                        if (i !== this.oldFlagsX[j] && i == this.oldFlagsY[k]) {
+                          foundY = true;
+                        }
+                        if (i == this.oldFlagsX[j] && i == this.oldFlagsY[k]) {
+                          foundXY = true;
+                        }
+                      }
+                    }
+                    if (foundX == true && foundY == false) {
+                      this.pointColors.push(this.xFlaggedColor);
+                      this.pointSymbols.push(this.flaggedSymbol);
+                    } else if (foundX == false && foundY == true) {
+                      this.pointColors.push(this.yFlaggedColor);
+                      this.pointSymbols.push(this.flaggedSymbol);
+                    } else if (foundX == true && foundY == true) {
+                      this.pointColors.push(this.xyFlaggedColor);
+                      this.pointSymbols.push(this.flaggedSymbol);
+                    } else {
+                      this.pointColors.push(this.unflaggedColor);
+                      this.pointSymbols.push(this.unflaggedSymbol);
+                    }
                   }
+
                   //Create and display graph
                   this.createGraph();
 
