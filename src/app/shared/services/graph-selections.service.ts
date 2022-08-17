@@ -63,9 +63,6 @@ export class GraphSelectionsService {
   public ready = 0;
   public makeGraph = false;
 
-  /* public flagIndexX = [];
-  public flagIndexY = []; */
-
   public valuesX = [];
   public valuesY = [];
   public allDataX = [];
@@ -171,11 +168,9 @@ export class GraphSelectionsService {
               for (let j = 0; j < this.flagsSubject.value.length; j++) {
                 if (this.flagsSubject.value[j].rcode == tempResultsX[i].rcode) {
                   flagX.push(i);
-                  console.log('x flag found!', i);
                 }
                 if (this.flagsSubject.value[j].rcode == tempResultsY[x].rcode) {
                   flagY.push(x);
-                  console.log('y flag found!', x);
                 }
               }
             }
@@ -188,8 +183,6 @@ export class GraphSelectionsService {
           if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
-            console.log('x flag index: ', this.flagIndexX.value);
-            console.log('y flag index: ', this.flagIndexY.value);
             this.finalGraphValues();
           }
         }
