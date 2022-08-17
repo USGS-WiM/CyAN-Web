@@ -161,26 +161,49 @@ export class GraphSelectionsService {
     let flagX = [];
     let flagY = [];
     if (tempResultsX && tempResultsY) {
-      for (let i = 0; i < tempResultsX.length; i++) {
-        for (let x = 0; x < tempResultsY.length; x++) {
-          if (tempResultsY[x].sid == tempResultsX[i].sid) {
+      for (
+        let xResultsIndex = 0;
+        xResultsIndex < tempResultsX.length;
+        xResultsIndex++
+      ) {
+        for (
+          let yResultsIndex = 0;
+          yResultsIndex < tempResultsY.length;
+          yResultsIndex++
+        ) {
+          if (
+            tempResultsY[yResultsIndex].sid == tempResultsX[xResultsIndex].sid
+          ) {
             if (this.flagsSubject.value) {
-              for (let j = 0; j < this.flagsSubject.value.length; j++) {
-                if (this.flagsSubject.value[j].rcode == tempResultsX[i].rcode) {
-                  flagX.push(i);
+              for (
+                let flagIndex = 0;
+                flagIndex < this.flagsSubject.value.length;
+                flagIndex++
+              ) {
+                if (
+                  this.flagsSubject.value[flagIndex].rcode ==
+                  tempResultsX[xResultsIndex].rcode
+                ) {
+                  flagX.push(xResultsIndex);
                 }
-                if (this.flagsSubject.value[j].rcode == tempResultsY[x].rcode) {
-                  flagY.push(x);
+                if (
+                  this.flagsSubject.value[flagIndex].rcode ==
+                  tempResultsY[yResultsIndex].rcode
+                ) {
+                  flagY.push(yResultsIndex);
                 }
               }
             }
-            this.valuesX.push(tempResultsX[i].result);
-            this.valuesY.push(tempResultsY[x].result);
-            this.allDataX.push(tempResultsX[i]);
-            this.allDataY.push(tempResultsY[x]);
-            this.sid.push(tempResultsY[x].sid);
+            this.valuesX.push(tempResultsX[xResultsIndex].result);
+            this.valuesY.push(tempResultsY[yResultsIndex].result);
+            this.allDataX.push(tempResultsX[xResultsIndex]);
+            this.allDataY.push(tempResultsY[yResultsIndex]);
+            this.sid.push(tempResultsY[yResultsIndex].sid);
           }
-          if (x > tempResultsY.length - 2 && i > tempResultsX.length - 2) {
+          if (
+            yResultsIndex > tempResultsY.length - 2 &&
+            xResultsIndex > tempResultsX.length - 2
+          ) {
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
             this.finalGraphValues();

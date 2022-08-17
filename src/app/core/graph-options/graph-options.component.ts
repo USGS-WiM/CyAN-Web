@@ -48,8 +48,8 @@ export class GraphOptionsComponent implements OnInit {
 
   //flags
   flaggedData = [];
-  oldFlagsX = [];
-  oldFlagsY = [];
+  rolloverFlagsX = [];
+  rolloverFlagsY = [];
   showFlagOptions: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
@@ -138,17 +138,13 @@ export class GraphOptionsComponent implements OnInit {
     this.parameterTypes$.subscribe(
       (parameters) => (this.parameterTypes = parameters)
     );
+    //rolloverFlags means the flags that were assigned for these specific datasets in a graph that was previously generated
     this.graphSelectionsService.flagIndexX.subscribe((xFlags) => {
-      this.oldFlagsX = xFlags;
+      this.rolloverFlagsX = xFlags;
     });
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
-      this.oldFlagsY = yFlags;
+      this.rolloverFlagsY = yFlags;
     });
-
-    /* this.graphSelectionsService.sidSubject.subscribe((sid) => {
-      this.sid = sid;
-    }); */
-
     //Reset the x and y values displayed on the graph whenever the values change in the service
     this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
       let graphOptionsBackgroundID = document.getElementById(
@@ -171,33 +167,54 @@ export class GraphOptionsComponent implements OnInit {
                   this.alreadyGraphed = true;
                   this.pointColors = [];
                   this.pointSymbols = [];
-                  //Since the point colors changed when flagged, we begin by setting the color of each point individually
-                  for (let i = 0; i < this.currentYaxisValues.length; i++) {
+                  //We begin by setting the color of each point individually
+                  for (
+                    let currentIndex = 0;
+                    currentIndex < this.currentYaxisValues.length;
+                    currentIndex++
+                  ) {
                     let foundX = false;
                     let foundY = false;
-                    let foundXY = false;
-                    for (let j = 0; j < this.oldFlagsX.length; j++) {
-                      for (let k = 0; k < this.oldFlagsY.length; k++) {
-                        if (i == this.oldFlagsX[j] && i !== this.oldFlagsY[k]) {
+                    //Loop through all the flag indicies
+                    for (
+                      let xIndex = 0;
+                      xIndex < this.rolloverFlagsX.length;
+                      xIndex++
+                    ) {
+                      for (
+                        let yIndex = 0;
+                        yIndex < this.rolloverFlagsY.length;
+                        yIndex++
+                      ) {
+                        //When an x flag is found
+                        if (
+                          currentIndex == this.rolloverFlagsX[xIndex] &&
+                          currentIndex !== this.rolloverFlagsY[yIndex]
+                        ) {
                           foundX = true;
                         }
-                        if (i !== this.oldFlagsX[j] && i == this.oldFlagsY[k]) {
+                        //When a y flag is found
+                        if (
+                          currentIndex !== this.rolloverFlagsX[xIndex] &&
+                          currentIndex == this.rolloverFlagsY[yIndex]
+                        ) {
                           foundY = true;
-                        }
-                        if (i == this.oldFlagsX[j] && i == this.oldFlagsY[k]) {
-                          foundXY = true;
                         }
                       }
                     }
+                    //Add an x flag marker to the color and symbol arrays
                     if (foundX == true && foundY == false) {
                       this.pointColors.push(this.xFlaggedColor);
                       this.pointSymbols.push(this.flaggedSymbol);
+                      //Add a y flag marker to the color and symbol arrays
                     } else if (foundX == false && foundY == true) {
                       this.pointColors.push(this.yFlaggedColor);
                       this.pointSymbols.push(this.flaggedSymbol);
+                      //Add an xy flag marker to the color and symbol arrays
                     } else if (foundX == true && foundY == true) {
                       this.pointColors.push(this.xyFlaggedColor);
                       this.pointSymbols.push(this.flaggedSymbol);
+                      //No flags; add a default marker to the color and symbol arrays
                     } else {
                       this.pointColors.push(this.unflaggedColor);
                       this.pointSymbols.push(this.unflaggedSymbol);
@@ -208,7 +225,6 @@ export class GraphOptionsComponent implements OnInit {
                   this.createGraph();
 
                   //Check for flags
-                  //this.checkForFlags();
                   this.showGraph = true;
                   //Remove the WIM loader to view graph
                   let base = document.getElementById('base');
@@ -274,57 +290,6 @@ export class GraphOptionsComponent implements OnInit {
     this.graphOptionsVisible = collapsed;
     this.resizeDivs();
   }
-
-  //Leaving this in here for now, in case it's useful later
-  /*
-  public checkForFlags() {
-    let colors = this.pointColors;
-    let symbols = this.pointSymbols;
-
-    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
-      console.log('flags', flags);
-    });
-
-    //check for flags in the y-axis
-    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
-      if (this.flaggedData) {
-        for (let i = 0; i < this.flaggedData.length; i++) {
-          for (let j = 0; j < ydata.length; j++) {
-            if (this.flaggedData[i].rcode == ydata[j].rcode) {
-              colors[j] = this.yFlaggedColor;
-              symbols[j] = this.flaggedSymbol;
-              //New styling for new plot
-              var update = {
-                marker: { color: colors, size: 12, symbol: symbols },
-              };
-              //Change the color on the graph
-              Plotly.restyle('graph', update);
-            }
-          }
-        }
-      }
-    }); 
-
-    //check for flags in the x-axis
-    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
-      if (this.flaggedData) {
-        for (let i = 0; i < this.flaggedData.length; i++) {
-          for (let j = 0; j < xdata.length; j++) {
-            if (this.flaggedData[i].rcode == xdata[j].rcode) {
-              colors[j] = this.xFlaggedColor;
-              symbols[j] = this.flaggedSymbol;
-              //New styling for new plot
-              var update = {
-                marker: { color: colors, size: 12, symbol: symbols },
-              };
-              //Change the color on the graph
-              Plotly.restyle('graph', update);
-            }
-          }
-        }
-      }
-    });
-  } */
 
   public createGraph() {
     //Designate div to put graph
