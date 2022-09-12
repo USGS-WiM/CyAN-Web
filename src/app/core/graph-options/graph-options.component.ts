@@ -555,25 +555,20 @@ export class GraphOptionsComponent implements OnInit {
     });
   }
 
-  //Called when user clicks the flag button
-  //Retrieves indicies of flagged data, get the corresponding data, and adds those data to x and y arrays
-  public createFlags() {
-    let tempXData;
-    let tempYData;
-    let flaggedXData = [];
-    let flaggedYData = [];
-    this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-      tempYData = data;
-      for (let i = 0; i < this.xFlaggedPointIndices.length; i++) {
-        flaggedYData.push(tempYData[this.xFlaggedPointIndices[i]]);
-      }
-    });
-    this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-      tempXData = data;
-      for (let i = 0; i < this.xFlaggedPointIndices.length; i++) {
-        flaggedXData.push(tempXData[this.xFlaggedPointIndices[i]]);
-      }
-    });
+  //take json of flagged points and download as csv file
+  createFlags() {
+    let data = this.flaggedData;
+    let flagContent = 'data:text/csv;charset=utf-8,';
+    let csv = data.map((row) => Object.values(row));
+    csv.unshift(Object.keys(data[0]));
+    flagContent += csv.join('\n');
+    console.log('flagContent', flagContent);
+    let encodedUri = encodeURI(flagContent);
+    let link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'flags.csv');
+    document.body.appendChild(link);
+    link.click();
   }
 
   //Called when user clicks 'Plot Data'
