@@ -352,6 +352,8 @@ export class GraphOptionsComponent implements OnInit {
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
+    let graph = document.getElementById('graph');
+    graph.classList.remove('disableClick');
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -552,6 +554,8 @@ export class GraphOptionsComponent implements OnInit {
       this.clickedPoint = selectedPoints;
       //Open flag options modal
       this.showFlagOptions = true;
+      let graph = document.getElementById('graph');
+      graph.classList.add('disableClick');
     });
   }
 
