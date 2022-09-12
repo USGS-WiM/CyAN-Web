@@ -1,0 +1,7 @@
+<input type="file" class="hideUpload" (change)="onFileSelected($event)" #fileUpload>
+<div>
+    <button class="flag dataBtn" (click)="fileUpload.click()" matTooltip="Upload CSV">
+        <mat-icon>cloud_upload</mat-icon>
+        <mat-icon>flag</mat-icon>
+    </button>
+</div>
