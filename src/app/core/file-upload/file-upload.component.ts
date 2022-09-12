@@ -8,24 +8,36 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./../core.component.scss'],
 })
 export class FileUploadComponent {
-  fileName = '';
+  file: any;
 
   constructor(private http: HttpClient) {}
 
-  onFileSelected(event) {
-    //Commenting out for now; need to get a way to get data from uploaded file
-    /* const file: File = event.target.files[0];
+  // this code is adapted from: https://stackoverflow.com/questions/27979002/convert-csv-data-into-json-format-using-javascript
+  //get the uploaded data
+  uploadedFlags(e) {
+    this.file = e.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      let csv = fileReader.result;
+      this.csvJSON(csv);
+    };
+  }
 
-    if (file) {
-      this.fileName = file.name;
+  //make the csv a json
+  csvJSON(csv) {
+    var lines = csv.split('\n');
+    var result = [];
+    var headers = lines[0].split(',');
 
-      const formData = new FormData();
+    for (var i = 1; i < lines.length; i++) {
+      var obj = {};
+      var currentline = lines[i].split(',');
+      for (var j = 0; j < headers.length; j++) {
+        obj[headers[j]] = currentline[j];
+      }
+      result.push(obj);
+    }
 
-      formData.append('thumbnail', file);
-
-      const upload$ = this.http.post('/api/thumbnail-upload', formData);
-
-      upload$.subscribe();
-    } */
+    return JSON.stringify(result);
   }
 }
