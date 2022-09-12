@@ -28,7 +28,6 @@
     "leaflet.markercluster": "^1.4.1",
     "moment": "^2.29.1",
     "plotly.js-dist": "^2.2.1",
-    "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
   },

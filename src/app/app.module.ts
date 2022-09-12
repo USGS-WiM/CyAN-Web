@@ -25,6 +25,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { FileUploadComponent } from './core/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     GraphOptionsComponent,
     AboutComponent,
     HomeComponent,
+    FileUploadComponent,
   ],
   imports: [
     BrowserModule,
