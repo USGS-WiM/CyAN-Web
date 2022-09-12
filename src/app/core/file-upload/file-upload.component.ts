@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Input } from '@angular/compiler/src/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -10,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class FileUploadComponent {
   file: any;
 
-  constructor(private http: HttpClient) {}
+  constructor(private graphSelectionsService: GraphSelectionsService) {}
 
   // this code is adapted from: https://stackoverflow.com/questions/27979002/convert-csv-data-into-json-format-using-javascript
   //get the uploaded data
@@ -21,12 +20,13 @@ export class FileUploadComponent {
       let csv = fileReader.result;
       this.csvJSON(csv);
     };
+    fileReader.readAsText(this.file);
   }
 
   //make the csv a json
   csvJSON(csv) {
     var lines = csv.split('\n');
-    var result = [];
+    var flagJSON = [];
     var headers = lines[0].split(',');
 
     for (var i = 1; i < lines.length; i++) {
@@ -35,9 +35,10 @@ export class FileUploadComponent {
       for (var j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
       }
-      result.push(obj);
+      flagJSON.push(obj);
     }
-
-    return JSON.stringify(result);
+    //update flag json in service so it can be used next time graph is generated
+    this.graphSelectionsService.flagsSubject.next(flagJSON);
+    return flagJSON;
   }
 }
