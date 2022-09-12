@@ -8,24 +8,16 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./../core.component.scss'],
 })
 export class FileUploadComponent {
-  fileName = '';
+  file: any;
 
   constructor(private http: HttpClient) {}
 
-  onFileSelected(event) {
-    //Commenting out for now; need to get a way to get data from uploaded file
-    /* const file: File = event.target.files[0];
-
-    if (file) {
-      this.fileName = file.name;
-
-      const formData = new FormData();
-
-      formData.append('thumbnail', file);
-
-      const upload$ = this.http.post('/api/thumbnail-upload', formData);
-
-      upload$.subscribe();
-    } */
+  fileChanged(e) {
+    this.file = e.target.files[0];
+    let fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      console.log(fileReader.result);
+    };
+    console.log(fileReader.readAsText(this.file));
   }
 }
