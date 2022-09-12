@@ -114,12 +114,12 @@
         <mat-icon>cloud_download</mat-icon>
       </button>
       <div class="flex-container">
-        <button class="flag dataBtn disabledDataBtn" id="flagBtn" (click)="createFlags()"
-          matTooltip="CSV of flagged data" aria-label="Clicking this button will download a CSV of the flagged data">
+        <app-file-upload></app-file-upload>
+        <button class="flag dataBtn disabledDataBtn" id="flagBtn" (click)="createFlags()" matTooltip="Download CSV"
+          aria-label="Clicking this button will download a CSV of the flagged data">
           <mat-icon>cloud_download</mat-icon>
           <mat-icon>flag</mat-icon>
         </button>
-        <app-file-upload></app-file-upload>
       </div>
     </div>
   </div>

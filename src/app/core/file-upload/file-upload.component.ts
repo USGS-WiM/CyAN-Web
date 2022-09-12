@@ -13,7 +13,8 @@ export class FileUploadComponent {
   constructor(private http: HttpClient) {}
 
   onFileSelected(event) {
-    const file: File = event.target.files[0];
+    //Commenting out for now; need to get a way to get data from uploaded file
+    /* const file: File = event.target.files[0];
 
     if (file) {
       this.fileName = file.name;
@@ -25,6 +26,6 @@ export class FileUploadComponent {
       const upload$ = this.http.post('/api/thumbnail-upload', formData);
 
       upload$.subscribe();
-    }
+    } */
   }
 }
