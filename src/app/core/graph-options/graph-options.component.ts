@@ -892,7 +892,6 @@ export class GraphOptionsComponent implements OnInit {
       let row = rowArray.join(',');
       graphMetadataContent += row + '\r\n';
     });
-    console.log('graphMetadataContent', graphMetadata);
     let encodedUri = encodeURI(graphMetadataContent);
     let link = document.createElement('a');
     link.setAttribute('href', encodedUri);
