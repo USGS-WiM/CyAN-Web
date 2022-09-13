@@ -18,9 +18,28 @@ export class FileUploadComponent {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       let csv = fileReader.result;
-      this.csvJSON(csv);
+      this.checkFile(csv);
     };
     fileReader.readAsText(this.file);
+  }
+
+  //ensure that the uploaded file matches the flag csv format
+  checkFile(file) {
+    //check file extension
+
+    //if file extension is not a csv, show warning message
+    this.incorrectFileMessage();
+
+    //if file is a csv, check headers
+
+    //if headers are bad, show warning message
+
+    //if everything is good, process the flags
+    this.csvJSON(file);
+  }
+
+  incorrectFileMessage() {
+    //you must upload a correctly formatted csv
   }
 
   //make the csv a json
