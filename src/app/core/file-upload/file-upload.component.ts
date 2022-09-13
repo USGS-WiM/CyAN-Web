@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-file-upload',
@@ -9,7 +10,10 @@ import { GraphSelectionsService } from 'src/app/shared/services/graph-selections
 export class FileUploadComponent {
   file: any;
 
-  constructor(private graphSelectionsService: GraphSelectionsService) {}
+  constructor(
+    private graphSelectionsService: GraphSelectionsService,
+    public snackBar: MatSnackBar
+  ) {}
 
   // this code is adapted from: https://stackoverflow.com/questions/27979002/convert-csv-data-into-json-format-using-javascript
   //get the uploaded data
@@ -40,6 +44,14 @@ export class FileUploadComponent {
 
   incorrectFileMessage() {
     //you must upload a correctly formatted csv
+    this.snackBar.open(
+      'Your file is not a CSV or it does not have the correct headers.',
+      'OK',
+      {
+        duration: 4000,
+        verticalPosition: 'top',
+      }
+    );
   }
 
   //make the csv a json
