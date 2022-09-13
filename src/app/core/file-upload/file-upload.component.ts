@@ -44,9 +44,15 @@ export class FileUploadComponent {
         userFlags = flags;
       }
     });
-
+    let allFlags;
     //combine new flags with uploaded flags into one json
-    let allFlags = uploadedFlags.concat(userFlags);
+    if (userFlags) {
+      //if user has created new flags before uploading file, combine them
+      allFlags = uploadedFlags.concat(userFlags);
+    } else {
+      //if user has not created new flags before uploading file, only use uploaded flags
+      allFlags = uploadedFlags;
+    }
     //update flag json in service so it can be used next time graph is generated
     this.graphSelectionsService.flagsSubject.next(allFlags);
     return allFlags;
