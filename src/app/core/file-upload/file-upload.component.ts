@@ -25,14 +25,14 @@ export class FileUploadComponent {
 
   //make the csv a json
   csvJSON(csv) {
-    var lines = csv.split('\n');
-    var uploadedFlags = [];
-    var headers = lines[0].split(',');
+    let lines = csv.split('\n');
+    let uploadedFlags = [];
+    let headers = lines[0].split(',');
 
-    for (var i = 1; i < lines.length; i++) {
-      var obj = {};
-      var currentline = lines[i].split(',');
-      for (var j = 0; j < headers.length; j++) {
+    for (let i = 1; i < lines.length; i++) {
+      let obj = {};
+      let currentline = lines[i].split(',');
+      for (let j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
       }
       uploadedFlags.push(obj);
