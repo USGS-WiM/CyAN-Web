@@ -40,12 +40,16 @@ export class FileUploadComponent {
 
     //if everything is good, process the flags
     this.csvJSON(file);
+    this.snackBar.open('Upload successful!', 'OK', {
+      duration: 4000,
+      verticalPosition: 'top',
+    });
   }
 
   incorrectFileMessage() {
     //you must upload a correctly formatted csv
     this.snackBar.open(
-      'Your file is not a CSV or it does not have the correct headers.',
+      'Upload failed. Either your file is not a CSV or it does not have the correct headers.',
       'OK',
       {
         duration: 4000,
