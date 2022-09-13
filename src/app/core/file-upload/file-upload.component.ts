@@ -26,7 +26,7 @@ export class FileUploadComponent {
   //make the csv a json
   csvJSON(csv) {
     var lines = csv.split('\n');
-    var flagJSON = [];
+    var uploadedFlags = [];
     var headers = lines[0].split(',');
 
     for (var i = 1; i < lines.length; i++) {
@@ -35,10 +35,20 @@ export class FileUploadComponent {
       for (var j = 0; j < headers.length; j++) {
         obj[headers[j]] = currentline[j];
       }
-      flagJSON.push(obj);
+      uploadedFlags.push(obj);
     }
+    let userFlags;
+    //get existing flags
+    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
+      if (flags) {
+        userFlags = flags;
+      }
+    });
+
+    //combine new flags with uploaded flags into one json
+    let allFlags = uploadedFlags.concat(userFlags);
     //update flag json in service so it can be used next time graph is generated
-    this.graphSelectionsService.flagsSubject.next(flagJSON);
-    return flagJSON;
+    this.graphSelectionsService.flagsSubject.next(allFlags);
+    return allFlags;
   }
 }
