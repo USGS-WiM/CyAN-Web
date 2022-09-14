@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-file-upload',
@@ -9,7 +10,10 @@ import { GraphSelectionsService } from 'src/app/shared/services/graph-selections
 export class FileUploadComponent {
   file: any;
 
-  constructor(private graphSelectionsService: GraphSelectionsService) {}
+  constructor(
+    private graphSelectionsService: GraphSelectionsService,
+    public snackBar: MatSnackBar
+  ) {}
 
   // this code is adapted from: https://stackoverflow.com/questions/27979002/convert-csv-data-into-json-format-using-javascript
   //get the uploaded data
@@ -18,9 +22,47 @@ export class FileUploadComponent {
     let fileReader = new FileReader();
     fileReader.onload = (e) => {
       let csv = fileReader.result;
-      this.csvJSON(csv);
+      this.checkFile(csv);
     };
     fileReader.readAsText(this.file);
+  }
+
+  //ensure that the uploaded file matches the flag csv format
+  checkFile(file) {
+    //check file extension
+    let filetype = this.file.type;
+    if (filetype == 'text/csv') {
+      //if file is a csv, check headers
+      //if everything is good, process the flags
+      let uploadedFlags = this.csvJSON(file);
+      let correctHeaders = this.checkHeaders(uploadedFlags);
+      if (correctHeaders == true) {
+        this.snackBar.open('Upload successful!', 'OK', {
+          duration: 4000,
+          verticalPosition: 'top',
+        });
+        this.combineFlags(uploadedFlags);
+      } else {
+        //if headers aren't correct, show error message
+        this.incorrectFileMessage();
+      }
+    }
+    if (filetype !== 'text/csv') {
+      //if file extension is not a csv, show warning message
+      this.incorrectFileMessage();
+    }
+  }
+
+  incorrectFileMessage() {
+    //you must upload a correctly formatted csv
+    this.snackBar.open(
+      'Upload failed. Either your file is not a CSV or it does not have the correct headers.',
+      'OK',
+      {
+        duration: 4000,
+        verticalPosition: 'top',
+      }
+    );
   }
 
   //make the csv a json
@@ -37,6 +79,38 @@ export class FileUploadComponent {
       }
       uploadedFlags.push(obj);
     }
+    return uploadedFlags;
+  }
+
+  checkHeaders(uploadedFlags) {
+    //expected headers
+    let expectedHeaders = [
+      'rcode',
+      'pcode',
+      'mcode',
+      'date_time_group',
+      'sid',
+      'latitude',
+      'longitude',
+      'result',
+      'units',
+      'region',
+    ];
+    //get uploaded headers
+    let uploadedHeaders = Object.keys(uploadedFlags[0]);
+    let matchingHeaders = true;
+    if (!uploadedHeaders) {
+      matchingHeaders = false;
+    }
+    for (let i = 0; i < uploadedHeaders.length; i++) {
+      if (uploadedHeaders[i] !== expectedHeaders[i]) {
+        matchingHeaders = false;
+      }
+    }
+    return matchingHeaders;
+  }
+
+  combineFlags(uploadedFlags) {
     let userFlags;
     //get existing flags
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
