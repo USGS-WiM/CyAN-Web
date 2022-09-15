@@ -49,12 +49,14 @@ export class GraphOptionsComponent implements OnInit {
   rolloverFlagsX = [];
   rolloverFlagsY = [];
   showFlagOptions: Boolean = false;
+  sameQuery: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
   clickedPoint;
   public axisFlagForm = new FormGroup({
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
+    xyFlagControl: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -724,6 +726,9 @@ export class GraphOptionsComponent implements OnInit {
 
   //formats user selections into an object that's used to retrieve data from the service
   public createQuery(axis: string) {
+    //default assumption is that there are different data for x and y values
+    this.sameQuery = false;
+
     let tempP;
     let tempM;
 
@@ -825,6 +830,12 @@ export class GraphOptionsComponent implements OnInit {
           items,
         };
       }
+    }
+    let xQueryString = JSON.stringify(this.filterQueryX);
+    let yQueryString = JSON.stringify(this.filterQueryY);
+    //check if user selected the exact same options for x and y axes
+    if (xQueryString === yQueryString) {
+      this.sameQuery = true;
     }
   }
 
