@@ -28,8 +28,6 @@ export class GraphOptionsComponent implements OnInit {
     ParametersY: new FormControl(),
     MethodsY: new FormControl(),
   });
-  public methodsToDisplay: string[];
-  public methodComboSelections: string[];
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
   minYear: number = 1975;
@@ -175,7 +173,7 @@ export class GraphOptionsComponent implements OnInit {
                   ) {
                     let foundX = false;
                     let foundY = false;
-                    //Loop through all the flag indicies
+                    //Loop through all the flag indices
                     for (
                       let xIndex = 0;
                       xIndex < this.rolloverFlagsX.length;
@@ -384,7 +382,7 @@ export class GraphOptionsComponent implements OnInit {
 
     //clickedPoints contains info about the click point: index of the point in the array created for this graph, the x and y values, and the marker display
     for (let i = 0; i < this.clickedPoint.points.length; i++) {
-      //unique id/index for selecte dpoint for this specific graph
+      //unique id/index for selected point for this specific graph
       pointIndex = this.clickedPoint.points[i].pointIndex;
       //data.marker.color = marker color array for all points in rgb
       colors = this.clickedPoint.points[i].data.marker.color;
@@ -621,7 +619,7 @@ export class GraphOptionsComponent implements OnInit {
       }
     }
 
-    //Discard old parameter indicies when a new graph is generated
+    //Discard old parameter indices when a new graph is generated
     if (this.flaggedPointIndices.x) {
       this.flaggedPointIndices.x = [];
     }
@@ -658,24 +656,6 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       this.yAxisType = 'scatter';
       this.autotickEnabled = true;
-    }
-  }
-
-  //Populate the method combination dropdown according to the selected methods
-  public methodSelectionChanged() {
-    this.methodsToDisplay = [];
-    this.methodComboSelections = [];
-    let tempMethodsX = this.graphSelectionsForm.get('MethodsX').value;
-    let tempMethodsY = this.graphSelectionsForm.get('MethodsY').value;
-    if (tempMethodsY) {
-      if (tempMethodsX) {
-        for (let i = 0; i < tempMethodsX.length; i++) {
-          for (let x = 0; x < tempMethodsY.length; x++) {
-            let newMethodCombo = tempMethodsX[i] + ' & ' + tempMethodsY[x];
-            this.methodsToDisplay.push(newMethodCombo);
-          }
-        }
-      }
     }
   }
 
@@ -740,7 +720,10 @@ export class GraphOptionsComponent implements OnInit {
 
     let items = new Object();
     //Populate the 'items' object (parameters & methods) in the query object
-    items[tempP] = tempM;
+    //Method form is a single-select dropdown, but service requires an array, so add method string to empty array
+    let formattedM = [];
+    formattedM.push(tempM);
+    items[tempP] = formattedM;
     //Populate axes titles
     for (let i = 0; i < this.parameterTypes.length; i++) {
       if (tempP === this.parameterTypes[i].pcode) {
