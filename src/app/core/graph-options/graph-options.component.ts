@@ -376,6 +376,7 @@ export class GraphOptionsComponent implements OnInit {
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
+    this.axisFlagForm.get('xyFlagControl').setValue(null);
 
     //Disable/enable flag button
     let flagBtn = document.getElementById('flagBtn');
@@ -531,37 +532,42 @@ export class GraphOptionsComponent implements OnInit {
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
     //X and Y both checked
+    let xyChecked = false;
     if (
-      this.axisFlagForm.get('xFlagControl').value &&
-      this.axisFlagForm.get('yFlagControl').value
+      (this.axisFlagForm.get('xFlagControl').value &&
+        this.axisFlagForm.get('yFlagControl').value) ||
+      this.axisFlagForm.get('xyFlagControl').value
     ) {
+      xyChecked = true;
+    }
+    if (xyChecked == true) {
       this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
     }
+    if (xyChecked == false) {
+      //Y checked; x not checked
+      if (
+        this.axisFlagForm.get('yFlagControl').value &&
+        !this.axisFlagForm.get('xFlagControl').value
+      ) {
+        this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
+      }
 
-    //Y checked; x not checked
-    if (
-      this.axisFlagForm.get('yFlagControl').value &&
-      !this.axisFlagForm.get('xFlagControl').value
-    ) {
-      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
+      //X checked; Y not checked
+      if (
+        !this.axisFlagForm.get('yFlagControl').value &&
+        this.axisFlagForm.get('xFlagControl').value
+      ) {
+        this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
+      }
+
+      //Neither X nor y checked
+      if (
+        !this.axisFlagForm.get('yFlagControl').value &&
+        !this.axisFlagForm.get('xFlagControl').value
+      ) {
+        this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+      }
     }
-
-    //X checked; Y not checked
-    if (
-      !this.axisFlagForm.get('yFlagControl').value &&
-      this.axisFlagForm.get('xFlagControl').value
-    ) {
-      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
-    }
-
-    //Neither X nor y checked
-    if (
-      !this.axisFlagForm.get('yFlagControl').value &&
-      !this.axisFlagForm.get('xFlagControl').value
-    ) {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
-    }
-
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
