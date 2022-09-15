@@ -104,7 +104,11 @@ export class GraphOptionsComponent implements OnInit {
   public yAxisType = 'scatter';
   public yAxisTitle = '';
   public xAxisTitle = '';
+  public yAxisParameter = '';
+  public xAxisParameter = '';
   public autotickEnabled: Boolean = true;
+  public xAxisUnits: string = '';
+  public yAxisUnits: string = '';
 
   constructor(
     private filterService: FiltersService,
@@ -218,6 +222,20 @@ export class GraphOptionsComponent implements OnInit {
                       this.pointSymbols.push(this.unflaggedSymbol);
                     }
                   }
+
+                  //Get units for axes labels
+                  this.graphSelectionsService.xAxisUnitsSubject.subscribe(
+                    (xUnits) => {
+                      this.xAxisUnits = xUnits;
+                      this.xAxisTitle = this.xAxisParameter + ' ' + xUnits;
+                    }
+                  );
+                  this.graphSelectionsService.yAxisUnitsSubject.subscribe(
+                    (yUnits) => {
+                      this.yAxisUnits = yUnits;
+                      this.yAxisTitle = this.yAxisParameter + ' ' + yUnits;
+                    }
+                  );
 
                   //Create and display graph
                   this.createGraph();
@@ -728,10 +746,10 @@ export class GraphOptionsComponent implements OnInit {
     for (let i = 0; i < this.parameterTypes.length; i++) {
       if (tempP === this.parameterTypes[i].pcode) {
         if (axis === 'yAxis') {
-          this.yAxisTitle = this.parameterTypes[i].short_name;
+          this.yAxisParameter = this.parameterTypes[i].short_name.toString();
         }
         if (axis === 'xAxis') {
-          this.xAxisTitle = this.parameterTypes[i].short_name.toString(); // + " " + this.parameterTypes[i].unit;
+          this.xAxisParameter = this.parameterTypes[i].short_name.toString(); // + " " + this.parameterTypes[i].unit;
         }
       }
     }
@@ -852,6 +870,8 @@ export class GraphOptionsComponent implements OnInit {
         'X_Method',
         'Y_Parameter',
         'Y_Method',
+        'X_Units',
+        'Y_Units',
       ],
       [
         this.filterQueryX.meta.north,
@@ -869,6 +889,8 @@ export class GraphOptionsComponent implements OnInit {
         formattedMcodeX,
         this.graphSelectionsForm.get('ParametersY').value,
         formattedMcodeY,
+        this.xAxisUnits,
+        this.yAxisUnits,
       ],
     ];
 

@@ -53,6 +53,12 @@ export class GraphSelectionsService {
   public maxDateSubject = new BehaviorSubject<any>(undefined);
   maxDate$ = this.maxDateSubject.asObservable();
 
+  public xAxisUnitsSubject = new BehaviorSubject<any>(undefined);
+  xAxisUnitsSubject$ = this.xAxisUnitsSubject.asObservable();
+
+  public yAxisUnitsSubject = new BehaviorSubject<any>(undefined);
+  yAxisUnitsSubject$ = this.yAxisUnitsSubject.asObservable();
+
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
   }
@@ -132,11 +138,13 @@ export class GraphSelectionsService {
           }
 
           if (axis === 'xAxis') {
+            this.xAxisUnitsSubject.next(res[0].units);
             this.rawX = res;
             this.tempResultsXSubject.next(res);
             this.ready += 1;
           }
           if (axis === 'yAxis') {
+            this.yAxisUnitsSubject.next(res[0].units);
             this.rawY = res;
             this.tempResultsYSubject.next(res);
             this.ready += 1;
