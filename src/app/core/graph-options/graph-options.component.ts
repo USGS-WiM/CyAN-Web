@@ -28,8 +28,6 @@ export class GraphOptionsComponent implements OnInit {
     ParametersY: new FormControl(),
     MethodsY: new FormControl(),
   });
-  public methodsToDisplay: string[];
-  public methodComboSelections: string[];
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
   minYear: number = 1975;
@@ -658,24 +656,6 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       this.yAxisType = 'scatter';
       this.autotickEnabled = true;
-    }
-  }
-
-  //Populate the method combination dropdown according to the selected methods
-  public methodSelectionChanged() {
-    this.methodsToDisplay = [];
-    this.methodComboSelections = [];
-    let tempMethodsX = this.graphSelectionsForm.get('MethodsX').value;
-    let tempMethodsY = this.graphSelectionsForm.get('MethodsY').value;
-    if (tempMethodsY) {
-      if (tempMethodsX) {
-        for (let i = 0; i < tempMethodsX.length; i++) {
-          for (let x = 0; x < tempMethodsY.length; x++) {
-            let newMethodCombo = tempMethodsX[i] + ' & ' + tempMethodsY[x];
-            this.methodsToDisplay.push(newMethodCombo);
-          }
-        }
-      }
     }
   }
 
