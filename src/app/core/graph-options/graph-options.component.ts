@@ -808,7 +808,6 @@ export class GraphOptionsComponent implements OnInit {
         };
       }
     }
-    console.log('items', items);
   }
 
   //creates a csv containing all of the user-defined filters
