@@ -71,11 +71,13 @@ export class FileUploadComponent {
     let uploadedFlags = [];
     let headers = lines[0].split(',');
 
-    for (let i = 1; i < lines.length; i++) {
+    let numLines = lines.length;
+    let numHeaders = headers.length;
+    for (let i = 1; i < numLines; i++) {
       let obj = {};
-      let currentline = lines[i].split(',');
-      for (let j = 0; j < headers.length; j++) {
-        obj[headers[j]] = currentline[j];
+      let currentLine = lines[i].split(',');
+      for (let j = 0; j < numHeaders; j++) {
+        obj[headers[j]] = currentLine[j];
       }
       uploadedFlags.push(obj);
     }
