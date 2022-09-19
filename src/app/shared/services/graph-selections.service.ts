@@ -101,17 +101,8 @@ export class GraphSelectionsService {
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
         if (res.length === 0) {
-          this.snackBar.open('No points match your query.', 'OK', {
-            duration: 4000,
-            verticalPosition: 'top',
-          });
+          this.noDataMatchQuery();
           this.ready = 0;
-          let base = document.getElementById('base');
-          base.classList.remove('initial-loader');
-          let graphOptionsBackgroundID = document.getElementById(
-            'graphOptionsBackgroundID'
-          );
-          graphOptionsBackgroundID.classList.remove('disableClick');
         } else {
           //find the min and max date of the dataset so that it can be included in the graph metadata download
           let minDate;
@@ -219,22 +210,23 @@ export class GraphSelectionsService {
         }
       }
     } else {
-      this.snackBar.open(
-        'No matching sites for your selected parameters.',
-        'OK',
-        {
-          duration: 4000,
-          verticalPosition: 'top',
-        }
-      );
-      let base = document.getElementById('base');
-      base.classList.remove('initial-loader');
-      let graphOptionsBackgroundID = document.getElementById(
-        'graphOptionsBackgroundID'
-      );
-      graphOptionsBackgroundID.classList.remove('disableClick');
+      this.noDataMatchQuery();
     }
   }
+
+  public noDataMatchQuery() {
+    this.snackBar.open('No data are available for your query.', 'OK', {
+      duration: 4000,
+      verticalPosition: 'top',
+    });
+    let base = document.getElementById('base');
+    base.classList.remove('initial-loader');
+    let graphOptionsBackgroundID = document.getElementById(
+      'graphOptionsBackgroundID'
+    );
+    graphOptionsBackgroundID.classList.remove('disableClick');
+  }
+
   public finalGraphValues() {
     if (this.valuesX.length > 0 && this.valuesY.length > 0) {
       this.graphPointsYSubject.next(this.valuesY);
