@@ -132,16 +132,20 @@ export class GraphOptionsComponent implements OnInit {
   ngOnInit(): void {
     //Set the display according to the initial screen dimensions
     this.resizeDivs();
+    this.getDataForDropdowns();
     this.initiateGraphService();
   }
 
-  public initiateGraphService() {
+  public getDataForDropdowns() {
     //Get the data to populate the dropdowns in Graph Options
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
     this.parameterTypes$.subscribe(
       (parameters) => (this.parameterTypes = parameters)
     );
+  }
+
+  public initiateGraphService() {
     //rolloverFlags means the flags that were assigned for these specific datasets in a graph that was previously generated
     this.graphSelectionsService.flagIndexX.subscribe((xFlags) => {
       this.rolloverFlagsX = xFlags;
@@ -157,7 +161,7 @@ export class GraphOptionsComponent implements OnInit {
       let graphDataDownloadBtn = document.getElementById(
         'graphDataDownloadBtn'
       );
-      if (makeGraph === true && this.alreadyGraphed === false) {
+      if (this.alreadyGraphed === false) {
         this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
           this.currentXaxisValues = points;
           this.graphSelectionsService.graphPointsYSubject.subscribe(
