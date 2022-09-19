@@ -154,122 +154,130 @@ export class GraphOptionsComponent implements OnInit {
       this.rolloverFlagsY = yFlags;
     });
     //Reset the x and y values displayed on the graph whenever the values change in the service
-    this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
-      let graphOptionsBackgroundID = document.getElementById(
-        'graphOptionsBackgroundID'
-      );
-      let graphDataDownloadBtn = document.getElementById(
-        'graphDataDownloadBtn'
-      );
-      if (this.alreadyGraphed === false) {
-        this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
-          this.currentXaxisValues = points;
-          this.graphSelectionsService.graphPointsYSubject.subscribe(
-            (points) => {
-              this.currentYaxisValues = points;
-              if (this.currentYaxisValues && this.currentXaxisValues) {
-                if (
-                  this.currentYaxisValues.length > 0 &&
-                  this.currentXaxisValues.length > 0
+    // this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+    let graphOptionsBackgroundID = document.getElementById(
+      'graphOptionsBackgroundID'
+    );
+    let graphDataDownloadBtn = document.getElementById('graphDataDownloadBtn');
+    if (this.alreadyGraphed === false) {
+      this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+        //get the x values to plot
+        this.currentXaxisValues = points;
+        this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
+          //get the y values to plot
+          this.currentYaxisValues = points;
+          //proceed if both the x and y data are ready
+          if (this.currentYaxisValues && this.currentXaxisValues) {
+            if (
+              this.currentYaxisValues.length > 0 &&
+              this.currentXaxisValues.length > 0
+            ) {
+              this.alreadyGraphed = true;
+              //because there might be flags, need to set the colors and symbols for each point
+              this.pointColors = [];
+              this.pointSymbols = [];
+              //We begin by setting the color of each point individually
+              //currentYaxisValues should always be the same length as currentXaxisValues, so we choose one
+              let numPoints = this.currentYaxisValues.length;
+              for (
+                let currentIndex = 0;
+                currentIndex < numPoints;
+                currentIndex++
+              ) {
+                //foundX and foundY: true if a flag was found for their corresponding index
+                let foundX = false;
+                let foundY = false;
+                //Loop through all the flag indices
+                for (
+                  let xIndex = 0;
+                  xIndex < this.rolloverFlagsX.length;
+                  xIndex++
                 ) {
-                  this.alreadyGraphed = true;
-                  this.pointColors = [];
-                  this.pointSymbols = [];
-                  //We begin by setting the color of each point individually
                   for (
-                    let currentIndex = 0;
-                    currentIndex < this.currentYaxisValues.length;
-                    currentIndex++
+                    let yIndex = 0;
+                    yIndex < this.rolloverFlagsY.length;
+                    yIndex++
                   ) {
-                    let foundX = false;
-                    let foundY = false;
-                    //Loop through all the flag indices
-                    for (
-                      let xIndex = 0;
-                      xIndex < this.rolloverFlagsX.length;
-                      xIndex++
+                    //When an x flag is found
+                    if (
+                      currentIndex == this.rolloverFlagsX[xIndex] &&
+                      currentIndex !== this.rolloverFlagsY[yIndex]
                     ) {
-                      for (
-                        let yIndex = 0;
-                        yIndex < this.rolloverFlagsY.length;
-                        yIndex++
-                      ) {
-                        //When an x flag is found
-                        if (
-                          currentIndex == this.rolloverFlagsX[xIndex] &&
-                          currentIndex !== this.rolloverFlagsY[yIndex]
-                        ) {
-                          foundX = true;
-                        }
-                        //When a y flag is found
-                        if (
-                          currentIndex !== this.rolloverFlagsX[xIndex] &&
-                          currentIndex == this.rolloverFlagsY[yIndex]
-                        ) {
-                          foundY = true;
-                        }
-                      }
+                      foundX = true;
                     }
-                    //Add an x flag marker to the color and symbol arrays
-                    if (foundX == true && foundY == false) {
-                      this.pointColors.push(this.xFlaggedColor);
-                      this.pointSymbols.push(this.flaggedSymbol);
-                      //Add a y flag marker to the color and symbol arrays
-                    } else if (foundX == false && foundY == true) {
-                      this.pointColors.push(this.yFlaggedColor);
-                      this.pointSymbols.push(this.flaggedSymbol);
-                      //Add an xy flag marker to the color and symbol arrays
-                    } else if (foundX == true && foundY == true) {
-                      this.pointColors.push(this.xyFlaggedColor);
-                      this.pointSymbols.push(this.flaggedSymbol);
-                      //No flags; add a default marker to the color and symbol arrays
-                    } else {
-                      this.pointColors.push(this.unflaggedColor);
-                      this.pointSymbols.push(this.unflaggedSymbol);
+                    //When a y flag is found
+                    if (
+                      currentIndex !== this.rolloverFlagsX[xIndex] &&
+                      currentIndex == this.rolloverFlagsY[yIndex]
+                    ) {
+                      foundY = true;
                     }
                   }
-
-                  //Get units for axes labels
-                  this.graphSelectionsService.xAxisUnitsSubject.subscribe(
-                    (xUnits) => {
-                      this.xAxisUnits = xUnits;
-                      this.xAxisTitle = this.xAxisParameter + ' ' + xUnits;
-                    }
-                  );
-                  this.graphSelectionsService.yAxisUnitsSubject.subscribe(
-                    (yUnits) => {
-                      this.yAxisUnits = yUnits;
-                      this.yAxisTitle = this.yAxisParameter + ' ' + yUnits;
-                    }
-                  );
-
-                  //Create and display graph
-                  this.createGraph();
-
-                  //Check for flags
-                  this.showGraph = true;
-                  //Remove the WIM loader to view graph
-                  let base = document.getElementById('base');
-                  base.classList.remove('initial-loader');
-                  graphOptionsBackgroundID.classList.remove('disableClick');
-                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
                 }
+                this.assignColors(foundX, foundY);
               }
-              if (!this.currentYaxisValues || !this.currentXaxisValues) {
-                if (this.alreadyGraphed === false) {
-                  this.alreadyGraphed = true;
-                  let base = document.getElementById('base');
-                  base.classList.remove('initial-loader');
-                  this.showGraph = false;
-                  graphOptionsBackgroundID.classList.remove('disableClick');
-                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+
+              //Get units for axes labels
+              this.graphSelectionsService.xAxisUnitsSubject.subscribe(
+                (xUnits) => {
+                  this.xAxisUnits = xUnits;
+                  this.xAxisTitle = this.xAxisParameter + ' ' + xUnits;
                 }
-              }
+              );
+              this.graphSelectionsService.yAxisUnitsSubject.subscribe(
+                (yUnits) => {
+                  this.yAxisUnits = yUnits;
+                  this.yAxisTitle = this.yAxisParameter + ' ' + yUnits;
+                }
+              );
+
+              //Create and display graph
+              this.createGraph();
+
+              //Check for flags
+              this.showGraph = true;
+              //Remove the WIM loader to view graph
+              let base = document.getElementById('base');
+              base.classList.remove('initial-loader');
+              graphOptionsBackgroundID.classList.remove('disableClick');
+              graphDataDownloadBtn.classList.remove('disabledDataBtn');
             }
-          );
+          }
+          if (!this.currentYaxisValues || !this.currentXaxisValues) {
+            if (this.alreadyGraphed === false) {
+              this.alreadyGraphed = true;
+              let base = document.getElementById('base');
+              base.classList.remove('initial-loader');
+              this.showGraph = false;
+              graphOptionsBackgroundID.classList.remove('disableClick');
+              graphDataDownloadBtn.classList.remove('disabledDataBtn');
+            }
+          }
         });
-      }
-    });
+      });
+    }
+    // });
+  }
+
+  //When a new graph is generated, assign colors and symbols for each point
+  public assignColors(xFlag: Boolean, yFlag: Boolean) {
+    //Add an x flag marker to the color and symbol arrays
+    if (xFlag == true && yFlag == false) {
+      this.pointColors.push(this.xFlaggedColor);
+      this.pointSymbols.push(this.flaggedSymbol);
+      //Add a y flag marker to the color and symbol arrays
+    } else if (xFlag == false && yFlag == true) {
+      this.pointColors.push(this.yFlaggedColor);
+      this.pointSymbols.push(this.flaggedSymbol);
+      //Add an xy flag marker to the color and symbol arrays
+    } else if (xFlag == true && yFlag == true) {
+      this.pointColors.push(this.xyFlaggedColor);
+      this.pointSymbols.push(this.flaggedSymbol);
+      //No flags; add a default marker to the color and symbol arrays
+    } else {
+      this.pointColors.push(this.unflaggedColor);
+      this.pointSymbols.push(this.unflaggedSymbol);
+    }
   }
 
   //When a parameter is selected, this function is called to populate the Methods dropdown
