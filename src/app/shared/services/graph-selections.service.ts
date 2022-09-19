@@ -47,11 +47,17 @@ export class GraphSelectionsService {
   public flagIndexY = new BehaviorSubject<any>(undefined);
   flagIndexY$ = this.flagIndexY.asObservable();
 
-  public minDateSubject = new BehaviorSubject<any>(undefined);
-  minDate$ = this.minDateSubject.asObservable();
+  public minDateSubjectY = new BehaviorSubject<any>(undefined);
+  minDateY$ = this.minDateSubjectY.asObservable();
 
-  public maxDateSubject = new BehaviorSubject<any>(undefined);
-  maxDate$ = this.maxDateSubject.asObservable();
+  public minDateSubjectX = new BehaviorSubject<any>(undefined);
+  minDateX$ = this.minDateSubjectX.asObservable();
+
+  public maxDateSubjectY = new BehaviorSubject<any>(undefined);
+  maxDateY$ = this.maxDateSubjectY.asObservable();
+
+  public maxDateSubjectX = new BehaviorSubject<any>(undefined);
+  maxDateX$ = this.maxDateSubjectX.asObservable();
 
   public xAxisUnitsSubject = new BehaviorSubject<any>(undefined);
   xAxisUnitsSubject$ = this.xAxisUnitsSubject.asObservable();
@@ -104,48 +110,70 @@ export class GraphSelectionsService {
           this.noDataMatchQuery();
           this.ready = 0;
         } else {
-          //find the min and max date of the dataset so that it can be included in the graph metadata download
-          let minDate;
-          let maxDate;
-          for (let i = 0; i < res.length; i++) {
-            let currentDate = res[i].date_time_group;
-            if (i === 0) {
-              minDate = currentDate;
-              maxDate = currentDate;
-            }
-            if (currentDate < minDate) {
-              minDate = currentDate;
-            }
-            if (currentDate > maxDate) {
-              maxDate = currentDate;
-            }
-            //on the last iteration, format and save the min and max date
-            if (i == res.length - 1) {
-              maxDate = moment(maxDate).format('MM-DD-YYYY');
-              minDate = moment(minDate).format('MM-DD-YYYY');
-              this.maxDateSubject.next(maxDate);
-              this.minDateSubject.next(minDate);
-            }
-          }
+          //find min and max date of returned dataset
+          this.formatMetadata(res, axis);
 
           if (axis === 'xAxis') {
-            this.xAxisUnitsSubject.next(res[0].units);
+            //store raw results for x axis
             this.rawX = res;
             this.tempResultsXSubject.next(res);
             this.ready += 1;
           }
           if (axis === 'yAxis') {
-            this.yAxisUnitsSubject.next(res[0].units);
+            //store raw results for y axis
             this.rawY = res;
             this.tempResultsYSubject.next(res);
             this.ready += 1;
           }
+          //when results have been saved for both x and y axis, proceed to filtering points
           if (this.ready == 2) {
             this.ready = 0;
             this.filterGraphPoints(this.rawX, this.rawY);
           }
         }
       });
+  }
+
+  //get min and max dates and units for each axis
+  public formatMetadata(res, axis) {
+    //find the min and max date of the dataset so that it can be included in the graph metadata download
+    let minDate;
+    let maxDate;
+    for (let i = 0; i < res.length; i++) {
+      let currentDate = res[i].date_time_group;
+      if (i === 0) {
+        minDate = currentDate;
+        maxDate = currentDate;
+      }
+      if (currentDate < minDate) {
+        minDate = currentDate;
+      }
+      if (currentDate > maxDate) {
+        maxDate = currentDate;
+      }
+      //on the last iteration, format and save the min and max date
+      if (i == res.length - 1) {
+        maxDate = moment(maxDate).format('MM-DD-YYYY');
+        minDate = moment(minDate).format('MM-DD-YYYY');
+        if (axis == 'yAxis') {
+          //store min and max dates for x axis
+          this.maxDateSubjectY.next(maxDate);
+          this.minDateSubjectY.next(minDate);
+
+          //get units for y axis
+          this.yAxisUnitsSubject.next(res[0].units);
+        }
+        if (axis == 'xAxis') {
+          //store min and max dates for x axis
+          this.maxDateSubjectX.next(maxDate);
+          this.minDateSubjectX.next(minDate);
+
+          //get units for x axis
+          //this is for metadata csv and axes labels
+          this.xAxisUnitsSubject.next(res[0].units);
+        }
+      }
+    }
   }
 
   //Match x data with y data and use them to populate graph
@@ -171,6 +199,7 @@ export class GraphSelectionsService {
           yResultsIndex++
         ) {
           if (
+            //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
             tempResultsY[yResultsIndex].sid == tempResultsX[xResultsIndex].sid
           ) {
             if (this.flagsSubject.value) {

@@ -859,13 +859,21 @@ export class GraphOptionsComponent implements OnInit {
 
   //creates a csv containing all of the user-defined filters
   public graphDataDownload() {
-    let maxDateReturned;
-    let minDateReturned;
-    this.graphSelectionsService.maxDateSubject.subscribe(
-      (maxDate) => (maxDateReturned = maxDate)
+    let maxDateReturnedY;
+    let maxDateReturnedX;
+    let minDateReturnedY;
+    let minDateReturnedX;
+    this.graphSelectionsService.maxDateSubjectY.subscribe(
+      (maxDateY) => (maxDateReturnedY = maxDateY)
     );
-    this.graphSelectionsService.minDateSubject.subscribe(
-      (minDate) => (minDateReturned = minDate)
+    this.graphSelectionsService.maxDateSubjectX.subscribe(
+      (maxDateX) => (maxDateReturnedX = maxDateX)
+    );
+    this.graphSelectionsService.minDateSubjectY.subscribe(
+      (minDateY) => (minDateReturnedY = minDateY)
+    );
+    this.graphSelectionsService.minDateSubjectX.subscribe(
+      (minDateX) => (minDateReturnedX = minDateX)
     );
 
     let graphMetadataContent = 'data:text/csv;charset=utf-8,';
@@ -890,8 +898,10 @@ export class GraphOptionsComponent implements OnInit {
         'West',
         'Min_Year_Selected',
         'Max_Year_Selected',
-        'Min_Date_Returned',
-        'Max_Date_Returned',
+        'X_Min_Date_Returned',
+        'X_Max_Date_Returned',
+        'Y_Min_Date_Returned',
+        'Y_Max_Date_Returned',
         'Include_Null',
         'Region',
         'Optimal_Alignment',
@@ -909,8 +919,10 @@ export class GraphOptionsComponent implements OnInit {
         this.filterQueryX.meta.west,
         this.filterQueryX.meta.min_year,
         this.filterQueryX.meta.max_year,
-        minDateReturned,
-        maxDateReturned,
+        minDateReturnedX,
+        maxDateReturnedX,
+        minDateReturnedY,
+        maxDateReturnedY,
         this.filterQueryX.meta.include_NULL,
         formattedRegion,
         this.filterQueryX.meta.satellite_align,
