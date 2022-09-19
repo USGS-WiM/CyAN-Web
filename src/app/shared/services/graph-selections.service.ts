@@ -47,17 +47,11 @@ export class GraphSelectionsService {
   public flagIndexY = new BehaviorSubject<any>(undefined);
   flagIndexY$ = this.flagIndexY.asObservable();
 
-  public minDateSubjectY = new BehaviorSubject<any>(undefined);
-  minDateY$ = this.minDateSubjectY.asObservable();
+  public minDateSubject = new BehaviorSubject<any>(undefined);
+  minDateY$ = this.minDateSubject.asObservable();
 
-  public minDateSubjectX = new BehaviorSubject<any>(undefined);
-  minDateX$ = this.minDateSubjectX.asObservable();
-
-  public maxDateSubjectY = new BehaviorSubject<any>(undefined);
-  maxDateY$ = this.maxDateSubjectY.asObservable();
-
-  public maxDateSubjectX = new BehaviorSubject<any>(undefined);
-  maxDateX$ = this.maxDateSubjectX.asObservable();
+  public maxDateSubject = new BehaviorSubject<any>(undefined);
+  maxDateX$ = this.maxDateSubject.asObservable();
 
   public xAxisUnitsSubject = new BehaviorSubject<any>(undefined);
   xAxisUnitsSubject$ = this.xAxisUnitsSubject.asObservable();
@@ -111,7 +105,7 @@ export class GraphSelectionsService {
           this.ready = 0;
         } else {
           //find min and max date of returned dataset
-          this.formatMetadata(res, axis);
+          //this.formatMetadata(res, axis);
 
           if (axis === 'xAxis') {
             //store raw results for x axis
@@ -155,21 +149,17 @@ export class GraphSelectionsService {
       if (i == res.length - 1) {
         maxDate = moment(maxDate).format('MM-DD-YYYY');
         minDate = moment(minDate).format('MM-DD-YYYY');
-        if (axis == 'yAxis') {
-          //store min and max dates for x axis
-          this.maxDateSubjectY.next(maxDate);
-          this.minDateSubjectY.next(minDate);
 
-          //get units for y axis
+        //store min and max dates for x axis
+        this.maxDateSubject.next(maxDate);
+        this.minDateSubject.next(minDate);
+
+        //get units
+        //this is for metadata csv and axes labels
+        if (axis == 'yAxis') {
           this.yAxisUnitsSubject.next(res[0].units);
         }
         if (axis == 'xAxis') {
-          //store min and max dates for x axis
-          this.maxDateSubjectX.next(maxDate);
-          this.minDateSubjectX.next(minDate);
-
-          //get units for x axis
-          //this is for metadata csv and axes labels
           this.xAxisUnitsSubject.next(res[0].units);
         }
       }
@@ -232,6 +222,8 @@ export class GraphSelectionsService {
             yResultsIndex > tempResultsY.length - 2 &&
             xResultsIndex > tempResultsX.length - 2
           ) {
+            this.formatMetadata(this.allDataX, 'xAxis');
+            this.formatMetadata(this.allDataX, 'yAxis');
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
             this.finalGraphValues();
