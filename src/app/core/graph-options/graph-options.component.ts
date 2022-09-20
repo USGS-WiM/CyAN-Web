@@ -170,54 +170,60 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
       this.rolloverFlagsY = yFlags;
     });
+    //this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+    this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+      //Reset the x and y values displayed on the graph whenever the values change in the service
+      let graphOptionsBackgroundID = document.getElementById(
+        'graphOptionsBackgroundID'
+      );
+      let graphDataDownloadBtn = document.getElementById(
+        'graphDataDownloadBtn'
+      );
+      if (makeGraph === true && this.alreadyGraphed === false) {
+        this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+          //get the x values to plot
+          this.currentXaxisValues = points;
+          this.graphSelectionsService.graphPointsYSubject.subscribe(
+            (points) => {
+              //get the y values to plot
+              this.currentYaxisValues = points;
+              //proceed if both the x and y data are ready
+              if (this.currentYaxisValues && this.currentXaxisValues) {
+                if (
+                  this.currentYaxisValues.length > 0 &&
+                  this.currentXaxisValues.length > 0
+                ) {
+                  this.alreadyGraphed = true;
 
-    //Reset the x and y values displayed on the graph whenever the values change in the service
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    let graphDataDownloadBtn = document.getElementById('graphDataDownloadBtn');
-    if (this.alreadyGraphed === false) {
-      this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
-        //get the x values to plot
-        this.currentXaxisValues = points;
-        this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
-          //get the y values to plot
-          this.currentYaxisValues = points;
-          //proceed if both the x and y data are ready
-          if (this.currentYaxisValues && this.currentXaxisValues) {
-            if (
-              this.currentYaxisValues.length > 0 &&
-              this.currentXaxisValues.length > 0
-            ) {
-              this.alreadyGraphed = true;
+                  //Create and display graph
+                  this.createGraph();
+                  //Prepare graph metadata
+                  this.createGraphMetadata();
 
-              //Create and display graph
-              this.createGraph();
-              //Prepare graph metadata
-              this.createGraphMetadata();
-
-              //Check for flags
-              this.showGraph = true;
-              //Remove the WIM loader to view graph
-              let base = document.getElementById('base');
-              base.classList.remove('initial-loader');
-              graphOptionsBackgroundID.classList.remove('disableClick');
-              graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                  //Check for flags
+                  this.showGraph = true;
+                  //Remove the WIM loader to view graph
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                  graphOptionsBackgroundID.classList.remove('disableClick');
+                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                }
+              }
+              if (!this.currentYaxisValues || !this.currentXaxisValues) {
+                if (this.alreadyGraphed === false) {
+                  this.alreadyGraphed = true;
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                  this.showGraph = false;
+                  graphOptionsBackgroundID.classList.remove('disableClick');
+                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                }
+              }
             }
-          }
-          if (!this.currentYaxisValues || !this.currentXaxisValues) {
-            if (this.alreadyGraphed === false) {
-              this.alreadyGraphed = true;
-              let base = document.getElementById('base');
-              base.classList.remove('initial-loader');
-              this.showGraph = false;
-              graphOptionsBackgroundID.classList.remove('disableClick');
-              graphDataDownloadBtn.classList.remove('disabledDataBtn');
-            }
-          }
+          );
         });
-      });
-    }
+      }
+    });
   }
 
   public createGraphMetadata() {
