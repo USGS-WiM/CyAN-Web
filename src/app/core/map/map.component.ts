@@ -140,7 +140,6 @@ export class MapComponent implements AfterViewInit {
                       }
                     }
 
-                    console.log('pCodeSummary', pCodeSummary);
                     let centerLatLng = this.map.getCenter();
                     this.map.openPopup(popupContent, centerLatLng, {
                       className: 'custom',

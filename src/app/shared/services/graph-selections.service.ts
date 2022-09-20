@@ -219,7 +219,6 @@ export class GraphSelectionsService {
                   this.flagsSubject.value[flagIndex].rcode ==
                   tempResultsX[xResultsIndex].rcode
                 ) {
-                  console.log('x flag detected. Index is: ', xResultsIndex);
                   flagX.push(xResultsIndex);
                   xFlag = true;
                 }
@@ -227,24 +226,12 @@ export class GraphSelectionsService {
                   this.flagsSubject.value[flagIndex].rcode ==
                   tempResultsY[yResultsIndex].rcode
                 ) {
-                  console.log('y flag detected. Index is: ', yResultsIndex);
                   flagY.push(yResultsIndex);
                   yFlag = true;
                 }
               }
             }
 
-            if (xFlag == true && yFlag == true) {
-              console.log('xFlag', xFlag, ', yFlag', yFlag);
-              console.log(
-                'counter',
-                counter,
-                'xResultsIndex',
-                xResultsIndex,
-                'yResultsIndex',
-                yResultsIndex
-              );
-            }
             this.assignColors(xFlag, yFlag);
             this.valuesX.push(tempResultsX[xResultsIndex].result);
             this.valuesY.push(tempResultsY[yResultsIndex].result);
@@ -256,30 +243,10 @@ export class GraphSelectionsService {
             yResultsIndex > tempResultsY.length - 2 &&
             xResultsIndex > tempResultsX.length - 2
           ) {
-            /* console.log('total count', this.allDataX.length);
-            let colorArray = Array(this.allDataX.length).fill(
-              'rgb(242, 189, 161)'
-            );
-            console.log('colorArray', colorArray); */
-            console.log('pointColors', this.pointColors);
-            console.log('pointSymbols', this.pointSymbol);
-            console.log('xFlag', flagX);
-            console.log('yFlag', flagY);
-
-            console.log(
-              'this.pointColors[270], service',
-              this.pointColors[270]
-            );
-            console.log(
-              'this.pointColors[379], service',
-              this.pointColors[379]
-            );
             this.formatMetadata(this.allDataX, 'xAxis');
             this.formatMetadata(this.allDataX, 'yAxis');
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
-            console.log('flagX', flagX);
-            console.log('flagY', flagY);
             this.finalGraphValues();
           }
         }

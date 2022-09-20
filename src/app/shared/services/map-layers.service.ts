@@ -59,7 +59,6 @@ export class MapLayersService {
     };
     items: {};
   }) {
-    console.log('map query', options);
     this.mapWQSites = L.markerClusterGroup({
       showCoverageOnHover: false,
       maxClusterRadius: 40,
@@ -109,7 +108,6 @@ export class MapLayersService {
           base.classList.remove('initial-loader');
         } else {
           mapData = res;
-          console.log('map results', res);
           for (let i = 0; i < res.length; i++) {
             let lat = Number(res[i].latitude);
             let lng = Number(res[i].longitude);
