@@ -69,6 +69,9 @@ export class GraphOptionsComponent implements OnInit {
   public allShapes = [];
   public unflaggedSymbol: string = 'circle-open';
   public flaggedSymbol: string = 'circle';
+  //Prevent duplicates
+  existingDupX: Boolean = false;
+  existingDupY: Boolean = false;
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -478,45 +481,32 @@ export class GraphOptionsComponent implements OnInit {
 
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
-    //X and Y both checked
-    let xyChecked = false;
-    if (
-      (this.axisFlagForm.get('xFlagControl').value &&
-        this.axisFlagForm.get('yFlagControl').value) ||
-      this.axisFlagForm.get('xyFlagControl').value
-    ) {
-      xyChecked = true;
-    }
-    if (xyChecked == true) {
+    let xChecked = this.axisFlagForm.get('xFlagControl').value;
+    let yChecked = this.axisFlagForm.get('yFlagControl').value;
+    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+    if ((xChecked && yChecked) || xyChecked) {
       this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
     }
     if (xyChecked == false) {
       //Y checked; x not checked
-      if (
-        this.axisFlagForm.get('yFlagControl').value &&
-        !this.axisFlagForm.get('xFlagControl').value
-      ) {
+      if (yChecked && !xChecked) {
         this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
       }
 
       //X checked; Y not checked
-      if (
-        !this.axisFlagForm.get('yFlagControl').value &&
-        this.axisFlagForm.get('xFlagControl').value
-      ) {
+      if (!yChecked && xChecked) {
         this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
       }
 
       //Neither X nor y checked
-      if (
-        !this.axisFlagForm.get('yFlagControl').value &&
-        !this.axisFlagForm.get('xFlagControl').value
-      ) {
+      if (!yChecked && !xChecked) {
         this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
       }
     }
     //Close flag modal and clear selections
     this.closeFlagOptions();
+    this.existingDupX = false;
+    this.existingDupY = false;
   }
 
   //Change color of flagged point and add x & y data to arrays
@@ -540,14 +530,21 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
       this.axisFlagForm.get('xyFlagControl').setValue(true);
+      //Used for preventing flag duplicates
+      this.existingDupX = true;
+      this.existingDupY = true;
     }
     if (selectedColor == this.xFlaggedColor) {
       //check the x box
       this.axisFlagForm.get('xFlagControl').setValue(true);
+      //Used for preventing flag duplicates
+      this.existingDupY = true;
     }
     if (selectedColor == this.yFlaggedColor) {
       //check the y box
       this.axisFlagForm.get('yFlagControl').setValue(true);
+      //Used for preventing flag duplicates
+      this.existingDupY = true;
     }
   }
 
