@@ -187,6 +187,8 @@ export class GraphSelectionsService {
     this.valuesY = [];
     this.allDataX = [];
     this.allDataY = [];
+    this.pointColors = [];
+    this.pointSymbol = [];
     this.sid = [];
     let flagX = [];
     let flagY = [];
@@ -248,6 +250,7 @@ export class GraphSelectionsService {
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
             this.finalGraphValues();
+            console.log('this.pointColors', this.pointColors);
           }
         }
       }

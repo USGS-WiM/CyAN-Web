@@ -169,8 +169,6 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
       this.rolloverFlagsY = yFlags;
     });
-    this.allColors = this.graphSelectionsService.pointColors;
-    this.allShapes = this.graphSelectionsService.pointSymbol;
 
     //Reset the x and y values displayed on the graph whenever the values change in the service
     let graphOptionsBackgroundID = document.getElementById(
@@ -261,6 +259,8 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public createGraph() {
+    this.allColors = this.graphSelectionsService.pointColors;
+    this.allShapes = this.graphSelectionsService.pointSymbol;
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
@@ -483,30 +483,39 @@ export class GraphOptionsComponent implements OnInit {
   submitFlagSelections() {
     let xChecked = this.axisFlagForm.get('xFlagControl').value;
     let yChecked = this.axisFlagForm.get('yFlagControl').value;
-    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
-    if ((xChecked && yChecked) || xyChecked) {
+    console.log('xChecked', xChecked, 'yChecked', yChecked);
+    if (xChecked && yChecked) {
       this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
     }
-    if (xyChecked == false) {
-      //Y checked; x not checked
-      if (yChecked && !xChecked) {
-        this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
-      }
-
-      //X checked; Y not checked
-      if (!yChecked && xChecked) {
-        this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
-      }
-
-      //Neither X nor y checked
-      if (!yChecked && !xChecked) {
-        this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
-      }
+    //Y checked; x not checked
+    if (yChecked && !xChecked) {
+      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
     }
+
+    //X checked; Y not checked
+    if (!yChecked && xChecked) {
+      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
+    }
+
+    //Neither X nor y checked
+    if (!yChecked && !xChecked) {
+      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+    }
+
     //Close flag modal and clear selections
     this.closeFlagOptions();
     this.existingDupX = false;
     this.existingDupY = false;
+  }
+  submitFlagSelectionsSingle() {
+    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+    if (xyChecked) {
+      this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
+    } else {
+      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+    }
+    //Close flag modal and clear selections
+    this.closeFlagOptions();
   }
 
   //Change color of flagged point and add x & y data to arrays
