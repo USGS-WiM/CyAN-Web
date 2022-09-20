@@ -100,6 +100,7 @@ export class GraphOptionsComponent implements OnInit {
   public xFlaggedPointIndices: Array<number> = [];
   public yFlaggedPointIndices: Array<number> = [];
   public allGraphData;
+  public graphMetadata;
 
   //Graph layout
   public graphHeight: Number;
@@ -169,52 +170,124 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
       this.rolloverFlagsY = yFlags;
     });
+    //this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+    this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
+      //Reset the x and y values displayed on the graph whenever the values change in the service
+      let graphOptionsBackgroundID = document.getElementById(
+        'graphOptionsBackgroundID'
+      );
+      let graphDataDownloadBtn = document.getElementById(
+        'graphDataDownloadBtn'
+      );
+      if (makeGraph === true && this.alreadyGraphed === false) {
+        this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
+          //get the x values to plot
+          this.currentXaxisValues = points;
+          this.graphSelectionsService.graphPointsYSubject.subscribe(
+            (points) => {
+              //get the y values to plot
+              this.currentYaxisValues = points;
+              //proceed if both the x and y data are ready
+              if (this.currentYaxisValues && this.currentXaxisValues) {
+                if (
+                  this.currentYaxisValues.length > 0 &&
+                  this.currentXaxisValues.length > 0
+                ) {
+                  this.alreadyGraphed = true;
 
-    //Reset the x and y values displayed on the graph whenever the values change in the service
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    let graphDataDownloadBtn = document.getElementById('graphDataDownloadBtn');
-    if (this.alreadyGraphed === false) {
-      this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
-        //get the x values to plot
-        this.currentXaxisValues = points;
-        this.graphSelectionsService.graphPointsYSubject.subscribe((points) => {
-          //get the y values to plot
-          this.currentYaxisValues = points;
-          //proceed if both the x and y data are ready
-          if (this.currentYaxisValues && this.currentXaxisValues) {
-            if (
-              this.currentYaxisValues.length > 0 &&
-              this.currentXaxisValues.length > 0
-            ) {
-              this.alreadyGraphed = true;
+                  //Create and display graph
+                  this.createGraph();
+                  //Prepare graph metadata
+                  this.createGraphMetadata();
 
-              //Create and display graph
-              this.createGraph();
-
-              //Check for flags
-              this.showGraph = true;
-              //Remove the WIM loader to view graph
-              let base = document.getElementById('base');
-              base.classList.remove('initial-loader');
-              graphOptionsBackgroundID.classList.remove('disableClick');
-              graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                  //Check for flags
+                  this.showGraph = true;
+                  //Remove the WIM loader to view graph
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                  graphOptionsBackgroundID.classList.remove('disableClick');
+                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                }
+              }
+              if (!this.currentYaxisValues || !this.currentXaxisValues) {
+                if (this.alreadyGraphed === false) {
+                  this.alreadyGraphed = true;
+                  let base = document.getElementById('base');
+                  base.classList.remove('initial-loader');
+                  this.showGraph = false;
+                  graphOptionsBackgroundID.classList.remove('disableClick');
+                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                }
+              }
             }
-          }
-          if (!this.currentYaxisValues || !this.currentXaxisValues) {
-            if (this.alreadyGraphed === false) {
-              this.alreadyGraphed = true;
-              let base = document.getElementById('base');
-              base.classList.remove('initial-loader');
-              this.showGraph = false;
-              graphOptionsBackgroundID.classList.remove('disableClick');
-              graphDataDownloadBtn.classList.remove('disabledDataBtn');
-            }
-          }
+          );
         });
-      });
-    }
+      }
+    });
+  }
+
+  public createGraphMetadata() {
+    let maxDateReturned;
+    let minDateReturned;
+    this.graphSelectionsService.maxDateSubject.subscribe(
+      (maxDate) => (maxDateReturned = maxDate)
+    );
+    this.graphSelectionsService.minDateSubject.subscribe(
+      (minDate) => (minDateReturned = minDate)
+    );
+
+    //Remove commas so they don't interfere with the csv format
+    let formattedRegion = String(this.filterQueryX.meta.region);
+    formattedRegion = formattedRegion.replace(/,/g, '; ');
+    let formattedMcodeX = String(
+      this.graphSelectionsForm.get('MethodsX').value
+    );
+    formattedMcodeX = formattedMcodeX.replace(/,/g, '; ');
+    let formattedMcodeY = String(
+      this.graphSelectionsForm.get('MethodsY').value
+    );
+    formattedMcodeY = formattedMcodeY.replace(/,/g, '; ');
+
+    this.graphMetadata = [
+      [
+        'North',
+        'South',
+        'East',
+        'West',
+        'Min_Year_Selected',
+        'Max_Year_Selected',
+        'Min_Date_Returned',
+        'Max_Date_Returned',
+        'Include_Null',
+        'Region',
+        'Optimal_Alignment',
+        'X_Parameter',
+        'X_Method',
+        'Y_Parameter',
+        'Y_Method',
+        'X_Units',
+        'Y_Units',
+      ],
+      [
+        this.filterQueryX.meta.north,
+        this.filterQueryX.meta.south,
+        this.filterQueryX.meta.east,
+        this.filterQueryX.meta.west,
+        this.filterQueryX.meta.min_year,
+        this.filterQueryX.meta.max_year,
+        minDateReturned,
+        maxDateReturned,
+        this.filterQueryX.meta.include_NULL,
+        formattedRegion,
+        this.filterQueryX.meta.satellite_align,
+        this.graphSelectionsForm.get('ParametersX').value,
+        formattedMcodeX,
+        this.graphSelectionsForm.get('ParametersY').value,
+        formattedMcodeY,
+        this.xAxisUnits,
+        this.yAxisUnits,
+      ],
+    ];
   }
 
   //When a parameter is selected, this function is called to populate the Methods dropdown
@@ -835,75 +908,12 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //creates a csv containing all of the user-defined filters
-  public graphDataDownload() {
-    let maxDateReturned;
-    let minDateReturned;
-    this.graphSelectionsService.maxDateSubject.subscribe(
-      (maxDate) => (maxDateReturned = maxDate)
-    );
-    this.graphSelectionsService.minDateSubject.subscribe(
-      (minDate) => (minDateReturned = minDate)
-    );
-
+  public downloadGraphMetadata() {
     let graphMetadataContent = 'data:text/csv;charset=utf-8,';
-
-    //Remove commas so they don't interfere with the csv format
-    let formattedRegion = String(this.filterQueryX.meta.region);
-    formattedRegion = formattedRegion.replace(/,/g, '; ');
-    let formattedMcodeX = String(
-      this.graphSelectionsForm.get('MethodsX').value
-    );
-    formattedMcodeX = formattedMcodeX.replace(/,/g, '; ');
-    let formattedMcodeY = String(
-      this.graphSelectionsForm.get('MethodsY').value
-    );
-    formattedMcodeY = formattedMcodeY.replace(/,/g, '; ');
-
-    let graphMetadata = [
-      [
-        'North',
-        'South',
-        'East',
-        'West',
-        'Min_Year_Selected',
-        'Max_Year_Selected',
-        'Min_Date_Returned',
-        'Max_Date_Returned',
-        'Include_Null',
-        'Region',
-        'Optimal_Alignment',
-        'X_Parameter',
-        'X_Method',
-        'Y_Parameter',
-        'Y_Method',
-        'X_Units',
-        'Y_Units',
-      ],
-      [
-        this.filterQueryX.meta.north,
-        this.filterQueryX.meta.south,
-        this.filterQueryX.meta.east,
-        this.filterQueryX.meta.west,
-        this.filterQueryX.meta.min_year,
-        this.filterQueryX.meta.max_year,
-        minDateReturned,
-        maxDateReturned,
-        this.filterQueryX.meta.include_NULL,
-        formattedRegion,
-        this.filterQueryX.meta.satellite_align,
-        this.graphSelectionsForm.get('ParametersX').value,
-        formattedMcodeX,
-        this.graphSelectionsForm.get('ParametersY').value,
-        formattedMcodeY,
-        this.xAxisUnits,
-        this.yAxisUnits,
-      ],
-    ];
-
     //Create and download a csv of the graph metadata
     //The following code was adapted from this example:
     //https://www.delftstack.com/howto/javascript/export-javascript-csv/
-    graphMetadata.forEach(function (rowArray) {
+    this.graphMetadata.forEach(function (rowArray) {
       let row = rowArray.join(',');
       graphMetadataContent += row + '\r\n';
     });
