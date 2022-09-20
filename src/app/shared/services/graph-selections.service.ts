@@ -48,16 +48,22 @@ export class GraphSelectionsService {
   flagIndexY$ = this.flagIndexY.asObservable();
 
   public minDateSubject = new BehaviorSubject<any>(undefined);
-  minDate$ = this.minDateSubject.asObservable();
+  minDateY$ = this.minDateSubject.asObservable();
 
   public maxDateSubject = new BehaviorSubject<any>(undefined);
-  maxDate$ = this.maxDateSubject.asObservable();
+  maxDateX$ = this.maxDateSubject.asObservable();
 
   public xAxisUnitsSubject = new BehaviorSubject<any>(undefined);
   xAxisUnitsSubject$ = this.xAxisUnitsSubject.asObservable();
 
   public yAxisUnitsSubject = new BehaviorSubject<any>(undefined);
   yAxisUnitsSubject$ = this.yAxisUnitsSubject.asObservable();
+
+  public colorsSubject = new BehaviorSubject<any>(undefined);
+  colorsSubject$ = this.colorsSubject.asObservable();
+
+  public symbolsSubject = new BehaviorSubject<any>(undefined);
+  symbolsSubject$ = this.symbolsSubject.asObservable();
 
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
@@ -78,6 +84,17 @@ export class GraphSelectionsService {
   public rawY;
 
   public sid = [];
+
+  //Colors for all 4 flagging options
+  public pointColors: Array<String> = [];
+  public unflaggedColor: string = 'rgb(242, 189, 161)';
+  public xyFlaggedColor: string = 'rgb(0, 153, 0)';
+  public xFlaggedColor: string = 'rgb(255, 0, 255)';
+  public yFlaggedColor: string = 'rgb(0, 204, 204)';
+  //Symbols for flagged vs unflagged
+  public pointSymbol: Array<String> = [];
+  public unflaggedSymbol: string = 'circle-open';
+  public flaggedSymbol: string = 'circle';
 
   //Retrieve x and y data from service
   public getTempArrays(
@@ -101,60 +118,65 @@ export class GraphSelectionsService {
       .post(APP_SETTINGS.wqDataURL, graphFilters)
       .subscribe((res: any[]) => {
         if (res.length === 0) {
-          this.snackBar.open('No points match your query.', 'OK', {
-            duration: 4000,
-            verticalPosition: 'top',
-          });
+          this.noDataMatchQuery();
           this.ready = 0;
-          let base = document.getElementById('base');
-          base.classList.remove('initial-loader');
-          let graphOptionsBackgroundID = document.getElementById(
-            'graphOptionsBackgroundID'
-          );
-          graphOptionsBackgroundID.classList.remove('disableClick');
         } else {
-          //find the min and max date of the dataset so that it can be included in the graph metadata download
-          let minDate;
-          let maxDate;
-          for (let i = 0; i < res.length; i++) {
-            let currentDate = res[i].date_time_group;
-            if (i === 0) {
-              minDate = currentDate;
-              maxDate = currentDate;
-            }
-            if (currentDate < minDate) {
-              minDate = currentDate;
-            }
-            if (currentDate > maxDate) {
-              maxDate = currentDate;
-            }
-            //on the last iteration, format and save the min and max date
-            if (i == res.length - 1) {
-              maxDate = moment(maxDate).format('MM-DD-YYYY');
-              minDate = moment(minDate).format('MM-DD-YYYY');
-              this.maxDateSubject.next(maxDate);
-              this.minDateSubject.next(minDate);
-            }
-          }
-
           if (axis === 'xAxis') {
-            this.xAxisUnitsSubject.next(res[0].units);
+            //store raw results for x axis
             this.rawX = res;
             this.tempResultsXSubject.next(res);
             this.ready += 1;
           }
           if (axis === 'yAxis') {
-            this.yAxisUnitsSubject.next(res[0].units);
+            //store raw results for y axis
             this.rawY = res;
             this.tempResultsYSubject.next(res);
             this.ready += 1;
           }
+          //when results have been saved for both x and y axis, proceed to filtering points
           if (this.ready == 2) {
             this.ready = 0;
             this.filterGraphPoints(this.rawX, this.rawY);
           }
         }
       });
+  }
+
+  //get min and max dates and units for each axis
+  public formatMetadata(res, axis) {
+    //find the min and max date of the dataset so that it can be included in the graph metadata download
+    let minDate;
+    let maxDate;
+    for (let i = 0; i < res.length; i++) {
+      let currentDate = res[i].date_time_group;
+      if (i === 0) {
+        minDate = currentDate;
+        maxDate = currentDate;
+      }
+      if (currentDate < minDate) {
+        minDate = currentDate;
+      }
+      if (currentDate > maxDate) {
+        maxDate = currentDate;
+      }
+      //on the last iteration, format and save the min and max date
+      if (i == res.length - 1) {
+        maxDate = moment(maxDate).format('MM-DD-YYYY');
+        minDate = moment(minDate).format('MM-DD-YYYY');
+
+        this.maxDateSubject.next(maxDate);
+        this.minDateSubject.next(minDate);
+
+        //get units
+        //this is for metadata csv and axes labels
+        if (axis == 'yAxis') {
+          this.yAxisUnitsSubject.next(res[0].units);
+        }
+        if (axis == 'xAxis') {
+          this.xAxisUnitsSubject.next(res[0].units);
+        }
+      }
+    }
   }
 
   //Match x data with y data and use them to populate graph
@@ -168,6 +190,7 @@ export class GraphSelectionsService {
     this.sid = [];
     let flagX = [];
     let flagY = [];
+    let counter = 0;
     if (tempResultsX && tempResultsY) {
       for (
         let xResultsIndex = 0;
@@ -180,8 +203,12 @@ export class GraphSelectionsService {
           yResultsIndex++
         ) {
           if (
+            //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
             tempResultsY[yResultsIndex].sid == tempResultsX[xResultsIndex].sid
           ) {
+            counter += 1;
+            let xFlag: Boolean = false;
+            let yFlag: Boolean = false;
             if (this.flagsSubject.value) {
               for (
                 let flagIndex = 0;
@@ -192,16 +219,33 @@ export class GraphSelectionsService {
                   this.flagsSubject.value[flagIndex].rcode ==
                   tempResultsX[xResultsIndex].rcode
                 ) {
+                  console.log('x flag detected. Index is: ', xResultsIndex);
                   flagX.push(xResultsIndex);
+                  xFlag = true;
                 }
                 if (
                   this.flagsSubject.value[flagIndex].rcode ==
                   tempResultsY[yResultsIndex].rcode
                 ) {
+                  console.log('y flag detected. Index is: ', yResultsIndex);
                   flagY.push(yResultsIndex);
+                  yFlag = true;
                 }
               }
             }
+
+            if (xFlag == true && yFlag == true) {
+              console.log('xFlag', xFlag, ', yFlag', yFlag);
+              console.log(
+                'counter',
+                counter,
+                'xResultsIndex',
+                xResultsIndex,
+                'yResultsIndex',
+                yResultsIndex
+              );
+            }
+            this.assignColors(xFlag, yFlag);
             this.valuesX.push(tempResultsX[xResultsIndex].result);
             this.valuesY.push(tempResultsY[yResultsIndex].result);
             this.allDataX.push(tempResultsX[xResultsIndex]);
@@ -212,29 +256,73 @@ export class GraphSelectionsService {
             yResultsIndex > tempResultsY.length - 2 &&
             xResultsIndex > tempResultsX.length - 2
           ) {
+            /* console.log('total count', this.allDataX.length);
+            let colorArray = Array(this.allDataX.length).fill(
+              'rgb(242, 189, 161)'
+            );
+            console.log('colorArray', colorArray); */
+            console.log('pointColors', this.pointColors);
+            console.log('pointSymbols', this.pointSymbol);
+            console.log('xFlag', flagX);
+            console.log('yFlag', flagY);
+
+            console.log(
+              'this.pointColors[270], service',
+              this.pointColors[270]
+            );
+            console.log(
+              'this.pointColors[379], service',
+              this.pointColors[379]
+            );
+            this.formatMetadata(this.allDataX, 'xAxis');
+            this.formatMetadata(this.allDataX, 'yAxis');
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
+            console.log('flagX', flagX);
+            console.log('flagY', flagY);
             this.finalGraphValues();
           }
         }
       }
     } else {
-      this.snackBar.open(
-        'No matching sites for your selected parameters.',
-        'OK',
-        {
-          duration: 4000,
-          verticalPosition: 'top',
-        }
-      );
-      let base = document.getElementById('base');
-      base.classList.remove('initial-loader');
-      let graphOptionsBackgroundID = document.getElementById(
-        'graphOptionsBackgroundID'
-      );
-      graphOptionsBackgroundID.classList.remove('disableClick');
+      this.noDataMatchQuery();
     }
   }
+
+  //When a new graph is generated, assign colors and symbols for each point
+  public assignColors(xFlag: Boolean, yFlag: Boolean) {
+    //Add an x flag marker to the color and symbol arrays
+    if (xFlag == true && yFlag == false) {
+      this.pointColors.push(this.xFlaggedColor);
+      this.pointSymbol.push(this.flaggedSymbol);
+      //Add a y flag marker to the color and symbol arrays
+    } else if (xFlag == false && yFlag == true) {
+      this.pointColors.push(this.yFlaggedColor);
+      this.pointSymbol.push(this.flaggedSymbol);
+      //Add an xy flag marker to the color and symbol arrays
+    } else if (xFlag == true && yFlag == true) {
+      this.pointColors.push(this.xyFlaggedColor);
+      this.pointSymbol.push(this.flaggedSymbol);
+      //No flags; add a default marker to the color and symbol arrays
+    } else {
+      this.pointColors.push(this.unflaggedColor);
+      this.pointSymbol.push(this.unflaggedSymbol);
+    }
+  }
+
+  public noDataMatchQuery() {
+    this.snackBar.open('No data are available for your query.', 'OK', {
+      duration: 4000,
+      verticalPosition: 'top',
+    });
+    let base = document.getElementById('base');
+    base.classList.remove('initial-loader');
+    let graphOptionsBackgroundID = document.getElementById(
+      'graphOptionsBackgroundID'
+    );
+    graphOptionsBackgroundID.classList.remove('disableClick');
+  }
+
   public finalGraphValues() {
     if (this.valuesX.length > 0 && this.valuesY.length > 0) {
       this.graphPointsYSubject.next(this.valuesY);
