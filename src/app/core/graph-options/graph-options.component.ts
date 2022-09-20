@@ -193,47 +193,6 @@ export class GraphOptionsComponent implements OnInit {
               this.currentXaxisValues.length > 0
             ) {
               this.alreadyGraphed = true;
-              //because there might be flags, need to set the colors and symbols for each point
-              this.pointColors = [];
-              this.pointSymbols = [];
-              //We begin by setting the color of each point individually
-              //currentYaxisValues should always be the same length as currentXaxisValues, so we choose one
-              let numPoints = this.currentYaxisValues.length;
-              for (
-                let currentIndex = 0;
-                currentIndex < numPoints;
-                currentIndex++
-              ) {
-                //foundX and foundY: true if a flag was found for their corresponding index
-                let foundX = false;
-                let foundY = false;
-                //Loop through all the flag indices
-                for (
-                  let xIndex = 0;
-                  xIndex < this.rolloverFlagsX.length;
-                  xIndex++
-                ) {
-                  //When an x flag is found
-                  if (currentIndex == this.rolloverFlagsX[xIndex]) {
-                    foundX = true;
-
-                    console.log('x index', currentIndex);
-                  }
-                }
-                for (
-                  let yIndex = 0;
-                  yIndex < this.rolloverFlagsY.length;
-                  yIndex++
-                ) {
-                  //When a y flag is found
-                  if (currentIndex == this.rolloverFlagsY[yIndex]) {
-                    foundY = true;
-                    console.log('y index', currentIndex);
-                  }
-                }
-
-                this.assignColors(foundX, foundY);
-              }
 
               //Create and display graph
               this.createGraph();
@@ -259,27 +218,6 @@ export class GraphOptionsComponent implements OnInit {
           }
         });
       });
-    }
-  }
-
-  //When a new graph is generated, assign colors and symbols for each point
-  public assignColors(xFlag: Boolean, yFlag: Boolean) {
-    //Add an x flag marker to the color and symbol arrays
-    if (xFlag == true && yFlag == false) {
-      this.pointColors.push(this.xFlaggedColor);
-      this.pointSymbols.push(this.flaggedSymbol);
-      //Add a y flag marker to the color and symbol arrays
-    } else if (xFlag == false && yFlag == true) {
-      this.pointColors.push(this.yFlaggedColor);
-      this.pointSymbols.push(this.flaggedSymbol);
-      //Add an xy flag marker to the color and symbol arrays
-    } else if (xFlag == true && yFlag == true) {
-      this.pointColors.push(this.xyFlaggedColor);
-      this.pointSymbols.push(this.flaggedSymbol);
-      //No flags; add a default marker to the color and symbol arrays
-    } else {
-      this.pointColors.push(this.unflaggedColor);
-      this.pointSymbols.push(this.unflaggedSymbol);
     }
   }
 
@@ -328,9 +266,6 @@ export class GraphOptionsComponent implements OnInit {
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
-    //console.log('this.pointColors', this.pointColors);
-    //console.log('this.pointColors[270]', this.pointColors[270]);
-    //console.log('this.pointColors[379]', this.pointColors[379]);
     var trace1 = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
