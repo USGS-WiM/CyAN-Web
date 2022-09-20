@@ -171,8 +171,6 @@ export class GraphOptionsComponent implements OnInit {
     });
     this.allColors = this.graphSelectionsService.pointColors;
     this.allShapes = this.graphSelectionsService.pointSymbol;
-    console.log('allColors', this.allColors);
-    console.log('allShapes', this.allShapes);
 
     //Reset the x and y values displayed on the graph whenever the values change in the service
     let graphOptionsBackgroundID = document.getElementById(
@@ -444,7 +442,6 @@ export class GraphOptionsComponent implements OnInit {
         }
       });
     }
-    console.log('this.flaggedData', this.flaggedData);
     //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
     //if neither are selected, ensure that neither are in the flaggedData array
     if (axis == 'x' || axis == 'none') {
@@ -543,7 +540,6 @@ export class GraphOptionsComponent implements OnInit {
     let csv = data.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
     flagContent += csv.join('\n');
-    console.log('flagContent', flagContent);
     let encodedUri = encodeURI(flagContent);
     let link = document.createElement('a');
     link.setAttribute('href', encodedUri);
