@@ -60,13 +60,13 @@ export class GraphOptionsComponent implements OnInit {
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
-  public pointColors = [];
   public unflaggedColor: string = 'rgb(242, 189, 161)';
   public xyFlaggedColor: string = 'rgb(0, 153, 0)';
   public xFlaggedColor: string = 'rgb(255, 0, 255)';
   public yFlaggedColor: string = 'rgb(0, 204, 204)';
   //Symbols for flagged vs unflagged
-  public pointSymbols = [];
+  public allColors = [];
+  public allShapes = [];
   public unflaggedSymbol: string = 'circle-open';
   public flaggedSymbol: string = 'circle';
 
@@ -111,9 +111,6 @@ export class GraphOptionsComponent implements OnInit {
   public autotickEnabled: Boolean = true;
   public xAxisUnits: string = '';
   public yAxisUnits: string = '';
-
-  public allColors = [];
-  public allShapes = [];
 
   constructor(
     private filterService: FiltersService,
@@ -525,12 +522,33 @@ export class GraphOptionsComponent implements OnInit {
   //Change color of flagged point and add x & y data to arrays
   public clickPoint() {
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
+      //If there is a flag at the selected point, pre-check the boxes in the flag options modal
+      this.axisFlagFormCheckBoxes(selectedPoints);
       this.clickedPoint = selectedPoints;
       //Open flag options modal
       this.showFlagOptions = true;
       let graph = document.getElementById('graph');
       graph.classList.add('disableClick');
     });
+  }
+
+  //If there is a flag at the selected point, pre-check the boxes in the flag options modal
+  axisFlagFormCheckBoxes(selectedPoints) {
+    let selectedColor = selectedPoints.points[0]['marker.color'];
+    if (selectedColor == this.xyFlaggedColor) {
+      //check both boxes
+      this.axisFlagForm.get('xFlagControl').setValue(true);
+      this.axisFlagForm.get('yFlagControl').setValue(true);
+      this.axisFlagForm.get('xyFlagControl').setValue(true);
+    }
+    if (selectedColor == this.xFlaggedColor) {
+      //check the x box
+      this.axisFlagForm.get('xFlagControl').setValue(true);
+    }
+    if (selectedColor == this.yFlaggedColor) {
+      //check the y box
+      this.axisFlagForm.get('yFlagControl').setValue(true);
+    }
   }
 
   //take json of flagged points and download as csv file
