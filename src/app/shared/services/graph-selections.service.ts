@@ -59,6 +59,12 @@ export class GraphSelectionsService {
   public yAxisUnitsSubject = new BehaviorSubject<any>(undefined);
   yAxisUnitsSubject$ = this.yAxisUnitsSubject.asObservable();
 
+  public colorsSubject = new BehaviorSubject<any>(undefined);
+  colorsSubject$ = this.colorsSubject.asObservable();
+
+  public symbolsSubject = new BehaviorSubject<any>(undefined);
+  symbolsSubject$ = this.symbolsSubject.asObservable();
+
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
   }
@@ -78,6 +84,17 @@ export class GraphSelectionsService {
   public rawY;
 
   public sid = [];
+
+  //Colors for all 4 flagging options
+  public pointColors: Array<String> = [];
+  public unflaggedColor: string = 'rgb(242, 189, 161)';
+  public xyFlaggedColor: string = 'rgb(0, 153, 0)';
+  public xFlaggedColor: string = 'rgb(255, 0, 255)';
+  public yFlaggedColor: string = 'rgb(0, 204, 204)';
+  //Symbols for flagged vs unflagged
+  public pointSymbol: Array<String> = [];
+  public unflaggedSymbol: string = 'circle-open';
+  public flaggedSymbol: string = 'circle';
 
   //Retrieve x and y data from service
   public getTempArrays(
@@ -104,9 +121,6 @@ export class GraphSelectionsService {
           this.noDataMatchQuery();
           this.ready = 0;
         } else {
-          //find min and max date of returned dataset
-          //this.formatMetadata(res, axis);
-
           if (axis === 'xAxis') {
             //store raw results for x axis
             this.rawX = res;
@@ -150,7 +164,6 @@ export class GraphSelectionsService {
         maxDate = moment(maxDate).format('MM-DD-YYYY');
         minDate = moment(minDate).format('MM-DD-YYYY');
 
-        //store min and max dates for x axis
         this.maxDateSubject.next(maxDate);
         this.minDateSubject.next(minDate);
 
@@ -177,6 +190,7 @@ export class GraphSelectionsService {
     this.sid = [];
     let flagX = [];
     let flagY = [];
+    let counter = 0;
     if (tempResultsX && tempResultsY) {
       for (
         let xResultsIndex = 0;
@@ -192,6 +206,9 @@ export class GraphSelectionsService {
             //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
             tempResultsY[yResultsIndex].sid == tempResultsX[xResultsIndex].sid
           ) {
+            counter += 1;
+            let xFlag: Boolean = false;
+            let yFlag: Boolean = false;
             if (this.flagsSubject.value) {
               for (
                 let flagIndex = 0;
@@ -202,16 +219,33 @@ export class GraphSelectionsService {
                   this.flagsSubject.value[flagIndex].rcode ==
                   tempResultsX[xResultsIndex].rcode
                 ) {
+                  console.log('x flag detected. Index is: ', xResultsIndex);
                   flagX.push(xResultsIndex);
+                  xFlag = true;
                 }
                 if (
                   this.flagsSubject.value[flagIndex].rcode ==
                   tempResultsY[yResultsIndex].rcode
                 ) {
+                  console.log('y flag detected. Index is: ', yResultsIndex);
                   flagY.push(yResultsIndex);
+                  yFlag = true;
                 }
               }
             }
+
+            if (xFlag == true && yFlag == true) {
+              console.log('xFlag', xFlag, ', yFlag', yFlag);
+              console.log(
+                'counter',
+                counter,
+                'xResultsIndex',
+                xResultsIndex,
+                'yResultsIndex',
+                yResultsIndex
+              );
+            }
+            this.assignColors(xFlag, yFlag);
             this.valuesX.push(tempResultsX[xResultsIndex].result);
             this.valuesY.push(tempResultsY[yResultsIndex].result);
             this.allDataX.push(tempResultsX[xResultsIndex]);
@@ -222,16 +256,57 @@ export class GraphSelectionsService {
             yResultsIndex > tempResultsY.length - 2 &&
             xResultsIndex > tempResultsX.length - 2
           ) {
+            /* console.log('total count', this.allDataX.length);
+            let colorArray = Array(this.allDataX.length).fill(
+              'rgb(242, 189, 161)'
+            );
+            console.log('colorArray', colorArray); */
+            console.log('pointColors', this.pointColors);
+            console.log('pointSymbols', this.pointSymbol);
+            console.log('xFlag', flagX);
+            console.log('yFlag', flagY);
+
+            console.log(
+              'this.pointColors[270], service',
+              this.pointColors[270]
+            );
+            console.log(
+              'this.pointColors[379], service',
+              this.pointColors[379]
+            );
             this.formatMetadata(this.allDataX, 'xAxis');
             this.formatMetadata(this.allDataX, 'yAxis');
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
+            console.log('flagX', flagX);
+            console.log('flagY', flagY);
             this.finalGraphValues();
           }
         }
       }
     } else {
       this.noDataMatchQuery();
+    }
+  }
+
+  //When a new graph is generated, assign colors and symbols for each point
+  public assignColors(xFlag: Boolean, yFlag: Boolean) {
+    //Add an x flag marker to the color and symbol arrays
+    if (xFlag == true && yFlag == false) {
+      this.pointColors.push(this.xFlaggedColor);
+      this.pointSymbol.push(this.flaggedSymbol);
+      //Add a y flag marker to the color and symbol arrays
+    } else if (xFlag == false && yFlag == true) {
+      this.pointColors.push(this.yFlaggedColor);
+      this.pointSymbol.push(this.flaggedSymbol);
+      //Add an xy flag marker to the color and symbol arrays
+    } else if (xFlag == true && yFlag == true) {
+      this.pointColors.push(this.xyFlaggedColor);
+      this.pointSymbol.push(this.flaggedSymbol);
+      //No flags; add a default marker to the color and symbol arrays
+    } else {
+      this.pointColors.push(this.unflaggedColor);
+      this.pointSymbol.push(this.unflaggedSymbol);
     }
   }
 

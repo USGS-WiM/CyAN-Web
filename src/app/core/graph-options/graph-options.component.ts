@@ -68,7 +68,7 @@ export class GraphOptionsComponent implements OnInit {
   //Symbols for flagged vs unflagged
   public pointSymbols = [];
   public unflaggedSymbol: string = 'circle-open';
-  public flaggedSymbol: string = 'cirlce';
+  public flaggedSymbol: string = 'circle';
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -112,6 +112,9 @@ export class GraphOptionsComponent implements OnInit {
   public xAxisUnits: string = '';
   public yAxisUnits: string = '';
 
+  public allColors = [];
+  public allShapes = [];
+
   constructor(
     private filterService: FiltersService,
     private graphSelectionsService: GraphSelectionsService,
@@ -134,6 +137,7 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
     this.getDataForDropdowns();
     this.initiateGraphService();
+    this.getUnits();
   }
 
   public getDataForDropdowns() {
@@ -145,6 +149,18 @@ export class GraphOptionsComponent implements OnInit {
     );
   }
 
+  public getUnits() {
+    //Get units for axes labels
+    this.graphSelectionsService.xAxisUnitsSubject.subscribe((xUnits) => {
+      this.xAxisUnits = xUnits;
+      this.xAxisTitle = this.xAxisParameter + ' ' + xUnits;
+    });
+    this.graphSelectionsService.yAxisUnitsSubject.subscribe((yUnits) => {
+      this.yAxisUnits = yUnits;
+      this.yAxisTitle = this.yAxisParameter + ' ' + yUnits;
+    });
+  }
+
   public initiateGraphService() {
     //rolloverFlags means the flags that were assigned for these specific datasets in a graph that was previously generated
     this.graphSelectionsService.flagIndexX.subscribe((xFlags) => {
@@ -153,8 +169,12 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
       this.rolloverFlagsY = yFlags;
     });
+    this.allColors = this.graphSelectionsService.pointColors;
+    this.allShapes = this.graphSelectionsService.pointSymbol;
+    console.log('allColors', this.allColors);
+    console.log('allShapes', this.allShapes);
+
     //Reset the x and y values displayed on the graph whenever the values change in the service
-    // this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
     let graphOptionsBackgroundID = document.getElementById(
       'graphOptionsBackgroundID'
     );
@@ -193,43 +213,27 @@ export class GraphOptionsComponent implements OnInit {
                   xIndex < this.rolloverFlagsX.length;
                   xIndex++
                 ) {
-                  for (
-                    let yIndex = 0;
-                    yIndex < this.rolloverFlagsY.length;
-                    yIndex++
-                  ) {
-                    //When an x flag is found
-                    if (
-                      currentIndex == this.rolloverFlagsX[xIndex] &&
-                      currentIndex !== this.rolloverFlagsY[yIndex]
-                    ) {
-                      foundX = true;
-                    }
-                    //When a y flag is found
-                    if (
-                      currentIndex !== this.rolloverFlagsX[xIndex] &&
-                      currentIndex == this.rolloverFlagsY[yIndex]
-                    ) {
-                      foundY = true;
-                    }
+                  //When an x flag is found
+                  if (currentIndex == this.rolloverFlagsX[xIndex]) {
+                    foundX = true;
+
+                    console.log('x index', currentIndex);
                   }
                 }
+                for (
+                  let yIndex = 0;
+                  yIndex < this.rolloverFlagsY.length;
+                  yIndex++
+                ) {
+                  //When a y flag is found
+                  if (currentIndex == this.rolloverFlagsY[yIndex]) {
+                    foundY = true;
+                    console.log('y index', currentIndex);
+                  }
+                }
+
                 this.assignColors(foundX, foundY);
               }
-
-              //Get units for axes labels
-              this.graphSelectionsService.xAxisUnitsSubject.subscribe(
-                (xUnits) => {
-                  this.xAxisUnits = xUnits;
-                  this.xAxisTitle = this.xAxisParameter + ' ' + xUnits;
-                }
-              );
-              this.graphSelectionsService.yAxisUnitsSubject.subscribe(
-                (yUnits) => {
-                  this.yAxisUnits = yUnits;
-                  this.yAxisTitle = this.yAxisParameter + ' ' + yUnits;
-                }
-              );
 
               //Create and display graph
               this.createGraph();
@@ -256,7 +260,6 @@ export class GraphOptionsComponent implements OnInit {
         });
       });
     }
-    // });
   }
 
   //When a new graph is generated, assign colors and symbols for each point
@@ -325,6 +328,9 @@ export class GraphOptionsComponent implements OnInit {
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
+    //console.log('this.pointColors', this.pointColors);
+    //console.log('this.pointColors[270]', this.pointColors[270]);
+    //console.log('this.pointColors[379]', this.pointColors[379]);
     var trace1 = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
@@ -333,7 +339,7 @@ export class GraphOptionsComponent implements OnInit {
       //name: 'Sample 1',
       // text: this.sid,
       textposition: 'bottom center',
-      marker: { size: 12, color: this.pointColors, symbol: this.pointSymbols },
+      marker: { size: 12, color: this.allColors, symbol: this.allShapes },
     };
 
     var data = [trace1];
