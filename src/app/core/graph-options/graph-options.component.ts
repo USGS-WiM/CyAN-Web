@@ -367,8 +367,12 @@ export class GraphOptionsComponent implements OnInit {
           //if there are no x-axis flags, create empty array
           this.flaggedPointIndices.x = [];
         }
-        //add new x-axis index to the array
-        this.flaggedPointIndices.x.push(this.clickedPoint.points[i].pointIndex);
+        //add new x-axis index to the array (if it's not already there)
+        if (!this.existingDupX) {
+          this.flaggedPointIndices.x.push(
+            this.clickedPoint.points[i].pointIndex
+          );
+        }
       }
       if (axis == 'y' || axis == 'both') {
         if (!this.flaggedPointIndices.y) {
@@ -376,7 +380,11 @@ export class GraphOptionsComponent implements OnInit {
           this.flaggedPointIndices.y = [];
         }
         //add new y-axis index to the array
-        this.flaggedPointIndices.y.push(this.clickedPoint.points[i].pointIndex);
+        if (!this.existingDupY) {
+          this.flaggedPointIndices.y.push(
+            this.clickedPoint.points[i].pointIndex
+          );
+        }
       }
       if (axis == 'none') {
         if (this.flaggedPointIndices.y) {
@@ -412,36 +420,6 @@ export class GraphOptionsComponent implements OnInit {
 
     //Change the color on the graph
     Plotly.restyle('graph', update);
-
-    let tempData;
-    if (axis == 'x' || axis == 'both') {
-      //Get all of the data corresponding with the flagged point
-      this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-        if (updateGraphCalled) {
-          tempData = data;
-          this.flaggedData.push(
-            tempData[
-              this.flaggedPointIndices.x[this.flaggedPointIndices.x.length - 1]
-            ]
-          );
-          this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-        }
-      });
-    }
-    if (axis == 'y' || axis == 'both') {
-      //Get all of the data corresponding with the flagged point
-      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-        if (updateGraphCalled) {
-          tempData = data;
-          this.flaggedData.push(
-            tempData[
-              this.flaggedPointIndices.y[this.flaggedPointIndices.y.length - 1]
-            ]
-          );
-          this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-        }
-      });
-    }
     //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
     //if neither are selected, ensure that neither are in the flaggedData array
     if (axis == 'x' || axis == 'none') {
@@ -476,14 +454,54 @@ export class GraphOptionsComponent implements OnInit {
         }
       });
     }
+
+    let tempData;
+    if (axis == 'x' || axis == 'both') {
+      //Get all of the data corresponding with the flagged point
+      this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+        if (updateGraphCalled) {
+          tempData = data;
+          if (!this.existingDupX) {
+            this.flaggedData.push(
+              tempData[
+                this.flaggedPointIndices.x[
+                  this.flaggedPointIndices.x.length - 1
+                ]
+              ]
+            );
+            this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+          }
+        }
+      });
+    }
+    if (axis == 'y' || axis == 'both') {
+      //Get all of the data corresponding with the flagged point
+      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+        if (updateGraphCalled) {
+          tempData = data;
+          if (!this.existingDupY) {
+            this.flaggedData.push(
+              tempData[
+                this.flaggedPointIndices.y[
+                  this.flaggedPointIndices.y.length - 1
+                ]
+              ]
+            );
+            this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+          }
+        }
+      });
+    }
+    console.log('this.flaggedData', this.flaggedData);
     updateGraphCalled = false;
+    this.existingDupX = false;
+    this.existingDupY = false;
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
     let xChecked = this.axisFlagForm.get('xFlagControl').value;
     let yChecked = this.axisFlagForm.get('yFlagControl').value;
-    console.log('xChecked', xChecked, 'yChecked', yChecked);
     if (xChecked && yChecked) {
       this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
     }
@@ -504,8 +522,6 @@ export class GraphOptionsComponent implements OnInit {
 
     //Close flag modal and clear selections
     this.closeFlagOptions();
-    this.existingDupX = false;
-    this.existingDupY = false;
   }
   submitFlagSelectionsSingle() {
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;

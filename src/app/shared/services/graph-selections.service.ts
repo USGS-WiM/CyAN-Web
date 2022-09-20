@@ -250,7 +250,6 @@ export class GraphSelectionsService {
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
             this.finalGraphValues();
-            console.log('this.pointColors', this.pointColors);
           }
         }
       }
