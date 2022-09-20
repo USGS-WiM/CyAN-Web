@@ -9,11 +9,31 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class FileUploadComponent {
   file: any;
+  userFlags: any;
 
   constructor(
     private graphSelectionsService: GraphSelectionsService,
     public snackBar: MatSnackBar
   ) {}
+
+  //Check uploaded json against user-selected flags
+  //A way to avoid this check would be to force user to upload flags before designating new flags
+  checkDuplicates(uploadedFlags, userFlags) {
+    for (let i = 0; i < uploadedFlags.length; i++) {
+      for (let j = 0; j < userFlags.length; j++) {
+        let uploaded = uploadedFlags[i];
+        let user = userFlags[j];
+        if (
+          uploaded.rcode == user.rcode &&
+          uploaded.pcode == user.pcode &&
+          uploaded.mcode == user.mcode
+        ) {
+          console.log('found a match');
+          userFlags.splice(j, 1);
+        }
+      }
+    }
+  }
 
   // this code is adapted from: https://stackoverflow.com/questions/27979002/convert-csv-data-into-json-format-using-javascript
   //get the uploaded data
@@ -113,24 +133,25 @@ export class FileUploadComponent {
   }
 
   combineFlags(uploadedFlags) {
-    let userFlags;
     //get existing flags
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
       if (flags) {
-        userFlags = flags;
+        this.userFlags = flags;
       }
     });
     let allFlags;
     //combine new flags with uploaded flags into one json
-    if (userFlags) {
+    if (this.userFlags) {
+      this.checkDuplicates(uploadedFlags, this.userFlags);
       //if user has created new flags before uploading file, combine them
-      allFlags = uploadedFlags.concat(userFlags);
+      allFlags = uploadedFlags.concat(this.userFlags);
     } else {
       //if user has not created new flags before uploading file, only use uploaded flags
       allFlags = uploadedFlags;
     }
     //update flag json in service so it can be used next time graph is generated
     this.graphSelectionsService.flagsSubject.next(allFlags);
+    console.log('allFlags', allFlags);
     return allFlags;
   }
 }
