@@ -170,6 +170,18 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
       this.rolloverFlagsY = yFlags;
     });
+    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
+      if (flags) {
+        if (flags.length > 0) {
+          this.disableEnable('flagBtn', true, true);
+        } else {
+          this.disableEnable('flagBtn', false, true);
+        }
+      } else {
+        this.disableEnable('flagBtn', false, true);
+      }
+    });
+
     //this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
     this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
       //Reset the x and y values displayed on the graph whenever the values change in the service
@@ -407,19 +419,22 @@ export class GraphOptionsComponent implements OnInit {
     //Change the color on the graph
     Plotly.restyle('graph', update);
     console.log(this.flaggedData);
-
     this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-    this.disableEnable('flagBtn', true, true);
+
+    //If the flag download button was disabled, enable it
+    //this.disableEnable('flagBtn', true, true);
   }
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
+
+    //enable all features that were disabled when modal was open
     this.disableEnable('graph', true, false);
     this.disableEnable('graphDownload', true, true);
     this.disableEnable('flagAll', true, true);
     this.disableEnable('graphOptionsBackgroundID', true, false);
     this.disableEnable('createGraph', true, true);
-    this.disableEnable('flagBtn', true, true);
+    //this.disableEnable('flagBtn', true, true);
     this.disableEnable('graphDataDownloadBtn', true, true);
     this.disableEnable('flagUpload', true, true);
 
@@ -429,6 +444,7 @@ export class GraphOptionsComponent implements OnInit {
     this.axisFlagForm.get('xyFlagControl').setValue(null);
 
     //Disable/enable flag button
+    /*
     if (this.flaggedPointIndices.x) {
       if (this.flaggedPointIndices.x.length > 0) {
         this.disableEnable('flagBtn', true, true);
@@ -440,7 +456,7 @@ export class GraphOptionsComponent implements OnInit {
       }
     } else {
       this.disableEnable('flagBtn', false, true);
-    }
+    } */
   }
 
   //Disables or enables clickable features
@@ -664,7 +680,7 @@ export class GraphOptionsComponent implements OnInit {
       this.disableEnable('flagAll', false, true);
       this.disableEnable('graphOptionsBackgroundID', false, false);
       this.disableEnable('createGraph', false, true);
-      this.disableEnable('flagBtn', false, true);
+      //this.disableEnable('flagBtn', false, true);
       this.disableEnable('graphDataDownloadBtn', false, true);
       this.disableEnable('flagUpload', false, true);
     });
