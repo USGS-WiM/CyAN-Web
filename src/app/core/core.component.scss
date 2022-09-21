@@ -518,8 +518,17 @@
 .graphDataDownload {
   z-index: 200;
   position: absolute;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
+  color: white;
+  cursor: pointer;
+  background-color: rgb(131, 184, 124);
+  border: none;
+  margin-top: 3px;
+  margin-left: 3px;
+}
+
+.downloadIcon {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 3px;
 }
 /* end graph overlays */
