@@ -925,6 +925,33 @@ export class GraphOptionsComponent implements OnInit {
     link.click();
   }
 
+  public downloadAllGraphData() {
+    console.log('data are downloaded');
+    let xData;
+    let yData;
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+      yData = ydata;
+    });
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+      xData = xdata;
+    });
+    this.createCSV(yData, 'xData.csv');
+    this.createCSV(xData, 'xData.csv');
+  }
+
+  createCSV(data, filename) {
+    let flagContent = 'data:text/csv;charset=utf-8,';
+    let csv = data.map((row) => Object.values(row));
+    csv.unshift(Object.keys(data[0]));
+    flagContent += csv.join('\n');
+    let encodedUri = encodeURI(flagContent);
+    let link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+  }
+
   public resizeDivs() {
     //get window dimensions
     let windowHeight = window.innerHeight;
