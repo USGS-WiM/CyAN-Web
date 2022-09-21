@@ -516,7 +516,8 @@
 }
 
 .graphDataDownload {
-  z-index: 200;
+  position: absolute;
+  z-index: 300;
   color: white;
   cursor: pointer;
   background-color: rgb(131, 184, 124);
@@ -524,6 +525,10 @@
   margin-top: 3px;
   margin-left: 3px;
   margin-right: 3px;
+}
+
+.btnMargin {
+  margin-left: 40px;
 }
 
 .downloadIcon {
