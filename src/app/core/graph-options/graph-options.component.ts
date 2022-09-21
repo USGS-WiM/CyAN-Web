@@ -677,7 +677,7 @@ export class GraphOptionsComponent implements OnInit {
       tempM_Y == null
     ) {
       this.snackBar.open(
-        'Please select a parameter and at least one method for each axis.',
+        'Please select a parameter and method for each axis.',
         'OK',
         {
           duration: 4000,
