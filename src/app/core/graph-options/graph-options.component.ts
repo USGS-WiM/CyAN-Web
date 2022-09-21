@@ -391,6 +391,33 @@ export class GraphOptionsComponent implements OnInit {
     this.clickPoint();
   }
 
+  flagAllData() {
+    let xData;
+    let yData;
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+      yData = ydata;
+    });
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+      xData = xdata;
+    });
+    this.flaggedData = this.flaggedData.concat(xData);
+    this.flaggedData = this.flaggedData.concat(yData);
+    let numPts = xData.length;
+    const colorArr = Array(numPts).fill(this.xyFlaggedColor);
+    const shapeArr = Array(numPts).fill(this.flaggedSymbol);
+    //New styling for new plot
+    var update = {
+      marker: { color: colorArr, size: 12, symbol: shapeArr },
+    };
+
+    //Change the color on the graph
+    Plotly.restyle('graph', update);
+    console.log(this.flaggedData);
+
+    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+    let flagBtn = document.getElementById('flagBtn');
+    flagBtn.classList.remove('disabledDataBtn');
+  }
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
@@ -399,6 +426,9 @@ export class GraphOptionsComponent implements OnInit {
     let graphDownload = document.getElementById('graphDownload');
     graphDownload.classList.remove('disableClick');
     graphDownload.classList.remove('disabledDataBtn');
+    let flagAll = document.getElementById('flagAll');
+    flagAll.classList.remove('disableClick');
+    flagAll.classList.remove('disabledDataBtn');
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -623,6 +653,9 @@ export class GraphOptionsComponent implements OnInit {
       let graphDownload = document.getElementById('graphDownload');
       graphDownload.classList.add('disableClick');
       graphDownload.classList.add('disabledDataBtn');
+      let flagAll = document.getElementById('flagAll');
+      flagAll.classList.add('disableClick');
+      flagAll.classList.add('disabledDataBtn');
     });
   }
 

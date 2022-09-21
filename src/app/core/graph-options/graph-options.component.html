@@ -166,10 +166,17 @@
         Cancel
       </button>
     </div>
-    <div id='graphDownload' class="graphDataDownload" (click)="downloadAllGraphData()" [hidden]="!showGraph"
-      matTooltip="Download plotted data">
-      <mat-icon class="downloadIcon">cloud_download</mat-icon>
+    <div class="flex-container">
+      <div id='flagAll' class="graphDataDownload" (click)="flagAllData()" [hidden]="!showGraph"
+        matTooltip="Flag plotted data">
+        <mat-icon class="downloadIcon">flag</mat-icon>
+      </div>
+      <div id='graphDownload' class="graphDataDownload" (click)="downloadAllGraphData()" [hidden]="!showGraph"
+        matTooltip="Download plotted data">
+        <mat-icon class="downloadIcon">cloud_download</mat-icon>
+      </div>
     </div>
+
     <div id="graph"></div>
   </div>
 </div>
