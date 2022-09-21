@@ -391,6 +391,9 @@ export class GraphOptionsComponent implements OnInit {
     this.clickPoint();
   }
 
+  flagAllData() {
+    //flag all data
+  }
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
@@ -399,6 +402,9 @@ export class GraphOptionsComponent implements OnInit {
     let graphDownload = document.getElementById('graphDownload');
     graphDownload.classList.remove('disableClick');
     graphDownload.classList.remove('disabledDataBtn');
+    let flagAll = document.getElementById('flagAll');
+    flagAll.classList.remove('disableClick');
+    flagAll.classList.remove('disabledDataBtn');
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -623,6 +629,9 @@ export class GraphOptionsComponent implements OnInit {
       let graphDownload = document.getElementById('graphDownload');
       graphDownload.classList.add('disableClick');
       graphDownload.classList.add('disabledDataBtn');
+      let flagAll = document.getElementById('flagAll');
+      flagAll.classList.add('disableClick');
+      flagAll.classList.add('disabledDataBtn');
     });
   }
 
