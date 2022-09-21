@@ -392,7 +392,31 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   flagAllData() {
-    //flag all data
+    let xData;
+    let yData;
+    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+      yData = ydata;
+    });
+    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+      xData = xdata;
+    });
+    this.flaggedData = this.flaggedData.concat(xData);
+    this.flaggedData = this.flaggedData.concat(yData);
+    let numPts = xData.length;
+    const colorArr = Array(numPts).fill(this.xyFlaggedColor);
+    const shapeArr = Array(numPts).fill(this.flaggedSymbol);
+    //New styling for new plot
+    var update = {
+      marker: { color: colorArr, size: 12, symbol: shapeArr },
+    };
+
+    //Change the color on the graph
+    Plotly.restyle('graph', update);
+    console.log(this.flaggedData);
+
+    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+    let flagBtn = document.getElementById('flagBtn');
+    flagBtn.classList.remove('disabledDataBtn');
   }
   closeFlagOptions() {
     //Close flag options modal
