@@ -396,6 +396,9 @@ export class GraphOptionsComponent implements OnInit {
     this.showFlagOptions = false;
     let graph = document.getElementById('graph');
     graph.classList.remove('disableClick');
+    let graphDownload = document.getElementById('graphDownload');
+    graphDownload.classList.remove('disableClick');
+    graphDownload.classList.remove('disabledDataBtn');
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -617,6 +620,9 @@ export class GraphOptionsComponent implements OnInit {
       this.showFlagOptions = true;
       let graph = document.getElementById('graph');
       graph.classList.add('disableClick');
+      let graphDownload = document.getElementById('graphDownload');
+      graphDownload.classList.add('disableClick');
+      graphDownload.classList.add('disabledDataBtn');
     });
   }
 
@@ -644,21 +650,6 @@ export class GraphOptionsComponent implements OnInit {
       //Used for preventing flag duplicates
       this.existingDupY = true;
     }
-  }
-
-  //take json of flagged points and download as csv file
-  createFlags() {
-    let data = this.flaggedData;
-    let flagContent = 'data:text/csv;charset=utf-8,';
-    let csv = data.map((row) => Object.values(row));
-    csv.unshift(Object.keys(data[0]));
-    flagContent += csv.join('\n');
-    let encodedUri = encodeURI(flagContent);
-    let link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', 'flags.csv');
-    document.body.appendChild(link);
-    link.click();
   }
 
   //Called when user clicks 'Plot Data'
@@ -926,7 +917,6 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public downloadAllGraphData() {
-    console.log('data are downloaded');
     let xData;
     let yData;
     this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
@@ -935,8 +925,8 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
       xData = xdata;
     });
-    this.createCSV(yData, 'xData.csv');
-    this.createCSV(xData, 'xData.csv');
+    let allGraphData = xData.concat(yData);
+    this.createCSV(allGraphData, 'plottedData.csv');
   }
 
   createCSV(data, filename) {
