@@ -500,9 +500,9 @@
 }
 /* end custom radio button stuff */
 
-/* start options pop-up */
+/* start graph overlays */
 .optionModal {
-  z-index: 200;
+  z-index: 300;
   height: 125px;
   width: 210px !important;
   background-color: rgb(255, 255, 255, 0.85);
@@ -514,3 +514,12 @@
   margin-top: 20px;
   margin-left: 15px;
 }
+
+.graphDataDownload {
+  z-index: 200;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+/* end graph overlays */
