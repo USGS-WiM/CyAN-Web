@@ -31,8 +31,6 @@ A step by step series of examples that tell you have to get a development env ru
 
 ## Development Workflow
 
-Explain the desired workflow. Workflow may deviate from the instructions below depending on the projects needs.
-
 **Instructions below are for developers actively working on the repo.**
 
 An issue will be assigned to you via GitHub. Your workflow begins after assignment:
@@ -62,9 +60,7 @@ Add additional notes about how to deploy this on a live system. **Do not include
 ## Built With
 
 - [Angular](https://angular.io/) - The main web framework used
-- [Clarity UI](https://vmware.github.io/clarity/) - Top-level UI framework if you have one
 - [NPM](https://www.npmjs.com/) - Dependency Management
-- [Others](https://www.npmjs.com/) - Any other high-level dependencies
 
 ## Contributing
 
@@ -83,6 +79,7 @@ To push tags to remote origin: `git push origin --tags`
 ## Authors
 
 - **[Kathy Dooley](<(https://github.com/kathymd)>)** - _Lead Developer_ - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
+- **[Lauren Privette](<(https://github.com/lprivette)>)** - _Developer_ - [USGS Web Informatics & Mapping](https://wim.usgs.gov/)
 
 ## License
 
