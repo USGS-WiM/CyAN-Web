@@ -104,6 +104,14 @@ export class FileUploadComponent {
     return uploadedFlags;
   }
 
+  uploadOneFile() {
+    //user cannot select multiple files at the same time
+    this.snackBar.open('Upload one file at a time.', 'OK', {
+      duration: 4000,
+      verticalPosition: 'bottom',
+    });
+  }
+
   checkHeaders(uploadedFlags) {
     //expected headers
     let expectedHeaders = [
