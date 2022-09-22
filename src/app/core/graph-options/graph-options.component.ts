@@ -432,9 +432,6 @@ export class GraphOptionsComponent implements OnInit {
     this.disableEnable('graphDownload', true, true);
     this.disableEnable('flagAll', true, true);
     this.disableEnable('graphOptionsBackgroundID', true, false);
-    this.disableEnable('createGraph', true, true);
-    this.disableEnable('graphDataDownloadBtn', true, true);
-    this.disableEnable('flagUpload', true, true);
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -663,9 +660,6 @@ export class GraphOptionsComponent implements OnInit {
       this.disableEnable('graphDownload', false, true);
       this.disableEnable('flagAll', false, true);
       this.disableEnable('graphOptionsBackgroundID', false, false);
-      this.disableEnable('createGraph', false, true);
-      this.disableEnable('graphDataDownloadBtn', false, true);
-      this.disableEnable('flagUpload', false, true);
     });
   }
 
