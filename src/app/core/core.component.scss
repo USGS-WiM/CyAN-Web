@@ -309,6 +309,17 @@
 .boundingBoxFullWidth {
   width: 100%;
 }
+.boundingBoxBtn {
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: white;
+  cursor: pointer;
+  background-color: rgb(131, 184, 124);
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+}
 /* end: filter options box */
 /* end: map panels */
 
@@ -356,9 +367,15 @@
 .leftBreak {
   margin-left: 10px;
 }
+.rightBreak {
+  margin-right: 10px;
+}
 .leftTopBreak {
   margin-top: 10px;
   margin-left: 10px;
+}
+.noLeftBreak {
+  margin-left: 0px !important;
 }
 .graphOptionsMin {
   transform: rotate(270deg);
