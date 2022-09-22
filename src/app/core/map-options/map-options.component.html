@@ -1,15 +1,14 @@
 <div class="optionsBackgroundMini marginLeftFullWidth" [hidden]="mapLayerOptions" (click)="displayMapLayerOptions(true)"
   id="mapLayersCollapsed"
   aria-label="This panel contains different base map options for the map. Right now, the panel is minimized click on it to access the base map options.">
-  <div style="text-align: right; margin-right: 10px">
+  <div class="alignRight">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
 <div class="mapLayerOptionsBackground marginLeftFullWidth marginTopFullHeight" [hidden]="!mapLayerOptions"
   id="mapLayersOptions">
-  <div style="text-align: right; margin-right: 10px"
-    aria-label="Click on this button to minimize the map filters panel.">
+  <div class="alignRight" aria-label="Click on this button to minimize the map filters panel.">
     <mat-icon matTooltip="minimize" style="cursor: pointer" (click)="displayMapLayerOptions(false)">minimize</mat-icon>
   </div>
   <div class="mapLayers" id="mapLayersID">
@@ -33,7 +32,7 @@
 <div class="flex-container" style="width: 660px">
   <div id="mapOptionsContainer" class="optionsBackgroundMapFull marginLeftFullWidth marginTopFullHeight"
     [hidden]="!mapFilters">
-    <div style="text-align: right; margin-right: 10px">
+    <div class="alignRight">
       <mat-icon matTooltip="minimize" style="cursor: pointer" (click)="displayMapFilters(false)"
         aria-label="Clicking this button will minimize the map filters panel">minimize</mat-icon>
     </div>
@@ -141,7 +140,7 @@
 </div>
 <div [hidden]="mapFilters" class="optionsBackgroundMini marginLeftFullWidth" (click)="displayMapFilters(true)"
   id="filterPointsCollapsed" aria-label="Click this button to maximize the map filter panel">
-  <div style="text-align: right; margin-right: 10px">
+  <div class="alignRight">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Filter Points</div>

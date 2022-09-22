@@ -348,8 +348,9 @@ export class GraphOptionsComponent implements OnInit {
       y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
+      //Keeping these here so that it's easy to add if we decide to implement in the future
       //name: 'Sample 1',
-      // text: this.sid,
+      //text: this.sid,
       textposition: 'bottom center',
       marker: { size: 12, color: this.allColors, symbol: this.allShapes },
     };
@@ -420,10 +421,8 @@ export class GraphOptionsComponent implements OnInit {
     Plotly.restyle('graph', update);
     console.log(this.flaggedData);
     this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-
-    //If the flag download button was disabled, enable it
-    //this.disableEnable('flagBtn', true, true);
   }
+
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
@@ -434,7 +433,6 @@ export class GraphOptionsComponent implements OnInit {
     this.disableEnable('flagAll', true, true);
     this.disableEnable('graphOptionsBackgroundID', true, false);
     this.disableEnable('createGraph', true, true);
-    //this.disableEnable('flagBtn', true, true);
     this.disableEnable('graphDataDownloadBtn', true, true);
     this.disableEnable('flagUpload', true, true);
 
@@ -442,21 +440,6 @@ export class GraphOptionsComponent implements OnInit {
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
     this.axisFlagForm.get('xyFlagControl').setValue(null);
-
-    //Disable/enable flag button
-    /*
-    if (this.flaggedPointIndices.x) {
-      if (this.flaggedPointIndices.x.length > 0) {
-        this.disableEnable('flagBtn', true, true);
-      }
-    }
-    if (this.flaggedPointIndices.y) {
-      if (this.flaggedPointIndices.y.length > 0) {
-        this.disableEnable('flagBtn', true, true);
-      }
-    } else {
-      this.disableEnable('flagBtn', false, true);
-    } */
   }
 
   //Disables or enables clickable features
@@ -656,6 +639,7 @@ export class GraphOptionsComponent implements OnInit {
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
+  //Submit flag selections when x and y axes are the same data
   submitFlagSelectionsSingle() {
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
     if (xyChecked) {
@@ -680,7 +664,6 @@ export class GraphOptionsComponent implements OnInit {
       this.disableEnable('flagAll', false, true);
       this.disableEnable('graphOptionsBackgroundID', false, false);
       this.disableEnable('createGraph', false, true);
-      //this.disableEnable('flagBtn', false, true);
       this.disableEnable('graphDataDownloadBtn', false, true);
       this.disableEnable('flagUpload', false, true);
     });
@@ -873,6 +856,8 @@ export class GraphOptionsComponent implements OnInit {
     }
     //Create separate query objects for x and y data
     if (axis === 'xAxis') {
+      //If the user selected the map bounds, populate with those values and region
+      //Otherwise, there are no geographic constraints
       if (this.useBoundingBox) {
         if (this.regions == undefined) {
           this.regions = [];
@@ -996,6 +981,7 @@ export class GraphOptionsComponent implements OnInit {
     link.click();
   }
 
+  //Every time the window is resized, change size and position of elements accordingly
   public resizeDivs() {
     //get window dimensions
     let windowHeight = window.innerHeight;
