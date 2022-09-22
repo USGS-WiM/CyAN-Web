@@ -170,15 +170,21 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
       this.rolloverFlagsY = yFlags;
     });
+    this.graphSelectionsService.flagsSubject.subscribe((flags) => {
+      if (flags) {
+        if (flags.length > 0) {
+          this.disableEnable('flagBtn', true, true);
+        } else {
+          this.disableEnable('flagBtn', false, true);
+        }
+      } else {
+        this.disableEnable('flagBtn', false, true);
+      }
+    });
+
     //this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
     this.graphSelectionsService.makeGraphSubject.subscribe((makeGraph) => {
       //Reset the x and y values displayed on the graph whenever the values change in the service
-      let graphOptionsBackgroundID = document.getElementById(
-        'graphOptionsBackgroundID'
-      );
-      let graphDataDownloadBtn = document.getElementById(
-        'graphDataDownloadBtn'
-      );
       if (makeGraph === true && this.alreadyGraphed === false) {
         this.graphSelectionsService.graphPointsXSubject.subscribe((points) => {
           //get the x values to plot
@@ -205,8 +211,8 @@ export class GraphOptionsComponent implements OnInit {
                   //Remove the WIM loader to view graph
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
-                  graphOptionsBackgroundID.classList.remove('disableClick');
-                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                  this.disableEnable('graphOptionsBackgroundID', true, false);
+                  this.disableEnable('graphDataDownloadBtn', true, true);
                 }
               }
               if (!this.currentYaxisValues || !this.currentXaxisValues) {
@@ -215,8 +221,8 @@ export class GraphOptionsComponent implements OnInit {
                   let base = document.getElementById('base');
                   base.classList.remove('initial-loader');
                   this.showGraph = false;
-                  graphOptionsBackgroundID.classList.remove('disableClick');
-                  graphDataDownloadBtn.classList.remove('disabledDataBtn');
+                  this.disableEnable('graphOptionsBackgroundID', true, false);
+                  this.disableEnable('graphDataDownloadBtn', true, true);
                 }
               }
             }
@@ -342,8 +348,9 @@ export class GraphOptionsComponent implements OnInit {
       y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
+      //Keeping these here so that it's easy to add if we decide to implement in the future
       //name: 'Sample 1',
-      // text: this.sid,
+      //text: this.sid,
       textposition: 'bottom center',
       marker: { size: 12, color: this.allColors, symbol: this.allShapes },
     };
@@ -413,41 +420,44 @@ export class GraphOptionsComponent implements OnInit {
     //Change the color on the graph
     Plotly.restyle('graph', update);
     console.log(this.flaggedData);
-
     this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-    let flagBtn = document.getElementById('flagBtn');
-    flagBtn.classList.remove('disabledDataBtn');
   }
+
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
-    let graph = document.getElementById('graph');
-    graph.classList.remove('disableClick');
-    let graphDownload = document.getElementById('graphDownload');
-    graphDownload.classList.remove('disableClick');
-    graphDownload.classList.remove('disabledDataBtn');
-    let flagAll = document.getElementById('flagAll');
-    flagAll.classList.remove('disableClick');
-    flagAll.classList.remove('disabledDataBtn');
+
+    //enable all features that were disabled when modal was open
+    this.disableEnable('graph', true, false);
+    this.disableEnable('graphDownload', true, true);
+    this.disableEnable('flagAll', true, true);
+    this.disableEnable('graphOptionsBackgroundID', true, false);
+    this.disableEnable('createGraph', true, true);
+    this.disableEnable('graphDataDownloadBtn', true, true);
+    this.disableEnable('flagUpload', true, true);
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
     this.axisFlagForm.get('xyFlagControl').setValue(null);
+  }
 
-    //Disable/enable flag button
-    let flagBtn = document.getElementById('flagBtn');
-    if (this.flaggedPointIndices.x) {
-      if (this.flaggedPointIndices.x.length > 0) {
-        flagBtn.classList.remove('disabledDataBtn');
-      }
+  //Disables or enables clickable features
+  //If it's a button, disabling it disables click and turns gray
+  //If it's not a button, just disables click
+  public disableEnable(element: string, enable: Boolean, button: Boolean) {
+    let feature = document.getElementById(element);
+    if (enable && button) {
+      feature.classList.remove('disabledDataBtn');
     }
-    if (this.flaggedPointIndices.y) {
-      if (this.flaggedPointIndices.y.length > 0) {
-        flagBtn.classList.remove('disabledDataBtn');
-      }
-    } else {
-      flagBtn.classList.add('disabledDataBtn');
+    if (!enable && button) {
+      feature.classList.add('disabledDataBtn');
+    }
+    if (enable && !button) {
+      feature.classList.remove('disableClick');
+    }
+    if (!enable && !button) {
+      feature.classList.add('disableClick');
     }
   }
 
@@ -629,6 +639,7 @@ export class GraphOptionsComponent implements OnInit {
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
+  //Submit flag selections when x and y axes are the same data
   submitFlagSelectionsSingle() {
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
     if (xyChecked) {
@@ -648,14 +659,13 @@ export class GraphOptionsComponent implements OnInit {
       this.clickedPoint = selectedPoints;
       //Open flag options modal
       this.showFlagOptions = true;
-      let graph = document.getElementById('graph');
-      graph.classList.add('disableClick');
-      let graphDownload = document.getElementById('graphDownload');
-      graphDownload.classList.add('disableClick');
-      graphDownload.classList.add('disabledDataBtn');
-      let flagAll = document.getElementById('flagAll');
-      flagAll.classList.add('disableClick');
-      flagAll.classList.add('disabledDataBtn');
+      this.disableEnable('graph', false, false);
+      this.disableEnable('graphDownload', false, true);
+      this.disableEnable('flagAll', false, true);
+      this.disableEnable('graphOptionsBackgroundID', false, false);
+      this.disableEnable('createGraph', false, true);
+      this.disableEnable('graphDataDownloadBtn', false, true);
+      this.disableEnable('flagUpload', false, true);
     });
   }
 
@@ -711,15 +721,9 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       //Add the WIM loader while graph is being created
       let base = document.getElementById('base');
-      let graphDataDownloadBtn = document.getElementById(
-        'graphDataDownloadBtn'
-      );
       base.classList.add('initial-loader');
-      let graphOptionsBackgroundID = document.getElementById(
-        'graphOptionsBackgroundID'
-      );
-      graphOptionsBackgroundID.classList.add('disableClick');
-      graphDataDownloadBtn.classList.add('disabledDataBtn');
+      this.disableEnable('graphOptionsBackgroundID', false, false);
+      this.disableEnable('graphDataDownloadBtn', false, true);
       this.showGraph = false;
       this.populateGraphData();
       this.resizeDivs();
@@ -852,6 +856,8 @@ export class GraphOptionsComponent implements OnInit {
     }
     //Create separate query objects for x and y data
     if (axis === 'xAxis') {
+      //If the user selected the map bounds, populate with those values and region
+      //Otherwise, there are no geographic constraints
       if (this.useBoundingBox) {
         if (this.regions == undefined) {
           this.regions = [];
@@ -975,6 +981,7 @@ export class GraphOptionsComponent implements OnInit {
     link.click();
   }
 
+  //Every time the window is resized, change size and position of elements accordingly
   public resizeDivs() {
     //get window dimensions
     let windowHeight = window.innerHeight;

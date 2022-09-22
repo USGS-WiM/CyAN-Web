@@ -1,6 +1,6 @@
 <input type="file" class="hideUpload" (change)="uploadedFlags($event)" #fileUpload>
 <div>
-    <button class="downloadBtn dataBtn" (click)="fileUpload.click()" matTooltip="Upload CSV">
+    <button id='flagUpload' class="downloadBtn dataBtn" (click)="fileUpload.click()" matTooltip="Upload CSV">
         <mat-icon>cloud_upload</mat-icon>
         <mat-icon>flag</mat-icon>
     </button>

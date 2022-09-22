@@ -56,6 +56,20 @@
   position: relative;
   text-align: center;
 }
+.homeFullScreenIcon {
+  font-size: 30px;
+  margin-left: -20px;
+  margin-right: 10px;
+}
+.infoLineHeight {
+  line-height: 10px;
+}
+.fullWidth {
+  width: 1500px;
+}
+.mapGraphWidth {
+  width: 200px;
+}
 /* End full home screen nav buttons */
 
 /* Start small home screen nav buttons */
@@ -65,6 +79,23 @@
   vertical-align: middle;
   line-height: 40px;
   border: none;
+}
+.infoBtnInside {
+  font-size: 22px;
+  margin-top: 30px;
+  margin-left: 5px;
+}
+.infoBtnSmIcon {
+  font-size: 28px;
+  margin-right: 2px;
+  text-align: center;
+}
+.infoBtnSmText {
+  line-height: 10px;
+  margin-top: 25px;
+  color: rgb(104, 90, 90);
+  font-size: 18px;
+  text-align: center;
 }
 .smScreenLandingBtns {
   line-height: 25px;
@@ -78,6 +109,7 @@
   margin-left: 10px;
   margin-top: 20px;
 }
+
 /* End small home screen nav buttons */
 
 /* Start small navbar buttons */
@@ -89,12 +121,49 @@
   margin-left: 10px;
   position: relative;
 }
-
 .smNavBtn {
   height: 60px;
   width: 60px;
   cursor: pointer;
   position: relative;
+}
+.usgsBtn {
+  background-color: rgb(22, 104, 49);
+  width: 160px;
+  height: 60px;
+  margin-left: 0px;
+  text-align: left;
+}
+.usgsLogo {
+  width: 150px;
+  margin-top: 4px;
+  margin-left: 5px;
+  margin-right: 5px;
+  text-align: left;
+}
+.infoBtnText {
+  font-size: 30px;
+  margin-top: 40px;
+}
+.infoIcon {
+  font-size: 32px;
+  margin-left: -20px;
+  margin-right: 10px;
+}
+.infoBtnSubheader {
+  line-height: 15px;
+  margin-top: 20px;
+  color: rgb(104, 90, 90);
+  font-size: 20px;
+}
+.usgsSquare {
+  width: 60px;
+  height: 60px;
+  background-color: white;
+}
+.square {
+  width: 60px;
+  height: 60px;
 }
 /* End small navbar buttons */
 /* End nav buttons */
@@ -194,6 +263,10 @@
 .mapLayersResize label {
   font-size: 14px;
 }
+.alignRight {
+  text-align: right;
+  margin-right: 10px;
+}
 /* end: map layers box */
 
 /* start: map filter options box */
@@ -236,6 +309,17 @@
 .boundingBoxFullWidth {
   width: 100%;
 }
+.boundingBoxBtn {
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: white;
+  cursor: pointer;
+  background-color: rgb(131, 184, 124);
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+}
 /* end: filter options box */
 /* end: map panels */
 
@@ -265,6 +349,43 @@
   height: 190px;
   position: relative;
   cursor: pointer;
+}
+.maximize {
+  text-align: right;
+  margin-right: 10px;
+  margin-top: 15px;
+  transform: rotate(270deg);
+}
+.minimize {
+  text-align: right;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.break {
+  height: 10px;
+}
+.leftBreak {
+  margin-left: 10px;
+}
+.rightBreak {
+  margin-right: 10px;
+}
+.leftTopBreak {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.noLeftBreak {
+  margin-left: 0px !important;
+}
+.graphOptionsMin {
+  transform: rotate(270deg);
+  font-size: 20px;
+  text-align: center;
+  word-wrap: none;
+  width: 150px;
+  margin-left: -45px;
+  margin-top: 50px;
+  color: rgb(163, 152, 152);
 }
 .traceOptionsBackground {
   margin-left: 10px;
@@ -516,6 +637,7 @@
 }
 
 .graphDataDownload {
+  position: absolute;
   z-index: 200;
   color: white;
   cursor: pointer;
@@ -526,9 +648,26 @@
   margin-right: 3px;
 }
 
+.btnMargin {
+  margin-left: 40px;
+}
+
 .downloadIcon {
   margin-left: 5px;
   margin-right: 5px;
   margin-top: 3px;
 }
 /* end graph overlays */
+
+/* start: about section */
+.aboutModal {
+  margin-left: 20px;
+  padding-top: 20px;
+  margin-right: 20px;
+}
+
+.aboutText {
+  font-size: 30px;
+  line-height: 35px;
+}
+/* end: about section */
