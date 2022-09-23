@@ -202,7 +202,7 @@ export class GraphOptionsComponent implements OnInit {
                   this.alreadyGraphed = true;
 
                   //Create and display graph
-                  this.createGraph();
+                  this.createGraph(true);
                   //Prepare graph metadata
                   this.createGraphMetadata();
 
@@ -337,9 +337,11 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
-  public createGraph() {
-    this.allColors = this.graphSelectionsService.pointColors;
-    this.allShapes = this.graphSelectionsService.pointSymbol;
+  public createGraph(newPlot: Boolean) {
+    if (newPlot) {
+      this.allColors = this.graphSelectionsService.pointColors;
+      this.allShapes = this.graphSelectionsService.pointSymbol;
+    }
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
@@ -412,15 +414,19 @@ export class GraphOptionsComponent implements OnInit {
     let numPts = xData.length;
     const colorArr = Array(numPts).fill(this.xyFlaggedColor);
     const shapeArr = Array(numPts).fill(this.flaggedSymbol);
+    this.flaggedPointIndices.x.push();
+
+    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
     //New styling for new plot
-    var update = {
+    let update = {
       marker: { color: colorArr, size: 12, symbol: shapeArr },
     };
 
+    this.allColors = colorArr;
+    this.allShapes = shapeArr;
+
     //Change the color on the graph
     Plotly.restyle('graph', update);
-    console.log(this.flaggedData);
-    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
   }
 
   closeFlagOptions() {
@@ -530,6 +536,9 @@ export class GraphOptionsComponent implements OnInit {
     var update = {
       marker: { color: colors, size: 12, symbol: symbols },
     };
+
+    this.allColors = colors;
+    this.allShapes = symbols;
 
     //Change the color on the graph
     Plotly.restyle('graph', update);
@@ -1064,7 +1073,7 @@ export class GraphOptionsComponent implements OnInit {
     }
 
     if (this.showGraph) {
-      this.createGraph();
+      this.createGraph(false);
     }
   }
 }
