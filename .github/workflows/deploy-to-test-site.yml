@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - dev
+      - staging
 name: Deploy to Test site
 jobs:
   deployToTest:
