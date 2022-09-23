@@ -537,6 +537,9 @@ export class GraphOptionsComponent implements OnInit {
       marker: { color: colors, size: 12, symbol: symbols },
     };
 
+    this.allColors = colors;
+    this.allShapes = symbols;
+
     //Change the color on the graph
     Plotly.restyle('graph', update);
     //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
