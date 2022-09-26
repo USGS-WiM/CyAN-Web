@@ -590,37 +590,69 @@ export class GraphOptionsComponent implements OnInit {
 
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
-    let xChecked = this.axisFlagForm.get('xFlagControl').value;
-    let yChecked = this.axisFlagForm.get('yFlagControl').value;
     let flagTypes = this.flagTypes();
-    if (xChecked && yChecked) {
-      this.updateGraph(
-        this.xyFlaggedColor,
-        'both',
-        this.flaggedSymbol,
-        flagTypes
-      );
-    }
-    //Y checked; x not checked
-    if (yChecked && !xChecked) {
-      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol, flagTypes);
-    }
+    if (!this.sameQuery) {
+      let xChecked = this.axisFlagForm.get('xFlagControl').value;
+      let yChecked = this.axisFlagForm.get('yFlagControl').value;
 
-    //X checked; Y not checked
-    if (!yChecked && xChecked) {
-      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol, flagTypes);
-    }
+      if (xChecked && yChecked) {
+        this.updateGraph(
+          this.xyFlaggedColor,
+          'both',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
+      //Y checked; x not checked
+      if (yChecked && !xChecked) {
+        this.updateGraph(
+          this.yFlaggedColor,
+          'y',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
 
-    //Neither X nor y checked
-    if (!yChecked && !xChecked) {
-      this.updateGraph(
-        this.unflaggedColor,
-        'none',
-        this.unflaggedSymbol,
-        flagTypes
-      );
+      //X checked; Y not checked
+      if (!yChecked && xChecked) {
+        this.updateGraph(
+          this.xFlaggedColor,
+          'x',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
+
+      //Neither X nor y checked
+      if (!yChecked && !xChecked) {
+        this.updateGraph(
+          this.unflaggedColor,
+          'none',
+          this.unflaggedSymbol,
+          flagTypes
+        );
+      }
+      this.flagTypes();
     }
-    this.flagTypes();
+    if (this.sameQuery) {
+      let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+      //Since x and y are identical, only add x data to the flags
+      if (xyChecked) {
+        this.updateGraph(
+          this.xyFlaggedColor,
+          'x',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      } else {
+        this.updateGraph(
+          this.unflaggedColor,
+          'none',
+          this.unflaggedSymbol,
+          flagTypes
+        );
+      }
+    }
 
     //Close flag modal and clear selections
     this.closeFlagOptions();
@@ -660,25 +692,6 @@ export class GraphOptionsComponent implements OnInit {
     this.axisFlagForm.get('phytoChl').setValue(null);
     this.axisFlagForm.get('unknown').setValue(null);
     return flagTypes;
-  }
-
-  //Submit flag selections when x and y axes are the same data
-  submitFlagSelectionsSingle() {
-    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
-    let flagTypes = this.flagTypes();
-    //Since x and y are identical, only add x data to the flags
-    if (xyChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'x', this.flaggedSymbol, flagTypes);
-    } else {
-      this.updateGraph(
-        this.unflaggedColor,
-        'none',
-        this.unflaggedSymbol,
-        flagTypes
-      );
-    }
-    //Close flag modal and clear selections
-    this.closeFlagOptions();
   }
 
   public initiateSelectPoints() {
