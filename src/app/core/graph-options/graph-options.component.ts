@@ -57,6 +57,7 @@ export class GraphOptionsComponent implements OnInit {
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
     xyFlagControl: new FormControl(),
+    type1: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -462,7 +463,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Called whenever a flag is selected/deselected
-  updateGraph(color: String, axis: String, symbol: String) {
+  updateGraph(color: String, axis: String, symbol: String, flagTypes) {
     let updateGraphCalled = true;
 
     let colors = this.allColors;
@@ -535,6 +536,8 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
+            console.log('x tempData[pointIndex]', tempData[pointIndex]);
+            tempData[pointIndex]['flagType'] = flagTypes;
             if (!existingDupX) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -547,6 +550,8 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
+            tempData[pointIndex]['flagType'] = flagTypes;
+            console.log('y tempData[pointIndex]', tempData[pointIndex]);
             if (!existingDupY) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -570,7 +575,7 @@ export class GraphOptionsComponent implements OnInit {
     }
     //Override the default Plotly post-lasso view by re-drawing graph
     if (this.lasso) {
-      this.createGraph(true);
+      this.createGraph(false);
     }
 
     console.log('this.flaggedData', this.flaggedData);
@@ -582,36 +587,63 @@ export class GraphOptionsComponent implements OnInit {
   submitFlagSelections() {
     let xChecked = this.axisFlagForm.get('xFlagControl').value;
     let yChecked = this.axisFlagForm.get('yFlagControl').value;
+    let flagTypes = this.flagTypes();
     if (xChecked && yChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
+      this.updateGraph(
+        this.xyFlaggedColor,
+        'both',
+        this.flaggedSymbol,
+        flagTypes
+      );
     }
     //Y checked; x not checked
     if (yChecked && !xChecked) {
-      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
+      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol, flagTypes);
     }
 
     //X checked; Y not checked
     if (!yChecked && xChecked) {
-      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
+      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol, flagTypes);
     }
 
     //Neither X nor y checked
     if (!yChecked && !xChecked) {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+      this.updateGraph(
+        this.unflaggedColor,
+        'none',
+        this.unflaggedSymbol,
+        flagTypes
+      );
     }
+    this.flagTypes();
 
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
 
+  public flagTypes() {
+    let type1 = this.axisFlagForm.get('type1').value;
+    let flagTypes = [];
+    if (type1) {
+      flagTypes.push('Type 1');
+    }
+    return flagTypes;
+  }
+
   //Submit flag selections when x and y axes are the same data
   submitFlagSelectionsSingle() {
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+    let flagTypes = this.flagTypes();
     //Since x and y are identical, only add x data to the flags
     if (xyChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'x', this.flaggedSymbol);
+      this.updateGraph(this.xyFlaggedColor, 'x', this.flaggedSymbol, flagTypes);
     } else {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+      this.updateGraph(
+        this.unflaggedColor,
+        'none',
+        this.unflaggedSymbol,
+        flagTypes
+      );
     }
     //Close flag modal and clear selections
     this.closeFlagOptions();
