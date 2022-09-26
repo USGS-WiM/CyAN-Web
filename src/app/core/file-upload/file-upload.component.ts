@@ -124,6 +124,7 @@ export class FileUploadComponent {
       'result',
       'units',
       'region',
+      'flagType',
     ];
     //get uploaded headers
     let uploadedHeaders = Object.keys(uploadedFlags[0]);

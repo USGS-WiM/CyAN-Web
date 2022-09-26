@@ -57,6 +57,12 @@ export class GraphOptionsComponent implements OnInit {
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
     xyFlagControl: new FormControl(),
+    centralTendency: new FormControl(),
+    outlier: new FormControl(),
+    matrixInterference: new FormControl(),
+    dissolvedGTTotal: new FormControl(),
+    phytoChl: new FormControl(),
+    unknown: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -462,7 +468,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Called whenever a flag is selected/deselected
-  updateGraph(color: String, axis: String, symbol: String) {
+  updateGraph(color: String, axis: String, symbol: String, flagTypes) {
     let updateGraphCalled = true;
 
     let colors = this.allColors;
@@ -535,6 +541,8 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
+            console.log('x tempData[pointIndex]', tempData[pointIndex]);
+            tempData[pointIndex]['flagType'] = flagTypes;
             if (!existingDupX) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -547,6 +555,8 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
+            tempData[pointIndex]['flagType'] = flagTypes;
+            console.log('y tempData[pointIndex]', tempData[pointIndex]);
             if (!existingDupY) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -570,7 +580,7 @@ export class GraphOptionsComponent implements OnInit {
     }
     //Override the default Plotly post-lasso view by re-drawing graph
     if (this.lasso) {
-      this.createGraph(true);
+      this.createGraph(false);
     }
 
     console.log('this.flaggedData', this.flaggedData);
@@ -580,41 +590,108 @@ export class GraphOptionsComponent implements OnInit {
 
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
-    let xChecked = this.axisFlagForm.get('xFlagControl').value;
-    let yChecked = this.axisFlagForm.get('yFlagControl').value;
-    if (xChecked && yChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
-    }
-    //Y checked; x not checked
-    if (yChecked && !xChecked) {
-      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
-    }
+    let flagTypes = this.flagTypes();
+    if (!this.sameQuery) {
+      let xChecked = this.axisFlagForm.get('xFlagControl').value;
+      let yChecked = this.axisFlagForm.get('yFlagControl').value;
 
-    //X checked; Y not checked
-    if (!yChecked && xChecked) {
-      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
-    }
+      if (xChecked && yChecked) {
+        this.updateGraph(
+          this.xyFlaggedColor,
+          'both',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
+      //Y checked; x not checked
+      if (yChecked && !xChecked) {
+        this.updateGraph(
+          this.yFlaggedColor,
+          'y',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
 
-    //Neither X nor y checked
-    if (!yChecked && !xChecked) {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+      //X checked; Y not checked
+      if (!yChecked && xChecked) {
+        this.updateGraph(
+          this.xFlaggedColor,
+          'x',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
+
+      //Neither X nor y checked
+      if (!yChecked && !xChecked) {
+        this.updateGraph(
+          this.unflaggedColor,
+          'none',
+          this.unflaggedSymbol,
+          flagTypes
+        );
+      }
+      this.flagTypes();
+    }
+    if (this.sameQuery) {
+      let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+      //Since x and y are identical, only add x data to the flags
+      if (xyChecked) {
+        this.updateGraph(
+          this.xyFlaggedColor,
+          'x',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      } else {
+        this.updateGraph(
+          this.unflaggedColor,
+          'none',
+          this.unflaggedSymbol,
+          flagTypes
+        );
+      }
     }
 
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
 
-  //Submit flag selections when x and y axes are the same data
-  submitFlagSelectionsSingle() {
-    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
-    //Since x and y are identical, only add x data to the flags
-    if (xyChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'x', this.flaggedSymbol);
-    } else {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+  public flagTypes() {
+    let centralTendency = this.axisFlagForm.get('centralTendency').value;
+    let outlier = this.axisFlagForm.get('outlier').value;
+    let matrixInterference = this.axisFlagForm.get('matrixInterference').value;
+    let dissolvedGTTotal = this.axisFlagForm.get('dissolvedGTTotal').value;
+    let phytoChl = this.axisFlagForm.get('phytoChl').value;
+    let unknown = this.axisFlagForm.get('unknown').value;
+
+    let flagTypes = '';
+    if (centralTendency) {
+      flagTypes += 'Central tendency; ';
     }
-    //Close flag modal and clear selections
-    this.closeFlagOptions();
+    if (outlier) {
+      flagTypes += 'Outlier; ';
+    }
+    if (matrixInterference) {
+      flagTypes += 'Matrix or recovery problem; ';
+    }
+    if (dissolvedGTTotal) {
+      flagTypes += 'Dissolved result > Total; ';
+    }
+    if (phytoChl) {
+      flagTypes += 'Phytoplankton vs Chl; ';
+    }
+    if (unknown) {
+      flagTypes += 'Unknown';
+    }
+    this.axisFlagForm.get('centralTendency').setValue(null);
+    this.axisFlagForm.get('outlier').setValue(null);
+    this.axisFlagForm.get('matrixInterference').setValue(null);
+    this.axisFlagForm.get('dissolvedGTTotal').setValue(null);
+    this.axisFlagForm.get('phytoChl').setValue(null);
+    this.axisFlagForm.get('unknown').setValue(null);
+    return flagTypes;
   }
 
   public initiateSelectPoints() {
