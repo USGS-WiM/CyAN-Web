@@ -123,28 +123,35 @@
           </mat-checkbox>
         </div>
         Flag Type
-        <div class="leftTopBreak" aria-label="Checking this box will add 'Type 1' to the list of flag types">
-          <mat-checkbox formControlName="type1" class="example-margin" [disableRipple]="true">Type 1
+        <div class="leftTopBreak" aria-label="Checking this box will add 'Central tendency' to the list of flag types">
+          <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central tendency
           </mat-checkbox>
         </div>
-        <!--
-<div class="leftTopBreak" aria-label="Checking this box will add 'Type 1' to the list of flag types">
-          <mat-checkbox formControlName="type2" class="example-margin" [disableRipple]="true">Type 2
+        <div class="leftTopBreak" aria-label="Checking this box will add 'Outlier' to the list of flag types">
+          <mat-checkbox formControlName="outlier" class="example-margin" [disableRipple]="true">Outlier
           </mat-checkbox>
         </div>
-        <div class="leftTopBreak" aria-label="Checking this box will add 'Type 1' to the list of flag types">
-          <mat-checkbox formControlName="type3" class="example-margin" [disableRipple]="true">Type 3
+        <div class="leftTopBreak"
+          aria-label="Checking this box will add 'Matrix or recovery problem' to the list of flag types">
+          <mat-checkbox formControlName="matrixInterference" class="example-margin" [disableRipple]="true">Matrix or
+            recovery problem
           </mat-checkbox>
         </div>
-        <div class="leftTopBreak" aria-label="Checking this box will add 'Type 1' to the list of flag types">
-          <mat-checkbox formControlName="type4" class="example-margin" [disableRipple]="true">Type 4
+        <div class="leftTopBreak"
+          aria-label="Checking this box will add 'Dissolved result > Total' to the list of flag types">
+          <mat-checkbox formControlName="dissolvedGTTotal" class="example-margin" [disableRipple]="true">Dissolved
+            result > Total
           </mat-checkbox>
         </div>
-        <div class="leftTopBreak" aria-label="Checking this box will add 'Type 1' to the list of flag types">
-          <mat-checkbox formControlName="type5" class="example-margin" [disableRipple]="true">Type 5
+        <div class="leftTopBreak"
+          aria-label="Checking this box will add 'Phytoplankton vs Chl' to the list of flag types">
+          <mat-checkbox formControlName="phytoChl" class="example-margin" [disableRipple]="true">Phytoplankton vs Chl
           </mat-checkbox>
-        
-    </div>-->
+        </div>
+        <div class="leftTopBreak" aria-label="Checking this box will add 'Unknown' to the list of flag types">
+          <mat-checkbox formControlName="unknown" class="example-margin" [disableRipple]="true">Unknown
+          </mat-checkbox>
+        </div>
       </form>
       <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
         aria-label="Click this button to save flag options">

@@ -57,7 +57,12 @@ export class GraphOptionsComponent implements OnInit {
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
     xyFlagControl: new FormControl(),
-    type1: new FormControl(),
+    centralTendency: new FormControl(),
+    outlier: new FormControl(),
+    matrixInterference: new FormControl(),
+    dissolvedGTTotal: new FormControl(),
+    phytoChl: new FormControl(),
+    unknown: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -622,11 +627,38 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public flagTypes() {
-    let type1 = this.axisFlagForm.get('type1').value;
-    let flagTypes = [];
-    if (type1) {
-      flagTypes.push('Type 1');
+    let centralTendency = this.axisFlagForm.get('centralTendency').value;
+    let outlier = this.axisFlagForm.get('outlier').value;
+    let matrixInterference = this.axisFlagForm.get('matrixInterference').value;
+    let dissolvedGTTotal = this.axisFlagForm.get('dissolvedGTTotal').value;
+    let phytoChl = this.axisFlagForm.get('phytoChl').value;
+    let unknown = this.axisFlagForm.get('unknown').value;
+
+    let flagTypes = '';
+    if (centralTendency) {
+      flagTypes += 'Central tendency; ';
     }
+    if (outlier) {
+      flagTypes += 'Outlier; ';
+    }
+    if (matrixInterference) {
+      flagTypes += 'Matrix or recovery problem; ';
+    }
+    if (dissolvedGTTotal) {
+      flagTypes += 'Dissolved result > Total; ';
+    }
+    if (phytoChl) {
+      flagTypes += 'Phytoplankton vs Chl; ';
+    }
+    if (unknown) {
+      flagTypes += 'Unknown';
+    }
+    this.axisFlagForm.get('centralTendency').setValue(null);
+    this.axisFlagForm.get('outlier').setValue(null);
+    this.axisFlagForm.get('matrixInterference').setValue(null);
+    this.axisFlagForm.get('dissolvedGTTotal').setValue(null);
+    this.axisFlagForm.get('phytoChl').setValue(null);
+    this.axisFlagForm.get('unknown').setValue(null);
     return flagTypes;
   }
 
