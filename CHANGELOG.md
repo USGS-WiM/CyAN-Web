@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Auto-deploy to test site on push to `dev` branch
 - Plotly lasso select tools works to create flags
 - Includes option for user to designate flag types
+- CSV download of points plotted on map
 
 ### Changed
 
