@@ -28,6 +28,7 @@ export class MapOptionsComponent implements OnInit {
   public pcodeToMcode;
   public mcodeShortName;
   public regions;
+  public allMapData;
 
   //Intermediate data
   public matchingMcodes = [];
@@ -114,6 +115,28 @@ export class MapOptionsComponent implements OnInit {
   ngOnInit(): void {
     this.resizeDivs();
     this.populateDropdowns();
+    this.getMapData();
+  }
+
+  public getMapData() {
+    this.mapLayersService.mapQueryResultsSubject.subscribe(
+      (mapQueryResults) => {
+        this.allMapData = mapQueryResults;
+      }
+    );
+  }
+
+  public downloadMapData() {
+    let mapContent = 'data:text/csv;charset=utf-8,';
+    let csv = this.allMapData.map((row) => Object.values(row));
+    csv.unshift(Object.keys(this.allMapData[0]));
+    mapContent += csv.join('\n');
+    let encodedUri = encodeURI(mapContent);
+    let link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'mappedData.csv');
+    document.body.appendChild(link);
+    link.click();
   }
 
   //Get data from the service to populate options for dropdown menus
