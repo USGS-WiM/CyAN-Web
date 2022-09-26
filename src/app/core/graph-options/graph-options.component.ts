@@ -388,6 +388,7 @@ export class GraphOptionsComponent implements OnInit {
     Plotly.newPlot(this.bivariatePlot, data, layout, {
       displayModeBar: true,
       displaylogo: false,
+      modeBarButtonsToRemove: ['select', 'resetscale', 'zoomin', 'zoomout'],
     });
 
     this.initiateSelectPoints();
