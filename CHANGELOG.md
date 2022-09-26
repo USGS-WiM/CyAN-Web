@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Disable flag/download buttons when there are no data to download
 - Simple popup on clustermarker click
 - Auto-deploy to test site on push to `dev` branch
+- Plotly lasso select tools works to create flags
 
 ### Changed
 
