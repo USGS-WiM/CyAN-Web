@@ -421,12 +421,9 @@ export class GraphOptionsComponent implements OnInit {
     Plotly.restyle('graph', update);
   }
 
-  closeFlagOptions(submitted: Boolean) {
+  closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
-    /*  if (!submitted) {
-      this.lasso = false;
-    } */
     if (this.lasso) {
       this.createGraph(false);
       this.lasso = false;
@@ -603,7 +600,7 @@ export class GraphOptionsComponent implements OnInit {
     }
 
     //Close flag modal and clear selections
-    this.closeFlagOptions(true);
+    this.closeFlagOptions();
   }
 
   //Submit flag selections when x and y axes are the same data
@@ -615,7 +612,7 @@ export class GraphOptionsComponent implements OnInit {
       this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
     }
     //Close flag modal and clear selections
-    this.closeFlagOptions(true);
+    this.closeFlagOptions();
   }
 
   public initiateSelectPoints() {
