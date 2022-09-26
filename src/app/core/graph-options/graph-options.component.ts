@@ -376,6 +376,7 @@ export class GraphOptionsComponent implements OnInit {
       modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
+      dragmode: 'lasso',
       margin: {
         l: this.graphMargins,
         r: this.graphMargins,
@@ -479,7 +480,7 @@ export class GraphOptionsComponent implements OnInit {
         existingDupY = true;
       }
       if (selectedColor == this.xFlaggedColor) {
-        existingDupY = true;
+        existingDupX = true;
       }
       if (selectedColor == this.yFlaggedColor) {
         existingDupY = true;
