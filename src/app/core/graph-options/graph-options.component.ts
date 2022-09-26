@@ -386,6 +386,7 @@ export class GraphOptionsComponent implements OnInit {
 
     //build the graph
     Plotly.newPlot(this.bivariatePlot, data, layout, {
+      displayModeBar: true,
       displaylogo: false,
     });
 
