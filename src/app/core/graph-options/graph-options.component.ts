@@ -423,7 +423,11 @@ export class GraphOptionsComponent implements OnInit {
   closeFlagOptions(submitted: Boolean) {
     //Close flag options modal
     this.showFlagOptions = false;
-    if (!submitted) {
+    /*  if (!submitted) {
+      this.lasso = false;
+    } */
+    if (this.lasso) {
+      this.createGraph(false);
       this.lasso = false;
     }
 
@@ -482,59 +486,6 @@ export class GraphOptionsComponent implements OnInit {
       if (selectedColor == this.yFlaggedColor) {
         existingDupY = true;
       }
-      /*//unique id/index for selected point for this specific graph
-      pointIndex = this.clickedPoint.points[i].pointIndex;
-      //data.marker.color = marker color array for all points in rgb
-      colors = this.clickedPoint.points[i].data.marker.color;
-      //data.marker.symbol = array of shapes for all points
-      symbols = this.clickedPoint.points[i].data.marker.symbol; */
-
-      //x and y data are flagged separately; need to keep track of which axis was flagged
-      /*
-      if (axis == 'x' || axis == 'both') {
-        if (!this.flaggedPointIndices.x) {
-          //if there are no x-axis flags, create empty array
-          this.flaggedPointIndices.x = [];
-        }
-        //add new x-axis index to the array (if it's not already there)
-        if (!this.existingDupX) {
-          this.flaggedPointIndices.x.push(
-            this.clickedPoint.points[i].pointIndex
-          );
-        }
-      }
-      if (axis == 'y' || axis == 'both') {
-        if (!this.flaggedPointIndices.y) {
-          //if there are no y-axis flags, create empty array
-          this.flaggedPointIndices.y = [];
-        }
-        //add new y-axis index to the array
-        if (!this.existingDupY) {
-          this.flaggedPointIndices.y.push(
-            this.clickedPoint.points[i].pointIndex
-          );
-        }
-      }
-      if (axis == 'none') {
-        if (this.flaggedPointIndices.y) {
-          for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
-            if (pointIndex == this.flaggedPointIndices.y.length[i]) {
-              this.flaggedPointIndices.y = this.flaggedPointIndices.y.splice(
-                i,
-                1
-              );
-            }
-          }
-        }
-        if (this.flaggedPointIndices.x) {
-          if (pointIndex == this.flaggedPointIndices.x.length[i]) {
-            this.flaggedPointIndices.x = this.flaggedPointIndices.x.splice(
-              i,
-              1
-            );
-          }
-        }
-      } */
       //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
       colors[pointIndex] = color;
       //Change the symbol of the point at the correct index (flagged pts become filled circles; unflagged becomes hollow circle)
@@ -618,6 +569,7 @@ export class GraphOptionsComponent implements OnInit {
     if (!this.lasso) {
       Plotly.restyle('graph', update);
     }
+    //Override the default Plotly post-lasso view by re-drawing graph
     if (this.lasso) {
       this.createGraph(true);
     }

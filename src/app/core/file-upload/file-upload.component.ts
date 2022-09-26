@@ -28,7 +28,6 @@ export class FileUploadComponent {
           uploaded.pcode == user.pcode &&
           uploaded.mcode == user.mcode
         ) {
-          console.log('found a match');
           userFlags.splice(j, 1);
         }
       }
