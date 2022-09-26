@@ -376,7 +376,6 @@ export class GraphOptionsComponent implements OnInit {
       modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
-      dragmode: 'lasso',
       margin: {
         l: this.graphMargins,
         r: this.graphMargins,
@@ -557,7 +556,7 @@ export class GraphOptionsComponent implements OnInit {
     }
 
     //New styling for new plot
-    var update = {
+    let update = {
       marker: { color: colors, size: 12, symbol: symbols },
     };
 
@@ -607,8 +606,9 @@ export class GraphOptionsComponent implements OnInit {
   //Submit flag selections when x and y axes are the same data
   submitFlagSelectionsSingle() {
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+    //Since x and y are identical, only add x data to the flags
     if (xyChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
+      this.updateGraph(this.xyFlaggedColor, 'x', this.flaggedSymbol);
     } else {
       this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
     }

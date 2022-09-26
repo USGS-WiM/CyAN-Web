@@ -158,7 +158,6 @@ export class FileUploadComponent {
     }
     //update flag json in service so it can be used next time graph is generated
     this.graphSelectionsService.flagsSubject.next(allFlags);
-    console.log('allFlags', allFlags);
     return allFlags;
   }
 }
