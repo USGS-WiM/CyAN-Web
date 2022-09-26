@@ -28,7 +28,6 @@ export class FileUploadComponent {
           uploaded.pcode == user.pcode &&
           uploaded.mcode == user.mcode
         ) {
-          console.log('found a match');
           userFlags.splice(j, 1);
         }
       }
@@ -159,7 +158,6 @@ export class FileUploadComponent {
     }
     //update flag json in service so it can be used next time graph is generated
     this.graphSelectionsService.flagsSubject.next(allFlags);
-    console.log('allFlags', allFlags);
     return allFlags;
   }
 }
