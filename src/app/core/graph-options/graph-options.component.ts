@@ -620,8 +620,19 @@ export class GraphOptionsComponent implements OnInit {
     this.flagAll = false;
   }
 
+  public selectText() {
+    const input = document.getElementById('text-box');
+    input.focus();
+  }
+
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
+    const input = document.getElementById(
+      'flagAnnotation'
+    ) as HTMLInputElement | null;
+
+    const value = input?.value;
+    console.log(value); // 👉️ "Initial value"
     let flagTypes = this.flagTypes();
     if (!this.sameQuery) {
       let xChecked = this.axisFlagForm.get('xFlagControl').value;
