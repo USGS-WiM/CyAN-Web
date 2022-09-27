@@ -37,3 +37,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - User can now upload a second flag file with no errors
 - Graph no longer loses visual flags when browser window is resized
+- Fixes metadata pcode
