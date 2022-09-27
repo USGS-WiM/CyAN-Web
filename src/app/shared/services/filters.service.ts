@@ -12,6 +12,7 @@ export class FiltersService {
   methodTypes$: Observable<any>;
   pcodeToMcode$: Observable<any>;
   regions$: Observable<any>;
+  flagTypes;
 
   constructor(private httpClient: HttpClient) {
     //Each of these is used to retrieve data for populating dropdown menus
@@ -31,5 +32,6 @@ export class FiltersService {
       shareReplay(1),
       tap(() => console.log('aftersharing'))
     );
+    this.flagTypes = APP_SETTINGS.flagTypes();
   }
 }
