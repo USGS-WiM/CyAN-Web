@@ -22,13 +22,14 @@
       <div>
         <div class="leftBreak">
           X-Axis <br />
-          <mat-form-field appearance="fill"
-            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's x-axis.">
+          <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Parameter</mat-label>
-            <mat-select (ngModelChange)="populateMcodeDropdown('xaxis')" formControlName="ParametersX">
-              <mat-option *ngFor="let parameter of this.parameterTypes$ | async" [value]="parameter.pcode">{{
-                parameter.short_name }}</mat-option>
-            </mat-select>
+            <input type="text" matInput formControlName="ParametersX" [matAutocomplete]="paramX" aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map.">
+            <mat-autocomplete #paramX="matAutocomplete" [displayWith]="display" (optionSelected)="populateMcodeDropdown('xaxis')">
+              <mat-option *ngFor="let parameter of filteredParametersX | async" [value]="parameter">
+                {{parameter.short_name}}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
           <mat-form-field appearance="fill"
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
@@ -44,13 +45,14 @@
       <div>
         <div class="leftBreak">
           Y-Axis <br />
-          <mat-form-field appearance="fill"
-            aria-label="This dropdown selector contains a list of parameter names. Select one parameter for the graph's y-axis.">
+          <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Parameter</mat-label>
-            <mat-select (ngModelChange)="populateMcodeDropdown('yaxis')" formControlName="ParametersY">
-              <mat-option *ngFor="let parameter of this.parameterTypes$ | async" [value]="parameter.pcode">{{
-                parameter.short_name }}</mat-option>
-            </mat-select>
+            <input type="text" matInput formControlName="ParametersY" [matAutocomplete]="paramY" aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map.">
+            <mat-autocomplete #paramY="matAutocomplete" [displayWith]="display" (optionSelected)="populateMcodeDropdown('yaxis')">
+              <mat-option *ngFor="let parameter of filteredParametersY | async" [value]="parameter">
+                {{parameter.short_name}}
+              </mat-option>
+            </mat-autocomplete>
           </mat-form-field>
           <mat-form-field appearance="fill"
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis.">

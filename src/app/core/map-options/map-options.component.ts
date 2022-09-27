@@ -1,14 +1,18 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, ElementRef, IterableDiffers, IterableDiffer } from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
+import { map, startWith } from 'rxjs/operators';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-map-options',
@@ -16,6 +20,19 @@ import 'leaflet.markercluster';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
+
+  //AutoComplete
+  @ViewChild('paramInput') paramInput: ElementRef;
+  chipParams = [];
+  snToPcode = [];
+  filteredParameters: Observable<any[]>;
+  visible: boolean = true;
+  selectable: boolean = true;
+  removable: boolean = true;
+  addOnBlur: boolean = false;
+  separatorKeysCodes = [ENTER, COMMA];
+  iterableDiffer;
+
   //Layout
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
@@ -25,6 +42,7 @@ export class MapOptionsComponent implements OnInit {
   public methodTypes$: Observable<any[]>;
   public pcodeToMcode$: Observable<any[]>;
   public regions$: Observable<any[]>;
+  public pcodeShortName;
   public pcodeToMcode;
   public mcodeShortName;
   public regions;
@@ -64,7 +82,6 @@ export class MapOptionsComponent implements OnInit {
   public regionForm = new FormGroup({
     regionControl: new FormControl(),
   });
-
   //Basemap layers
   public osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -96,12 +113,14 @@ export class MapOptionsComponent implements OnInit {
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService,
     private filterService: FiltersService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private iterableDiffers: IterableDiffers
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.regions$ = this.filterService.regions$;
+    this.iterableDiffer = iterableDiffers.find([]).create(null);
   }
 
   @HostListener('window:resize')
@@ -114,11 +133,26 @@ export class MapOptionsComponent implements OnInit {
   ngOnInit(): void {
     this.resizeDivs();
     this.populateDropdowns();
+    
+  }
+  ngDoCheck() {
+    // Data processing slower then lifecycle hooks so waiting for array to be full before watching parameter control for changes
+    // there may be a better way to do this
+    let changes = this.iterableDiffer.diff(this.pcodeShortName);
+    if (changes) {
+        this.filteredParameters = this.paramMethodForm.get('parameterControl').valueChanges.pipe(
+          startWith(null),
+          map((parameter: string | null) =>
+          parameter ? this.filter(parameter) : this.pcodeShortName.slice()
+          )
+        );
+    }
   }
 
   //Get data from the service to populate options for dropdown menus
   public populateDropdowns() {
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
+    this.parameterTypes$.subscribe((codes) => (this.pcodeShortName = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
     this.regions$.subscribe((codes) => (this.regions = codes));
   }
@@ -126,17 +160,30 @@ export class MapOptionsComponent implements OnInit {
   //This is called whenever the parameter selection changes
   //It takes the selected parameters and uses them to populate Methods with corresponding methods
   public parameterSelected() {
+    // chips contain the short_name so getting the pcodes
+    for (let sn in this.chipParams) {
+      let shortname =this.chipParams[sn];
+      for ( let p in this.pcodeShortName){
+        if (shortname == this.pcodeShortName[p].short_name) {
+          this.snToPcode.push(this.pcodeShortName[p].pcode);
+        }
+      }
+    }
+
+    // removing duplicated parameters if there are any
+    this.snToPcode = this.snToPcode.filter(function (value, index, array) { 
+      return array.indexOf(value) === index;
+    });
+    
     this.matchingMcodes = [];
-    let tempParameter = [];
-    tempParameter.push(this.paramMethodForm.get('parameterControl').value);
-    for (let x = 0; x < tempParameter[0].length; x++) {
+    for (let x = 0; x < this.snToPcode.length; x++) {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
-        if (pcode == tempParameter[0][x]) {
+        if (pcode == this.snToPcode[x]) {
           mcodes.push(this.pcodeToMcode[pcode]);
           for (let i = 0; i < this.mcodeShortName.length; i++) {
-            for (let x = 0; x < mcodes[0].length; x++) {
-              if (mcodes[0][x] == this.mcodeShortName[i].mcode) {
+            for (let x = 0; x < mcodes.length; x++) {
+              if (mcodes[x] == this.mcodeShortName[i].mcode) {
                 this.matchingMcodes.push(this.mcodeShortName[i]);
               }
             }
@@ -159,7 +206,7 @@ export class MapOptionsComponent implements OnInit {
   public runFilters() {
     //Users must select at least one parameter and at least one method
     if (
-      this.paramMethodForm.get('parameterControl').value == null ||
+      this.snToPcode == null ||
       this.paramMethodForm.get('methodControl').value == null
     ) {
       this.snackBar.open(
@@ -171,7 +218,7 @@ export class MapOptionsComponent implements OnInit {
         }
       );
     } else if (
-      this.paramMethodForm.get('parameterControl').value.length == 0 ||
+      this.snToPcode.length == 0 ||
       this.paramMethodForm.get('methodControl').value.length == 0
     ) {
       this.snackBar.open(
@@ -186,7 +233,7 @@ export class MapOptionsComponent implements OnInit {
       //format pcodes with their corresponding mcodes so they're compatible in the http request
       let items = new Object();
       //get the codes from the first two selections (parameters and methods)
-      let tempP = this.paramMethodForm.get('parameterControl').value;
+      let tempP = this.snToPcode;
       let tempM = this.paramMethodForm.get('methodControl').value;
       if (tempP) {
         for (let i = 0; i < tempP.length; i++) {
@@ -581,5 +628,42 @@ export class MapOptionsComponent implements OnInit {
       this.boundingBoxForm.get('eastControl').setValue('');
       this.boundingBoxForm.get('westControl').setValue('');
     }
+  }
+
+  // remove chip
+  remove(param: any): void {
+    let pcode = "";
+    const index = this.chipParams.indexOf(param);
+
+    if (index >= 0) {
+      this.chipParams.splice(index, 1);
+    }
+    
+    // getting pcode from chip and removing from array
+    for ( let p in this.pcodeShortName){
+      if (param == this.pcodeShortName[p].short_name) {
+        pcode = this.pcodeShortName[p].pcode;
+      }
+    }
+    if(this.snToPcode.includes(pcode)) {
+      this.snToPcode = this.snToPcode.filter(x => x !== pcode);
+    }
+
+    this.parameterSelected();
+  }
+
+  // filter using typed string
+  filter(name: string) {
+    return this.pcodeShortName.filter(
+      (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
+    );
+  }
+
+  // selected param
+  selectedParameter(event: MatAutocompleteSelectedEvent): void {
+    this.chipParams.push(event.option.value);
+    this.paramInput.nativeElement.value = '';
+    this.paramMethodForm.get('parameterControl').setValue(null);
+    this.parameterSelected();
   }
 }

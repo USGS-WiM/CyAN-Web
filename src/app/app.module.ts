@@ -16,6 +16,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatAutocompleteModule, } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
@@ -53,6 +55,8 @@ import { FileUploadComponent } from './core/file-upload/file-upload.component';
     MatCheckboxModule,
     MatInputModule,
     MatRadioModule,
+    MatAutocompleteModule,
+    MatChipsModule,
     ScrollingModule,
     HttpClientModule,
     MatSnackBarModule,
