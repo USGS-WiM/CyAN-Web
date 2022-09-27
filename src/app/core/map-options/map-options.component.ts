@@ -21,18 +21,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 })
 export class MapOptionsComponent implements OnInit {
 
-  //AutoComplete
-  @ViewChild('paramInput') paramInput: ElementRef;
-  chipParams = [];
-  snToPcode = [];
-  filteredParameters: Observable<any[]>;
-  visible: boolean = true;
-  selectable: boolean = true;
-  removable: boolean = true;
-  addOnBlur: boolean = false;
-  separatorKeysCodes = [ENTER, COMMA];
-  iterableDiffer;
-
   //Layout
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
@@ -83,6 +71,19 @@ export class MapOptionsComponent implements OnInit {
   public regionForm = new FormGroup({
     regionControl: new FormControl(),
   });
+
+  //AutoComplete
+  @ViewChild('paramInput') paramInput: ElementRef;
+  chipParams = [];
+  snToPcode = [];
+  filteredParameters: Observable<any[]>;
+  visible: boolean = true;
+  selectable: boolean = true;
+  removable: boolean = true;
+  addOnBlur: boolean = false;
+  separatorKeysCodes = [ENTER, COMMA];
+  iterableDiffer;
+
   //Basemap layers
   public osm = L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -137,14 +138,14 @@ export class MapOptionsComponent implements OnInit {
     this.getMapData();
   }
   ngDoCheck() {
-    // Data processing slower then lifecycle hooks so waiting for array to be full before watching parameter control for changes
+    // Data processing slower then lifecycle hooks so waiting for array to be set before watching parameter control for changes
     // there may be a better way to do this
     let changes = this.iterableDiffer.diff(this.pcodeShortName);
     if (changes) {
         this.filteredParameters = this.paramMethodForm.get('parameterControl').valueChanges.pipe(
           startWith(null),
           map((parameter: string | null) =>
-          parameter ? this.filter(parameter) : this.pcodeShortName.slice()
+          parameter ? this._filter(parameter) : this.pcodeShortName.slice()
           )
         );
     }
@@ -677,7 +678,7 @@ export class MapOptionsComponent implements OnInit {
   }
 
   // filter using typed string
-  filter(name: string) {
+  _filter(name: string) {
     return this.pcodeShortName.filter(
       (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
     );

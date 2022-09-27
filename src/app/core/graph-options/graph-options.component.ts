@@ -101,10 +101,7 @@ export class GraphOptionsComponent implements OnInit {
   filteredParametersX: Observable<any[]>;
   filteredParametersY: Observable<any[]>;
   iterableDiffer;
-  public parameterTypesX;
-  public parameterTypesY;
   
-
   //Graph data
   public xDataTrace1;
   public yDataTrace1;
@@ -165,13 +162,13 @@ export class GraphOptionsComponent implements OnInit {
         this.filteredParametersX = this.graphSelectionsForm.get('ParametersX').valueChanges.pipe(
           startWith(null),
           map((parameter: string | null) =>
-          parameter ? this.filterX(parameter) : this.parameterTypesX.slice()
+          parameter ? this._filter(parameter) : this.parameterTypes.slice()
           )
         );
         this.filteredParametersY = this.graphSelectionsForm.get('ParametersY').valueChanges.pipe(
           startWith(null),
           map((parameter: string | null) =>
-          parameter ? this.filterY(parameter) : this.parameterTypesY.slice()
+          parameter ? this._filter(parameter) : this.parameterTypes.slice()
           )
         );
     }
@@ -182,7 +179,7 @@ export class GraphOptionsComponent implements OnInit {
     this.pcodeToMcode$.subscribe((codes) => (this.pcodeToMcode = codes));
     this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
     this.parameterTypes$.subscribe(
-      (parameters) => (this.parameterTypes = parameters, this.parameterTypesX = parameters, this.parameterTypesY = parameters)
+      (parameters) => (this.parameterTypes = parameters)
     );
   }
 
@@ -1145,32 +1142,19 @@ export class GraphOptionsComponent implements OnInit {
       this.createGraph(false);
     }
   }
+
   // filter using typed string
-  filterX(name: string) {
+  _filter(name: string) {
     if (name.length == undefined) {
-      return this.parameterTypesX.filter(
+      return this.parameterTypes.filter(
         (parameter) => parameter.short_name.toLowerCase().indexOf(name['short_name'].toLowerCase()) === 0
       );
     } else {
-      return this.parameterTypesX.filter(
+      return this.parameterTypes.filter(
         (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
       );
     }
   }
-
-  //
-  filterY(name: string) {
-    if (name.length == undefined) {
-      return this.parameterTypesY.filter(
-        (parameter) => parameter.short_name.toLowerCase().indexOf(name['short_name'].toLowerCase()) === 0
-      );
-    } else {
-      return this.parameterTypesY.filter(
-        (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
-      );
-    }
-  }
-
 
   // display the select parameter in the select box
   display(selectedoption){
