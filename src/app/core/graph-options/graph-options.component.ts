@@ -101,6 +101,7 @@ export class GraphOptionsComponent implements OnInit {
   public pcodeToMcode;
   public mcodeShortName;
   public parameterTypes;
+  public allFlagTypes;
 
   //Autocomplete
   filteredParametersX: Observable<any[]>;
@@ -143,6 +144,7 @@ export class GraphOptionsComponent implements OnInit {
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
+    this.allFlagTypes = this.filterService.flagTypes;
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -1017,6 +1019,7 @@ export class GraphOptionsComponent implements OnInit {
 
   //creates a csv containing all of the user-defined filters
   public downloadGraphMetadata() {
+    this.createCSV(this.allFlagTypes, 'flagTypes.csv');
     let graphMetadataContent = 'data:text/csv;charset=utf-8,';
     //Create and download a csv of the graph metadata
     //The following code was adapted from this example:
@@ -1047,11 +1050,11 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   createCSV(data, filename) {
-    let flagContent = 'data:text/csv;charset=utf-8,';
+    let csvContent = 'data:text/csv;charset=utf-8,';
     let csv = data.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
-    flagContent += csv.join('\n');
-    let encodedUri = encodeURI(flagContent);
+    csvContent += csv.join('\n');
+    let encodedUri = encodeURI(csvContent);
     let link = document.createElement('a');
     link.setAttribute('href', encodedUri);
     link.setAttribute('download', filename);
