@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Disable flag/download buttons when there are no data to download
 - Simple popup on clustermarker click
 - Auto-deploy to test site on push to `dev` branch
+- Autocomplete and chiplist to Map parameters input
+- Autocomplete to Graph X,Y parameter inputs
 - Plotly lasso select tools works to create flags
 - Includes option for user to designate flag types
 - CSV download of points plotted on map
@@ -36,3 +38,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - User can now upload a second flag file with no errors
 - Graph no longer loses visual flags when browser window is resized
 - Flag all button now uses same data flow as all the other flagging options
+- Fixes metadata pcode
