@@ -184,7 +184,6 @@ export class MapOptionsComponent implements OnInit {
   //This is called whenever the parameter selection changes
   //It takes the selected parameters and uses them to populate Methods with corresponding methods
   public parameterSelected() {
-    console.log("in param se")
     // chips contain the short_name so getting the pcodes
     for (let sn in this.chipParams) {
       let shortname =this.chipParams[sn];
