@@ -56,6 +56,7 @@ export class GraphOptionsComponent implements OnInit {
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
   sameQuery: Boolean = false;
+  flagAll: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
   clickedPoint;
@@ -81,9 +82,6 @@ export class GraphOptionsComponent implements OnInit {
   public allShapes = [];
   public unflaggedSymbol: string = 'circle-open';
   public flaggedSymbol: string = 'circle';
-  //Prevent duplicates
-  //existingDupX: Boolean = false;
-  //existingDupY: Boolean = false;
   public selectedPoints;
 
   //Intermediate data
@@ -438,31 +436,8 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   flagAllData() {
-    let xData;
-    let yData;
-    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
-      yData = ydata;
-    });
-    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
-      xData = xdata;
-    });
-    this.flaggedData = this.flaggedData.concat(xData);
-    this.flaggedData = this.flaggedData.concat(yData);
-    let numPts = xData.length;
-    const colorArr = Array(numPts).fill(this.xyFlaggedColor);
-    const shapeArr = Array(numPts).fill(this.flaggedSymbol);
-
-    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-    //New styling for new plot
-    let update = {
-      marker: { color: colorArr, size: 12, symbol: shapeArr },
-    };
-
-    this.allColors = colorArr;
-    this.allShapes = shapeArr;
-
-    //Change the color on the graph
-    Plotly.restyle('graph', update);
+    this.flagAll = true;
+    this.showFlagOptions = true;
   }
 
   closeFlagOptions() {
@@ -472,6 +447,7 @@ export class GraphOptionsComponent implements OnInit {
       this.createGraph(false);
       this.lasso = false;
     }
+    this.flagAll = false;
 
     //enable all features that were disabled when modal was open
     this.disableEnable('graph', true, false);
@@ -507,15 +483,33 @@ export class GraphOptionsComponent implements OnInit {
   //Called whenever a flag is selected/deselected
   updateGraph(color: String, axis: String, symbol: String, flagTypes) {
     let updateGraphCalled = true;
-
     let colors = this.allColors;
     let symbols = this.allShapes;
+    let numPts;
 
-    for (let i = 0; i < this.selectedPoints.length; i++) {
+    //If flagAll button is clicked, need to get attributes outside of Plotly
+    if (this.flagAll) {
+      numPts = this.currentXaxisValues.length;
+    }
+    if (!this.flagAll) {
+      numPts = this.selectedPoints.length;
+    }
+
+    for (let i = 0; i < numPts; i++) {
       let existingDupX = false;
       let existingDupY = false;
-      let pointIndex = this.selectedPoints[i].pointIndex;
-      let selectedColor = this.selectedPoints[i]['marker.color'];
+      let pointIndex;
+      let selectedColor;
+      if (!this.flagAll) {
+        pointIndex = this.selectedPoints[i].pointIndex;
+        selectedColor = this.selectedPoints[i]['marker.color'];
+      }
+      if (this.flagAll) {
+        //If flagging all points, we'll be looping through every point index
+        pointIndex = i;
+        //Get current point color to check for duplicates
+        selectedColor = this.allColors[i];
+      }
 
       //Used for preventing flag duplicates
       if (selectedColor == this.xyFlaggedColor) {
@@ -578,7 +572,6 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
-            console.log('x tempData[pointIndex]', tempData[pointIndex]);
             tempData[pointIndex]['flagType'] = flagTypes;
             if (!existingDupX) {
               this.flaggedData.push(tempData[pointIndex]);
@@ -593,7 +586,6 @@ export class GraphOptionsComponent implements OnInit {
           if (updateGraphCalled) {
             tempData = data;
             tempData[pointIndex]['flagType'] = flagTypes;
-            console.log('y tempData[pointIndex]', tempData[pointIndex]);
             if (!existingDupY) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -623,6 +615,7 @@ export class GraphOptionsComponent implements OnInit {
     console.log('this.flaggedData', this.flaggedData);
     updateGraphCalled = false;
     this.lasso = false;
+    this.flagAll = false;
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
