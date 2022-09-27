@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Includes option for user to designate flag types
 - CSV download of points plotted on map
 - CSV download of flag types added to metadata download
+- Ability to add annotation in flag option modal
 
 ### Changed
 
