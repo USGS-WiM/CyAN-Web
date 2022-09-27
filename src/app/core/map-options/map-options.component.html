@@ -61,7 +61,7 @@
           />
         </mat-chip-list>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedParameter($event)">
-            <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.pcode">
+            <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.short_name"> 
               {{ parameter.short_name }}
             </mat-option>
           </mat-autocomplete>
@@ -131,7 +131,8 @@
       aria-label="Click this button to filter points and plot them on the map">
       Plot Points
     </button>
-    <button class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download CSV" id="mapDownloadBtn">
+    <button class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download CSV" id="mapDownloadBtn"
+      (click)="downloadMapData()">
       <mat-icon>cloud_download</mat-icon>
     </button>
   </div>

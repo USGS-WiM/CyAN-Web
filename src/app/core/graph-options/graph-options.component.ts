@@ -47,9 +47,9 @@ export class GraphOptionsComponent implements OnInit {
 
   //flags
   flaggedData = [];
-  rolloverFlagsX = [];
-  rolloverFlagsY = [];
   showFlagOptions: Boolean = false;
+  showLassoFlagOptions: Boolean = false;
+  lasso: Boolean = false;
   sameQuery: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
@@ -58,6 +58,12 @@ export class GraphOptionsComponent implements OnInit {
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
     xyFlagControl: new FormControl(),
+    centralTendency: new FormControl(),
+    outlier: new FormControl(),
+    matrixInterference: new FormControl(),
+    dissolvedGTTotal: new FormControl(),
+    phytoChl: new FormControl(),
+    unknown: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -71,8 +77,9 @@ export class GraphOptionsComponent implements OnInit {
   public unflaggedSymbol: string = 'circle-open';
   public flaggedSymbol: string = 'circle';
   //Prevent duplicates
-  existingDupX: Boolean = false;
-  existingDupY: Boolean = false;
+  //existingDupX: Boolean = false;
+  //existingDupY: Boolean = false;
+  public selectedPoints;
 
   //Intermediate data
   public matchingMcodesY = [];
@@ -106,8 +113,6 @@ export class GraphOptionsComponent implements OnInit {
   public currentXaxisValues = [];
   public currentYaxisValues = [];
   public flaggedPointIndices = { x: [], y: [] };
-  public xFlaggedPointIndices: Array<number> = [];
-  public yFlaggedPointIndices: Array<number> = [];
   public allGraphData;
   public graphMetadata;
 
@@ -194,13 +199,6 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public initiateGraphService() {
-    //rolloverFlags means the flags that were assigned for these specific datasets in a graph that was previously generated
-    this.graphSelectionsService.flagIndexX.subscribe((xFlags) => {
-      this.rolloverFlagsX = xFlags;
-    });
-    this.graphSelectionsService.flagIndexY.subscribe((yFlags) => {
-      this.rolloverFlagsY = yFlags;
-    });
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
       if (flags) {
         if (flags.length > 0) {
@@ -233,7 +231,7 @@ export class GraphOptionsComponent implements OnInit {
                   this.alreadyGraphed = true;
 
                   //Create and display graph
-                  this.createGraph();
+                  this.createGraph(true);
                   //Prepare graph metadata
                   this.createGraphMetadata();
 
@@ -368,9 +366,11 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
-  public createGraph() {
-    this.allColors = this.graphSelectionsService.pointColors;
-    this.allShapes = this.graphSelectionsService.pointSymbol;
+  public createGraph(newPlot: Boolean) {
+    if (newPlot) {
+      this.allColors = this.graphSelectionsService.pointColors;
+      this.allShapes = this.graphSelectionsService.pointSymbol;
+    }
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
@@ -423,10 +423,12 @@ export class GraphOptionsComponent implements OnInit {
 
     //build the graph
     Plotly.newPlot(this.bivariatePlot, data, layout, {
+      displayModeBar: true,
       displaylogo: false,
+      modeBarButtonsToRemove: ['select', 'resetscale', 'zoomin', 'zoomout'],
     });
 
-    this.clickPoint();
+    this.initiateSelectPoints();
   }
 
   flagAllData() {
@@ -443,20 +445,27 @@ export class GraphOptionsComponent implements OnInit {
     let numPts = xData.length;
     const colorArr = Array(numPts).fill(this.xyFlaggedColor);
     const shapeArr = Array(numPts).fill(this.flaggedSymbol);
+
+    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
     //New styling for new plot
-    var update = {
+    let update = {
       marker: { color: colorArr, size: 12, symbol: shapeArr },
     };
 
+    this.allColors = colorArr;
+    this.allShapes = shapeArr;
+
     //Change the color on the graph
     Plotly.restyle('graph', update);
-    console.log(this.flaggedData);
-    this.graphSelectionsService.flagsSubject.next(this.flaggedData);
   }
 
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
+    if (this.lasso) {
+      this.createGraph(false);
+      this.lasso = false;
+    }
 
     //enable all features that were disabled when modal was open
     this.disableEnable('graph', true, false);
@@ -490,87 +499,62 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Called whenever a flag is selected/deselected
-  updateGraph(color: String, axis: String, symbol: String) {
-    let pointIndex = '';
-    let colors: [];
-    let symbols: [];
+  updateGraph(color: String, axis: String, symbol: String, flagTypes) {
     let updateGraphCalled = true;
 
-    //clickedPoints contains info about the click point: index of the point in the array created for this graph, the x and y values, and the marker display
-    for (let i = 0; i < this.clickedPoint.points.length; i++) {
-      //unique id/index for selected point for this specific graph
-      pointIndex = this.clickedPoint.points[i].pointIndex;
-      //data.marker.color = marker color array for all points in rgb
-      colors = this.clickedPoint.points[i].data.marker.color;
-      //data.marker.symbol = array of shapes for all points
-      symbols = this.clickedPoint.points[i].data.marker.symbol;
+    let colors = this.allColors;
+    let symbols = this.allShapes;
 
-      //x and y data are flagged separately; need to keep track of which axis was flagged
-      if (axis == 'x' || axis == 'both') {
-        if (!this.flaggedPointIndices.x) {
-          //if there are no x-axis flags, create empty array
-          this.flaggedPointIndices.x = [];
-        }
-        //add new x-axis index to the array (if it's not already there)
-        if (!this.existingDupX) {
-          this.flaggedPointIndices.x.push(
-            this.clickedPoint.points[i].pointIndex
-          );
-        }
+    for (let i = 0; i < this.selectedPoints.length; i++) {
+      let existingDupX = false;
+      let existingDupY = false;
+      let pointIndex = this.selectedPoints[i].pointIndex;
+      let selectedColor = this.selectedPoints[i]['marker.color'];
+
+      //Used for preventing flag duplicates
+      if (selectedColor == this.xyFlaggedColor) {
+        existingDupX = true;
+        existingDupY = true;
       }
-      if (axis == 'y' || axis == 'both') {
-        if (!this.flaggedPointIndices.y) {
-          //if there are no y-axis flags, create empty array
-          this.flaggedPointIndices.y = [];
-        }
-        //add new y-axis index to the array
-        if (!this.existingDupY) {
-          this.flaggedPointIndices.y.push(
-            this.clickedPoint.points[i].pointIndex
-          );
-        }
+      if (selectedColor == this.xFlaggedColor) {
+        existingDupX = true;
       }
-      if (axis == 'none') {
-        if (this.flaggedPointIndices.y) {
-          for (let i = 0; i < this.flaggedPointIndices.y.length; i++) {
-            if (pointIndex == this.flaggedPointIndices.y.length[i]) {
-              this.flaggedPointIndices.y = this.flaggedPointIndices.y.splice(
-                i,
-                1
-              );
+      if (selectedColor == this.yFlaggedColor) {
+        existingDupY = true;
+      }
+      //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
+      colors[pointIndex] = color;
+      //Change the symbol of the point at the correct index (flagged pts become filled circles; unflagged becomes hollow circle)
+      symbols[pointIndex] = symbol;
+
+      //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
+      //if neither are selected, ensure that neither are in the flaggedData array
+      if (axis == 'x' || axis == 'none') {
+        if (this.flaggedData) {
+          this.graphSelectionsService.allGraphDataYSubject.subscribe(
+            (ydata) => {
+              if (updateGraphCalled) {
+                let pointToRemove = ydata[pointIndex];
+                let rcodeToRemove = pointToRemove.rcode;
+                for (let i = 0; i < this.flaggedData.length; i++) {
+                  if (rcodeToRemove == this.flaggedData[i].rcode) {
+                    this.flaggedData.splice(i, 1);
+                    this.graphSelectionsService.flagsSubject.next(
+                      this.flaggedData
+                    );
+                  }
+                }
+              }
             }
-          }
-        }
-        if (this.flaggedPointIndices.x) {
-          if (pointIndex == this.flaggedPointIndices.x.length[i]) {
-            this.flaggedPointIndices.x = this.flaggedPointIndices.x.splice(
-              i,
-              1
-            );
-          }
+          );
         }
       }
-    }
-
-    //Change the color of the point at the correct index (according to x-axis, y-axis, or both selection)
-    colors[pointIndex] = color;
-    //Change the symbol of the point at the correct index (flagged pts become filled circles; unflagged becomes hollow circle)
-    symbols[pointIndex] = symbol;
-
-    //New styling for new plot
-    var update = {
-      marker: { color: colors, size: 12, symbol: symbols },
-    };
-
-    //Change the color on the graph
-    Plotly.restyle('graph', update);
-    //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
-    //if neither are selected, ensure that neither are in the flaggedData array
-    if (axis == 'x' || axis == 'none') {
-      if (this.flaggedData) {
-        this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+      //if only the y-axis is selected, make sure the x-value at that point isn't in the flaggedData array
+      //if neither are selected, ensure that neither are in the flaggedData array
+      if (axis == 'y' || axis == 'none') {
+        this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
           if (updateGraphCalled) {
-            let pointToRemove = ydata[pointIndex];
+            let pointToRemove = xdata[pointIndex];
             let rcodeToRemove = pointToRemove.rcode;
             for (let i = 0; i < this.flaggedData.length; i++) {
               if (rcodeToRemove == this.flaggedData[i].rcode) {
@@ -581,142 +565,205 @@ export class GraphOptionsComponent implements OnInit {
           }
         });
       }
-    }
-    //if only the y-axis is selected, make sure the x-value at that point isn't in the flaggedData array
-    //if neither are selected, ensure that neither are in the flaggedData array
-    if (axis == 'y' || axis == 'none') {
-      this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
-        if (updateGraphCalled) {
-          let pointToRemove = xdata[pointIndex];
-          let rcodeToRemove = pointToRemove.rcode;
-          for (let i = 0; i < this.flaggedData.length; i++) {
-            if (rcodeToRemove == this.flaggedData[i].rcode) {
-              this.flaggedData.splice(i, 1);
+
+      let tempData;
+      if (axis == 'x' || axis == 'both') {
+        //Get all of the data corresponding with the flagged point
+        this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
+          if (updateGraphCalled) {
+            tempData = data;
+            console.log('x tempData[pointIndex]', tempData[pointIndex]);
+            tempData[pointIndex]['flagType'] = flagTypes;
+            if (!existingDupX) {
+              this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
             }
           }
-        }
-      });
+        });
+      }
+      if (axis == 'y' || axis == 'both') {
+        //Get all of the data corresponding with the flagged point
+        this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
+          if (updateGraphCalled) {
+            tempData = data;
+            tempData[pointIndex]['flagType'] = flagTypes;
+            console.log('y tempData[pointIndex]', tempData[pointIndex]);
+            if (!existingDupY) {
+              this.flaggedData.push(tempData[pointIndex]);
+              this.graphSelectionsService.flagsSubject.next(this.flaggedData);
+            }
+          }
+        });
+      }
     }
 
-    let tempData;
-    if (axis == 'x' || axis == 'both') {
-      //Get all of the data corresponding with the flagged point
-      this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
-        if (updateGraphCalled) {
-          tempData = data;
-          if (!this.existingDupX) {
-            this.flaggedData.push(
-              tempData[
-                this.flaggedPointIndices.x[
-                  this.flaggedPointIndices.x.length - 1
-                ]
-              ]
-            );
-            this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-          }
-        }
-      });
+    //New styling for new plot
+    let update = {
+      marker: { color: colors, size: 12, symbol: symbols },
+    };
+
+    this.allColors = colors;
+    this.allShapes = symbols;
+
+    //Change the color on the graph
+    if (!this.lasso) {
+      Plotly.restyle('graph', update);
     }
-    if (axis == 'y' || axis == 'both') {
-      //Get all of the data corresponding with the flagged point
-      this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
-        if (updateGraphCalled) {
-          tempData = data;
-          if (!this.existingDupY) {
-            this.flaggedData.push(
-              tempData[
-                this.flaggedPointIndices.y[
-                  this.flaggedPointIndices.y.length - 1
-                ]
-              ]
-            );
-            this.graphSelectionsService.flagsSubject.next(this.flaggedData);
-          }
-        }
-      });
+    //Override the default Plotly post-lasso view by re-drawing graph
+    if (this.lasso) {
+      this.createGraph(false);
     }
+
     console.log('this.flaggedData', this.flaggedData);
     updateGraphCalled = false;
-    this.existingDupX = false;
-    this.existingDupY = false;
+    this.lasso = false;
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
-    let xChecked = this.axisFlagForm.get('xFlagControl').value;
-    let yChecked = this.axisFlagForm.get('yFlagControl').value;
-    if (xChecked && yChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
-    }
-    //Y checked; x not checked
-    if (yChecked && !xChecked) {
-      this.updateGraph(this.yFlaggedColor, 'y', this.flaggedSymbol);
-    }
+    let flagTypes = this.flagTypes();
+    if (!this.sameQuery) {
+      let xChecked = this.axisFlagForm.get('xFlagControl').value;
+      let yChecked = this.axisFlagForm.get('yFlagControl').value;
 
-    //X checked; Y not checked
-    if (!yChecked && xChecked) {
-      this.updateGraph(this.xFlaggedColor, 'x', this.flaggedSymbol);
-    }
+      if (xChecked && yChecked) {
+        this.updateGraph(
+          this.xyFlaggedColor,
+          'both',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
+      //Y checked; x not checked
+      if (yChecked && !xChecked) {
+        this.updateGraph(
+          this.yFlaggedColor,
+          'y',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
 
-    //Neither X nor y checked
-    if (!yChecked && !xChecked) {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+      //X checked; Y not checked
+      if (!yChecked && xChecked) {
+        this.updateGraph(
+          this.xFlaggedColor,
+          'x',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      }
+
+      //Neither X nor y checked
+      if (!yChecked && !xChecked) {
+        this.updateGraph(
+          this.unflaggedColor,
+          'none',
+          this.unflaggedSymbol,
+          flagTypes
+        );
+      }
+      this.flagTypes();
+    }
+    if (this.sameQuery) {
+      let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+      //Since x and y are identical, only add x data to the flags
+      if (xyChecked) {
+        this.updateGraph(
+          this.xyFlaggedColor,
+          'x',
+          this.flaggedSymbol,
+          flagTypes
+        );
+      } else {
+        this.updateGraph(
+          this.unflaggedColor,
+          'none',
+          this.unflaggedSymbol,
+          flagTypes
+        );
+      }
     }
 
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
-  //Submit flag selections when x and y axes are the same data
-  submitFlagSelectionsSingle() {
-    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
-    if (xyChecked) {
-      this.updateGraph(this.xyFlaggedColor, 'both', this.flaggedSymbol);
-    } else {
-      this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol);
+
+  public flagTypes() {
+    let centralTendency = this.axisFlagForm.get('centralTendency').value;
+    let outlier = this.axisFlagForm.get('outlier').value;
+    let matrixInterference = this.axisFlagForm.get('matrixInterference').value;
+    let dissolvedGTTotal = this.axisFlagForm.get('dissolvedGTTotal').value;
+    let phytoChl = this.axisFlagForm.get('phytoChl').value;
+    let unknown = this.axisFlagForm.get('unknown').value;
+
+    let flagTypes = '';
+    if (centralTendency) {
+      flagTypes += 'Central tendency; ';
     }
-    //Close flag modal and clear selections
-    this.closeFlagOptions();
+    if (outlier) {
+      flagTypes += 'Outlier; ';
+    }
+    if (matrixInterference) {
+      flagTypes += 'Matrix or recovery problem; ';
+    }
+    if (dissolvedGTTotal) {
+      flagTypes += 'Dissolved result > Total; ';
+    }
+    if (phytoChl) {
+      flagTypes += 'Phytoplankton vs Chl; ';
+    }
+    if (unknown) {
+      flagTypes += 'Unknown';
+    }
+    this.axisFlagForm.get('centralTendency').setValue(null);
+    this.axisFlagForm.get('outlier').setValue(null);
+    this.axisFlagForm.get('matrixInterference').setValue(null);
+    this.axisFlagForm.get('dissolvedGTTotal').setValue(null);
+    this.axisFlagForm.get('phytoChl').setValue(null);
+    this.axisFlagForm.get('unknown').setValue(null);
+    return flagTypes;
   }
 
-  //Change color of flagged point and add x & y data to arrays
-  public clickPoint() {
+  public initiateSelectPoints() {
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal
-      this.axisFlagFormCheckBoxes(selectedPoints);
-      this.clickedPoint = selectedPoints;
-      //Open flag options modal
-      this.showFlagOptions = true;
-      this.disableEnable('graph', false, false);
-      this.disableEnable('graphDownload', false, true);
-      this.disableEnable('flagAll', false, true);
-      this.disableEnable('graphOptionsBackgroundID', false, false);
+      this.axisFlagFormCheckBoxes(selectedPoints.points);
+      this.selectPoints(selectedPoints.points);
+    });
+    this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
+      this.lasso = true;
+      this.selectPoints(selectedPoints.points);
     });
   }
 
+  public selectPoints(selectedPoints) {
+    this.selectedPoints = selectedPoints;
+    //Open flag options modal
+    this.showFlagOptions = true;
+    //Prevent user from clicking on features outside the modal
+    this.disableEnable('graph', false, false);
+    this.disableEnable('graphDownload', false, true);
+    this.disableEnable('flagAll', false, true);
+    this.disableEnable('graphOptionsBackgroundID', false, false);
+  }
+
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
-  axisFlagFormCheckBoxes(selectedPoints) {
-    let selectedColor = selectedPoints.points[0]['marker.color'];
+  public axisFlagFormCheckBoxes(selectedPoints) {
+    let selectedColor = selectedPoints[0]['marker.color'];
     if (selectedColor == this.xyFlaggedColor) {
       //check both boxes
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
       this.axisFlagForm.get('xyFlagControl').setValue(true);
-      //Used for preventing flag duplicates
-      this.existingDupX = true;
-      this.existingDupY = true;
     }
     if (selectedColor == this.xFlaggedColor) {
       //check the x box
       this.axisFlagForm.get('xFlagControl').setValue(true);
-      //Used for preventing flag duplicates
-      this.existingDupY = true;
     }
     if (selectedColor == this.yFlaggedColor) {
       //check the y box
       this.axisFlagForm.get('yFlagControl').setValue(true);
-      //Used for preventing flag duplicates
-      this.existingDupY = true;
     }
   }
 
@@ -1095,7 +1142,7 @@ export class GraphOptionsComponent implements OnInit {
     }
 
     if (this.showGraph) {
-      this.createGraph();
+      this.createGraph(false);
     }
   }
   // filter using typed string

@@ -25,11 +25,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Auto-deploy to test site on push to `dev` branch
 - Autocomplete and chiplist to Map parameters input
 - Autocomplete to Graph X,Y parameter inputs
+- Plotly lasso select tools works to create flags
+- Includes option for user to designate flag types
+- CSV download of points plotted on map
 
 ### Changed
 
--
+- Removes extra modebar buttons
 
 ### Fixed
 
 - User can now upload a second flag file with no errors
+- Graph no longer loses visual flags when browser window is resized
