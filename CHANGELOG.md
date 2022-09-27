@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Plotly lasso select tools works to create flags
 - Includes option for user to designate flag types
 - CSV download of points plotted on map
+- CSV download of flag types added to metadata download
 
 ### Changed
 
