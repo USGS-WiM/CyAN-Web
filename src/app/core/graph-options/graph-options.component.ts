@@ -449,6 +449,8 @@ export class GraphOptionsComponent implements OnInit {
     let colors = this.allColors;
     let symbols = this.allShapes;
     let numPts;
+
+    //If flagAll button is clicked, need to get attributes outside of Plotly
     if (this.flagAll) {
       numPts = this.currentXaxisValues.length;
     }
@@ -466,7 +468,9 @@ export class GraphOptionsComponent implements OnInit {
         selectedColor = this.selectedPoints[i]['marker.color'];
       }
       if (this.flagAll) {
+        //If flagging all points, we'll be looping through every point index
         pointIndex = i;
+        //Get current point color to check for duplicates
         selectedColor = this.allColors[i];
       }
 
