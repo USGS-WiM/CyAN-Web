@@ -1,4 +1,9 @@
-import { Component, OnInit, HostListener, IterableDiffers } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  IterableDiffers,
+} from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
@@ -101,7 +106,7 @@ export class GraphOptionsComponent implements OnInit {
   filteredParametersX: Observable<any[]>;
   filteredParametersY: Observable<any[]>;
   iterableDiffer;
-  
+
   //Graph data
   public xDataTrace1;
   public yDataTrace1;
@@ -159,16 +164,20 @@ export class GraphOptionsComponent implements OnInit {
     // there may be a better way to do this
     let changes = this.iterableDiffer.diff(this.parameterTypes);
     if (changes) {
-        this.filteredParametersX = this.graphSelectionsForm.get('ParametersX').valueChanges.pipe(
+      this.filteredParametersX = this.graphSelectionsForm
+        .get('ParametersX')
+        .valueChanges.pipe(
           startWith(null),
           map((parameter: string | null) =>
-          parameter ? this._filter(parameter) : this.parameterTypes.slice()
+            parameter ? this._filter(parameter) : this.parameterTypes.slice()
           )
         );
-        this.filteredParametersY = this.graphSelectionsForm.get('ParametersY').valueChanges.pipe(
+      this.filteredParametersY = this.graphSelectionsForm
+        .get('ParametersY')
+        .valueChanges.pipe(
           startWith(null),
           map((parameter: string | null) =>
-          parameter ? this._filter(parameter) : this.parameterTypes.slice()
+            parameter ? this._filter(parameter) : this.parameterTypes.slice()
           )
         );
     }
@@ -312,9 +321,9 @@ export class GraphOptionsComponent implements OnInit {
         this.filterQueryX.meta.include_NULL,
         formattedRegion,
         this.filterQueryX.meta.satellite_align,
-        this.graphSelectionsForm.get('ParametersX').value,
+        this.graphSelectionsForm.get('ParametersX').value.pcode,
         formattedMcodeX,
-        this.graphSelectionsForm.get('ParametersY').value,
+        this.graphSelectionsForm.get('ParametersY').value.pcode,
         formattedMcodeY,
         this.xAxisUnits,
         this.yAxisUnits,
@@ -1147,20 +1156,23 @@ export class GraphOptionsComponent implements OnInit {
   _filter(name: string) {
     if (name.length == undefined) {
       return this.parameterTypes.filter(
-        (parameter) => parameter.short_name.toLowerCase().indexOf(name['short_name'].toLowerCase()) === 0
+        (parameter) =>
+          parameter.short_name
+            .toLowerCase()
+            .indexOf(name['short_name'].toLowerCase()) === 0
       );
     } else {
       return this.parameterTypes.filter(
-        (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
+        (parameter) =>
+          parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
       );
     }
   }
 
   // display the select parameter in the select box
-  display(selectedoption){
+  display(selectedoption) {
     if (selectedoption !== null) {
       return selectedoption.short_name ? selectedoption.short_name : '';
-    } 
+    }
   }
-
 }
