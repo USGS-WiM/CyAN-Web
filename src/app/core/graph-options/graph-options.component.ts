@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, IterableDiffers } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Options } from '@angular-slider/ngx-slider';
@@ -8,6 +8,7 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 import { Observable } from 'rxjs/Observable';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-graph-options',
@@ -96,6 +97,11 @@ export class GraphOptionsComponent implements OnInit {
   public mcodeShortName;
   public parameterTypes;
 
+  //Autocomplete
+  filteredParametersX: Observable<any[]>;
+  filteredParametersY: Observable<any[]>;
+  iterableDiffer;
+  
   //Graph data
   public xDataTrace1;
   public yDataTrace1;
@@ -125,11 +131,13 @@ export class GraphOptionsComponent implements OnInit {
     private filterService: FiltersService,
     private graphSelectionsService: GraphSelectionsService,
     public snackBar: MatSnackBar,
-    private componentDisplayService: ComponentDisplayService
+    private componentDisplayService: ComponentDisplayService,
+    private iterableDiffers: IterableDiffers
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
+    this.iterableDiffer = iterableDiffers.find([]).create(null);
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -144,6 +152,26 @@ export class GraphOptionsComponent implements OnInit {
     this.getDataForDropdowns();
     this.initiateGraphService();
     this.getUnits();
+  }
+
+  ngDoCheck() {
+    // Data processing slower then lifecycle hooks so waiting for array to be full before watching parameter control for changes
+    // there may be a better way to do this
+    let changes = this.iterableDiffer.diff(this.parameterTypes);
+    if (changes) {
+        this.filteredParametersX = this.graphSelectionsForm.get('ParametersX').valueChanges.pipe(
+          startWith(null),
+          map((parameter: string | null) =>
+          parameter ? this._filter(parameter) : this.parameterTypes.slice()
+          )
+        );
+        this.filteredParametersY = this.graphSelectionsForm.get('ParametersY').valueChanges.pipe(
+          startWith(null),
+          map((parameter: string | null) =>
+          parameter ? this._filter(parameter) : this.parameterTypes.slice()
+          )
+        );
+    }
   }
 
   public getDataForDropdowns() {
@@ -308,7 +336,7 @@ export class GraphOptionsComponent implements OnInit {
     //Get the parameter code from the dropdown selection
     let tempParameter = this.graphSelectionsForm.get(formName).value;
     for (let pcode in this.pcodeToMcode) {
-      if (pcode == tempParameter) {
+      if (pcode == tempParameter.pcode) {
         //get list of corresponding mcodes
         let mcodes = this.pcodeToMcode[pcode];
         //match the mcode to the mcode short names to populate dropdown
@@ -740,8 +768,8 @@ export class GraphOptionsComponent implements OnInit {
   public clickPlotData() {
     this.alreadyGraphed = false;
     //Get parameter and method user selections
-    let tempP_X = this.graphSelectionsForm.get('ParametersX').value;
-    let tempP_Y = this.graphSelectionsForm.get('ParametersY').value;
+    let tempP_X = this.graphSelectionsForm.get('ParametersX').value.pcode;
+    let tempP_Y = this.graphSelectionsForm.get('ParametersY').value.pcode;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
     //If any parameter or method is left blank, prompt user to make a selection
@@ -870,11 +898,11 @@ export class GraphOptionsComponent implements OnInit {
     let tempM;
 
     if (axis == 'xAxis') {
-      tempP = this.graphSelectionsForm.get('ParametersX').value;
+      tempP = this.graphSelectionsForm.get('ParametersX').value.pcode;
       tempM = this.graphSelectionsForm.get('MethodsX').value;
     }
     if (axis == 'yAxis') {
-      tempP = this.graphSelectionsForm.get('ParametersY').value;
+      tempP = this.graphSelectionsForm.get('ParametersY').value.pcode;
       tempM = this.graphSelectionsForm.get('MethodsY').value;
     }
 
@@ -1114,4 +1142,25 @@ export class GraphOptionsComponent implements OnInit {
       this.createGraph(false);
     }
   }
+
+  // filter using typed string
+  _filter(name: string) {
+    if (name.length == undefined) {
+      return this.parameterTypes.filter(
+        (parameter) => parameter.short_name.toLowerCase().indexOf(name['short_name'].toLowerCase()) === 0
+      );
+    } else {
+      return this.parameterTypes.filter(
+        (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
+      );
+    }
+  }
+
+  // display the select parameter in the select box
+  display(selectedoption){
+    if (selectedoption !== null) {
+      return selectedoption.short_name ? selectedoption.short_name : '';
+    } 
+  }
+
 }
