@@ -68,16 +68,19 @@
     <div id="graphFilters">
       <div class="custom-slider leftBreak"
         aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph.">
-        <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions"></ngx-slider>
+        <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions" (userChange)="uncheckDatefromMapOptions()"></ngx-slider>
+        <mat-checkbox [disableRipple]="true" (change)="applyDatesFromMap($event)"
+        aria-label="Check this box to use date range from map options" #datefromMap class="datefromMapOptions">Use date range from map options
+    </mat-checkbox>
       </div>
       <div class="leftBreak">
         Log Scale &nbsp;
         <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogX($event)"
-          aria-label="Checking this box will add a logarithmic scale to the x-axis ">x
+          aria-label="Checking this box will add a logarithmic scale to the x-axis">x
         </mat-checkbox>
         &nbsp;
         <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogY($event)"
-          aria-label="Checking this box will add a logarithmic scale to the y-axis ">y
+          aria-label="Checking this box will add a logarithmic scale to the y-axis">y
         </mat-checkbox>
       </div>
       <div class="leftTopBreak" aria-label="Checking this box will filter points using the current map extent">

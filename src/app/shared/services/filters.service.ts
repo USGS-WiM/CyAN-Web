@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { tap, shareReplay } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { APP_SETTINGS } from 'src/app/app.settings';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +34,20 @@ export class FiltersService {
       tap(() => console.log('aftersharing'))
     );
     this.flagTypes = APP_SETTINGS.flagTypes();
+  }
+
+  // Observables for min and max year of map options
+  public minYearSubject = new BehaviorSubject<number>(1975);
+  minYear$ = this.minYearSubject.asObservable();
+
+  public maxYearSubject = new BehaviorSubject<number>(2021);
+  maxYear$ = this.maxYearSubject.asObservable();
+
+  // functions to update the observables
+  public getMinYear(min: number) {
+    this.minYearSubject.next(min);
+  }
+  public getMaxYear(max: number) {
+    this.maxYearSubject.next(max);
   }
 }
