@@ -641,6 +641,7 @@ export class GraphOptionsComponent implements OnInit {
       'flagAnnotation'
     ) as HTMLInputElement | null;
     annotation = input?.value;
+    annotation = annotation.replace(/,/g, ';');
     let flagTypes = this.flagTypes();
     if (!this.sameQuery) {
       let xChecked = this.axisFlagForm.get('xFlagControl').value;
