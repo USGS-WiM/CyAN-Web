@@ -78,7 +78,7 @@
     </form>
     <div class="custom-slider leftBreak"
       aria-label="This is a slider filter. It determines the minimum and maximum years of the points displayed in the map">
-      <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions"></ngx-slider>
+      <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions" (userChange)="updateYears($event)"></ngx-slider>
     </div>
     <div style="margin-left: 10px; margin-top: 10px">
       <form [formGroup]="regionForm">

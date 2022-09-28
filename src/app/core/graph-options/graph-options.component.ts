@@ -3,6 +3,7 @@ import {
   OnInit,
   HostListener,
   IterableDiffers,
+  ViewChild,
 } from '@angular/core';
 import * as Plotly from 'plotly.js-dist';
 import { FormControl, FormGroup } from '@angular/forms';
@@ -11,7 +12,7 @@ import { FiltersService } from '../../shared/services/filters.service';
 import { GraphSelectionsService } from 'src/app/shared/services/graph-selections.service';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { Observable } from 'rxjs/Observable';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
 
@@ -49,6 +50,8 @@ export class GraphOptionsComponent implements OnInit {
   east: number = 180;
   west: number = -180;
   regions: any[];
+  datefromMapChecked = false;
+  @ViewChild('datefromMap') datefromMap: MatCheckbox;
 
   //flags
   flaggedData = [];
@@ -1201,5 +1204,27 @@ export class GraphOptionsComponent implements OnInit {
     if (selectedoption !== null) {
       return selectedoption.short_name ? selectedoption.short_name : '';
     }
+  }
+
+  // use min & max year values from map options
+  applyDatesFromMap(event) {
+    if (event.checked == true) {
+      // getting min & max set in map options 
+      this.filterService.minYear$.subscribe((year) => {
+        this.minYear = year;
+      });
+      this.filterService.maxYear$.subscribe((year) => {
+        this.maxYear = year;
+      });
+    } else {
+      // reseting graph min & max but leaving map options observables alone
+      // if user checks box it will default to map option again
+      this.minYear = 1975
+      this.maxYear = 2021
+    }
+    
+  }
+  uncheckDatefromMapOptions() {
+    this.datefromMap.checked = false;
   }
 }

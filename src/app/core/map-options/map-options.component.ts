@@ -690,4 +690,11 @@ export class MapOptionsComponent implements OnInit {
     this.paramMethodForm.get('parameterControl').setValue(null);
     this.parameterSelected();
   }
+
+  // called when slider is adjusted and updates min & max year observables for use in other components
+  updateYears(event){
+    this.filterService.getMaxYear(event.highValue);
+    this.filterService.getMinYear(event.value)
+  }
+
 }
