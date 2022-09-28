@@ -486,7 +486,13 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Called whenever a flag is selected/deselected
-  updateGraph(color: String, axis: String, symbol: String, flagTypes) {
+  updateGraph(
+    color: String,
+    axis: String,
+    symbol: String,
+    flagTypes,
+    annotation: String
+  ) {
     let updateGraphCalled = true;
     let colors = this.allColors;
     let symbols = this.allShapes;
@@ -578,6 +584,7 @@ export class GraphOptionsComponent implements OnInit {
           if (updateGraphCalled) {
             tempData = data;
             tempData[pointIndex]['flagType'] = flagTypes;
+            tempData[pointIndex]['annotation'] = annotation;
             if (!existingDupX) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -591,6 +598,7 @@ export class GraphOptionsComponent implements OnInit {
           if (updateGraphCalled) {
             tempData = data;
             tempData[pointIndex]['flagType'] = flagTypes;
+            tempData[pointIndex]['annotation'] = annotation;
             if (!existingDupY) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -623,8 +631,20 @@ export class GraphOptionsComponent implements OnInit {
     this.flagAll = false;
   }
 
+  public selectText() {
+    const input = document.getElementById('text-box');
+    input.focus();
+  }
+
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
+    //Capture user input in the annotation box
+    let annotation = '';
+    let input = document.getElementById(
+      'flagAnnotation'
+    ) as HTMLInputElement | null;
+    annotation = input?.value;
+    annotation = annotation.replace(/,/g, ';');
     let flagTypes = this.flagTypes();
     if (!this.sameQuery) {
       let xChecked = this.axisFlagForm.get('xFlagControl').value;
@@ -635,7 +655,8 @@ export class GraphOptionsComponent implements OnInit {
           this.xyFlaggedColor,
           'both',
           this.flaggedSymbol,
-          flagTypes
+          flagTypes,
+          annotation
         );
       }
       //Y checked; x not checked
@@ -644,7 +665,8 @@ export class GraphOptionsComponent implements OnInit {
           this.yFlaggedColor,
           'y',
           this.flaggedSymbol,
-          flagTypes
+          flagTypes,
+          annotation
         );
       }
 
@@ -654,7 +676,8 @@ export class GraphOptionsComponent implements OnInit {
           this.xFlaggedColor,
           'x',
           this.flaggedSymbol,
-          flagTypes
+          flagTypes,
+          annotation
         );
       }
 
@@ -664,7 +687,8 @@ export class GraphOptionsComponent implements OnInit {
           this.unflaggedColor,
           'none',
           this.unflaggedSymbol,
-          flagTypes
+          flagTypes,
+          annotation
         );
       }
       this.flagTypes();
@@ -677,16 +701,23 @@ export class GraphOptionsComponent implements OnInit {
           this.xyFlaggedColor,
           'x',
           this.flaggedSymbol,
-          flagTypes
+          flagTypes,
+          annotation
         );
       } else {
         this.updateGraph(
           this.unflaggedColor,
           'none',
           this.unflaggedSymbol,
-          flagTypes
+          flagTypes,
+          annotation
         );
       }
+    }
+
+    //Clear annotation form
+    if (input.value) {
+      input.value = null;
     }
 
     //Close flag modal and clear selections
