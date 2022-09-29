@@ -71,10 +71,12 @@
     <div id="graphFilters">
       <div class="custom-slider leftBreak"
         aria-label="This is a slider for choosing the minimum and maximum years that will be represented in the graph.">
-        <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions" (userChange)="uncheckDatefromMapOptions()"></ngx-slider>
+        <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions"
+          (userChange)="uncheckDatefromMapOptions()"></ngx-slider>
         <mat-checkbox [disableRipple]="true" (change)="applyDatesFromMap($event)"
-        aria-label="Check this box to use date range from map options" #datefromMap class="datefromMapOptions">Use date range from map options
-    </mat-checkbox>
+          aria-label="Check this box to use date range from map options" #datefromMap class="datefromMapOptions">Use
+          date range from map options
+        </mat-checkbox>
       </div>
       <div class="leftBreak">
         Log Scale &nbsp;
@@ -193,6 +195,10 @@
       <div id='flagAll' class="graphDataDownload" (click)="flagAllData()" [hidden]="!showGraph"
         matTooltip="Flag plotted data">
         <mat-icon class="downloadIcon">flag</mat-icon>
+      </div>
+      <div id='flagAll' class="graphDataDownload" (click)="flagAllData()" [hidden]="!showGraph"
+        matTooltip="Unflag plotted data">
+        <mat-icon class="downloadIcon">block</mat-icon>
       </div>
       <div id='graphDownload' class="graphDataDownload btnMargin" (click)="downloadAllGraphData()" [hidden]="!showGraph"
         matTooltip="Download plotted data">
