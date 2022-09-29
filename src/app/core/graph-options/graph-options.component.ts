@@ -19,7 +19,7 @@ import { map, startWith } from 'rxjs/operators';
 @Component({
   selector: 'app-graph-options',
   templateUrl: './graph-options.component.html',
-  styleUrls: ['./../core.component.scss'],
+  styleUrls: ['./graph-options.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
   //Overall display
@@ -151,12 +151,10 @@ export class GraphOptionsComponent implements OnInit {
   //Adjust the css (via resizeDivs()) when the window is resized
   @HostListener('window:resize')
   onResize() {
-    this.resizeDivs();
   }
 
   ngOnInit(): void {
     //Set the display according to the initial screen dimensions
-    this.resizeDivs();
     this.getDataForDropdowns();
     this.initiateGraphService();
     this.getUnits();
@@ -372,7 +370,6 @@ export class GraphOptionsComponent implements OnInit {
   //Shrinks Graph Options panel into a button and expands the graph
   public collapseGraphOptions(collapsed: Boolean) {
     this.graphOptionsVisible = collapsed;
-    this.resizeDivs();
   }
 
   public createGraph(newPlot: Boolean) {
@@ -833,7 +830,6 @@ export class GraphOptionsComponent implements OnInit {
       this.disableEnable('graphDataDownloadBtn', false, true);
       this.showGraph = false;
       this.populateGraphData();
-      this.resizeDivs();
 
       //minimize graph options panel if the screen width is small
       let windowWidth = window.innerWidth;
@@ -1090,97 +1086,10 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Every time the window is resized, change size and position of elements accordingly
-  public resizeDivs() {
-    //get window dimensions
-    let windowHeight = window.innerHeight;
-    let windowWidth = window.innerWidth;
 
-    this.graphHeight = 0.7 * window.innerHeight;
-
-    let graphOptionsBackgroundID = document.getElementById(
-      'graphOptionsBackgroundID'
-    );
-    let graphBackgroundID = document.getElementById('graphBackgroundID');
-    let graphOptionsCollapsedID = document.getElementById(
-      'graphOptionsCollapsedID'
-    );
-
-    if (windowWidth < 800) {
-      graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
-      graphOptionsBackgroundID.classList.add('marginLeftSmallWidth');
-
-      graphOptionsCollapsedID.classList.remove('marginLeftFullWidth');
-      graphOptionsCollapsedID.classList.add('marginLeftSmallWidth');
-
-      graphOptionsBackgroundID.classList.remove('optionsMarginRightLarge');
-      graphOptionsBackgroundID.classList.add('optionsMarginRightSmall');
-
-      if (this.graphOptionsVisible) {
-        this.graphWidth = 0.95 * windowWidth - 245;
-      }
-      if (!this.graphOptionsVisible) {
-        this.graphWidth = 0.95 * windowWidth - 65;
-      }
-    }
-    if (windowWidth > 800) {
-      graphOptionsBackgroundID.classList.add('marginLeftFullWidth');
-      graphOptionsBackgroundID.classList.remove('marginLeftSmallWidth');
-
-      graphOptionsCollapsedID.classList.add('marginLeftFullWidth');
-      graphOptionsCollapsedID.classList.remove('marginLeftSmallWidth');
-
-      graphOptionsBackgroundID.classList.add('optionsMarginRightLarge');
-      graphOptionsBackgroundID.classList.remove('optionsMarginRightSmall');
-
-      if (this.graphOptionsVisible) {
-        this.graphWidth = 0.8 * windowWidth - 400;
-      }
-      if (!this.graphOptionsVisible) {
-        this.graphWidth = 0.8 * windowWidth - 165;
-      }
-    }
-    if (windowHeight < 723) {
-      graphOptionsBackgroundID.classList.remove('marginTopFullHeight');
-      graphOptionsBackgroundID.classList.add('marginTopSmallHeight');
-
-      graphBackgroundID.classList.remove('marginTopFullHeight');
-      graphBackgroundID.classList.add('marginTopSmallHeight');
-
-      graphOptionsCollapsedID.classList.remove('marginTopFullHeight');
-      graphOptionsCollapsedID.classList.add('marginTopSmallHeight');
-    }
-    if (windowHeight > 723) {
-      graphOptionsBackgroundID.classList.add('marginTopFullHeight');
-      graphOptionsBackgroundID.classList.remove('marginTopSmallHeight');
-
-      graphBackgroundID.classList.add('marginTopFullHeight');
-      graphBackgroundID.classList.remove('marginTopSmallHeight');
-
-      graphOptionsCollapsedID.classList.add('marginTopFullHeight');
-      graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
-    }
-    if (windowHeight < 700) {
-      //add scrollbar
-      graphOptionsBackgroundID.classList.add('optionsBackgroundResponsive');
-      graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightSmall');
-    }
-    if (windowHeight > 700) {
-      //remove scrollbar
-      graphOptionsBackgroundID.classList.remove('optionsBackgroundResponsive');
-      graphOptionsBackgroundID.classList.add('optionsBackgroundHeightSmall');
-    }
-    if (windowWidth > 1200 && windowHeight > 450) {
-      this.graphMargins = 80;
-    }
-    if (windowWidth < 1200 || windowHeight < 450) {
-      //commenting this out for now because shrinking the margins make the axes titles overlap with the tick marks
-      //this.graphMargins = 20;
-    }
-
-    if (this.showGraph) {
-      this.createGraph(false);
-    }
-  }
+    // if (this.showGraph) {
+    //   this.createGraph(false);
+    // }
 
   // filter using typed string
   _filter(name: string) {

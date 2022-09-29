@@ -17,7 +17,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 @Component({
   selector: 'app-map-options',
   templateUrl: './map-options.component.html',
-  styleUrls: ['./../core.component.scss'],
+  styleUrls: ['./map-options.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
 

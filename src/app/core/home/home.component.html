@@ -1,3 +1,47 @@
+
+
+<div id="cyanControlArea">
+
+	<div id="cyanMenuTabs">
+		<!-- Home -->
+		<button class="home" (click)="viewTab = null">
+			<i class="fas fa-home"></i>
+			<span>CyAN FIELD</span>
+		</button>
+		<!-- Map -->
+		<button class="map" (click)="viewTab = 'map'" [ngClass]="{'active': viewTab == 'map'}">
+			<i class="fas fa-map-location"></i>
+			<span>Map</span>
+		</button>
+		<!-- Graph -->
+		<button class="graph" (click)="viewTab = 'graph'" [ngClass]="{'active': viewTab == 'graph'}">
+			<i class="fas fa-chart-scatter"></i>
+			<span>Graph</span>
+		</button>
+		<!-- About -->
+		<button class="about" (click)="viewTab = 'about'" [ngClass]="{'active': viewTab == 'about'}">
+			<i class="fas fa-info-circle"></i>
+			<span>About</span>
+		</button>
+	</div>
+
+	<div id="cyanTabBody" *ngIf="viewTab">
+
+		<div *ngIf="viewTab == 'map'">
+			<app-map-options></app-map-options>
+		</div>
+		<div *ngIf="viewTab == 'graph'">
+			<app-graph-options></app-graph-options>
+		</div>
+		<div *ngIf="viewTab == 'about'">
+			<app-about></app-about>
+		</div>
+
+	</div>
+
+</div>
+
+
 <div id="base" class="cyan-home">
 	<div>
 		<div class="flex-container fullWidth">
