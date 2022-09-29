@@ -445,6 +445,7 @@ export class GraphOptionsComponent implements OnInit {
   flagAllData() {
     this.flagAll = true;
     this.showFlagOptions = true;
+    this.selectPoints();
   }
 
   unflagAllData() {
@@ -777,19 +778,19 @@ export class GraphOptionsComponent implements OnInit {
 
   public initiateSelectPoints() {
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
+      this.selectPoints();
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal
       this.axisFlagFormCheckBoxes(selectedPoints.points);
       this.selectedPoints = selectedPoints;
       //Open flag options modal
       this.showFlagOptions = true;
-      this.selectPoints();
     });
     this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
+      this.selectPoints();
       this.selectedPoints = selectedPoints;
       //Open flag options modal
       this.showFlagOptions = true;
       this.lasso = true;
-      this.selectPoints();
     });
   }
 
