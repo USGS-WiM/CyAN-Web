@@ -56,10 +56,12 @@ export class GraphOptionsComponent implements OnInit {
   //flags
   flaggedData = [];
   showFlagOptions: Boolean = false;
+  showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
   sameQuery: Boolean = false;
   flagAll: Boolean = false;
+  unflagAll: Boolean = false;
   xAxisChecked: Boolean = false;
   yAxisChecked: Boolean = false;
   clickedPoint;
@@ -443,11 +445,19 @@ export class GraphOptionsComponent implements OnInit {
   flagAllData() {
     this.flagAll = true;
     this.showFlagOptions = true;
+    this.selectPoints();
+  }
+
+  unflagAllData() {
+    this.unflagAll = true;
+    this.showUnflagOptions = true;
+    this.selectPoints();
   }
 
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
+    this.showUnflagOptions = false;
     if (this.lasso) {
       this.createGraph(false);
       this.lasso = false;
@@ -459,6 +469,7 @@ export class GraphOptionsComponent implements OnInit {
     this.disableEnable('graphDownload', true, true);
     this.disableEnable('flagAll', true, true);
     this.disableEnable('graphOptionsBackgroundID', true, false);
+    this.disableEnable('unflagAll', true, true);
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -499,10 +510,10 @@ export class GraphOptionsComponent implements OnInit {
     let numPts;
 
     //If flagAll button is clicked, need to get attributes outside of Plotly
-    if (this.flagAll) {
+    if (this.flagAll || this.unflagAll) {
       numPts = this.currentXaxisValues.length;
     }
-    if (!this.flagAll) {
+    if (!this.flagAll && !this.unflagAll) {
       numPts = this.selectedPoints.length;
     }
 
@@ -511,11 +522,11 @@ export class GraphOptionsComponent implements OnInit {
       let existingDupY = false;
       let pointIndex;
       let selectedColor;
-      if (!this.flagAll) {
+      if (!this.flagAll && !this.unflagAll) {
         pointIndex = this.selectedPoints[i].pointIndex;
         selectedColor = this.selectedPoints[i]['marker.color'];
       }
-      if (this.flagAll) {
+      if (this.flagAll || this.unflagAll) {
         //If flagging all points, we'll be looping through every point index
         pointIndex = i;
         //Get current point color to check for duplicates
@@ -636,6 +647,12 @@ export class GraphOptionsComponent implements OnInit {
     input.focus();
   }
 
+  sumbitUnflagSelections() {
+    this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol, '', '');
+    this.showUnflagOptions = false;
+    this.closeFlagOptions();
+  }
+
   //Triggered when the 'Submit' button is clicked in the flag modal
   submitFlagSelections() {
     //Capture user input in the annotation box
@@ -719,7 +736,6 @@ export class GraphOptionsComponent implements OnInit {
     if (input.value) {
       input.value = null;
     }
-
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
@@ -762,24 +778,28 @@ export class GraphOptionsComponent implements OnInit {
 
   public initiateSelectPoints() {
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
+      this.selectPoints();
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal
       this.axisFlagFormCheckBoxes(selectedPoints.points);
-      this.selectPoints(selectedPoints.points);
+      this.selectedPoints = selectedPoints.points;
+      //Open flag options modal
+      this.showFlagOptions = true;
     });
     this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
+      this.selectedPoints = selectedPoints.points;
+      //Open flag options modal
+      this.showFlagOptions = true;
       this.lasso = true;
-      this.selectPoints(selectedPoints.points);
+      this.selectPoints();
     });
   }
 
-  public selectPoints(selectedPoints) {
-    this.selectedPoints = selectedPoints;
-    //Open flag options modal
-    this.showFlagOptions = true;
+  public selectPoints() {
     //Prevent user from clicking on features outside the modal
     this.disableEnable('graph', false, false);
     this.disableEnable('graphDownload', false, true);
     this.disableEnable('flagAll', false, true);
+    this.disableEnable('unflagAll', false, true);
     this.disableEnable('graphOptionsBackgroundID', false, false);
   }
 
@@ -1209,7 +1229,7 @@ export class GraphOptionsComponent implements OnInit {
   // use min & max year values from map options
   applyDatesFromMap(event) {
     if (event.checked == true) {
-      // getting min & max set in map options 
+      // getting min & max set in map options
       this.filterService.minYear$.subscribe((year) => {
         this.minYear = year;
       });
@@ -1219,10 +1239,9 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       // reseting graph min & max but leaving map options observables alone
       // if user checks box it will default to map option again
-      this.minYear = 1975
-      this.maxYear = 2021
+      this.minYear = 1975;
+      this.maxYear = 2021;
     }
-    
   }
   uncheckDatefromMapOptions() {
     this.datefromMap.checked = false;
