@@ -468,6 +468,7 @@ export class GraphOptionsComponent implements OnInit {
     this.disableEnable('graphDownload', true, true);
     this.disableEnable('flagAll', true, true);
     this.disableEnable('graphOptionsBackgroundID', true, false);
+    this.disableEnable('unflagAll', true, true);
 
     //Reset form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -797,6 +798,7 @@ export class GraphOptionsComponent implements OnInit {
     this.disableEnable('graph', false, false);
     this.disableEnable('graphDownload', false, true);
     this.disableEnable('flagAll', false, true);
+    this.disableEnable('unflagAll', false, true);
     this.disableEnable('graphOptionsBackgroundID', false, false);
   }
 
