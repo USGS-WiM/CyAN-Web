@@ -121,6 +121,17 @@
   </div>
   <div class="graphBackground marginTopFullHeight" id="graphBackgroundID" [hidden]="!showGraph && sameQuery"
     aria-label="This is a graph displaying the points that were filtered using the menu located to the left of this graph">
+    <div class="unflagModal" [hidden]="!showUnflagOptions">
+      <div>Are you sure you want to remove all plotted flags?</div>
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="sumbitUnflagSelections()"
+        aria-label="Click this button to save flag options">
+        Yes
+      </button>
+      <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+        aria-label="Click this button to close the flag options modal without saving changes">
+        No
+      </button>
+    </div>
     <div class="optionModal" [hidden]=" !showFlagOptions">
       <form [formGroup]="axisFlagForm">
         <div style="background-color: rgb(242, 189, 161, 0.2)">
@@ -196,7 +207,7 @@
         matTooltip="Flag plotted data">
         <mat-icon class="downloadIcon">flag</mat-icon>
       </div>
-      <div id='flagAll' class="graphDataDownload btnMargin" (click)="flagAllData()" [hidden]="!showGraph"
+      <div id='flagAll' class="graphDataDownload btnMargin" (click)="unflagAllData()" [hidden]="!showGraph"
         matTooltip="Unflag plotted data">
         <mat-icon class="downloadIcon">block</mat-icon>
       </div>
