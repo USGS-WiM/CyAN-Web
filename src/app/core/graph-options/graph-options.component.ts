@@ -781,16 +781,16 @@ export class GraphOptionsComponent implements OnInit {
       this.selectPoints();
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal
       this.axisFlagFormCheckBoxes(selectedPoints.points);
-      this.selectedPoints = selectedPoints;
+      this.selectedPoints = selectedPoints.points;
       //Open flag options modal
       this.showFlagOptions = true;
     });
     this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
-      this.selectPoints();
-      this.selectedPoints = selectedPoints;
+      this.selectedPoints = selectedPoints.points;
       //Open flag options modal
       this.showFlagOptions = true;
       this.lasso = true;
+      this.selectPoints();
     });
   }
 
