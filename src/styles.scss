@@ -43,3 +43,10 @@ body {
   color: white;
   margin-bottom: 300px;
 }
+
+// css for plotly graph buttons
+a.modebar-btn svg {
+  transform: scale(1.5);
+  transform-origin: center center;
+  margin: 8px;
+}
