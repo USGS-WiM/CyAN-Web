@@ -640,6 +640,7 @@ export class GraphOptionsComponent implements OnInit {
     updateGraphCalled = false;
     this.lasso = false;
     this.flagAll = false;
+    this.unflagAll = false;
   }
 
   public selectText() {
