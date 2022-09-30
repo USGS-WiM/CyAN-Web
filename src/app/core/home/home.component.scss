@@ -3,13 +3,15 @@
 	top: 0;
 	left: 0;
 	z-index: 500;
+	pointer-events: none;
 }
 
 
 
 .floating-body{
-	max-height: 60vh;
-	overflow: auto;
+	// max-height: 60vh;
+	// overflow: auto;
+	pointer-events: all !important;
 }
 
 

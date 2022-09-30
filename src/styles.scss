@@ -43,3 +43,9 @@ body {
   color: white;
   margin-bottom: 300px;
 }
+
+
+.pointer-events,
+.pointer-events *{
+	pointer-events: all !important;
+}
