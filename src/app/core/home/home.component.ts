@@ -12,12 +12,12 @@ export class HomeComponent implements AfterViewInit {
     this.resizeDivs();
   }
 
-  public showHomeLayout: Boolean = true;
+  public showHomeLayout: Boolean = false;
   public showMap: Boolean = false;
-  public showInfo: Boolean = false;
+  public showInfo: Boolean = true;
   public showGraph: Boolean = false;
   public windowWidthResize = false;
-  public fullHomeScreen = true;
+  public fullHomeScreen = false;
   public showFullCyanHomeBtn: Boolean = true;
 
   ngAfterViewInit(): void {
@@ -39,7 +39,7 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showInfo = false;
     this.showGraph = false;
-    this.showHomeLayout = true;
+    this.showHomeLayout = false;
     this.resizeDivs();
   }
 
