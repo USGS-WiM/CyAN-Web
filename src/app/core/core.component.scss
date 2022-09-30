@@ -171,6 +171,7 @@
 /* start: display divs side-by-side */
 .flex-container {
   display: flex;
+  pointer-events: all !important;
 }
 .flex-child {
   flex: 1;
@@ -280,9 +281,9 @@
   height: 575px;
 }
 .mapFiltersSmallHeight {
-  height: calc(95vh - 200px);
   overflow-y: scroll;
   min-height: 100px;
+  height: calc(95vh - 200px);
 }
 .mapFiltersMedHeight {
   height: calc(95vh - 130px);
@@ -391,6 +392,7 @@
 .traceOptionsBackground {
   margin-left: 10px;
   margin-right: 10px;
+	pointer-events: all;
   font-size: 15px;
   background-color: rgba(2, 71, 94, 0.085);
 }

@@ -1,128 +1,106 @@
-<div id="base">
-  <div>
-    <div class="flex-container fullWidth">
-      <div [hidden]="!showHomeLayout" class="landingPgBtns usgsBtn">
-        <a href="https://www.usgs.gov/" target="_blank">
-          <img
-            alt="United States Geological Survey Logo. White wavey lines with a green background next to the letters USGS. Their motto, Science for a changing world, is written across the bottom. Clicking on this logo leads to the USGS homepage."
-            class="usgsLogo" src="assets/USGS_White_web.png" />
-        </a>
-      </div>
-      <div [hidden]="!showFullCyanHomeBtn"
-        aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
-        <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
-          <div id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth" (click)="clickHome()"
-            [hidden]="!showFullCyanHomeBtn">
-            <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-            CyAN FIELD
-          </div>
-        </div>
-      </div>
-      <div class="landingPgBtns infoBtn infoBtnColor" [hidden]="!showHomeLayout || !fullHomeScreen"
-        (click)="clickInfo()" id="infoBtnFullID"
-        aria-label="This is an orange button featuring a white info icon (i with a circle around it). Clicking on this button will lead to the info page.">
-        <p class="infoBtnText">
-          <mat-icon class="infoIcon">info</mat-icon>
-          Cyanobacteria Assessment Network <br />
-          Field Exploratory Lakes Database
-        </p>
-        <div class="infoBtnSubheader">
-          <p>Explore, compare, & evaluate</p>
-          <p class="infoLineHeight">
-            water quality data related to harmful algal blooms
-          </p>
-        </div>
-      </div>
-      <div [hidden]="showHomeLayout">
-        <div class="flex-child flex-container">
-          <div [hidden]="windowWidthResize">
-            <div class="homeBtnColor smNavBtn marginLeftSmallWidth" (click)="clickHome()" matTooltip="CyAN Home"
-              aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
-              <p>
-                <mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home</mat-icon>
-              </p>
-            </div>
-          </div>
-          <div class="smNavBtn usgsSquare" matTooltip="USGS Home">
-            <a href="https://www.usgs.gov/" target="_blank">
-              <img
-                alt="United States Geological Survey logo. Green Square with white wavy lines. Clicking on this square leads to the USGS homepage."
-                class="square" src="assets/USGS_Green_Banneronly_web.png" /></a>
-          </div>
-          <div>
-            <div class="infoBtnColor smNavBtn" (click)="clickInfo()" matTooltip="About"
-              aria-label="This is an orange button feature a white icon logo (letter i with a circle around it). Clicking on this button will lead ot the info page.">
-              <mat-icon class="smBtnIcon">info</mat-icon>
-            </div>
-          </div>
-          <div>
-            <div class="mapBtnColor smNavBtn" (click)="clickMap()" matTooltip="Map"
-              aria-label="This is a gray button featuring a map icon> Clicking on this button will lead to the the map and map filters.">
-              <mat-icon class="smBtnIcon">map</mat-icon>
-            </div>
-          </div>
-          <div>
-            <div class="graphBtnColor smNavBtn" (click)="clickGraph()" matTooltip="Graph"
-              aria-label="This is a blue button featuring three dots meant to represent a graph. Clicking on this button will lead to the graph and graph filters.">
-              <mat-icon class="smBtnIcon">scatter_plot</mat-icon>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div [hidden]="fullHomeScreen || !showHomeLayout">
-      <div (click)="clickInfo()" class="
+<div id="base" class="cyan-home">
+	<div>
+		<div class="flex-container fullWidth pointer-events">
+			<div [hidden]="!showFullCyanHomeBtn"
+				aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
+				<div class="flex-child" [hidden]="!showFullCyanHomeBtn">
+					<div id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth"
+						(click)="clickHome()" [hidden]="!showFullCyanHomeBtn">
+						<mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home
+						</mat-icon>
+						CyAN FIELD
+					</div>
+				</div>
+			</div>
+			<div class="landingPgBtns infoBtn infoBtnColor" [hidden]="!showHomeLayout || !fullHomeScreen"
+				(click)="clickInfo()" id="infoBtnFullID"
+				aria-label="This is an orange button featuring a white info icon (i with a circle around it). Clicking on this button will lead to the info page.">
+				<p class="infoBtnText">
+					<mat-icon class="infoIcon">info</mat-icon>
+					Cyanobacteria Assessment Network <br />
+					Field Exploratory Lakes Database
+				</p>
+			</div>
+			<div [hidden]="showHomeLayout">
+				<div class="flex-child flex-container">
+					<div [hidden]="windowWidthResize">
+						<div class="homeBtnColor smNavBtn marginLeftSmallWidth" (click)="clickHome()"
+							matTooltip="CyAN Home"
+							aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
+							<p>
+								<mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home
+								</mat-icon>
+							</p>
+						</div>
+					</div>
+					<div>
+						<div class="infoBtnColor smNavBtn" (click)="clickInfo()" matTooltip="About"
+							aria-label="This is an orange button feature a white icon logo (letter i with a circle around it). Clicking on this button will lead ot the info page.">
+							<mat-icon class="smBtnIcon">info</mat-icon>
+						</div>
+					</div>
+					<div>
+						<div class="mapBtnColor smNavBtn" (click)="clickMap()" matTooltip="Map"
+							aria-label="This is a gray button featuring a map icon> Clicking on this button will lead to the the map and map filters.">
+							<mat-icon class="smBtnIcon">map</mat-icon>
+						</div>
+					</div>
+					<div>
+						<div class="graphBtnColor smNavBtn" (click)="clickGraph()" matTooltip="Graph"
+							aria-label="This is a blue button featuring three dots meant to represent a graph. Clicking on this button will lead to the graph and graph filters.">
+							<mat-icon class="smBtnIcon">scatter_plot</mat-icon>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div [hidden]="fullHomeScreen || !showHomeLayout">
+			<div (click)="clickInfo()" class="
           smScreenLandingBtns
           infoBtnSmallScreen
           infoBtnColor
           flex-container
-        "
-        aria-label="This is an orange button featuring a white info icon (i with a circle around it). Clicking on this button will lead to the info page.">
-        <div class="flex-child infoBtnInside">
-          <p style="line-height: 0px">
-            <mat-icon class="infoBtnSmIcon">info</mat-icon>
-            Cyanobacteria Assessment Network
-          </p>
-          <p style="margin-left: 40px">Field Exploratory Lakes Database</p>
-          <div class="infoBtnSmText">
-            <p>Explore, compare, & evaluate</p>
-            <p class="infoLineHeight">water quality data</p>
-            <p class="infoLineHeight">related to harmful algal blooms</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div [hidden]="!showInfo">
-      <app-about></app-about>
-    </div>
-    <div [hidden]="!showMap">
-      <app-map-options></app-map-options>
-    </div>
-    <div [hidden]="!showGraph">
-      <app-graph-options></app-graph-options>
-    </div>
-    <div [hidden]="!showHomeLayout">
-      <div id="mapGraphID" class="flex-container mapGraphWidth">
-        <div class="flex-child">
-          <div class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor" [hidden]="!showHomeLayout"
-            (click)="clickMap()" id="mapBtnFullID"
-            aria-label="This is a gray button featuring a map icon> Clicking on this button will lead to the the map and map filters.">
-            <br />
-            <p style="text-align: center">Map</p>
-            <mat-icon class="mapGraphIconFullScreen"> map</mat-icon>
-          </div>
-        </div>
-        <div class="flex-child">
-          <div class="landingPgBtns mapGraphBtn graphBtnColor" [hidden]="!showHomeLayout" (click)="clickGraph()"
-            aria-label="This is a blue button featuring three dots meant to represent a graph. Clicking on this button will lead to the graph and graph filters.">
-            <p style="text-align: center">
-              <br />
-              Graph
-            </p>
-            <mat-icon class="mapGraphIconFullScreen"> scatter_plot</mat-icon>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+        " aria-label="This is an orange button featuring a white info icon (i with a circle around it). Clicking on this button will lead to the info page.">
+				<div class="flex-child infoBtnInside">
+					<p style="line-height: 0px">
+						<mat-icon class="infoBtnSmIcon">info</mat-icon>
+						Cyanobacteria Assessment Network
+					</p>
+				</div>
+			</div>
+		</div>
+		<div [hidden]="!showInfo" class="floating-body">
+			<app-about></app-about>
+		</div>
+		<div [hidden]="!showMap" class="floating-body">
+			<app-map-options></app-map-options>
+		</div>
+		<div [hidden]="!showGraph" class="floating-body">
+			<app-graph-options></app-graph-options>
+		</div>
+		<div [hidden]="!showHomeLayout">
+			<div id="mapGraphID" class="flex-container mapGraphWidth">
+				<div class="flex-child">
+					<div class="landingPgBtns mapGraphBtn mapBtnFullMargin mapBtnColor" [hidden]="!showHomeLayout"
+						(click)="clickMap()" id="mapBtnFullID"
+						aria-label="This is a gray button featuring a map icon> Clicking on this button will lead to the the map and map filters.">
+						<br />
+						<p style="text-align: center">Map</p>
+						<mat-icon class="mapGraphIconFullScreen"> map</mat-icon>
+					</div>
+				</div>
+				<div class="flex-child">
+					<div class="landingPgBtns mapGraphBtn graphBtnColor" [hidden]="!showHomeLayout"
+						(click)="clickGraph()"
+						aria-label="This is a blue button featuring three dots meant to represent a graph. Clicking on this button will lead to the graph and graph filters.">
+						<p style="text-align: center">
+							<br />
+							Graph
+						</p>
+						<mat-icon class="mapGraphIconFullScreen"> scatter_plot</mat-icon>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

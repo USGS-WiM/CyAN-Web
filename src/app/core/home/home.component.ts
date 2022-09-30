@@ -3,7 +3,7 @@ import { Component, AfterViewInit, HostListener } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./../core.component.scss'],
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements AfterViewInit {
   constructor() {}
@@ -12,9 +12,9 @@ export class HomeComponent implements AfterViewInit {
     this.resizeDivs();
   }
 
-  public showHomeLayout: Boolean = true;
+  public showHomeLayout: Boolean = false;
   public showMap: Boolean = false;
-  public showInfo: Boolean = false;
+  public showInfo: Boolean = true;
   public showGraph: Boolean = false;
   public windowWidthResize = false;
   public fullHomeScreen = true;
@@ -39,7 +39,7 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showInfo = false;
     this.showGraph = false;
-    this.showHomeLayout = true;
+    this.showHomeLayout = false;
     this.resizeDivs();
   }
 
