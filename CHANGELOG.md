@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 
 - Removes extra modebar buttons
+- Moves flag buttons into modebar
 
 ### Fixed
 
