@@ -1,0 +1,112 @@
+#app_outer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+#app_main {
+  flex-grow: 3;
+  position: relative;
+}
+
+// USGS Header
+#usgsBar {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 25px 4px 25px;
+  background-color: #02274b;
+}
+/* USGS Footer */
+footer#usgs {
+  background-color: #02274b;
+  box-sizing: border-box;
+  padding: 8px 10px;
+}
+footer#usgs a {
+  color: white;
+  font-size: 12px;
+  margin-right: 18px;
+  position: relative;
+  text-decoration: none;
+}
+
+// USA Banner
+#usaBar {
+  display: block;
+  background-color: #1b1b1b;
+  color: white;
+
+  // Main, always visible bar
+  #usaBarTitle {
+    box-sizing: border-box;
+    padding: 2px 15px 4px 15px;
+    font-size: 0.75rem;
+    img {
+      height: 11px;
+      width: auto;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    span {
+      vertical-align: middle;
+    }
+    button {
+      background-color: transparent;
+      vertical-align: middle;
+      padding: 0;
+      border: none;
+      margin-left: 10px;
+      color: #adadad;
+      font-size: 0.75rem;
+      text-decoration: underline;
+
+      &:hover {
+        color: white;
+        cursor: pointer;
+      }
+
+      i {
+        color: #2491ff;
+      }
+    }
+  }
+
+  // Toggle Section
+  #usaBarCollapse {
+    display: flex;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding: 25px;
+    gap: 25px;
+
+    .usaBar__section {
+      display: flex;
+      gap: 10px;
+
+      img {
+        height: 40px;
+        width: 40px;
+        vertical-align: text-top;
+      }
+
+      p {
+        max-width: 380px;
+        font-size: 0.95rem;
+        line-height: 1.5rem;
+        vertical-align: top;
+
+        .icon-lock svg {
+          margin: 0;
+          height: 14px;
+          width: auto;
+        }
+
+        strong {
+          font-weight: 800;
+        }
+      }
+    }
+  }
+}
