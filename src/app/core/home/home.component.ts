@@ -3,7 +3,7 @@ import { Component, AfterViewInit, HostListener } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./../core.component.scss'],
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements AfterViewInit {
   constructor() {}
@@ -12,11 +12,12 @@ export class HomeComponent implements AfterViewInit {
     this.resizeDivs();
   }
 
-  public showHomeLayout: Boolean = true;
+  public showHomeLayout: Boolean = false;
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
   public windowWidthResize = false;
+  public showIntro = true;
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
 
@@ -39,7 +40,8 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showInfo = false;
     this.showGraph = false;
-    this.showHomeLayout = true;
+    this.showHomeLayout = false;
+    this.showIntro = true;
     this.resizeDivs();
   }
 
@@ -48,6 +50,7 @@ export class HomeComponent implements AfterViewInit {
     this.showHomeLayout = false;
     this.showInfo = false;
     this.showGraph = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -56,6 +59,7 @@ export class HomeComponent implements AfterViewInit {
     this.showHomeLayout = false;
     this.showMap = false;
     this.showGraph = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -64,6 +68,7 @@ export class HomeComponent implements AfterViewInit {
     this.showInfo = false;
     this.showHomeLayout = false;
     this.showMap = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 

@@ -50,3 +50,8 @@ a.modebar-btn svg {
   transform-origin: center center;
   margin: 8px;
 }
+
+.pointer-events,
+.pointer-events * {
+  pointer-events: all !important;
+}

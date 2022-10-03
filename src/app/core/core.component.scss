@@ -171,6 +171,7 @@
 /* start: display divs side-by-side */
 .flex-container {
   display: flex;
+  pointer-events: all !important;
 }
 .flex-child {
   flex: 1;
@@ -277,20 +278,20 @@
   overflow-y: scroll;
 }
 .mapFiltersFullHeight {
-  height: 575px;
+  height: calc(97vh - 408px);
 }
 .mapFiltersSmallHeight {
-  height: calc(95vh - 200px);
   overflow-y: scroll;
   min-height: 100px;
+  height: calc(97vh - 408px);
 }
 .mapFiltersMedHeight {
-  height: calc(95vh - 130px);
+  height: calc(97vh - 340px);
   overflow-y: scroll;
   min-height: 100px;
 }
 .mapFiltersMLHeight {
-  height: calc(95vh - 175px);
+  height: calc(97vh - 398px);
   overflow-y: scroll;
   min-height: 100px;
 }
@@ -334,7 +335,7 @@
   height: 665px;
 }
 .optionsBackgroundResponsive {
-  height: calc(95vh - 80px);
+  height: calc(97vh - 268px);
   overflow-y: scroll;
   min-height: 100px;
 }
@@ -391,6 +392,7 @@
 .traceOptionsBackground {
   margin-left: 10px;
   margin-right: 10px;
+  pointer-events: all;
   font-size: 15px;
   background-color: rgba(2, 71, 94, 0.085);
 }
@@ -419,9 +421,9 @@
   width: 45vw;
   min-width: 240px;
   max-width: 700px;
-  height: 400px;
   position: relative;
   overflow-y: auto;
+  padding-bottom: 20px;
 }
 /* end: info box */
 

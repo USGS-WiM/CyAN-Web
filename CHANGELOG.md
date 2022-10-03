@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - CSV download of flag types added to metadata download
 - Ability to add annotation in flag option modal
 - Checkbox to use map option min/max years in graph options
+- USGS header and footer
+- Filler landing page that corresponds with the CyAN button
 
 ### Changed
 

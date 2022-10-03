@@ -28,6 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FileUploadComponent } from './core/file-upload/file-upload.component';
+import { IntroComponent } from './core/intro/intro.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { FileUploadComponent } from './core/file-upload/file-upload.component';
     AboutComponent,
     HomeComponent,
     FileUploadComponent,
+    IntroComponent,
   ],
   imports: [
     BrowserModule,

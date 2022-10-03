@@ -1212,16 +1212,6 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.add('marginTopFullHeight');
       graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
     }
-    if (windowHeight < 700) {
-      //add scrollbar
-      graphOptionsBackgroundID.classList.add('optionsBackgroundResponsive');
-      graphOptionsBackgroundID.classList.remove('optionsBackgroundHeightSmall');
-    }
-    if (windowHeight > 700) {
-      //remove scrollbar
-      graphOptionsBackgroundID.classList.remove('optionsBackgroundResponsive');
-      graphOptionsBackgroundID.classList.add('optionsBackgroundHeightSmall');
-    }
     if (windowWidth > 1200 && windowHeight > 450) {
       this.graphMargins = 80;
     }
