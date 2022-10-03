@@ -14,9 +14,10 @@ export class HomeComponent implements AfterViewInit {
 
   public showHomeLayout: Boolean = false;
   public showMap: Boolean = false;
-  public showInfo: Boolean = true;
+  public showInfo: Boolean = false;
   public showGraph: Boolean = false;
   public windowWidthResize = false;
+  public showIntro = true;
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
 
@@ -40,6 +41,7 @@ export class HomeComponent implements AfterViewInit {
     this.showInfo = false;
     this.showGraph = false;
     this.showHomeLayout = false;
+    this.showIntro = true;
     this.resizeDivs();
   }
 
@@ -48,6 +50,7 @@ export class HomeComponent implements AfterViewInit {
     this.showHomeLayout = false;
     this.showInfo = false;
     this.showGraph = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -56,6 +59,7 @@ export class HomeComponent implements AfterViewInit {
     this.showHomeLayout = false;
     this.showMap = false;
     this.showGraph = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -64,6 +68,7 @@ export class HomeComponent implements AfterViewInit {
     this.showInfo = false;
     this.showHomeLayout = false;
     this.showMap = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 

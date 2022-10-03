@@ -392,7 +392,7 @@
 .traceOptionsBackground {
   margin-left: 10px;
   margin-right: 10px;
-	pointer-events: all;
+  pointer-events: all;
   font-size: 15px;
   background-color: rgba(2, 71, 94, 0.085);
 }
@@ -421,9 +421,9 @@
   width: 45vw;
   min-width: 240px;
   max-width: 700px;
-  height: 400px;
   position: relative;
   overflow-y: auto;
+  padding-bottom: 20px;
 }
 /* end: info box */
 
