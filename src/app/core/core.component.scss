@@ -278,20 +278,20 @@
   overflow-y: scroll;
 }
 .mapFiltersFullHeight {
-  height: 575px;
+  height: calc(97vh - 408px);
 }
 .mapFiltersSmallHeight {
   overflow-y: scroll;
   min-height: 100px;
-  height: calc(95vh - 200px);
+  height: calc(97vh - 408px);
 }
 .mapFiltersMedHeight {
-  height: calc(95vh - 130px);
+  height: calc(97vh - 340px);
   overflow-y: scroll;
   min-height: 100px;
 }
 .mapFiltersMLHeight {
-  height: calc(95vh - 175px);
+  height: calc(97vh - 398px);
   overflow-y: scroll;
   min-height: 100px;
 }
@@ -335,7 +335,7 @@
   height: 665px;
 }
 .optionsBackgroundResponsive {
-  height: calc(95vh - 80px);
+  height: calc(97vh - 268px);
   overflow-y: scroll;
   min-height: 100px;
 }
