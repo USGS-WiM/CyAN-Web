@@ -890,7 +890,7 @@ export class GraphOptionsComponent implements OnInit {
 
       //minimize graph options panel if the screen width is small
       let windowWidth = window.innerWidth;
-      if (windowWidth < 800) {
+      if (windowWidth < 900) {
         this.collapseGraphOptions(false);
       }
     }
@@ -1158,7 +1158,7 @@ export class GraphOptionsComponent implements OnInit {
       'graphOptionsCollapsedID'
     );
 
-    if (windowWidth < 800) {
+    if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
       graphOptionsBackgroundID.classList.add('marginLeftSmallWidth');
 
@@ -1175,7 +1175,7 @@ export class GraphOptionsComponent implements OnInit {
         this.graphWidth = 0.95 * windowWidth - 65;
       }
     }
-    if (windowWidth > 800) {
+    if (windowWidth > 900) {
       graphOptionsBackgroundID.classList.add('marginLeftFullWidth');
       graphOptionsBackgroundID.classList.remove('marginLeftSmallWidth');
 

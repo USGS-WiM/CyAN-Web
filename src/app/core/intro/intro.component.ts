@@ -19,24 +19,22 @@ export class IntroComponent implements OnInit {
     //get window dimensions
     let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;
-    let infoPanelID = document.getElementById('infoPanelID');
-    if (windowWidth < 800) {
-      infoPanelID.classList.remove('marginLeftFullWidth');
-      infoPanelID.classList.add('marginLeftSmallWidth');
+    let introID = document.getElementById('introID');
+    if (windowWidth < 900) {
+      introID.classList.remove('marginLeftFullWidth');
+      introID.classList.add('marginLeftSmallWidth');
     }
-    if (windowWidth > 800) {
-      infoPanelID.classList.add('marginLeftFullWidth');
-      infoPanelID.classList.remove('marginLeftSmallWidth');
+    if (windowWidth > 900) {
+      introID.classList.add('marginLeftFullWidth');
+      introID.classList.remove('marginLeftSmallWidth');
     }
-    if (windowHeight < 500) {
-      infoPanelID.classList.add('yOverflow');
-      infoPanelID.classList.add('marginTopSmallHeight');
-      infoPanelID.classList.remove('marginTopFullHeight');
+    if (windowHeight < 590) {
+      introID.classList.add('marginTopSmallHeight');
+      introID.classList.remove('marginTopFullHeight');
     }
-    if (windowHeight > 500) {
-      infoPanelID.classList.remove('yOverflow');
-      infoPanelID.classList.remove('marginTopSmallHeight');
-      infoPanelID.classList.add('marginTopFullHeight');
+    if (windowHeight > 590) {
+      introID.classList.remove('marginTopSmallHeight');
+      introID.classList.add('marginTopFullHeight');
     }
   }
 }
