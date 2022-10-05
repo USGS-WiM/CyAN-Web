@@ -308,7 +308,7 @@ export class MapOptionsComponent implements OnInit {
 
       //minimize panels if the screen width is small
       let windowWidth = window.innerWidth;
-      if (windowWidth < 800) {
+      if (windowWidth < 900) {
         this.displayMapLayerOptions(false);
         this.displayMapFilters(false);
       }
@@ -429,7 +429,7 @@ export class MapOptionsComponent implements OnInit {
     let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
 
     //move everything to the left when the width shrinks
-    if (windowWidth < 800) {
+    if (windowWidth < 900) {
       mapLayersOptions.classList.remove('marginLeftFullWidth');
       mapLayersOptions.classList.add('marginLeftSmallWidth');
 
@@ -444,7 +444,7 @@ export class MapOptionsComponent implements OnInit {
     }
 
     //move everything to the right when the width grows
-    if (windowWidth > 800) {
+    if (windowWidth > 900) {
       mapLayersOptions.classList.add('marginLeftFullWidth');
       mapLayersOptions.classList.remove('marginLeftSmallWidth');
 

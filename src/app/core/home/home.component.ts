@@ -22,8 +22,8 @@ export class HomeComponent implements AfterViewInit {
   public showFullCyanHomeBtn: Boolean = true;
 
   ngAfterViewInit(): void {
-    window.onload = () => (this.windowWidthResize = window.innerWidth >= 800);
-    window.onresize = () => (this.windowWidthResize = window.innerWidth >= 800);
+    window.onload = () => (this.windowWidthResize = window.innerWidth >= 900);
+    window.onresize = () => (this.windowWidthResize = window.innerWidth >= 900);
     Promise.resolve().then(() => this.resizeDivs());
   }
 
@@ -79,10 +79,10 @@ export class HomeComponent implements AfterViewInit {
     let homeBtnFullID = document.getElementById('homeBtnFullID');
     let mapBtnFullID = document.getElementById('mapBtnFullID');
     let mapGraphID = document.getElementById('mapGraphID');
-    if (windowWidth < 800 && !this.showHomeLayout) {
+    if (windowWidth < 900 && !this.showHomeLayout) {
       this.showFullCyanHomeBtn = false;
     }
-    if (windowWidth > 800 || this.showHomeLayout) {
+    if (windowWidth > 900 || this.showHomeLayout) {
       this.showFullCyanHomeBtn = true;
     }
     if (windowWidth < 1000) {

@@ -69,17 +69,17 @@
         </div>
       </div>
     </div>
-    <div [hidden]="!showIntro" class="floating-body">
-      <app-intro></app-intro>
-    </div>
-    <div [hidden]="!showInfo" class="floating-body">
-      <app-about></app-about>
-    </div>
     <div [hidden]="!showMap" class="floating-body">
       <app-map-options></app-map-options>
     </div>
     <div [hidden]="!showGraph" class="floating-body">
       <app-graph-options></app-graph-options>
+    </div>
+    <div [hidden]="!showIntro" class="floating-body">
+      <app-intro></app-intro>
+    </div>
+    <div [hidden]="!showInfo" class="floating-body">
+      <app-about></app-about>
     </div>
     <div [hidden]="!showHomeLayout">
       <div id="mapGraphID" class="flex-container mapGraphWidth">
