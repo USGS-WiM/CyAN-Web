@@ -335,11 +335,7 @@
   width: 240px !important;
   position: relative;
 }
-.optionsBackgroundHeightSmall {
-  height: 665px;
-}
 .optionsBackgroundResponsive {
-  height: calc(97vh - 268px);
   max-height: 670px;
   overflow-y: scroll;
   min-height: 100px;

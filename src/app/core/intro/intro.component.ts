@@ -17,19 +17,17 @@ export class IntroComponent implements OnInit {
     this.resizeDivs();
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
-        if (usaBarBoolean) {
+        setTimeout(() => {
           this.resizeDivs();
-        }
-        if (!usaBarBoolean) {
-          this.resizeDivs();
-        }
+        }, 0.1);
       }
     );
   }
 
   public resizeDivs() {
+    //get map height
     let mapContainer = document.getElementById('mapContainer');
-    var mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
+    let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
 
     //get window width
     let windowWidth = window.innerWidth;

@@ -409,8 +409,11 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public resizeDivs() {
-    //get window dimensions
-    let windowHeight = window.innerHeight;
+    //get map height
+    let mapContainer = document.getElementById('mapContainer');
+    let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
+
+    //get window width
     let windowWidth = window.innerWidth;
 
     //get all the elements that change according to window dimensions
@@ -459,12 +462,12 @@ export class MapOptionsComponent implements OnInit {
     }
     //initiate the filter points scroll depending on the height of the screen and whether the Map Layers panel is collapsed
     if (
-      (this.mapLayerOptions && windowHeight < 830) ||
-      (!this.mapLayerOptions && windowHeight < 710)
+      (this.mapLayerOptions && mapHeight < 830) ||
+      (!this.mapLayerOptions && mapHeight < 710)
     ) {
       //if the filters panel is open, decrease the spacing above collapsed Map Filters
       //if the height is super tiny (<280), do this regardless of the filters panel
-      if (this.mapFilters || windowHeight < 280) {
+      if (this.mapFilters || mapHeight < 280) {
         mapLayersCollapsed.classList.remove('marginTopFullHeight');
         mapLayersCollapsed.classList.add('marginTopSmallHeight');
 
@@ -491,7 +494,7 @@ export class MapOptionsComponent implements OnInit {
         mapLayersOptions.classList.add('marginTopSmallHeight');
       }
       //
-      if (!this.mapFilters && windowHeight > 280) {
+      if (!this.mapFilters && mapHeight > 280) {
         mapLayersCollapsed.classList.add('marginTopFullHeight');
         mapLayersCollapsed.classList.remove('marginTopSmallHeight');
 
@@ -505,8 +508,8 @@ export class MapOptionsComponent implements OnInit {
     }
     //remove the filter points scroll depending on the height of the screen and whether the Map Layers panel is collapsed
     if (
-      (this.mapLayerOptions && windowHeight > 830) ||
-      (!this.mapLayerOptions && windowHeight > 710)
+      (this.mapLayerOptions && mapHeight > 830) ||
+      (!this.mapLayerOptions && mapHeight > 710)
     ) {
       mapPointFilterDiv.classList.add('mapFiltersFullHeight');
       mapPointFilterDiv.classList.remove('mapFiltersSmallHeight');
@@ -530,7 +533,7 @@ export class MapOptionsComponent implements OnInit {
     }
 
     //Edit map layers box when the height shrinks
-    if (windowHeight < 530) {
+    if (mapHeight < 440) {
       mapPointFilterDiv.classList.remove('mapFiltersFullHeight');
       if (this.mapLayerOptions) {
         mapPointFilterDiv.classList.remove('mapFiltersMedHeight');
@@ -565,7 +568,7 @@ export class MapOptionsComponent implements OnInit {
       mapLayersOptions.classList.remove('mapLayerOptionsBackground');
       mapLayersOptions.classList.add('mapLayerOptionsBackgroundResizeH');
     }
-    if (windowHeight > 530) {
+    if (mapHeight > 440) {
       //increase font size
       mapLayersRadioLabels.classList.add('mapLayers');
       mapLayersRadioLabels.classList.remove('mapLayersResize');
