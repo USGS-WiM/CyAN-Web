@@ -5,8 +5,8 @@
 		<div id="usaBarTitle">
 			<img class="usa-banner__header-flag" src="/assets/us_flag_small.png" alt="U.S. flag" />
 			<span>An official website of the United States Government</span>
-			<button (click)="usaBarCollapse = !usaBarCollapse">
-				Here's how you know 
+			<button (click)="clickUsaBarCollapse()">
+				Here's how you know
 				<i [ngClass]="usaBarCollapse ? 'fas fa-angle-down' : 'fas fa-angle-up'"></i>
 			</button>
 		</div>
@@ -15,7 +15,8 @@
 		<div id="usaBarCollapse" *ngIf="!usaBarCollapse">
 
 			<div class="usaBar__section">
-				<img class="usa-banner__icon usa-media-block__img" src="/assets/icon-dot-gov.svg" role="img" alt="" aria-hidden="true" />
+				<img class="usa-banner__icon usa-media-block__img" src="/assets/icon-dot-gov.svg" role="img" alt=""
+					aria-hidden="true" />
 				<p>
 					<strong>Official websites use .gov</strong><br />
 					A <strong>.gov</strong> website belongs to an official government organization in the United States.
@@ -23,7 +24,8 @@
 			</div>
 
 			<div class="usaBar__section">
-				<img class="usa-banner__icon usa-media-block__img" src="/assets/icon-https.svg" role="img" alt="" aria-hidden="true" />
+				<img class="usa-banner__icon usa-media-block__img" src="/assets/icon-https.svg" role="img" alt=""
+					aria-hidden="true" />
 				<p>
 					<strong>Secure .gov websites use HTTPS</strong><br />A
 					<strong>lock</strong> (

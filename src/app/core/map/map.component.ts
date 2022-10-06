@@ -23,11 +23,6 @@ export class MapComponent implements AfterViewInit {
     private mapLayersService: MapLayersService
   ) {}
 
-  @HostListener('window:resize')
-  onResize() {
-    //
-  }
-
   ngAfterViewInit(): void {
     this.initMap();
     this.mapLayersService.basemapSubject.subscribe((base) => {

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  constructor(private componentDisplayService: ComponentDisplayService) {}
   usaBarCollapse = true;
+
+  public clickUsaBarCollapse() {
+    this.usaBarCollapse = !this.usaBarCollapse;
+    this.componentDisplayService.usaBarCollapseSubject.next(
+      this.usaBarCollapse
+    );
+  }
 
   title = 'CyAN-Web';
 }

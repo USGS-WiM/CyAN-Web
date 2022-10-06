@@ -23,6 +23,14 @@ export class ComponentDisplayService {
     this.homeLayoutSubject.next(display);
   }
 
+  //get USA bar
+  public usaBarCollapseSubject = new BehaviorSubject<Boolean>(undefined);
+  usaBarCollapse$ = this.usaBarCollapseSubject.asObservable();
+
+  public getUsaBarCollapse(collapse: Boolean) {
+    this.usaBarCollapseSubject.next(collapse);
+  }
+
   //get bounding box: north
   public northBoundsSubject = new BehaviorSubject<number>(undefined);
   northBounds$ = this.northBoundsSubject.asObservable();

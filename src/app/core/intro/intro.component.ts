@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
   selector: 'app-intro',
@@ -6,6 +7,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
   styleUrls: ['./../core.component.scss'],
 })
 export class IntroComponent implements OnInit {
+  constructor(private componentDisplayService: ComponentDisplayService) {}
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -13,18 +15,25 @@ export class IntroComponent implements OnInit {
 
   ngOnInit(): void {
     this.resizeDivs();
+    this.componentDisplayService.usaBarCollapseSubject.subscribe(
+      (usaBarBoolean) => {
+        if (usaBarBoolean) {
+          this.resizeDivs();
+        }
+        if (!usaBarBoolean) {
+          this.resizeDivs();
+        }
+      }
+    );
   }
 
   public resizeDivs() {
     let mapContainer = document.getElementById('mapContainer');
     var mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
-    console.log('mapHeight', mapHeight);
 
-    //get window dimensions
-    let windowHeight = window.innerHeight;
+    //get window width
     let windowWidth = window.innerWidth;
     let introID = document.getElementById('introID');
-    //introID.style.height = (mapHeight - 80).toString() + 'px';
     if (windowWidth < 900) {
       introID.classList.remove('marginLeftFullWidth');
       introID.classList.add('marginLeftSmallWidth');
@@ -33,13 +42,15 @@ export class IntroComponent implements OnInit {
       introID.classList.add('marginLeftFullWidth');
       introID.classList.remove('marginLeftSmallWidth');
     }
-    if (windowHeight < 590) {
+    if (mapHeight < 440) {
       introID.classList.add('marginTopSmallHeight');
       introID.classList.remove('marginTopFullHeight');
+      introID.style.height = (mapHeight - 95).toString() + 'px';
     }
-    if (windowHeight > 590) {
+    if (mapHeight > 440) {
       introID.classList.remove('marginTopSmallHeight');
       introID.classList.add('marginTopFullHeight');
+      introID.style.height = (mapHeight - 115).toString() + 'px';
     }
   }
 }
