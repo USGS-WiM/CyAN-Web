@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, HostListener } from '@angular/core';
 import * as L from 'leaflet';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
@@ -22,6 +22,11 @@ export class MapComponent implements AfterViewInit {
     private componentDisplayService: ComponentDisplayService,
     private mapLayersService: MapLayersService
   ) {}
+
+  @HostListener('window:resize')
+  onResize() {
+    //
+  }
 
   ngAfterViewInit(): void {
     this.initMap();
