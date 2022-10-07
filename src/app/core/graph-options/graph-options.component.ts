@@ -56,6 +56,8 @@ export class GraphOptionsComponent implements OnInit {
   //flags
   flaggedData = [];
   showFlagOptions: Boolean = false;
+  showFlagOptionsX: Boolean = false;
+  showFlagOptionsY: Boolean = false;
   showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
@@ -69,6 +71,16 @@ export class GraphOptionsComponent implements OnInit {
     xFlagControl: new FormControl(),
     yFlagControl: new FormControl(),
     xyFlagControl: new FormControl(),
+  });
+  public flagTypesX = new FormGroup({
+    centralTendency: new FormControl(),
+    outlier: new FormControl(),
+    matrixInterference: new FormControl(),
+    dissolvedGTTotal: new FormControl(),
+    phytoChl: new FormControl(),
+    unknown: new FormControl(),
+  });
+  public flagTypesY = new FormGroup({
     centralTendency: new FormControl(),
     outlier: new FormControl(),
     matrixInterference: new FormControl(),
@@ -519,6 +531,8 @@ export class GraphOptionsComponent implements OnInit {
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
     this.axisFlagForm.get('xyFlagControl').setValue(null);
+    this.showFlagOptionsX = false;
+    this.showFlagOptionsY = false;
   }
 
   //Disables or enables clickable features
@@ -719,6 +733,17 @@ export class GraphOptionsComponent implements OnInit {
     this.updateGraph(this.unflaggedColor, 'none', this.unflaggedSymbol, '', '');
     this.showUnflagOptions = false;
     this.closeFlagOptions();
+  }
+
+  public goToFlagTypes(axis: String) {
+    this.showFlagOptions = false;
+    if (axis == 'x') {
+      this.showFlagOptionsX = true;
+    }
+    if (axis == 'y') {
+      this.showFlagOptionsX = false;
+      this.showFlagOptionsY = true;
+    }
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
