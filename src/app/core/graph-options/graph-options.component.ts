@@ -541,27 +541,26 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public disableEnableGraph(enable: boolean) {
-
     // disable pointer events based on if the show flags button is open
     const plotlyjs = document.getElementsByClassName('js-plotly-plot');
-      for (let el in plotlyjs) {
-        if ((plotlyjs[el]['style'] !== undefined) && (enable) ) {
-          console.log("enable true");
-          plotlyjs[el]['style'].pointerEvents = "unset";
-        } else if ((plotlyjs[el]['style'] !== undefined) && (!enable) ) {
-          plotlyjs[el]['style'].pointerEvents = "none";
-          plotlyjs[0]['style'].pointerEvents = "unset"; // re-enables modebar
-        }
+    for (let el in plotlyjs) {
+      if (plotlyjs[el]['style'] !== undefined && enable) {
+        console.log('enable true');
+        plotlyjs[el]['style'].pointerEvents = 'unset';
+      } else if (plotlyjs[el]['style'] !== undefined && !enable) {
+        plotlyjs[el]['style'].pointerEvents = 'none';
+        plotlyjs[0]['style'].pointerEvents = 'unset'; // re-enables modebar
       }
+    }
 
-      const mainSVG = document.getElementsByClassName('main-svg')
-      for (let el in mainSVG) {
-        if ((mainSVG[el]['style'] !== undefined) && (enable)) {
-          mainSVG[el]['style'].pointerEvents = "unset";
-        } else if ((mainSVG[el]['style'] !== undefined) && (!enable) ){
-          mainSVG[el]['style'].pointerEvents = "none";
-        }
+    const mainSVG = document.getElementsByClassName('main-svg');
+    for (let el in mainSVG) {
+      if (mainSVG[el]['style'] !== undefined && enable) {
+        mainSVG[el]['style'].pointerEvents = 'unset';
+      } else if (mainSVG[el]['style'] !== undefined && !enable) {
+        mainSVG[el]['style'].pointerEvents = 'none';
       }
+    }
   }
 
   //Called whenever a flag is selected/deselected
@@ -1187,8 +1186,6 @@ export class GraphOptionsComponent implements OnInit {
     //get window width
     let windowWidth = window.innerWidth;
 
-    this.graphHeight = 0.7 * window.innerHeight;
-
     let graphOptionsBackgroundID = document.getElementById(
       'graphOptionsBackgroundID'
     );
@@ -1196,6 +1193,9 @@ export class GraphOptionsComponent implements OnInit {
     let graphOptionsCollapsedID = document.getElementById(
       'graphOptionsCollapsedID'
     );
+
+    this.graphHeight = 0.7 * mapHeight;
+    graphBackgroundID.style.height = (0.7 * mapHeight).toString() + 'px';
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
