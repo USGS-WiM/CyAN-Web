@@ -542,7 +542,6 @@ export class GraphOptionsComponent implements OnInit {
           console.log("enable true");
           plotlyjs[el]['style'].pointerEvents = "unset";
         } else if ((plotlyjs[el]['style'] !== undefined) && (!enable) ) {
-          console.log(modebar);
           plotlyjs[el]['style'].pointerEvents = "none";
           plotlyjs[0]['style'].pointerEvents = "unset"; // re-enables modebar
         }
