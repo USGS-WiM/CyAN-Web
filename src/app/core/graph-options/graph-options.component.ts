@@ -483,6 +483,7 @@ export class GraphOptionsComponent implements OnInit {
   flagAllData() {
     this.flagAll = true;
     this.showFlagOptions = true;
+    this.disableEnableGraph(true);
     this.selectPoints();
   }
 
@@ -495,6 +496,7 @@ export class GraphOptionsComponent implements OnInit {
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
+    this.disableEnableGraph(false);
     this.showUnflagOptions = false;
     if (this.lasso) {
       this.createGraph(false);
@@ -529,6 +531,30 @@ export class GraphOptionsComponent implements OnInit {
     if (!enable && !button) {
       feature.classList.add('disableClick');
     }
+  }
+
+  public disableEnableGraph(enable: boolean) {
+
+    // disable pointer events based on if the show flags button is open
+    const plotlyjs = document.getElementsByClassName('js-plotly-plot');
+      for (let el in plotlyjs) {
+        if ((plotlyjs[el]['style'] !== undefined) && (enable) ) {
+          console.log("enable true");
+          plotlyjs[el]['style'].pointerEvents = "unset";
+        } else if ((plotlyjs[el]['style'] !== undefined) && (!enable) ) {
+          plotlyjs[el]['style'].pointerEvents = "none";
+          plotlyjs[0]['style'].pointerEvents = "unset"; // re-enables modebar
+        }
+      }
+
+      const mainSVG = document.getElementsByClassName('main-svg')
+      for (let el in mainSVG) {
+        if ((mainSVG[el]['style'] !== undefined) && (enable)) {
+          mainSVG[el]['style'].pointerEvents = "unset";
+        } else if ((mainSVG[el]['style'] !== undefined) && (!enable) ){
+          mainSVG[el]['style'].pointerEvents = "none";
+        }
+      }
   }
 
   //Called whenever a flag is selected/deselected
@@ -820,6 +846,7 @@ export class GraphOptionsComponent implements OnInit {
       this.selectedPoints = selectedPoints.points;
       //Open flag options modal
       this.showFlagOptions = true;
+      this.disableEnableGraph(true);
     });
     this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
       this.selectedPoints = selectedPoints.points;
@@ -827,6 +854,7 @@ export class GraphOptionsComponent implements OnInit {
       this.showFlagOptions = true;
       this.lasso = true;
       this.selectPoints();
+      this.disableEnableGraph(true);
     });
   }
 
@@ -834,6 +862,7 @@ export class GraphOptionsComponent implements OnInit {
     //Prevent user from clicking on features outside the modal
     this.disableEnable('graph', false, false);
     this.disableEnable('graphOptionsBackgroundID', false, false);
+    //Plotly.react(this.bivariatePlot, {}, {'staticPlot': 'true'});
   }
 
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
