@@ -12,9 +12,7 @@ export class AppComponent {
 
   public clickUsaBarCollapse() {
     this.usaBarCollapse = !this.usaBarCollapse;
-    this.componentDisplayService.usaBarCollapseSubject.next(
-      this.usaBarCollapse
-    );
+    this.componentDisplayService.getUsaBarCollapse(this.usaBarCollapse);
   }
 
   title = 'CyAN-Web';

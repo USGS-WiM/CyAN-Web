@@ -7,13 +7,13 @@
             </p>
         </div>
         <div style="padding: 20px; margin-top: 20px; background-color: rgb(242, 189, 161, 0.2)">
-            <p style="font-size: large">
-                <mat-icon>map</mat-icon>
-                View data on an interactive map.
+            <p style="font-size: large; cursor: pointer;">
+                <mat-icon (click)="clickIntroMap()">map</mat-icon>
+                Query and view data on an interactive map.
             </p>
-            <p style="font-size: large">
-                <mat-icon>scatter_plot</mat-icon>
-                Plot and flag data on an interactive graph.
+            <p style="font-size: large; cursor: pointer;">
+                <mat-icon (click)="clickIntroGraph()">scatter_plot</mat-icon>
+                Query, plot, and flag data on an interactive graph.
             </p>
         </div>
     </div>

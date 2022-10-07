@@ -17,11 +17,24 @@ export class IntroComponent implements OnInit {
     this.resizeDivs();
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
-        setTimeout(() => {
-          this.resizeDivs();
-        }, 0.1);
+        this.componentDisplayService.usaBarCollapseSubject.subscribe(
+          (usaBarBoolean) => {
+            setTimeout(() => {
+              this.resizeDivs();
+            }, 0.1);
+          }
+        );
       }
     );
+  }
+
+  public clickIntroMap() {
+    this.componentDisplayService.getMapBtn(true);
+    this.componentDisplayService.getMapBtn(false);
+  }
+  public clickIntroGraph() {
+    this.componentDisplayService.getGraphBtn(true);
+    this.componentDisplayService.getGraphBtn(false);
   }
 
   public resizeDivs() {

@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, HostListener } from '@angular/core';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +7,7 @@ import { Component, AfterViewInit, HostListener } from '@angular/core';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements AfterViewInit {
-  constructor() {}
+  constructor(private componentDisplayService: ComponentDisplayService) {}
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -24,6 +25,18 @@ export class HomeComponent implements AfterViewInit {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 900);
     window.onresize = () => (this.windowWidthResize = window.innerWidth >= 900);
     Promise.resolve().then(() => this.resizeDivs());
+    this.componentDisplayService.mapBtnSubject.subscribe((mapBtnDisplay) => {
+      if (mapBtnDisplay) {
+        this.clickMap();
+      }
+    });
+    this.componentDisplayService.graphBtnSubject.subscribe(
+      (graphBtnDisplay) => {
+        if (graphBtnDisplay) {
+          this.clickGraph();
+        }
+      }
+    );
   }
 
   public changeLayout(homeLayout: Boolean) {

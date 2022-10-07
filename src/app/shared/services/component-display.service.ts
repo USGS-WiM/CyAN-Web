@@ -31,6 +31,22 @@ export class ComponentDisplayService {
     this.usaBarCollapseSubject.next(collapse);
   }
 
+  //map button clicked
+  public mapBtnSubject = new BehaviorSubject<Boolean>(undefined);
+  mapBtn$ = this.mapBtnSubject.asObservable();
+
+  public getMapBtn(collapse: Boolean) {
+    this.mapBtnSubject.next(collapse);
+  }
+
+  //graph button clicked
+  public graphBtnSubject = new BehaviorSubject<Boolean>(undefined);
+  graphBtn$ = this.graphBtnSubject.asObservable();
+
+  public getGraphBtn(collapse: Boolean) {
+    this.graphBtnSubject.next(collapse);
+  }
+
   //get bounding box: north
   public northBoundsSubject = new BehaviorSubject<number>(undefined);
   northBounds$ = this.northBoundsSubject.asObservable();
