@@ -162,7 +162,7 @@
       </form>
     </div>
     <div class="optionModal" [hidden]="!showFlagOptionsX">
-      X-Axis Flag Types
+      <p class="leftTopBreak">X-Axis Flags</p>
       <div style="background-color: rgb(254, 254, 204, 0.4)">
         <form [formGroup]="flagTypesX">
           <div class="leftTopBreak"
@@ -200,7 +200,7 @@
       </div>
       <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
         <mat-label>Notes</mat-label>
-        <textarea style="resize: none" id='flagAnnotation' matInput
+        <textarea style="resize: none" id='flagAnnotationX' matInput
           placeholder="Enter a custom flag annotation here"></textarea>
       </mat-form-field>
       <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypesY()" [hidden]="submitAfterX"
@@ -217,7 +217,7 @@
       </button>
     </div>
     <div class="optionModal" [hidden]="!showFlagOptionsY">
-      Y-Axis Flag Types
+      <p class="leftTopBreak">Y-Axis Flags</p>
       <div style="background-color: rgb(254, 254, 204, 0.4)">
         <form [formGroup]="flagTypesY">
           <div class="leftTopBreak"
@@ -255,7 +255,7 @@
       </div>
       <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
         <mat-label>Notes</mat-label>
-        <textarea style="resize: none" id='flagAnnotation' matInput
+        <textarea style="resize: none" id='flagAnnotationY' matInput
           placeholder="Enter a custom flag annotation here"></textarea>
       </mat-form-field>
       <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
