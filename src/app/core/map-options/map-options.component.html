@@ -1,12 +1,12 @@
-<div class="optionsBackgroundMini marginLeftFullWidth" [hidden]="mapLayerOptions" (click)="displayMapLayerOptions(true)"
-  id="mapLayersCollapsed"
+<div class="optionsBackgroundMini marginLeftFullWidth floating-body" [hidden]="mapLayerOptions"
+  (click)="displayMapLayerOptions(true)" id="mapLayersCollapsed"
   aria-label="This panel contains different base map options for the map. Right now, the panel is minimized click on it to access the base map options.">
   <div class="alignRight">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>
   <div class="minimizedBackground">Map Layers</div>
 </div>
-<div class="mapLayerOptionsBackground marginLeftFullWidth marginTopFullHeight" [hidden]="!mapLayerOptions"
+<div class="mapLayerOptionsBackground marginLeftFullWidth marginTopFullHeight floating-body" [hidden]="!mapLayerOptions"
   id="mapLayersOptions">
   <div class="minimize" aria-label="Click on this button to minimize the map filters panel.">
     <mat-icon matTooltip="minimize" (click)="displayMapLayerOptions(false)">minimize</mat-icon>
@@ -39,29 +39,19 @@
     <form [formGroup]="paramMethodForm">
       <div class="leftBreak">
         <mat-form-field appearance="fill">
-          <mat-chip-list #paramList >
-            <mat-chip
-              *ngFor="let parameter of chipParams"
-              [selectable]="selectable"
-              [removable]="removable"
+          <mat-chip-list #paramList>
+            <mat-chip *ngFor="let parameter of chipParams" [selectable]="selectable" [removable]="removable"
               (removed)="remove(parameter)">
               {{parameter}}
               <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
             </mat-chip>
-          <input
-            matInput 
-            placeholder="Parameters"
-            #paramInput
-            formControlName="parameterControl"
-            [matAutocomplete]="auto"
-            [matChipInputFor]="paramList"
-            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-            [matChipInputAddOnBlur]="addOnBlur"
-            aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map."
-          />
-        </mat-chip-list>
+            <input matInput placeholder="Parameters" #paramInput formControlName="parameterControl"
+              [matAutocomplete]="auto" [matChipInputFor]="paramList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+              aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map." />
+          </mat-chip-list>
           <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedParameter($event)">
-            <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.short_name"> 
+            <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.short_name">
               {{ parameter.short_name }}
             </mat-option>
           </mat-autocomplete>
@@ -78,7 +68,8 @@
     </form>
     <div class="custom-slider leftBreak"
       aria-label="This is a slider filter. It determines the minimum and maximum years of the points displayed in the map">
-      <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions" (userChange)="updateYears($event)"></ngx-slider>
+      <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions"
+        (userChange)="updateYears($event)"></ngx-slider>
     </div>
     <div style="margin-left: 10px; margin-top: 10px">
       <form [formGroup]="regionForm">
@@ -149,8 +140,9 @@
     </button>
   </div>
 </div>
-<div [hidden]="mapFilters" class="optionsBackgroundMini marginLeftFullWidth" (click)="displayMapFilters(true)"
-  id="filterPointsCollapsed" aria-label="Click this button to maximize the map filter panel">
+<div [hidden]="mapFilters" class="optionsBackgroundMini marginLeftFullWidth floating-body"
+  (click)="displayMapFilters(true)" id="filterPointsCollapsed"
+  aria-label="Click this button to maximize the map filter panel">
   <div class="alignRight">
     <mat-icon matTooltip="maximize">maximize</mat-icon>
   </div>

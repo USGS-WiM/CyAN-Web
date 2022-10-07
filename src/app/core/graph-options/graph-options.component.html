@@ -134,7 +134,7 @@
     </div>
     <div class="optionModal" [hidden]=" !showFlagOptions">
       <form [formGroup]="axisFlagForm">
-        <div style="background-color: rgb(242, 189, 161, 0.2)">
+        <div>
           <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
             [hidden]="sameQuery">
             <mat-checkbox formControlName="xFlagControl" class="example-margin" [disableRipple]="true">X-Axis
@@ -151,7 +151,22 @@
             </mat-checkbox>
           </div>
         </div>
-        <div style="background-color: rgb(254, 254, 204, 0.4)">
+        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()"
+          aria-label="Click this button to save flag options">
+          Next
+        </button>
+        <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+          aria-label="Click this button to close the flag options modal without saving changes">
+          Cancel
+        </button>
+      </form>
+    </div>
+    <div class="optionModal" [hidden]="!showFlagOptionsX">
+      <div class="leftTopBreak">
+        X-Axis Flags
+      </div>
+      <div>
+        <form [formGroup]="flagTypesX">
           <div class="leftTopBreak"
             aria-label="Checking this box will add 'Central tendency' to the list of flag types">
             <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central
@@ -183,19 +198,73 @@
             <mat-checkbox formControlName="unknown" class="example-margin" [disableRipple]="true">Unknown
             </mat-checkbox>
           </div>
-        </div>
-        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
-          <mat-label>Notes</mat-label>
-          <textarea style="resize: none" id='flagAnnotation' matInput
-            placeholder="Enter a custom flag annotation here"></textarea>
-        </mat-form-field>
-      </form>
-      <form>
-
-      </form>
+        </form>
+      </div>
+      <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+        <mat-label>Notes</mat-label>
+        <textarea style="resize: none" id='flagAnnotationX' matInput
+          placeholder="Enter a custom flag annotation here"></textarea>
+      </mat-form-field>
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypesY()" [hidden]="submitAfterX"
+        aria-label="Click this button to save flag options">
+        Next
+      </button>
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()" [hidden]="!submitAfterX"
+        aria-label="Click this button to save flag options">
+        Submit
+      </button>
+      <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+        aria-label="Click this button to close the flag options modal without saving changes">
+        Cancel
+      </button>
+    </div>
+    <div class="optionModal" [hidden]="!showFlagOptionsY">
+      <div class="leftTopBreak">
+        Y-Axis Flags
+      </div>
+      <div>
+        <form [formGroup]="flagTypesY">
+          <div class="leftTopBreak"
+            aria-label="Checking this box will add 'Central tendency' to the list of flag types">
+            <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central
+              tendency
+            </mat-checkbox>
+          </div>
+          <div class="leftTopBreak" aria-label="Checking this box will add 'Outlier' to the list of flag types">
+            <mat-checkbox formControlName="outlier" class="example-margin" [disableRipple]="true">Outlier
+            </mat-checkbox>
+          </div>
+          <div class="leftTopBreak"
+            aria-label="Checking this box will add 'Matrix or recovery problem' to the list of flag types">
+            <mat-checkbox formControlName="matrixInterference" class="example-margin" [disableRipple]="true">Matrix or
+              recovery problem
+            </mat-checkbox>
+          </div>
+          <div class="leftTopBreak"
+            aria-label="Checking this box will add 'Dissolved result > Total' to the list of flag types">
+            <mat-checkbox formControlName="dissolvedGTTotal" class="example-margin" [disableRipple]="true">Dissolved
+              result > Total
+            </mat-checkbox>
+          </div>
+          <div class="leftTopBreak"
+            aria-label="Checking this box will add 'Phytoplankton vs Chl' to the list of flag types">
+            <mat-checkbox formControlName="phytoChl" class="example-margin" [disableRipple]="true">Phytoplankton vs Chl
+            </mat-checkbox>
+          </div>
+          <div class="leftTopBreak" aria-label="Checking this box will add 'Unknown' to the list of flag types">
+            <mat-checkbox formControlName="unknown" class="example-margin" [disableRipple]="true">Unknown
+            </mat-checkbox>
+          </div>
+        </form>
+      </div>
+      <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+        <mat-label>Notes</mat-label>
+        <textarea style="resize: none" id='flagAnnotationY' matInput
+          placeholder="Enter a custom flag annotation here"></textarea>
+      </mat-form-field>
       <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
         aria-label="Click this button to save flag options">
-        Save
+        Submit
       </button>
       <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
         aria-label="Click this button to close the flag options modal without saving changes">

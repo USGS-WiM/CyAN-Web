@@ -41,6 +41,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - New colors for nav buttons; selected btn changes color
 - Responsive resizing to account for top bars
 - Prevents user interaction with graph when Flag Options modal is open
+- Separates x and y axes in flag modal
 
 ### Fixed
 
