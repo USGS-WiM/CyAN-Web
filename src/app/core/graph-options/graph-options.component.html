@@ -151,7 +151,7 @@
             </mat-checkbox>
           </div>
         </div>
-        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes('x')"
+        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()"
           aria-label="Click this button to save flag options">
           Next
         </button>
@@ -162,7 +162,9 @@
       </form>
     </div>
     <div class="optionModal" [hidden]="!showFlagOptionsX">
-      <title [hidden]="sameQuery">X-Axis Flag Types</title>
+      <div [hidden]="!sameQuery">
+        <title>X-Axis Flag Types</title>
+      </div>
       <div style="background-color: rgb(254, 254, 204, 0.4)">
         <form [formGroup]="flagTypesX">
           <div class="leftTopBreak"
@@ -203,9 +205,13 @@
         <textarea style="resize: none" id='flagAnnotation' matInput
           placeholder="Enter a custom flag annotation here"></textarea>
       </mat-form-field>
-      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes('y')"
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()"
         aria-label="Click this button to save flag options">
         Next
+      </button>
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
+        aria-label="Click this button to save flag options">
+        Submit
       </button>
       <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
         aria-label="Click this button to close the flag options modal without saving changes">
@@ -213,7 +219,7 @@
       </button>
     </div>
     <div class="optionModal" [hidden]="!showFlagOptionsY">
-      Y-Axis Flag Types
+      <title>Y-Axis Flag Types</title>
       <div style="background-color: rgb(254, 254, 204, 0.4)">
         <form [formGroup]="flagTypesY">
           <div class="leftTopBreak"
@@ -254,7 +260,7 @@
         <textarea style="resize: none" id='flagAnnotation' matInput
           placeholder="Enter a custom flag annotation here"></textarea>
       </mat-form-field>
-      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes('y')"
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
         aria-label="Click this button to save flag options">
         Submit
       </button>

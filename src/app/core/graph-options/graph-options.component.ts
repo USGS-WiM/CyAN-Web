@@ -735,13 +735,15 @@ export class GraphOptionsComponent implements OnInit {
     this.closeFlagOptions();
   }
 
-  public goToFlagTypes(axis: String) {
+  public goToFlagTypes() {
+    let xChecked = this.axisFlagForm.get('xFlagControl').value;
+    let yChecked = this.axisFlagForm.get('yFlagControl').value;
+    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
     this.showFlagOptions = false;
-    if (axis == 'x') {
+    if (xChecked || xyChecked) {
       this.showFlagOptionsX = true;
     }
-    if (axis == 'y') {
-      this.showFlagOptionsX = false;
+    if (yChecked) {
       this.showFlagOptionsY = true;
     }
   }
