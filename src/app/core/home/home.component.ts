@@ -12,7 +12,6 @@ export class HomeComponent implements AfterViewInit {
     this.resizeDivs();
   }
 
-  public showHomeLayout: Boolean = false;
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
@@ -28,7 +27,6 @@ export class HomeComponent implements AfterViewInit {
   }
 
   public changeLayout(homeLayout: Boolean) {
-    this.showHomeLayout = homeLayout;
     if (homeLayout === true) {
       this.showMap = false;
       this.showInfo = false;
@@ -40,14 +38,12 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showInfo = false;
     this.showGraph = false;
-    this.showHomeLayout = false;
     this.showIntro = true;
     this.resizeDivs();
   }
 
   public clickMap() {
     this.showMap = true;
-    this.showHomeLayout = false;
     this.showInfo = false;
     this.showGraph = false;
     this.showIntro = false;
@@ -56,7 +52,6 @@ export class HomeComponent implements AfterViewInit {
 
   public clickInfo() {
     this.showInfo = true;
-    this.showHomeLayout = false;
     this.showMap = false;
     this.showGraph = false;
     this.showIntro = false;
@@ -66,7 +61,6 @@ export class HomeComponent implements AfterViewInit {
   public clickGraph() {
     this.showGraph = true;
     this.showInfo = false;
-    this.showHomeLayout = false;
     this.showMap = false;
     this.showIntro = false;
     this.resizeDivs();
@@ -76,32 +70,17 @@ export class HomeComponent implements AfterViewInit {
     //get window dimensions
     let windowWidth = window.innerWidth;
 
-    let homeBtnFullID = document.getElementById('homeBtnFullID');
-    let mapBtnFullID = document.getElementById('mapBtnFullID');
-    let mapGraphID = document.getElementById('mapGraphID');
-    if (windowWidth < 900 && !this.showHomeLayout) {
+    if (windowWidth < 900) {
       this.showFullCyanHomeBtn = false;
     }
-    if (windowWidth > 900 || this.showHomeLayout) {
+    if (windowWidth > 900) {
       this.showFullCyanHomeBtn = true;
     }
     if (windowWidth < 1000) {
       this.fullHomeScreen = false;
-      mapGraphID.classList.remove('mapGraphBtnGap');
     }
     if (windowWidth > 1000) {
       this.fullHomeScreen = true;
-
-      mapGraphID.classList.add('mapGraphBtnGap');
-
-      mapBtnFullID.classList.add('mapBtnFullMargin');
-      mapBtnFullID.classList.remove('mapBtnSmallMargin');
-    }
-    if (this.showHomeLayout) {
-      homeBtnFullID.classList.remove('marginLeftFullWidth');
-    }
-    if (!this.showHomeLayout) {
-      homeBtnFullID.classList.add('marginLeftFullWidth');
     }
   }
 }
