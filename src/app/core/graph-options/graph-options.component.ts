@@ -58,6 +58,7 @@ export class GraphOptionsComponent implements OnInit {
   showFlagOptions: Boolean = false;
   showFlagOptionsX: Boolean = false;
   showFlagOptionsY: Boolean = false;
+  submitAfterX: Boolean = false;
   showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
@@ -743,9 +744,20 @@ export class GraphOptionsComponent implements OnInit {
     if (xChecked || xyChecked) {
       this.showFlagOptionsX = true;
     }
-    if (yChecked) {
+    if (!xChecked && !xyChecked) {
       this.showFlagOptionsY = true;
     }
+    if (yChecked) {
+      this.submitAfterX = false;
+    }
+    if (!yChecked) {
+      this.submitAfterX = true;
+    }
+  }
+
+  public goToFlagTypesY() {
+    this.showFlagOptionsX = false;
+    this.showFlagOptionsY = true;
   }
 
   //Triggered when the 'Submit' button is clicked in the flag modal
