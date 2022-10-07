@@ -40,12 +40,12 @@ export class IntroComponent implements OnInit {
       introID.classList.add('marginLeftFullWidth');
       introID.classList.remove('marginLeftSmallWidth');
     }
-    if (mapHeight < 440) {
+    if (mapHeight < 570) {
       introID.classList.add('marginTopSmallHeight');
       introID.classList.remove('marginTopFullHeight');
       introID.style.height = (mapHeight - 95).toString() + 'px';
     }
-    if (mapHeight > 440) {
+    if (mapHeight > 570) {
       introID.classList.remove('marginTopSmallHeight');
       introID.classList.add('marginTopFullHeight');
       introID.style.height = (mapHeight - 115).toString() + 'px';

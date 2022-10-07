@@ -1202,7 +1202,7 @@ export class GraphOptionsComponent implements OnInit {
         this.graphWidth = 0.8 * windowWidth - 165;
       }
     }
-    if (mapHeight < 723) {
+    if (mapHeight < 570) {
       graphOptionsBackgroundID.classList.remove('marginTopFullHeight');
       graphOptionsBackgroundID.classList.add('marginTopSmallHeight');
 
@@ -1213,9 +1213,9 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.add('marginTopSmallHeight');
 
       graphOptionsBackgroundID.style.height =
-        (mapHeight - 95).toString() + 'px';
+        (mapHeight - 75).toString() + 'px';
     }
-    if (mapHeight > 723) {
+    if (mapHeight > 570) {
       graphOptionsBackgroundID.classList.add('marginTopFullHeight');
       graphOptionsBackgroundID.classList.remove('marginTopSmallHeight');
 

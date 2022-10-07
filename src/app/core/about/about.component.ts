@@ -41,12 +41,12 @@ export class AboutComponent implements OnInit {
       infoPanelID.classList.add('marginLeftFullWidth');
       infoPanelID.classList.remove('marginLeftSmallWidth');
     }
-    if (mapHeight < 590) {
+    if (mapHeight < 570) {
       infoPanelID.classList.add('marginTopSmallHeight');
       infoPanelID.classList.remove('marginTopFullHeight');
       infoPanelID.style.height = (mapHeight - 95).toString() + 'px';
     }
-    if (mapHeight > 590) {
+    if (mapHeight > 570) {
       infoPanelID.classList.remove('marginTopSmallHeight');
       infoPanelID.classList.add('marginTopFullHeight');
       infoPanelID.style.height = (mapHeight - 95).toString() + 'px';

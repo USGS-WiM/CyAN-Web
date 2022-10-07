@@ -143,6 +143,13 @@ export class MapOptionsComponent implements OnInit {
     this.resizeDivs();
     this.populateDropdowns();
     this.getMapData();
+    this.componentDisplayService.usaBarCollapseSubject.subscribe(
+      (usaBarBoolean) => {
+        setTimeout(() => {
+          this.resizeDivs();
+        }, 0.1);
+      }
+    );
   }
   ngDoCheck() {
     // Data processing slower then lifecycle hooks so waiting for array to be set before watching parameter control for changes
@@ -408,94 +415,6 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
-  public resizeDivs() {
-    //get map height
-    let mapContainer = document.getElementById('mapContainer');
-    let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
-
-    //get window width
-    let windowWidth = window.innerWidth;
-
-    //get all the elements that change according to window dimensions
-    let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
-    let mapLayersOptions = document.getElementById('mapLayersOptions');
-    let filterPointsCollapsed = document.getElementById(
-      'filterPointsCollapsed'
-    );
-    let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
-
-    //move everything to the left when the width shrinks
-    if (windowWidth < 900) {
-      mapLayersOptions.classList.remove('marginLeftFullWidth');
-      mapLayersOptions.classList.add('marginLeftSmallWidth');
-
-      mapPointFilterDiv.classList.remove('marginLeftFullWidth');
-      mapPointFilterDiv.classList.add('marginLeftSmallWidth');
-
-      filterPointsCollapsed.classList.remove('marginLeftFullWidth');
-      filterPointsCollapsed.classList.add('marginLeftSmallWidth');
-
-      mapLayersCollapsed.classList.remove('marginLeftFullWidth');
-      mapLayersCollapsed.classList.add('marginLeftSmallWidth');
-    }
-
-    //move everything to the right when the width grows
-    if (windowWidth > 900) {
-      mapLayersOptions.classList.add('marginLeftFullWidth');
-      mapLayersOptions.classList.remove('marginLeftSmallWidth');
-
-      mapPointFilterDiv.classList.add('marginLeftFullWidth');
-      mapPointFilterDiv.classList.remove('marginLeftSmallWidth');
-
-      filterPointsCollapsed.classList.add('marginLeftFullWidth');
-      filterPointsCollapsed.classList.remove('marginLeftSmallWidth');
-
-      mapLayersCollapsed.classList.add('marginLeftFullWidth');
-      mapLayersCollapsed.classList.remove('marginLeftSmallWidth');
-    }
-
-    if (mapHeight < 570) {
-      //reduce spacing between collapsed map layers and nav buttons
-      mapLayersCollapsed.classList.remove('marginTopFullHeight');
-      mapLayersCollapsed.classList.add('marginTopSmallHeight');
-
-      //decrease the margin between map layers and point filters
-      filterPointsCollapsed.classList.remove('marginTopFullHeight');
-      filterPointsCollapsed.classList.add('marginTopSmallHeight');
-
-      //reduce spacing between map layers and nav buttons
-      mapLayersOptions.classList.remove('marginTopFullHeight');
-      mapLayersOptions.classList.add('marginTopSmallHeight');
-
-      //reduce spacing between point filters and map layers
-      mapPointFilterDiv.classList.remove('marginTopFullHeight');
-      mapPointFilterDiv.classList.add('marginTopSmallHeight');
-
-      //set height of point filters according to map height
-      mapPointFilterDiv.style.height = (mapHeight - 220).toString() + 'px';
-    }
-    if (mapHeight > 570) {
-      //increase spacing between collapsed map layers and nav buttons
-      mapLayersCollapsed.classList.add('marginTopFullHeight');
-      mapLayersCollapsed.classList.remove('marginTopSmallHeight');
-
-      //increase the spacing between map layers and point filters
-      filterPointsCollapsed.classList.add('marginTopFullHeight');
-      filterPointsCollapsed.classList.remove('marginTopSmallHeight');
-
-      //increase spacing between map layers and nav buttons
-      mapLayersOptions.classList.add('marginTopFullHeight');
-      mapLayersOptions.classList.remove('marginTopSmallHeight');
-
-      //reduce spacing between point filters and map layers
-      mapPointFilterDiv.classList.add('marginTopFullHeight');
-      mapPointFilterDiv.classList.remove('marginTopSmallHeight');
-
-      //set height of point filters according to map height
-      mapPointFilterDiv.style.height = (mapHeight - 250).toString() + 'px';
-    }
-  }
-
   public storeNorth() {
     //Setting these variables so they can be used to populate graph options if that checkbox is selected
     this.componentDisplayService.getStoreNorthBounds(
@@ -605,5 +524,93 @@ export class MapOptionsComponent implements OnInit {
   updateYears(event) {
     this.filterService.getMaxYear(event.highValue);
     this.filterService.getMinYear(event.value);
+  }
+
+  public resizeDivs() {
+    //get map height
+    let mapContainer = document.getElementById('mapContainer');
+    let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
+
+    //get window width
+    let windowWidth = window.innerWidth;
+
+    //get all the elements that change according to window dimensions
+    let mapPointFilterDiv = document.getElementById('mapOptionsContainer');
+    let mapLayersOptions = document.getElementById('mapLayersOptions');
+    let filterPointsCollapsed = document.getElementById(
+      'filterPointsCollapsed'
+    );
+    let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
+
+    //move everything to the left when the width shrinks
+    if (windowWidth < 900) {
+      mapLayersOptions.classList.remove('marginLeftFullWidth');
+      mapLayersOptions.classList.add('marginLeftSmallWidth');
+
+      mapPointFilterDiv.classList.remove('marginLeftFullWidth');
+      mapPointFilterDiv.classList.add('marginLeftSmallWidth');
+
+      filterPointsCollapsed.classList.remove('marginLeftFullWidth');
+      filterPointsCollapsed.classList.add('marginLeftSmallWidth');
+
+      mapLayersCollapsed.classList.remove('marginLeftFullWidth');
+      mapLayersCollapsed.classList.add('marginLeftSmallWidth');
+    }
+
+    //move everything to the right when the width grows
+    if (windowWidth > 900) {
+      mapLayersOptions.classList.add('marginLeftFullWidth');
+      mapLayersOptions.classList.remove('marginLeftSmallWidth');
+
+      mapPointFilterDiv.classList.add('marginLeftFullWidth');
+      mapPointFilterDiv.classList.remove('marginLeftSmallWidth');
+
+      filterPointsCollapsed.classList.add('marginLeftFullWidth');
+      filterPointsCollapsed.classList.remove('marginLeftSmallWidth');
+
+      mapLayersCollapsed.classList.add('marginLeftFullWidth');
+      mapLayersCollapsed.classList.remove('marginLeftSmallWidth');
+    }
+
+    if (mapHeight < 570) {
+      //reduce spacing between collapsed map layers and nav buttons
+      mapLayersCollapsed.classList.remove('marginTopFullHeight');
+      mapLayersCollapsed.classList.add('marginTopSmallHeight');
+
+      //decrease the margin between map layers and point filters
+      filterPointsCollapsed.classList.remove('marginTopFullHeight');
+      filterPointsCollapsed.classList.add('marginTopSmallHeight');
+
+      //reduce spacing between map layers and nav buttons
+      mapLayersOptions.classList.remove('marginTopFullHeight');
+      mapLayersOptions.classList.add('marginTopSmallHeight');
+
+      //reduce spacing between point filters and map layers
+      mapPointFilterDiv.classList.remove('marginTopFullHeight');
+      mapPointFilterDiv.classList.add('marginTopSmallHeight');
+
+      //set height of point filters according to map height
+      mapPointFilterDiv.style.height = (mapHeight - 220).toString() + 'px';
+    }
+    if (mapHeight > 570) {
+      //increase spacing between collapsed map layers and nav buttons
+      mapLayersCollapsed.classList.add('marginTopFullHeight');
+      mapLayersCollapsed.classList.remove('marginTopSmallHeight');
+
+      //increase the spacing between map layers and point filters
+      filterPointsCollapsed.classList.add('marginTopFullHeight');
+      filterPointsCollapsed.classList.remove('marginTopSmallHeight');
+
+      //increase spacing between map layers and nav buttons
+      mapLayersOptions.classList.add('marginTopFullHeight');
+      mapLayersOptions.classList.remove('marginTopSmallHeight');
+
+      //reduce spacing between point filters and map layers
+      mapPointFilterDiv.classList.add('marginTopFullHeight');
+      mapPointFilterDiv.classList.remove('marginTopSmallHeight');
+
+      //set height of point filters according to map height
+      mapPointFilterDiv.style.height = (mapHeight - 250).toString() + 'px';
+    }
   }
 }
