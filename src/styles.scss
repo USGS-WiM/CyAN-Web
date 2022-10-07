@@ -38,12 +38,6 @@ body {
   opacity: 1;
 }
 
-::ng-deep .mat-snack-bar-container.no-data-warning {
-  background-color: #ff9100;
-  color: white;
-  margin-bottom: 300px;
-}
-
 // css for plotly graph buttons
 a.modebar-btn svg {
   transform: scale(1.5);
@@ -495,31 +489,6 @@ a.modebar-btn svg {
 .disableClick {
   pointer-events: none;
 }
-
-/* start: year slider */
-::ng-deep {
-  .custom-slider {
-    .ngx-slider {
-      .ngx-slider-selection {
-        background: rgb(146, 146, 136) !important;
-      }
-    }
-    .ngx-slider-pointer {
-      background: rgb(146, 146, 136) !important;
-      .ng-slider-active::before {
-        background-color: white !important;
-      }
-    }
-  }
-}
-::ng-deep
-  .mat-checkbox-checked.mat-accent
-  .mat-checkbox-ripple
-  .mat-ripple-element {
-  opacity: 0.03 !important;
-  background-color: #545e64 !important;
-}
-/* end: year slider */
 
 /* start: checkboxes */
 ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
