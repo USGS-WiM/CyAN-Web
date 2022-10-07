@@ -1,4 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 
 @Component({
   selector: 'app-about',
@@ -6,7 +7,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
   styleUrls: ['./../core.component.scss'],
 })
 export class AboutComponent implements OnInit {
-  constructor() {}
+  constructor(private componentDisplayService: ComponentDisplayService) {}
 
   @HostListener('window:resize')
   onResize() {
@@ -15,11 +16,21 @@ export class AboutComponent implements OnInit {
 
   ngOnInit(): void {
     this.resizeDivs();
+    this.componentDisplayService.usaBarCollapseSubject.subscribe(
+      (usaBarBoolean) => {
+        setTimeout(() => {
+          this.resizeDivs();
+        }, 0.1);
+      }
+    );
   }
 
   public resizeDivs() {
-    //get window dimensions
-    let windowHeight = window.innerHeight;
+    //get map height
+    let mapContainer = document.getElementById('mapContainer');
+    let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
+
+    //get window width
     let windowWidth = window.innerWidth;
     let infoPanelID = document.getElementById('infoPanelID');
     if (windowWidth < 900) {
@@ -30,13 +41,15 @@ export class AboutComponent implements OnInit {
       infoPanelID.classList.add('marginLeftFullWidth');
       infoPanelID.classList.remove('marginLeftSmallWidth');
     }
-    if (windowHeight < 590) {
+    if (mapHeight < 570) {
       infoPanelID.classList.add('marginTopSmallHeight');
       infoPanelID.classList.remove('marginTopFullHeight');
+      infoPanelID.style.height = (mapHeight - 95).toString() + 'px';
     }
-    if (windowHeight > 590) {
+    if (mapHeight > 570) {
       infoPanelID.classList.remove('marginTopSmallHeight');
       infoPanelID.classList.add('marginTopFullHeight');
+      infoPanelID.style.height = (mapHeight - 95).toString() + 'px';
     }
   }
 }

@@ -38,6 +38,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Removes extra modebar buttons
 - Moves flag buttons into modebar
+- New colors for nav buttons; selected btn changes color
+- Responsive resizing to account for top bars
 - Prevents user interaction with graph when Flag Options modal is open
 
 ### Fixed
@@ -47,4 +49,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Flag all button now uses same data flow as all the other flagging options
 - Fixes metadata pcode
 - Resets unflag status
+- Removes old home layout from html
 - USWDS broken images in deployments

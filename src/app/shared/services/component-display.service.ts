@@ -23,6 +23,30 @@ export class ComponentDisplayService {
     this.homeLayoutSubject.next(display);
   }
 
+  //get USA bar
+  public usaBarCollapseSubject = new BehaviorSubject<Boolean>(undefined);
+  usaBarCollapse$ = this.usaBarCollapseSubject.asObservable();
+
+  public getUsaBarCollapse(collapse: Boolean) {
+    this.usaBarCollapseSubject.next(collapse);
+  }
+
+  //map button clicked
+  public mapBtnSubject = new BehaviorSubject<Boolean>(undefined);
+  mapBtn$ = this.mapBtnSubject.asObservable();
+
+  public getMapBtn(collapse: Boolean) {
+    this.mapBtnSubject.next(collapse);
+  }
+
+  //graph button clicked
+  public graphBtnSubject = new BehaviorSubject<Boolean>(undefined);
+  graphBtn$ = this.graphBtnSubject.asObservable();
+
+  public getGraphBtn(collapse: Boolean) {
+    this.graphBtnSubject.next(collapse);
+  }
+
   //get bounding box: north
   public northBoundsSubject = new BehaviorSubject<number>(undefined);
   northBounds$ = this.northBoundsSubject.asObservable();

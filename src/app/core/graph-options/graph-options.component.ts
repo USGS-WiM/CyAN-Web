@@ -162,6 +162,13 @@ export class GraphOptionsComponent implements OnInit {
     this.getDataForDropdowns();
     this.initiateGraphService();
     this.getUnits();
+    this.componentDisplayService.usaBarCollapseSubject.subscribe(
+      (usaBarBoolean) => {
+        setTimeout(() => {
+          this.resizeDivs();
+        }, 0.1);
+      }
+    );
   }
 
   ngDoCheck() {
@@ -534,27 +541,26 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public disableEnableGraph(enable: boolean) {
-
     // disable pointer events based on if the show flags button is open
     const plotlyjs = document.getElementsByClassName('js-plotly-plot');
-      for (let el in plotlyjs) {
-        if ((plotlyjs[el]['style'] !== undefined) && (enable) ) {
-          console.log("enable true");
-          plotlyjs[el]['style'].pointerEvents = "unset";
-        } else if ((plotlyjs[el]['style'] !== undefined) && (!enable) ) {
-          plotlyjs[el]['style'].pointerEvents = "none";
-          plotlyjs[0]['style'].pointerEvents = "unset"; // re-enables modebar
-        }
+    for (let el in plotlyjs) {
+      if (plotlyjs[el]['style'] !== undefined && enable) {
+        console.log('enable true');
+        plotlyjs[el]['style'].pointerEvents = 'unset';
+      } else if (plotlyjs[el]['style'] !== undefined && !enable) {
+        plotlyjs[el]['style'].pointerEvents = 'none';
+        plotlyjs[0]['style'].pointerEvents = 'unset'; // re-enables modebar
       }
+    }
 
-      const mainSVG = document.getElementsByClassName('main-svg')
-      for (let el in mainSVG) {
-        if ((mainSVG[el]['style'] !== undefined) && (enable)) {
-          mainSVG[el]['style'].pointerEvents = "unset";
-        } else if ((mainSVG[el]['style'] !== undefined) && (!enable) ){
-          mainSVG[el]['style'].pointerEvents = "none";
-        }
+    const mainSVG = document.getElementsByClassName('main-svg');
+    for (let el in mainSVG) {
+      if (mainSVG[el]['style'] !== undefined && enable) {
+        mainSVG[el]['style'].pointerEvents = 'unset';
+      } else if (mainSVG[el]['style'] !== undefined && !enable) {
+        mainSVG[el]['style'].pointerEvents = 'none';
       }
+    }
   }
 
   //Called whenever a flag is selected/deselected
@@ -1173,11 +1179,12 @@ export class GraphOptionsComponent implements OnInit {
 
   //Every time the window is resized, change size and position of elements accordingly
   public resizeDivs() {
-    //get window dimensions
-    let windowHeight = window.innerHeight;
-    let windowWidth = window.innerWidth;
+    //get map height
+    let mapContainer = document.getElementById('mapContainer');
+    let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
 
-    this.graphHeight = 0.7 * window.innerHeight;
+    //get window width
+    let windowWidth = window.innerWidth;
 
     let graphOptionsBackgroundID = document.getElementById(
       'graphOptionsBackgroundID'
@@ -1186,6 +1193,9 @@ export class GraphOptionsComponent implements OnInit {
     let graphOptionsCollapsedID = document.getElementById(
       'graphOptionsCollapsedID'
     );
+
+    this.graphHeight = 0.7 * mapHeight;
+    graphBackgroundID.style.height = (0.7 * mapHeight).toString() + 'px';
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
@@ -1221,7 +1231,7 @@ export class GraphOptionsComponent implements OnInit {
         this.graphWidth = 0.8 * windowWidth - 165;
       }
     }
-    if (windowHeight < 723) {
+    if (mapHeight < 570) {
       graphOptionsBackgroundID.classList.remove('marginTopFullHeight');
       graphOptionsBackgroundID.classList.add('marginTopSmallHeight');
 
@@ -1230,8 +1240,11 @@ export class GraphOptionsComponent implements OnInit {
 
       graphOptionsCollapsedID.classList.remove('marginTopFullHeight');
       graphOptionsCollapsedID.classList.add('marginTopSmallHeight');
+
+      graphOptionsBackgroundID.style.height =
+        (mapHeight - 75).toString() + 'px';
     }
-    if (windowHeight > 723) {
+    if (mapHeight > 570) {
       graphOptionsBackgroundID.classList.add('marginTopFullHeight');
       graphOptionsBackgroundID.classList.remove('marginTopSmallHeight');
 
@@ -1240,11 +1253,14 @@ export class GraphOptionsComponent implements OnInit {
 
       graphOptionsCollapsedID.classList.add('marginTopFullHeight');
       graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
+
+      graphOptionsBackgroundID.style.height =
+        (mapHeight - 95).toString() + 'px';
     }
-    if (windowWidth > 1200 && windowHeight > 450) {
+    if (windowWidth > 1200 && mapHeight > 450) {
       this.graphMargins = 80;
     }
-    if (windowWidth < 1200 || windowHeight < 450) {
+    if (windowWidth < 1200 || mapHeight < 450) {
       //commenting this out for now because shrinking the margins make the axes titles overlap with the tick marks
       //this.graphMargins = 20;
     }
