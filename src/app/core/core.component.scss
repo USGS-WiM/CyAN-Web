@@ -276,28 +276,7 @@
   width: 240px !important;
   position: relative;
   overflow-y: scroll;
-}
-.mapFiltersFullHeight {
-  height: calc(97vh - 408px);
-  max-height: 585px;
-}
-.mapFiltersSmallHeight {
-  overflow-y: scroll;
-  min-height: 100px;
-  height: calc(97vh - 408px);
-  max-height: 585px;
-}
-.mapFiltersMedHeight {
-  height: calc(97vh - 340px);
-  overflow-y: scroll;
-  min-height: 100px;
-  max-height: 585px;
-}
-.mapFiltersMLHeight {
-  height: calc(97vh - 398px);
-  overflow-y: scroll;
-  min-height: 100px;
-  max-height: 585px;
+  max-height: 579px;
 }
 .optionsBackgroundMini {
   background-color: rgba(255, 255, 255, 0.85);
