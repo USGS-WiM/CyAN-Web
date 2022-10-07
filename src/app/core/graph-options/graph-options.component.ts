@@ -532,6 +532,21 @@ export class GraphOptionsComponent implements OnInit {
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
     this.axisFlagForm.get('xyFlagControl').setValue(null);
+
+    this.flagTypesX.get('centralTendency').setValue(null);
+    this.flagTypesX.get('outlier').setValue(null);
+    this.flagTypesX.get('matrixInterference').setValue(null);
+    this.flagTypesX.get('dissolvedGTTotal').setValue(null);
+    this.flagTypesX.get('phytoChl').setValue(null);
+    this.flagTypesX.get('unknown').setValue(null);
+
+    this.flagTypesY.get('centralTendency').setValue(null);
+    this.flagTypesY.get('outlier').setValue(null);
+    this.flagTypesY.get('matrixInterference').setValue(null);
+    this.flagTypesY.get('dissolvedGTTotal').setValue(null);
+    this.flagTypesY.get('phytoChl').setValue(null);
+    this.flagTypesY.get('unknown').setValue(null);
+
     this.showFlagOptionsX = false;
     this.showFlagOptionsY = false;
   }
