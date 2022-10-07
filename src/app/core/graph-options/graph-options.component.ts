@@ -537,7 +537,6 @@ export class GraphOptionsComponent implements OnInit {
 
     // disable pointer events based on if the show flags button is open
     const plotlyjs = document.getElementsByClassName('js-plotly-plot');
-    const modebar = document.getElementsByClassName('modebar-container');
       for (let el in plotlyjs) {
         if ((plotlyjs[el]['style'] !== undefined) && (enable) ) {
           console.log("enable true");
