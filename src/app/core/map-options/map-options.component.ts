@@ -1,11 +1,19 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef, IterableDiffers, IterableDiffer } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  ViewChild,
+  ElementRef,
+  IterableDiffers,
+  IterableDiffer,
+} from '@angular/core';
 import { Options } from '@angular-slider/ngx-slider';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MapLayersService } from 'src/app/shared/services/map-layers.service';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { FiltersService } from '../../shared/services/filters.service';
 import { Observable } from 'rxjs/Observable';
 import * as L from 'leaflet';
@@ -20,7 +28,6 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
   styleUrls: ['./../core.component.scss'],
 })
 export class MapOptionsComponent implements OnInit {
-
   //Layout
   public mapFilters: Boolean = true;
   public mapLayerOptions: Boolean = true;
@@ -142,14 +149,15 @@ export class MapOptionsComponent implements OnInit {
     // there may be a better way to do this
     let changes = this.iterableDiffer.diff(this.pcodeShortName);
     if (changes) {
-        this.filteredParameters = this.paramMethodForm.get('parameterControl').valueChanges.pipe(
+      this.filteredParameters = this.paramMethodForm
+        .get('parameterControl')
+        .valueChanges.pipe(
           startWith(null),
           map((parameter: string | null) =>
-          parameter ? this._filter(parameter) : this.pcodeShortName.slice()
+            parameter ? this._filter(parameter) : this.pcodeShortName.slice()
           )
         );
     }
-    
   }
 
   public getMapData() {
@@ -186,8 +194,8 @@ export class MapOptionsComponent implements OnInit {
   public parameterSelected() {
     // chips contain the short_name so getting the pcodes
     for (let sn in this.chipParams) {
-      let shortname =this.chipParams[sn];
-      for ( let p in this.pcodeShortName){
+      let shortname = this.chipParams[sn];
+      for (let p in this.pcodeShortName) {
         if (shortname == this.pcodeShortName[p].short_name) {
           this.snToPcode.push(this.pcodeShortName[p].pcode);
         }
@@ -195,10 +203,10 @@ export class MapOptionsComponent implements OnInit {
     }
 
     // removing duplicated parameters if there are any
-    this.snToPcode = this.snToPcode.filter(function (value, index, array) { 
+    this.snToPcode = this.snToPcode.filter(function (value, index, array) {
       return array.indexOf(value) === index;
     });
-    
+
     this.matchingMcodes = [];
     for (let x = 0; x < this.snToPcode.length; x++) {
       let mcodes = [];
@@ -300,7 +308,7 @@ export class MapOptionsComponent implements OnInit {
 
       //minimize panels if the screen width is small
       let windowWidth = window.innerWidth;
-      if (windowWidth < 800) {
+      if (windowWidth < 900) {
         this.displayMapLayerOptions(false);
         this.displayMapFilters(false);
       }
@@ -421,7 +429,7 @@ export class MapOptionsComponent implements OnInit {
     let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
 
     //move everything to the left when the width shrinks
-    if (windowWidth < 800) {
+    if (windowWidth < 900) {
       mapLayersOptions.classList.remove('marginLeftFullWidth');
       mapLayersOptions.classList.add('marginLeftSmallWidth');
 
@@ -436,7 +444,7 @@ export class MapOptionsComponent implements OnInit {
     }
 
     //move everything to the right when the width grows
-    if (windowWidth > 800) {
+    if (windowWidth > 900) {
       mapLayersOptions.classList.add('marginLeftFullWidth');
       mapLayersOptions.classList.remove('marginLeftSmallWidth');
 
@@ -656,21 +664,21 @@ export class MapOptionsComponent implements OnInit {
 
   // remove chip
   remove(param: any): void {
-    let pcode = "";
+    let pcode = '';
     const index = this.chipParams.indexOf(param);
 
     if (index >= 0) {
       this.chipParams.splice(index, 1);
     }
-    
+
     // getting pcode from chip and removing from array
-    for ( let p in this.pcodeShortName){
+    for (let p in this.pcodeShortName) {
       if (param == this.pcodeShortName[p].short_name) {
         pcode = this.pcodeShortName[p].pcode;
       }
     }
-    if(this.snToPcode.includes(pcode)) {
-      this.snToPcode = this.snToPcode.filter(x => x !== pcode);
+    if (this.snToPcode.includes(pcode)) {
+      this.snToPcode = this.snToPcode.filter((x) => x !== pcode);
     }
 
     this.parameterSelected();
@@ -679,7 +687,8 @@ export class MapOptionsComponent implements OnInit {
   // filter using typed string
   _filter(name: string) {
     return this.pcodeShortName.filter(
-      (parameter) => parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
+      (parameter) =>
+        parameter.short_name.toLowerCase().indexOf(name.toLowerCase()) === 0
     );
   }
 
@@ -692,9 +701,8 @@ export class MapOptionsComponent implements OnInit {
   }
 
   // called when slider is adjusted and updates min & max year observables for use in other components
-  updateYears(event){
+  updateYears(event) {
     this.filterService.getMaxYear(event.highValue);
-    this.filterService.getMinYear(event.value)
+    this.filterService.getMinYear(event.value);
   }
-
 }

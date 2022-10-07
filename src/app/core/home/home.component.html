@@ -1,19 +1,13 @@
-<div id="base">
+<div id="base" class="cyan-home">
   <div>
-    <div class="flex-container fullWidth">
-      <div [hidden]="!showHomeLayout" class="landingPgBtns usgsBtn">
-        <a href="https://www.usgs.gov/" target="_blank">
-          <img
-            alt="United States Geological Survey Logo. White wavey lines with a green background next to the letters USGS. Their motto, Science for a changing world, is written across the bottom. Clicking on this logo leads to the USGS homepage."
-            class="usgsLogo" src="assets/USGS_White_web.png" />
-        </a>
-      </div>
+    <div class="flex-container fullWidth pointer-events">
       <div [hidden]="!showFullCyanHomeBtn"
         aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
         <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
           <div id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth" (click)="clickHome()"
             [hidden]="!showFullCyanHomeBtn">
-            <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+            <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home
+            </mat-icon>
             CyAN FIELD
           </div>
         </div>
@@ -26,12 +20,6 @@
           Cyanobacteria Assessment Network <br />
           Field Exploratory Lakes Database
         </p>
-        <div class="infoBtnSubheader">
-          <p>Explore, compare, & evaluate</p>
-          <p class="infoLineHeight">
-            water quality data related to harmful algal blooms
-          </p>
-        </div>
       </div>
       <div [hidden]="showHomeLayout">
         <div class="flex-child flex-container">
@@ -39,15 +27,10 @@
             <div class="homeBtnColor smNavBtn marginLeftSmallWidth" (click)="clickHome()" matTooltip="CyAN Home"
               aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
               <p>
-                <mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home</mat-icon>
+                <mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home
+                </mat-icon>
               </p>
             </div>
-          </div>
-          <div class="smNavBtn usgsSquare" matTooltip="USGS Home">
-            <a href="https://www.usgs.gov/" target="_blank">
-              <img
-                alt="United States Geological Survey logo. Green Square with white wavy lines. Clicking on this square leads to the USGS homepage."
-                class="square" src="assets/USGS_Green_Banneronly_web.png" /></a>
           </div>
           <div>
             <div class="infoBtnColor smNavBtn" (click)="clickInfo()" matTooltip="About"
@@ -83,23 +66,20 @@
             <mat-icon class="infoBtnSmIcon">info</mat-icon>
             Cyanobacteria Assessment Network
           </p>
-          <p style="margin-left: 40px">Field Exploratory Lakes Database</p>
-          <div class="infoBtnSmText">
-            <p>Explore, compare, & evaluate</p>
-            <p class="infoLineHeight">water quality data</p>
-            <p class="infoLineHeight">related to harmful algal blooms</p>
-          </div>
         </div>
       </div>
     </div>
-    <div [hidden]="!showInfo">
-      <app-about></app-about>
-    </div>
-    <div [hidden]="!showMap">
+    <div [hidden]="!showMap" class="floating-body">
       <app-map-options></app-map-options>
     </div>
-    <div [hidden]="!showGraph">
+    <div [hidden]="!showGraph" class="floating-body">
       <app-graph-options></app-graph-options>
+    </div>
+    <div [hidden]="!showIntro" class="floating-body">
+      <app-intro></app-intro>
+    </div>
+    <div [hidden]="!showInfo" class="floating-body">
+      <app-about></app-about>
     </div>
     <div [hidden]="!showHomeLayout">
       <div id="mapGraphID" class="flex-container mapGraphWidth">

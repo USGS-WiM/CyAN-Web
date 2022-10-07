@@ -22,21 +22,19 @@ export class AboutComponent implements OnInit {
     let windowHeight = window.innerHeight;
     let windowWidth = window.innerWidth;
     let infoPanelID = document.getElementById('infoPanelID');
-    if (windowWidth < 800) {
+    if (windowWidth < 900) {
       infoPanelID.classList.remove('marginLeftFullWidth');
       infoPanelID.classList.add('marginLeftSmallWidth');
     }
-    if (windowWidth > 800) {
+    if (windowWidth > 900) {
       infoPanelID.classList.add('marginLeftFullWidth');
       infoPanelID.classList.remove('marginLeftSmallWidth');
     }
-    if (windowHeight < 500) {
-      infoPanelID.classList.add('yOverflow');
+    if (windowHeight < 590) {
       infoPanelID.classList.add('marginTopSmallHeight');
       infoPanelID.classList.remove('marginTopFullHeight');
     }
-    if (windowHeight > 500) {
-      infoPanelID.classList.remove('yOverflow');
+    if (windowHeight > 590) {
       infoPanelID.classList.remove('marginTopSmallHeight');
       infoPanelID.classList.add('marginTopFullHeight');
     }

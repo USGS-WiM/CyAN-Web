@@ -3,7 +3,7 @@ import { Component, AfterViewInit, HostListener } from '@angular/core';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./../core.component.scss'],
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements AfterViewInit {
   constructor() {}
@@ -12,17 +12,18 @@ export class HomeComponent implements AfterViewInit {
     this.resizeDivs();
   }
 
-  public showHomeLayout: Boolean = true;
+  public showHomeLayout: Boolean = false;
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
   public windowWidthResize = false;
+  public showIntro = true;
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
 
   ngAfterViewInit(): void {
-    window.onload = () => (this.windowWidthResize = window.innerWidth >= 800);
-    window.onresize = () => (this.windowWidthResize = window.innerWidth >= 800);
+    window.onload = () => (this.windowWidthResize = window.innerWidth >= 900);
+    window.onresize = () => (this.windowWidthResize = window.innerWidth >= 900);
     Promise.resolve().then(() => this.resizeDivs());
   }
 
@@ -39,7 +40,8 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showInfo = false;
     this.showGraph = false;
-    this.showHomeLayout = true;
+    this.showHomeLayout = false;
+    this.showIntro = true;
     this.resizeDivs();
   }
 
@@ -48,6 +50,7 @@ export class HomeComponent implements AfterViewInit {
     this.showHomeLayout = false;
     this.showInfo = false;
     this.showGraph = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -56,6 +59,7 @@ export class HomeComponent implements AfterViewInit {
     this.showHomeLayout = false;
     this.showMap = false;
     this.showGraph = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -64,6 +68,7 @@ export class HomeComponent implements AfterViewInit {
     this.showInfo = false;
     this.showHomeLayout = false;
     this.showMap = false;
+    this.showIntro = false;
     this.resizeDivs();
   }
 
@@ -74,10 +79,10 @@ export class HomeComponent implements AfterViewInit {
     let homeBtnFullID = document.getElementById('homeBtnFullID');
     let mapBtnFullID = document.getElementById('mapBtnFullID');
     let mapGraphID = document.getElementById('mapGraphID');
-    if (windowWidth < 800 && !this.showHomeLayout) {
+    if (windowWidth < 900 && !this.showHomeLayout) {
       this.showFullCyanHomeBtn = false;
     }
-    if (windowWidth > 800 || this.showHomeLayout) {
+    if (windowWidth > 900 || this.showHomeLayout) {
       this.showFullCyanHomeBtn = true;
     }
     if (windowWidth < 1000) {
