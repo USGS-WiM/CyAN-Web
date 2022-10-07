@@ -36,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Removes extra modebar buttons
 - Moves flag buttons into modebar
+- Prevents user interaction with graph when Flag Options modal is open
 
 ### Fixed
 
@@ -44,3 +45,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Flag all button now uses same data flow as all the other flagging options
 - Fixes metadata pcode
 - Resets unflag status
+- USWDS broken images in deployments
