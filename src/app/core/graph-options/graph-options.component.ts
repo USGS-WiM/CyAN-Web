@@ -486,7 +486,7 @@ export class GraphOptionsComponent implements OnInit {
           },
         },
         {
-          name: 'Remove all flags',
+          name: 'Remove plotted flags',
           icon: removeIcon,
           click: (e) => {
             this.unflagAllData();
@@ -526,6 +526,13 @@ export class GraphOptionsComponent implements OnInit {
     }
   }
 
+  public stringArray(flagString: String) {
+    let flagArray: String[] = null;
+    flagArray = flagString.split('; ');
+    console.log('newArr', flagArray);
+    return flagArray;
+  }
+
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
@@ -559,6 +566,9 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesY.get('dissolvedGTTotal').setValue(null);
     this.flagTypesY.get('phytoChl').setValue(null);
     this.flagTypesY.get('unknown').setValue(null);
+
+    this.sameXYFlag.get('diffY').setValue(null);
+    this.differentYflags = false;
 
     this.showFlagOptionsX = false;
     this.showFlagOptionsY = false;
@@ -831,6 +841,7 @@ export class GraphOptionsComponent implements OnInit {
       flagTypesY = this.flagTypes('y');
       annotationY = this.getAnnotation('y');
     }
+    this.stringArray(flagTypesX);
     //if user chose to use the same responses for both axes, duplicate x responses
     if (!this.differentYflags) {
       flagTypesY = flagTypesX;
@@ -1014,7 +1025,6 @@ export class GraphOptionsComponent implements OnInit {
     //Prevent user from clicking on features outside the modal
     this.disableEnable('graph', false, false);
     this.disableEnable('graphOptionsBackgroundID', false, false);
-    //Plotly.react(this.bivariatePlot, {}, {'staticPlot': 'true'});
   }
 
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
@@ -1025,14 +1035,87 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
       this.axisFlagForm.get('xyFlagControl').setValue(true);
+      this.autoCheckFlagTypes('x');
+      this.autoCheckFlagTypes('y');
     }
     if (selectedColor == this.xFlaggedColor) {
       //check the x box
       this.axisFlagForm.get('xFlagControl').setValue(true);
+      this.autoCheckFlagTypes('x');
     }
     if (selectedColor == this.yFlaggedColor) {
       //check the y box
       this.axisFlagForm.get('yFlagControl').setValue(true);
+      this.autoCheckFlagTypes('y');
+    }
+  }
+
+  autoCheckFlagTypes(axis: String) {
+    if (axis === 'x') {
+      this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+        let selectedRcodeX = xdata[this.selectedPoints[0].pointIndex].rcode;
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          if (this.flaggedData[i].rcode == selectedRcodeX) {
+            let currentFlagType = this.flaggedData[i].flagType;
+            let flagArray = this.stringArray(currentFlagType);
+            if (flagArray) {
+              for (let j = 0; j < flagArray.length; j++) {
+                if (flagArray[j] == 'Central tendency') {
+                  this.flagTypesX.get('centralTendency').setValue(true);
+                }
+                if (flagArray[j] == 'Outlier') {
+                  this.flagTypesX.get('outlier').setValue(true);
+                }
+                if (flagArray[j] == 'Matrix or recovery problem') {
+                  this.flagTypesX.get('matrixInterference').setValue(true);
+                }
+                if (flagArray[j] == 'Dissolved result > Total') {
+                  this.flagTypesX.get('dissolvedGTTotal').setValue(true);
+                }
+                if (flagArray[j] == 'Phytoplankton vs Chl') {
+                  this.flagTypesX.get('phytoChl').setValue(true);
+                }
+                if (flagArray[j] == 'Unknown') {
+                  this.flagTypesX.get('unknown').setValue(true);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    if (axis === 'y') {
+      this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+        let selectedRcodeY = ydata[this.selectedPoints[0].pointIndex].rcode;
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          if (this.flaggedData[i].rcode == selectedRcodeY) {
+            let currentFlagType = this.flaggedData[i].flagType;
+            let flagArray = this.stringArray(currentFlagType);
+            if (flagArray) {
+              for (let j = 0; j < flagArray.length; j++) {
+                if (flagArray[j] == 'Central tendency') {
+                  this.flagTypesY.get('centralTendency').setValue(true);
+                }
+                if (flagArray[j] == 'Outlier') {
+                  this.flagTypesY.get('outlier').setValue(true);
+                }
+                if (flagArray[j] == 'Matrix or recovery problem') {
+                  this.flagTypesY.get('matrixInterference').setValue(true);
+                }
+                if (flagArray[j] == 'Dissolved result > Total') {
+                  this.flagTypesY.get('dissolvedGTTotal').setValue(true);
+                }
+                if (flagArray[j] == 'Phytoplankton vs Chl') {
+                  this.flagTypesY.get('phytoChl').setValue(true);
+                }
+                if (flagArray[j] == 'Unknown') {
+                  this.flagTypesY.get('unknown').setValue(true);
+                }
+              }
+            }
+          }
+        }
+      });
     }
   }
 
