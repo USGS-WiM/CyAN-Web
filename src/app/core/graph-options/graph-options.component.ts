@@ -572,6 +572,18 @@ export class GraphOptionsComponent implements OnInit {
 
     this.showFlagOptionsX = false;
     this.showFlagOptionsY = false;
+    let inputX = document.getElementById(
+      'flagAnnotationX'
+    ) as HTMLInputElement | null;
+    if (inputX.value) {
+      inputX.value = '';
+    }
+    let inputY = document.getElementById(
+      'flagAnnotationY'
+    ) as HTMLInputElement | null;
+    if (inputY.value) {
+      inputY.value = '';
+    }
   }
 
   //Disables or enables clickable features
@@ -823,9 +835,7 @@ export class GraphOptionsComponent implements OnInit {
     }
     annotation = input?.value;
     annotation = annotation.replace(/,/g, ';');
-    if (input.value) {
-      input.value = null;
-    }
+
     return annotation;
   }
 
@@ -927,10 +937,6 @@ export class GraphOptionsComponent implements OnInit {
       }
     }
 
-    //Clear annotation form
-    /*   if (input.value) {
-      input.value = null;
-    } */
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
@@ -1056,6 +1062,11 @@ export class GraphOptionsComponent implements OnInit {
         let selectedRcodeX = xdata[this.selectedPoints[0].pointIndex].rcode;
         for (let i = 0; i < this.flaggedData.length; i++) {
           if (this.flaggedData[i].rcode == selectedRcodeX) {
+            let currentAnnotation = this.flaggedData[i].annotation;
+            let insertAnnotation = document.getElementById(
+              'flagAnnotationX'
+            ) as HTMLInputElement | null;
+            insertAnnotation.value = currentAnnotation;
             let currentFlagType = this.flaggedData[i].flagType;
             let flagArray = this.stringArray(currentFlagType);
             if (flagArray) {
@@ -1089,6 +1100,11 @@ export class GraphOptionsComponent implements OnInit {
         let selectedRcodeY = ydata[this.selectedPoints[0].pointIndex].rcode;
         for (let i = 0; i < this.flaggedData.length; i++) {
           if (this.flaggedData[i].rcode == selectedRcodeY) {
+            let currentAnnotation = this.flaggedData[i].annotation;
+            let insertAnnotation = document.getElementById(
+              'flagAnnotationY'
+            ) as HTMLInputElement | null;
+            insertAnnotation.value = currentAnnotation;
             let currentFlagType = this.flaggedData[i].flagType;
             let flagArray = this.stringArray(currentFlagType);
             if (flagArray) {
