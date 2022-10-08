@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Checkbox to use map option min/max years in graph options
 - USGS header and footer
 - Filler landing page that corresponds with the CyAN button
+- Ability to select/deselect x-axis flag types for y-axis
 
 ### Changed
 
