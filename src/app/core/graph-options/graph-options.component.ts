@@ -827,7 +827,7 @@ export class GraphOptionsComponent implements OnInit {
     let flagTypesX = this.flagTypes('x');
     let flagTypesY;
     //if user chose different flag types for the y-axis, get responses from form
-    if (this.differentYflags) {
+    if (this.differentYflags || this.submitAfterX) {
       flagTypesY = this.flagTypes('y');
       annotationY = this.getAnnotation('y');
     }
