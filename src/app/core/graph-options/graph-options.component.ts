@@ -91,7 +91,7 @@ export class GraphOptionsComponent implements OnInit {
     unknown: new FormControl(),
   });
   public sameXYFlag = new FormGroup({
-    sameY: new FormControl(),
+    diffY: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -966,8 +966,11 @@ export class GraphOptionsComponent implements OnInit {
       flagTypes += 'Phytoplankton vs Chl; ';
     }
     if (unknown) {
-      flagTypes += 'Unknown';
+      flagTypes += 'Unknown; ';
     }
+    //remove final semicolon
+    flagTypes = flagTypes.slice(0, -2);
+    console.log('flagTypes:', flagTypes);
     if (axis == 'x') {
       this.flagTypesX.get('centralTendency').setValue(null);
       this.flagTypesX.get('outlier').setValue(null);
