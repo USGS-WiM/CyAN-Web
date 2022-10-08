@@ -59,6 +59,7 @@ export class GraphOptionsComponent implements OnInit {
   showFlagOptionsX: Boolean = false;
   showFlagOptionsY: Boolean = false;
   submitAfterX: Boolean = false;
+  differentYflags: Boolean = false;
   showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
@@ -88,6 +89,9 @@ export class GraphOptionsComponent implements OnInit {
     dissolvedGTTotal: new FormControl(),
     phytoChl: new FormControl(),
     unknown: new FormControl(),
+  });
+  public sameXYFlag = new FormGroup({
+    sameY: new FormControl(),
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
@@ -513,6 +517,15 @@ export class GraphOptionsComponent implements OnInit {
     this.selectPoints();
   }
 
+  diffYflags(event) {
+    if (event.checked) {
+      this.differentYflags = true;
+    }
+    if (!event.checked) {
+      this.differentYflags = false;
+    }
+  }
+
   closeFlagOptions() {
     //Close flag options modal
     this.showFlagOptions = false;
@@ -810,9 +823,19 @@ export class GraphOptionsComponent implements OnInit {
   submitFlagSelections() {
     //Capture user input in the annotation box
     let annotationX = this.getAnnotation('x');
-    let annotationY = this.getAnnotation('y');
+    let annotationY;
     let flagTypesX = this.flagTypes('x');
-    let flagTypesY = this.flagTypes('y');
+    let flagTypesY;
+    //if user chose different flag types for the y-axis, get responses from form
+    if (this.differentYflags) {
+      flagTypesY = this.flagTypes('y');
+      annotationY = this.getAnnotation('y');
+    }
+    //if user chose to use the same responses for both axes, duplicate x responses
+    if (!this.differentYflags) {
+      flagTypesY = flagTypesX;
+      annotationY = annotationX;
+    }
     if (!this.sameQuery) {
       let xChecked = this.axisFlagForm.get('xFlagControl').value;
       let yChecked = this.axisFlagForm.get('yFlagControl').value;

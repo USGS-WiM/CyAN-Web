@@ -205,11 +205,21 @@
         <textarea style="resize: none" id='flagAnnotationX' matInput
           placeholder="Enter a custom flag annotation here"></textarea>
       </mat-form-field>
-      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypesY()" [hidden]="submitAfterX"
-        aria-label="Click this button to save flag options">
+      <div [hidden]="submitAfterX">
+        <form [formGroup]="sameXYFlag">
+          <div class="leftTopBreak"
+            aria-label="Checking this box will allow you to choose different flag types and annotations for the y-axis data">
+            <mat-checkbox formControlName="diffY" (change)="diffYflags($event)" [disableRipple]="true">Record different
+              responses <br /> for y-axis data
+            </mat-checkbox>
+          </div>
+        </form>
+      </div>
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypesY()"
+        [hidden]="!differentYflags || submitAfterX" aria-label="Click this button to save flag options">
         Next
       </button>
-      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()" [hidden]="!submitAfterX"
+      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()" [hidden]="differentYflags"
         aria-label="Click this button to save flag options">
         Submit
       </button>
