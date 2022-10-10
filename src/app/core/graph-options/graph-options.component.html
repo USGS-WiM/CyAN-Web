@@ -208,7 +208,7 @@
         <textarea style="resize: none" id='flagAnnotationX' matInput
           placeholder="Enter a custom flag annotation here"></textarea>
       </mat-form-field>
-      <div [hidden]="submitAfterX">
+      <div [hidden]="submitAfterX || sameQuery">
         <form [formGroup]="sameXYFlag">
           <div class="leftTopBreak"
             aria-label="Checking this box will allow you to choose different flag types and annotations for the y-axis data">

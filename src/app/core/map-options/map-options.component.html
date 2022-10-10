@@ -127,7 +127,7 @@
       <mat-icon>cloud_download</mat-icon>
     </button>
   </div>
-  <div class="flex-child" class="optionModal" style="position: relative;" [hidden]="!showNullWarning">
+  <div class="optionModal" style="position: relative; height: 125px" [hidden]="!showNullWarning">
     Are you sure you want to include sites with null values? This will
     significantly slow processing times. <br />
     <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitNullWarning(false)" matTooltip="Recommended"
