@@ -1136,16 +1136,19 @@ export class GraphOptionsComponent implements OnInit {
 
   //Called when user clicks 'Plot Data'
   public clickPlotData() {
+    //Whenever user attempts to create a new graph, clear previous one even if it's a failed query
+    this.showGraph = false;
     this.alreadyGraphed = false;
     //Get parameter and method user selections
-    let tempP_X = this.graphSelectionsForm.get('ParametersX').value.pcode;
-    let tempP_Y = this.graphSelectionsForm.get('ParametersY').value.pcode;
+    let tempP_X_value = this.graphSelectionsForm.get('ParametersX').value;
+    let tempP_Y_value = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
+
     //If any parameter or method is left blank, prompt user to make a selection
     if (
-      tempP_X === null ||
-      tempP_Y === null ||
+      tempP_X_value === null ||
+      tempP_Y_value === null ||
       tempM_X == null ||
       tempM_Y == null
     ) {

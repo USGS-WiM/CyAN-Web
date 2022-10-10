@@ -309,7 +309,6 @@ export class GraphSelectionsService {
           verticalPosition: 'top',
         }
       );
-
       let graphOptions = document.getElementById('graphOptionsBackgroundID');
       graphOptions.classList.remove('disableClick');
     }
