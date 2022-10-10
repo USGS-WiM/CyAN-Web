@@ -530,7 +530,6 @@ export class GraphOptionsComponent implements OnInit {
   public stringArray(flagString: String) {
     let flagArray: String[] = null;
     flagArray = flagString.split('; ');
-    console.log('newArr', flagArray);
     return flagArray;
   }
 
@@ -620,7 +619,6 @@ export class GraphOptionsComponent implements OnInit {
     const plotlyjs = document.getElementsByClassName('js-plotly-plot');
     for (let el in plotlyjs) {
       if (plotlyjs[el]['style'] !== undefined && enable) {
-        console.log('enable true');
         plotlyjs[el]['style'].pointerEvents = 'unset';
       } else if (plotlyjs[el]['style'] !== undefined && !enable) {
         plotlyjs[el]['style'].pointerEvents = 'none';
@@ -677,8 +675,6 @@ export class GraphOptionsComponent implements OnInit {
         selectedColor = this.allColors[i];
       }
 
-      console.log('pointIndex', pointIndex);
-
       //Used for preventing flag duplicates
       if (selectedColor == this.xyFlaggedColor) {
         existingDupX = true;
@@ -726,10 +722,6 @@ export class GraphOptionsComponent implements OnInit {
             let rcodeToRemove = pointToRemove.rcode;
             for (let i = 0; i < this.flaggedData.length; i++) {
               if (rcodeToRemove == this.flaggedData[i].rcode) {
-                console.log(
-                  'this.flaggedData[i].rcode to remove',
-                  this.flaggedData[i].rcode
-                );
                 this.flaggedData.splice(i, 1);
                 this.graphSelectionsService.flagsSubject.next(this.flaggedData);
               }
@@ -786,7 +778,6 @@ export class GraphOptionsComponent implements OnInit {
       this.createGraph(false);
     }
 
-    console.log('this.flaggedData', this.flaggedData);
     updateGraphCalled = false;
     this.lasso = false;
     this.flagAll = false;
@@ -1067,17 +1058,9 @@ export class GraphOptionsComponent implements OnInit {
   autoCheckFlagTypes(axis: String, selectedPoints) {
     if (axis === 'x') {
       this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
-        console.log('this.selectedPoints', this.selectedPoints);
-        console.log(
-          'this.selectedPoints[0].pointIndex',
-          this.selectedPoints[0].pointIndex
-        );
-        console.log('xdata', xdata);
         let selectedRcodeX = xdata[selectedPoints[0].pointIndex].rcode;
-        console.log('selectedRcodeX', selectedRcodeX);
         for (let i = 0; i < this.flaggedData.length; i++) {
           if (this.flaggedData[i].rcode == selectedRcodeX) {
-            console.log('this.flaggedData[i].rcode', this.flaggedData[i].rcode);
             let currentAnnotation = this.flaggedData[i].annotation;
             let insertAnnotation = document.getElementById(
               'flagAnnotationX'
