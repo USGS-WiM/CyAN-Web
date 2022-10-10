@@ -97,7 +97,7 @@ export class GraphOptionsComponent implements OnInit {
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
-  public unflaggedColor: string = 'rgb(242, 189, 161)';
+  public unflaggedColor: string = 'rgb(242, 204, 177)';
   public xyFlaggedColor: string = 'rgb(0, 153, 0)';
   public xFlaggedColor: string = 'rgb(255, 0, 255)';
   public yFlaggedColor: string = 'rgb(0, 204, 204)';
@@ -565,6 +565,7 @@ export class GraphOptionsComponent implements OnInit {
   unflagAllData() {
     this.unflagAll = true;
     this.showUnflagOptions = true;
+    this.disableEnableGraph(true);
     this.selectPoints();
   }
 
@@ -1495,8 +1496,8 @@ export class GraphOptionsComponent implements OnInit {
       'graphOptionsCollapsedID'
     );
 
-    this.graphHeight = 0.7 * mapHeight;
-    graphBackgroundID.style.height = (0.7 * mapHeight).toString() + 'px';
+    this.graphHeight = 0.99 * mapHeight - 100;
+    graphBackgroundID.style.height = (0.99 * mapHeight - 100).toString() + 'px';
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');

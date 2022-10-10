@@ -87,7 +87,7 @@ export class GraphSelectionsService {
 
   //Colors for all 4 flagging options
   public pointColors: Array<String> = [];
-  public unflaggedColor: string = 'rgb(242, 189, 161)';
+  public unflaggedColor: string = 'rgb(242, 204, 177)';
   public xyFlaggedColor: string = 'rgb(0, 153, 0)';
   public xFlaggedColor: string = 'rgb(255, 0, 255)';
   public yFlaggedColor: string = 'rgb(0, 204, 204)';
