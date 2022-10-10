@@ -534,7 +534,11 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   closeFlagOptions() {
+    //Unfreeze graph and sidebar
     this.disableEnableGraph(false);
+    this.disableEnable('graph', true, false);
+    this.disableEnable('graphOptionsBackgroundID', true, false);
+
     //Hide all flag option modals
     this.showFlagOptions = false;
     this.showFlagOptionsX = false;
@@ -549,10 +553,6 @@ export class GraphOptionsComponent implements OnInit {
 
     //Reset boolean that controls flagging all data at once
     this.flagAll = false;
-
-    //enable all features that were disabled when modal was open
-    this.disableEnable('graph', true, false);
-    this.disableEnable('graphOptionsBackgroundID', true, false);
 
     //Reset x-axis/y-axis selection form
     this.axisFlagForm.get('xFlagControl').setValue(null);
@@ -675,6 +675,8 @@ export class GraphOptionsComponent implements OnInit {
         selectedColor = this.allColors[i];
       }
 
+      console.log('pointIndex', pointIndex);
+
       //Used for preventing flag duplicates
       if (selectedColor == this.xyFlaggedColor) {
         existingDupX = true;
@@ -722,6 +724,10 @@ export class GraphOptionsComponent implements OnInit {
             let rcodeToRemove = pointToRemove.rcode;
             for (let i = 0; i < this.flaggedData.length; i++) {
               if (rcodeToRemove == this.flaggedData[i].rcode) {
+                console.log(
+                  'this.flaggedData[i].rcode to remove',
+                  this.flaggedData[i].rcode
+                );
                 this.flaggedData.splice(i, 1);
                 this.graphSelectionsService.flagsSubject.next(this.flaggedData);
               }
@@ -950,6 +956,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public flagTypes(axis: String) {
+    //All flag type options
     let centralTendency;
     let outlier;
     let matrixInterference;
@@ -957,6 +964,7 @@ export class GraphOptionsComponent implements OnInit {
     let phytoChl;
     let unknown;
 
+    //Get x flag types
     if (axis == 'x') {
       centralTendency = this.flagTypesX.get('centralTendency').value;
       outlier = this.flagTypesX.get('outlier').value;
@@ -965,6 +973,8 @@ export class GraphOptionsComponent implements OnInit {
       phytoChl = this.flagTypesX.get('phytoChl').value;
       unknown = this.flagTypesX.get('unknown').value;
     }
+
+    //Get y flag types
     if (axis == 'y') {
       centralTendency = this.flagTypesY.get('centralTendency').value;
       outlier = this.flagTypesY.get('outlier').value;
@@ -974,6 +984,7 @@ export class GraphOptionsComponent implements OnInit {
       unknown = this.flagTypesY.get('unknown').value;
     }
 
+    //Convert flag types selections into a string for the csv
     let flagTypes = '';
     if (centralTendency) {
       flagTypes += 'Central tendency; ';
@@ -993,25 +1004,11 @@ export class GraphOptionsComponent implements OnInit {
     if (unknown) {
       flagTypes += 'Unknown; ';
     }
-    //remove final semicolon
+
+    //remove final semicolon and space
     flagTypes = flagTypes.slice(0, -2);
-    console.log('flagTypes:', flagTypes);
-    if (axis == 'x') {
-      this.flagTypesX.get('centralTendency').setValue(null);
-      this.flagTypesX.get('outlier').setValue(null);
-      this.flagTypesX.get('matrixInterference').setValue(null);
-      this.flagTypesX.get('dissolvedGTTotal').setValue(null);
-      this.flagTypesX.get('phytoChl').setValue(null);
-      this.flagTypesX.get('unknown').setValue(null);
-    }
-    if (axis == 'y') {
-      this.flagTypesY.get('centralTendency').setValue(null);
-      this.flagTypesY.get('outlier').setValue(null);
-      this.flagTypesY.get('matrixInterference').setValue(null);
-      this.flagTypesY.get('dissolvedGTTotal').setValue(null);
-      this.flagTypesY.get('phytoChl').setValue(null);
-      this.flagTypesY.get('unknown').setValue(null);
-    }
+
+    //Return string of all selected flag types for one axis
     return flagTypes;
   }
 
@@ -1049,27 +1046,35 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
       this.axisFlagForm.get('xyFlagControl').setValue(true);
-      this.autoCheckFlagTypes('x');
-      this.autoCheckFlagTypes('y');
+      this.autoCheckFlagTypes('x', selectedPoints);
+      this.autoCheckFlagTypes('y', selectedPoints);
     }
     if (selectedColor == this.xFlaggedColor) {
       //check the x box
       this.axisFlagForm.get('xFlagControl').setValue(true);
-      this.autoCheckFlagTypes('x');
+      this.autoCheckFlagTypes('x', selectedPoints);
     }
     if (selectedColor == this.yFlaggedColor) {
       //check the y box
       this.axisFlagForm.get('yFlagControl').setValue(true);
-      this.autoCheckFlagTypes('y');
+      this.autoCheckFlagTypes('y', selectedPoints);
     }
   }
 
-  autoCheckFlagTypes(axis: String) {
+  autoCheckFlagTypes(axis: String, selectedPoints) {
     if (axis === 'x') {
       this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
-        let selectedRcodeX = xdata[this.selectedPoints[0].pointIndex].rcode;
+        console.log('this.selectedPoints', this.selectedPoints);
+        console.log(
+          'this.selectedPoints[0].pointIndex',
+          this.selectedPoints[0].pointIndex
+        );
+        console.log('xdata', xdata);
+        let selectedRcodeX = xdata[selectedPoints[0].pointIndex].rcode;
+        console.log('selectedRcodeX', selectedRcodeX);
         for (let i = 0; i < this.flaggedData.length; i++) {
           if (this.flaggedData[i].rcode == selectedRcodeX) {
+            console.log('this.flaggedData[i].rcode', this.flaggedData[i].rcode);
             let currentAnnotation = this.flaggedData[i].annotation;
             let insertAnnotation = document.getElementById(
               'flagAnnotationX'
@@ -1105,7 +1110,7 @@ export class GraphOptionsComponent implements OnInit {
     }
     if (axis === 'y') {
       this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
-        let selectedRcodeY = ydata[this.selectedPoints[0].pointIndex].rcode;
+        let selectedRcodeY = ydata[selectedPoints[0].pointIndex].rcode;
         for (let i = 0; i < this.flaggedData.length; i++) {
           if (this.flaggedData[i].rcode == selectedRcodeY) {
             let currentAnnotation = this.flaggedData[i].annotation;
