@@ -1059,7 +1059,6 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public initiateSelectPoints() {
-    this.bivariatePlot.on('plotly_legendclick', () => false);
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
       this.selectPoints();
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal

@@ -29,6 +29,12 @@
 }
 /* end: year slider */
 
+::ng-deep {
+  .legendtoggle {
+    pointer-events: none;
+  }
+}
+
 /* start: checkboxes */
 ::ng-deep .mat-checkbox-checked.mat-accent .mat-checkbox-background,
 .mat-checkbox-indeterminate.mat-accent .mat-checkbox-background {
