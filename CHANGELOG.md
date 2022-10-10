@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - USGS header and footer
 - Filler landing page that corresponds with the CyAN button
 - Ability to select/deselect x-axis flag types for y-axis
+- Auto-checks flag types and annotations
+- Option for users to auto-fill y-axis flag types with their x-axis selections
+- 'Next' button in flag modal is disabled when neither axis is selected
 
 ### Changed
 
@@ -43,6 +46,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Responsive resizing to account for top bars
 - Prevents user interaction with graph when Flag Options modal is open
 - Separates x and y axes in flag modal
+- Clears previous graph each time 'Create Graph' is clicked regardless of whether or no data are returned
 
 ### Fixed
 

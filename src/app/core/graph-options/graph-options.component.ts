@@ -820,11 +820,6 @@ export class GraphOptionsComponent implements OnInit {
     let xChecked = this.axisFlagForm.get('xFlagControl').value;
     let yChecked = this.axisFlagForm.get('yFlagControl').value;
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
-
-    console.log('goToFlagTypes xChecked', xChecked);
-    console.log('goToFlagTypes yChecked', yChecked);
-    console.log('goToFlagTypes xyChecked', xyChecked);
-
     this.showFlagOptions = false;
 
     if (xChecked || xyChecked) {
