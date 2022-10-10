@@ -62,6 +62,7 @@ export class GraphOptionsComponent implements OnInit {
   submitAfterX: Boolean = false;
   onlyYflags: Boolean = false;
   differentYflags: Boolean = false;
+  maxFlagModalHeight;
   showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
@@ -874,11 +875,28 @@ export class GraphOptionsComponent implements OnInit {
     if (!yChecked) {
       this.submitAfterX = true;
     }
+
+    setTimeout(() => {
+      document.getElementById('flagModals').style.height = 'auto';
+      this.maxFlagModalHeight =
+        document.getElementById('flagModals').clientHeight - 20;
+      this.resizeDivs();
+    }, 1);
   }
 
   public goToFlagTypesY() {
     this.showFlagOptionsX = false;
     this.showFlagOptionsY = true;
+
+    this.maxFlagModalHeight =
+      document.getElementById('flagModals').clientHeight;
+
+    setTimeout(() => {
+      document.getElementById('flagModals').style.height = 'auto';
+      this.maxFlagModalHeight =
+        document.getElementById('flagModals').clientHeight - 20;
+      this.resizeDivs();
+    }, 1);
   }
 
   public getAnnotation(axis: String) {
@@ -1080,9 +1098,17 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public selectPoints() {
+    document.getElementById('flagModals').style.height = 'auto';
     //Prevent user from clicking on features outside the modal
     this.disableEnable('graph', false, false);
     this.disableEnable('graphOptionsBackgroundID', false, false);
+
+    //Get original flag modal height
+    setTimeout(() => {
+      this.maxFlagModalHeight =
+        document.getElementById('flagModals').clientHeight - 20;
+      this.resizeDivs();
+    }, 1);
   }
 
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
@@ -1496,7 +1522,14 @@ export class GraphOptionsComponent implements OnInit {
       'graphOptionsCollapsedID'
     );
 
-    let optionModalHeight = document.getElementById('optionModal');
+    let flagModals = document.getElementById('flagModals');
+
+    if (this.maxFlagModalHeight > mapHeight - 130) {
+      let newFlagModalHeight = (mapHeight - 130).toString() + 'px';
+      flagModals.style.height = newFlagModalHeight;
+    } else {
+      flagModals.style.height = 'auto';
+    }
 
     this.graphHeight = 0.99 * mapHeight - 100;
     graphBackgroundID.style.height = (0.99 * mapHeight - 100).toString() + 'px';
