@@ -1496,6 +1496,8 @@ export class GraphOptionsComponent implements OnInit {
       'graphOptionsCollapsedID'
     );
 
+    let optionModalHeight = document.getElementById('optionModal');
+
     this.graphHeight = 0.99 * mapHeight - 100;
     graphBackgroundID.style.height = (0.99 * mapHeight - 100).toString() + 'px';
 

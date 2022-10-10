@@ -327,7 +327,7 @@ a.modebar-btn svg {
   background-color: rgba(255, 255, 255, 0.85);
   width: 240px !important;
   position: relative;
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 579px;
 }
 .optionsBackgroundMini {
@@ -368,7 +368,7 @@ a.modebar-btn svg {
 }
 .optionsBackgroundResponsive {
   max-height: 670px;
-  overflow-y: scroll;
+  overflow-y: auto;
   min-height: 100px;
 }
 .optionsMarginRightLarge {
@@ -454,7 +454,7 @@ a.modebar-btn svg {
   max-width: 700px;
   position: relative;
   padding-bottom: 20px;
-  overflow-y: scroll;
+  overflow-y: auto;
   width: calc(97vw - 90px);
 }
 .introSize {
@@ -471,7 +471,7 @@ a.modebar-btn svg {
   display: none !important;
 }
 .yOverflow {
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .marginLeftFullWidth {
   margin-left: 160px;
@@ -622,7 +622,7 @@ a.modebar-btn svg {
 /* start graph overlays */
 .optionModal {
   z-index: 300;
-  width: 210px !important;
+  width: 235px !important;
   background-color: rgb(255, 255, 255, 0.95);
   position: absolute;
   border: 4px solid #687980;
@@ -631,6 +631,7 @@ a.modebar-btn svg {
   padding: 10px;
   margin-top: 20px;
   margin-left: 15px;
+  overflow-y: auto;
 }
 
 .unflagModal {
