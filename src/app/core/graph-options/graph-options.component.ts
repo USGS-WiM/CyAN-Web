@@ -534,25 +534,32 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   closeFlagOptions() {
-    //Close flag options modal
-    this.showFlagOptions = false;
     this.disableEnableGraph(false);
+    //Hide all flag option modals
+    this.showFlagOptions = false;
+    this.showFlagOptionsX = false;
+    this.showFlagOptionsY = false;
     this.showUnflagOptions = false;
+
+    //If lasso was used, redraw graph to reset color display
     if (this.lasso) {
       this.createGraph(false);
       this.lasso = false;
     }
+
+    //Reset boolean that controls flagging all data at once
     this.flagAll = false;
 
     //enable all features that were disabled when modal was open
     this.disableEnable('graph', true, false);
     this.disableEnable('graphOptionsBackgroundID', true, false);
 
-    //Reset form
+    //Reset x-axis/y-axis selection form
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
     this.axisFlagForm.get('xyFlagControl').setValue(null);
 
+    //Reset flag types x selection form
     this.flagTypesX.get('centralTendency').setValue(null);
     this.flagTypesX.get('outlier').setValue(null);
     this.flagTypesX.get('matrixInterference').setValue(null);
@@ -560,6 +567,7 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesX.get('phytoChl').setValue(null);
     this.flagTypesX.get('unknown').setValue(null);
 
+    //Reset flag types y selection form
     this.flagTypesY.get('centralTendency').setValue(null);
     this.flagTypesY.get('outlier').setValue(null);
     this.flagTypesY.get('matrixInterference').setValue(null);
@@ -567,11 +575,11 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesY.get('phytoChl').setValue(null);
     this.flagTypesY.get('unknown').setValue(null);
 
+    //Reset option to choose different y-axis flag types
     this.sameXYFlag.get('diffY').setValue(null);
     this.differentYflags = false;
 
-    this.showFlagOptionsX = false;
-    this.showFlagOptionsY = false;
+    //Reset the user input for x and y flag annotations
     let inputX = document.getElementById(
       'flagAnnotationX'
     ) as HTMLInputElement | null;
