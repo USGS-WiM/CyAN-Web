@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
+import { NONE_TYPE } from '@angular/compiler';
 
 @Component({
   selector: 'app-graph-options',
@@ -410,19 +411,64 @@ export class GraphOptionsComponent implements OnInit {
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
-    var trace1 = {
+    var allData = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
-      //Keeping these here so that it's easy to add if we decide to implement in the future
-      //name: 'Sample 1',
-      //text: this.sid,
+      name: 'None',
+      hovertemplate: 'x: %{x} <br> y: %{y} <extra></extra>',
       textposition: 'bottom center',
       marker: { size: 12, color: this.allColors, symbol: this.allShapes },
     };
+    let AxisLegendFillerX = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'X-Axis',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.xFlaggedColor,
+        symbol: this.flaggedSymbol,
+      },
+    };
 
-    var data = [trace1];
+    let AxisLegendFillerY = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'Y-Axis',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.yFlaggedColor,
+        symbol: this.flaggedSymbol,
+      },
+    };
+
+    let AxisLegendFillerXY = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'Both Axes',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.xyFlaggedColor,
+        symbol: this.flaggedSymbol,
+      },
+    };
+
+    var data = [
+      allData,
+      AxisLegendFillerX,
+      AxisLegendFillerY,
+      AxisLegendFillerXY,
+    ];
 
     var layout = {
       font: {
@@ -444,8 +490,12 @@ export class GraphOptionsComponent implements OnInit {
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
-      showlegend: false,
-      legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      showlegend: true,
+      legend: {
+        bgcolor: 'rgba(255, 255, 255, 0)',
+        title: { text: 'Flagged Data' },
+        font: { size: 14 },
+      },
       modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
@@ -761,22 +811,10 @@ export class GraphOptionsComponent implements OnInit {
       }
     }
 
-    //New styling for new plot
-    let update = {
-      marker: { color: colors, size: 12, symbol: symbols },
-    };
-
     this.allColors = colors;
     this.allShapes = symbols;
 
-    //Change the color on the graph
-    if (!this.lasso) {
-      Plotly.restyle('graph', update);
-    }
-    //Override the default Plotly post-lasso view by re-drawing graph
-    if (this.lasso) {
-      this.createGraph(false);
-    }
+    this.createGraph(false);
 
     updateGraphCalled = false;
     this.lasso = false;
@@ -1021,6 +1059,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public initiateSelectPoints() {
+    this.bivariatePlot.on('plotly_legendclick', () => false);
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
       this.selectPoints();
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal
