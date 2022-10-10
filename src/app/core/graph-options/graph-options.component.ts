@@ -59,6 +59,7 @@ export class GraphOptionsComponent implements OnInit {
   showFlagOptionsX: Boolean = false;
   showFlagOptionsY: Boolean = false;
   submitAfterX: Boolean = false;
+  onlyYflags: Boolean = false;
   differentYflags: Boolean = false;
   showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
@@ -544,6 +545,7 @@ export class GraphOptionsComponent implements OnInit {
     this.showFlagOptionsX = false;
     this.showFlagOptionsY = false;
     this.showUnflagOptions = false;
+    this.onlyYflags = false;
 
     //If lasso was used, redraw graph to reset color display
     if (this.lasso) {
@@ -818,7 +820,8 @@ export class GraphOptionsComponent implements OnInit {
     if (xChecked || xyChecked) {
       this.showFlagOptionsX = true;
     }
-    if (!xChecked && !xyChecked) {
+    if (!xChecked && !xyChecked && yChecked) {
+      this.onlyYflags = true;
       this.showFlagOptionsY = true;
     }
     if (yChecked) {
@@ -861,13 +864,13 @@ export class GraphOptionsComponent implements OnInit {
     let flagTypesX = this.flagTypes('x');
     let flagTypesY;
     //if user chose different flag types for the y-axis, get responses from form
-    if (this.differentYflags || this.submitAfterX) {
+    if (this.differentYflags || this.onlyYflags) {
       flagTypesY = this.flagTypes('y');
       annotationY = this.getAnnotation('y');
     }
     this.stringArray(flagTypesX);
     //if user chose to use the same responses for both axes, duplicate x responses
-    if (!this.differentYflags) {
+    if (!this.differentYflags && !this.onlyYflags) {
       flagTypesY = flagTypesX;
       annotationY = annotationX;
     }
