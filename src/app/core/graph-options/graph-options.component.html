@@ -137,21 +137,24 @@
         <div>
           <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
             [hidden]="sameQuery">
-            <mat-checkbox formControlName="xFlagControl" class="example-margin" [disableRipple]="true">X-Axis
+            <mat-checkbox formControlName="xFlagControl" class="example-margin" [disableRipple]="true"
+              (change)="xyFlagClicked()">X-Axis
             </mat-checkbox>
           </div>
           <div class=" leftTopBreak" aria-label="Checking this box will flag the Y-Axis data from this point"
             [hidden]="sameQuery">
-            <mat-checkbox class=" example-margin" formControlName="yFlagControl" [disableRipple]="true">Y-Axis
+            <mat-checkbox class=" example-margin" formControlName="yFlagControl" [disableRipple]="true"
+              (change)="xyFlagClicked()">Y-Axis
             </mat-checkbox>
           </div>
           <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
             [hidden]="!sameQuery">
-            <mat-checkbox formControlName="xyFlagControl" class="example-margin" [disableRipple]="true">Create flag
+            <mat-checkbox formControlName="xyFlagControl" class="example-margin" [disableRipple]="true"
+              (change)="xyFlagClicked()">Create flag
             </mat-checkbox>
           </div>
         </div>
-        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()"
+        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()" id="continueToFlagOptions"
           aria-label="Click this button to save flag options">
           Next
         </button>

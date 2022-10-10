@@ -803,11 +803,30 @@ export class GraphOptionsComponent implements OnInit {
     this.closeFlagOptions();
   }
 
+  //Disable/enable 'Next' button depending on whether or not an axis is checked
+  public xyFlagClicked() {
+    let xChecked = this.axisFlagForm.get('xFlagControl').value;
+    let yChecked = this.axisFlagForm.get('yFlagControl').value;
+    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+
+    if (xChecked || yChecked || xyChecked) {
+      this.disableEnable('continueToFlagOptions', true, true);
+    } else {
+      this.disableEnable('continueToFlagOptions', false, true);
+    }
+  }
+
   public goToFlagTypes() {
     let xChecked = this.axisFlagForm.get('xFlagControl').value;
     let yChecked = this.axisFlagForm.get('yFlagControl').value;
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+
+    console.log('goToFlagTypes xChecked', xChecked);
+    console.log('goToFlagTypes yChecked', yChecked);
+    console.log('goToFlagTypes xyChecked', xyChecked);
+
     this.showFlagOptions = false;
+
     if (xChecked || xyChecked) {
       this.showFlagOptionsX = true;
     }
@@ -1053,6 +1072,8 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('yFlagControl').setValue(true);
       this.autoCheckFlagTypes('y', selectedPoints);
     }
+    //Disable/enable 'Next' button depending on whether or not an axis is checked
+    this.xyFlagClicked();
   }
 
   autoCheckFlagTypes(axis: String, selectedPoints) {
