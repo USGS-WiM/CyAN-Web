@@ -22,6 +22,7 @@ export class AboutComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.selectBtn('faqView');
     this.resizeDivs();
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
@@ -72,7 +73,7 @@ export class AboutComponent implements OnInit {
       userGuideViewID.style.color = this.buttonText;
       userGuideViewID.style.backgroundColor = this.buttonBackground;
 
-      faqViewID.style.color = this.buttonText;
+      //faqViewID.style.color = this.buttonText;
       faqViewID.style.backgroundColor = this.buttonBackground;
     }
     if (button == 'userGuideView') {
