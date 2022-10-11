@@ -209,7 +209,6 @@ export class MapComponent implements AfterViewInit {
   }
   public disableMap() {
     this.componentDisplayService.disableMapSubject.subscribe((disableMap) => {
-      console.log('mapBtnClicked', disableMap);
       if (disableMap) {
         this.map.dragging.disable();
         this.map.touchZoom.disable();
