@@ -1,27 +1,82 @@
-<div class="infoPanel marginLeftFullWidth marginTopFullHeight aboutSize" id="infoPanelID"
+<div style="pointer-events: all;" class="infoPanel marginLeftFullWidth marginTopFullHeight " id="infoPanelID"
   aria-label="This panel contains information about CyAN">
   <div class="aboutModal">
-    <p class="aboutText">
-      About CyAN FIELD
-    </p>
-    <p>
-      The purpose of the Cyanobacterial Assessment Network (CyAN) field tool is
-      to display, distribute, and analyze harmful algal bloom (HAB) data. Users
-      can query water quality samples and access the data through maps, charts,
-      and tables. <br />
-      <br />
-      This app was custom built for scientists who use in-situ data to create
-      and validate algal bloom algorithms based on spectral satellite data. This
-      is one tool researchers at the USGS, NASA, and the EPA use in conjunction
-      with SENTINEL-3 data. The Ocean and Land Color Instrument (OCLI) sensor
-      onboard the European Space Agency's (ESA) SENTINEL 3-A and SENTINEL 3-B
-      satellites detects visible and infrared light emitted by large bodies of
-      water. OCLI has 21 bands, meaning it can detect 21 ranges of
-      electromagnetic wavelengths. Algorithms combine the values of these bands
-      to calculate estimates of the presence/absence of cyanobacteria, which are
-      then validated against the in-situ data provided in this app. Learn more
-      about the larger CyAN project
-      <a href="https://www.epa.gov/water-research/cyanobacteria-assessment-network-cyan" target="_blank">here</a>.
-    </p>
+    <div class="flex-container">
+      <div matTooltip="FAQ" style="cursor: pointer; height: 45px; width: 45px; margin-right: 5px; text-align: center"
+        (click)="aboutView('faqView')" id="faqViewID">
+        <mat-icon class="aboutText flex-child" style="margin-left: -5px; margin-top: 5px">question_answer</mat-icon>
+      </div>
+      <div matTooltip="User's Guide"
+        style="cursor: pointer; height: 45px; width: 45px; margin-right: 5px; text-align: center"
+        (click)="aboutView('userGuideView')" id="userGuideViewID">
+        <mat-icon class="aboutText flex-child" style="margin-left: -5px; margin-top: 5px">library_books</mat-icon>
+      </div>
+      <div matTooltip="Disclaimer"
+        style="cursor: pointer; height: 45px; width: 45px; margin-right: 5px; text-align: center"
+        (click)="aboutView('disclaimerView')" id="disclaimerViewID">
+        <mat-icon class="aboutText flex-child" style="margin-left: -5px; margin-top: 5px">warning</mat-icon>
+      </div>
+    </div>
+    <div style="margin-top: 20px;" [hidden]="!userGuide">User's guide... coming soon!</div>
+    <div style="margin-top: 20px;" [hidden]="!faq">
+      <div style="font-size:large; margin-top: 15px; margin-bottom: 5px;">
+        What is the goal of CyAN FIELD?
+      </div>
+      The goal of CyAN FIELD is to aid harmful algal bloom (HAB) research.
+      <div style="font-size:large; margin-top: 20px; margin-bottom: 5px;">How does CyAN FIELD aid HAB research?</div>
+      Users can query water quality samples and access the data through maps and scatter plots. The interactive graph
+      allows users to flag and download data that need further investigation. By using these data as a ground-truth
+      comparison, researchers create and validate HAB detection algorithms for spectral satellite data. <div
+        style="font-size:large; margin-top: 20px; margin-bottom: 5px">
+        Who uses CyAN FIELD?</div>
+      Anyone can use CyAN FIELD. This app was custom-built for USGS, NASA, and EPA scientists and researchers who are
+      studying HABs.
+      <div style="font-size:large; margin-top: 20px; margin-bottom: -5px;">What are some related resources?</div>
+      <ul>
+        <li>CyAN FIELD is one tool in the larger CyAN project. Visit the <a
+            href="https://www.epa.gov/water-research/cyanobacteria-assessment-network-cyan" target="_blank">CyAN
+            page</a> to
+          learn more.</li>
+        <li><a href="https://landsatlook.usgs.gov/explore" target="_blank">LandsatLook</a></li>
+        <li><a
+            href="https://www.nesdis.noaa.gov/real-time-imagery/interactive-maps/how-use-the-interactive-satellite-maps"
+            target="_blank">NOAA's guide</a> on how to use interactive satellite maps.</li>
+        <li><a href="https://www.star.nesdis.noaa.gov/smcd/spb/aq/AerosolWatch/" target="_blank">AerosolWatch</a></li>
+        <li><a href="https://www.star.nesdis.noaa.gov/goes/" target="_blank">GOES
+            Image Viewer</a></li>
+        <li><a href="https://www.ospo.noaa.gov/Products/atmosphere/index.html" target="_blank">NOAA's
+            Office of Satellite and Product Operations</a></li>
+        <li><a href="https://www.radar-live.com/p/satellite-weather.html" target="_blank">Radar Live</a></li>
+      </ul>
+    </div>
+    <div style="margin-top: 20px;" [hidden]="!disclaimer">
+      <div style="font-size:large; margin-top: 15px; margin-bottom: 5px;">
+        USGS Data Disclaimer
+      </div>
+      Unless otherwise stated, all data, metadata and related materials are considered to satisfy the quality standards
+      relative to the purpose for which the data were collected. Although these data and associated metadata have been
+      reviewed for accuracy and completeness and approved for release by the U.S. Geological Survey (USGS), no warranty
+      expressed or implied is made regarding the display or utility of the data for other purposes, nor on all computer
+      systems, nor shall the act of distribution constitute any such warranty.
+      <div style="font-size:large; margin-top: 15px; margin-bottom: 5px;">
+        USGS Software Disclaimer
+      </div>
+      This software has been approved for release by the U.S. Geological Survey (USGS). Although the software has been
+      subjected to rigorous review, the USGS reserves the right to update the software as needed pursuant to further
+      analysis
+      and review. No warranty, expressed or implied, is made by the USGS or the U.S. Government as to the functionality
+      of
+      the software and related material nor shall the fact of release constitute any such warranty. Furthermore, the
+      software
+      is released on condition that neither the USGS nor the U.S. Government shall be held liable for any damages
+      resulting
+      from its authorized or unauthorized use.
+      <div style="font-size:large; margin-top: 15px; margin-bottom: 5px;">
+        USGS Product Names Disclaimer
+      </div>
+      Any use of trade, firm, or product names is for descriptive purposes only and does not imply endorsement by the
+      U.S.
+      Government.
+    </div>
   </div>
 </div>
