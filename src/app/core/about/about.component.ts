@@ -12,6 +12,9 @@ export class AboutComponent implements OnInit {
   public faq: Boolean = true;
   public disclaimer: Boolean = false;
   public userGuide: Boolean = false;
+  public selectedBackground = null;
+  public buttonText = 'rgb(255, 255, 255)';
+  public buttonBackground = '#95dab6';
 
   @HostListener('window:resize')
   onResize() {
@@ -44,6 +47,43 @@ export class AboutComponent implements OnInit {
       this.faq = false;
       this.disclaimer = false;
       this.userGuide = true;
+    }
+    this.selectBtn(view);
+  }
+
+  public selectBtn(button) {
+    let faqViewID = document.getElementById('faqViewID');
+    let userGuideViewID = document.getElementById('userGuideViewID');
+    let disclaimerViewID = document.getElementById('disclaimerViewID');
+    if (button == 'faqView') {
+      faqViewID.style.color = this.buttonBackground;
+      faqViewID.style.backgroundColor = this.selectedBackground;
+
+      userGuideViewID.style.color = this.buttonText;
+      userGuideViewID.style.backgroundColor = this.buttonBackground;
+
+      disclaimerViewID.style.color = this.buttonText;
+      disclaimerViewID.style.backgroundColor = this.buttonBackground;
+    }
+    if (button == 'disclaimerView') {
+      disclaimerViewID.style.color = this.buttonBackground;
+      disclaimerViewID.style.backgroundColor = this.selectedBackground;
+
+      userGuideViewID.style.color = this.buttonText;
+      userGuideViewID.style.backgroundColor = this.buttonBackground;
+
+      faqViewID.style.color = this.buttonText;
+      faqViewID.style.backgroundColor = this.buttonBackground;
+    }
+    if (button == 'userGuideView') {
+      userGuideViewID.style.color = this.buttonBackground;
+      userGuideViewID.style.backgroundColor = this.selectedBackground;
+
+      disclaimerViewID.style.color = this.buttonText;
+      disclaimerViewID.style.backgroundColor = this.buttonBackground;
+
+      faqViewID.style.color = this.buttonText;
+      faqViewID.style.backgroundColor = this.buttonBackground;
     }
   }
 
