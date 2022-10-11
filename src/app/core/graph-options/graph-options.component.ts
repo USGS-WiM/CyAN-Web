@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
+import { NONE_TYPE } from '@angular/compiler';
 
 @Component({
   selector: 'app-graph-options',
@@ -59,6 +60,9 @@ export class GraphOptionsComponent implements OnInit {
   showFlagOptionsX: Boolean = false;
   showFlagOptionsY: Boolean = false;
   submitAfterX: Boolean = false;
+  onlyYflags: Boolean = false;
+  differentYflags: Boolean = false;
+  maxFlagModalHeight;
   showUnflagOptions: Boolean = false;
   showLassoFlagOptions: Boolean = false;
   lasso: Boolean = false;
@@ -89,9 +93,12 @@ export class GraphOptionsComponent implements OnInit {
     phytoChl: new FormControl(),
     unknown: new FormControl(),
   });
+  public sameXYFlag = new FormGroup({
+    diffY: new FormControl(),
+  });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
-  public unflaggedColor: string = 'rgb(242, 189, 161)';
+  public unflaggedColor: string = 'rgb(242, 204, 177)';
   public xyFlaggedColor: string = 'rgb(0, 153, 0)';
   public xFlaggedColor: string = 'rgb(255, 0, 255)';
   public yFlaggedColor: string = 'rgb(0, 204, 204)';
@@ -405,19 +412,81 @@ export class GraphOptionsComponent implements OnInit {
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
 
-    var trace1 = {
+    var allData = {
       x: this.currentXaxisValues,
       y: this.currentYaxisValues,
       mode: 'markers',
       type: 'scatter',
-      //Keeping these here so that it's easy to add if we decide to implement in the future
-      //name: 'Sample 1',
-      //text: this.sid,
+      name: 'None',
+      showlegend: false,
+      hovertemplate: 'x: %{x} <br> y: %{y} <extra></extra>',
       textposition: 'bottom center',
       marker: { size: 12, color: this.allColors, symbol: this.allShapes },
     };
 
-    var data = [trace1];
+    let AxisLegendFillerAllData = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'None',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.unflaggedColor,
+        symbol: this.unflaggedSymbol,
+      },
+    };
+
+    let AxisLegendFillerX = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'X-Axis',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.xFlaggedColor,
+        symbol: this.flaggedSymbol,
+      },
+    };
+
+    let AxisLegendFillerY = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'Y-Axis',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.yFlaggedColor,
+        symbol: this.flaggedSymbol,
+      },
+    };
+
+    let AxisLegendFillerXY = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'Both Axes',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.xyFlaggedColor,
+        symbol: this.flaggedSymbol,
+      },
+    };
+
+    var data = [
+      allData,
+      AxisLegendFillerAllData,
+      AxisLegendFillerX,
+      AxisLegendFillerY,
+      AxisLegendFillerXY,
+    ];
 
     var layout = {
       font: {
@@ -439,8 +508,12 @@ export class GraphOptionsComponent implements OnInit {
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
       plot_bgcolor: 'rgba(255, 255, 255, 0)',
-      showlegend: false,
-      legend: { bgcolor: 'rgba(255, 255, 255, 0)' },
+      showlegend: true,
+      legend: {
+        bgcolor: 'rgba(255, 255, 255, 0)',
+        title: { text: 'Flagged Data' },
+        font: { size: 14 },
+      },
       modebar: { bgcolor: 'rgba(255, 255, 255, 0)' },
       height: this.graphHeight,
       width: this.graphWidth,
@@ -482,7 +555,7 @@ export class GraphOptionsComponent implements OnInit {
           },
         },
         {
-          name: 'Remove all flags',
+          name: 'Remove plotted flags',
           icon: removeIcon,
           click: (e) => {
             this.unflagAllData();
@@ -510,29 +583,53 @@ export class GraphOptionsComponent implements OnInit {
   unflagAllData() {
     this.unflagAll = true;
     this.showUnflagOptions = true;
+    this.disableEnableGraph(true);
     this.selectPoints();
   }
 
+  diffYflags(event) {
+    if (event.checked) {
+      this.differentYflags = true;
+    }
+    if (!event.checked) {
+      this.differentYflags = false;
+    }
+  }
+
+  public stringArray(flagString: String) {
+    let flagArray: String[] = null;
+    flagArray = flagString.split('; ');
+    return flagArray;
+  }
+
   closeFlagOptions() {
-    //Close flag options modal
-    this.showFlagOptions = false;
+    //Unfreeze graph and sidebar
     this.disableEnableGraph(false);
+    this.disableEnable('graph', true, false);
+    this.disableEnable('graphOptionsBackgroundID', true, false);
+
+    //Hide all flag option modals
+    this.showFlagOptions = false;
+    this.showFlagOptionsX = false;
+    this.showFlagOptionsY = false;
     this.showUnflagOptions = false;
+    this.onlyYflags = false;
+
+    //If lasso was used, redraw graph to reset color display
     if (this.lasso) {
       this.createGraph(false);
       this.lasso = false;
     }
+
+    //Reset boolean that controls flagging all data at once
     this.flagAll = false;
 
-    //enable all features that were disabled when modal was open
-    this.disableEnable('graph', true, false);
-    this.disableEnable('graphOptionsBackgroundID', true, false);
-
-    //Reset form
+    //Reset x-axis/y-axis selection form
     this.axisFlagForm.get('xFlagControl').setValue(null);
     this.axisFlagForm.get('yFlagControl').setValue(null);
     this.axisFlagForm.get('xyFlagControl').setValue(null);
 
+    //Reset flag types x selection form
     this.flagTypesX.get('centralTendency').setValue(null);
     this.flagTypesX.get('outlier').setValue(null);
     this.flagTypesX.get('matrixInterference').setValue(null);
@@ -540,6 +637,7 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesX.get('phytoChl').setValue(null);
     this.flagTypesX.get('unknown').setValue(null);
 
+    //Reset flag types y selection form
     this.flagTypesY.get('centralTendency').setValue(null);
     this.flagTypesY.get('outlier').setValue(null);
     this.flagTypesY.get('matrixInterference').setValue(null);
@@ -547,8 +645,23 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesY.get('phytoChl').setValue(null);
     this.flagTypesY.get('unknown').setValue(null);
 
-    this.showFlagOptionsX = false;
-    this.showFlagOptionsY = false;
+    //Reset option to choose different y-axis flag types
+    this.sameXYFlag.get('diffY').setValue(null);
+    this.differentYflags = false;
+
+    //Reset the user input for x and y flag annotations
+    let inputX = document.getElementById(
+      'flagAnnotationX'
+    ) as HTMLInputElement | null;
+    if (inputX.value) {
+      inputX.value = '';
+    }
+    let inputY = document.getElementById(
+      'flagAnnotationY'
+    ) as HTMLInputElement | null;
+    if (inputY.value) {
+      inputY.value = '';
+    }
   }
 
   //Disables or enables clickable features
@@ -575,7 +688,6 @@ export class GraphOptionsComponent implements OnInit {
     const plotlyjs = document.getElementsByClassName('js-plotly-plot');
     for (let el in plotlyjs) {
       if (plotlyjs[el]['style'] !== undefined && enable) {
-        console.log('enable true');
         plotlyjs[el]['style'].pointerEvents = 'unset';
       } else if (plotlyjs[el]['style'] !== undefined && !enable) {
         plotlyjs[el]['style'].pointerEvents = 'none';
@@ -718,24 +830,11 @@ export class GraphOptionsComponent implements OnInit {
       }
     }
 
-    //New styling for new plot
-    let update = {
-      marker: { color: colors, size: 12, symbol: symbols },
-    };
-
     this.allColors = colors;
     this.allShapes = symbols;
 
-    //Change the color on the graph
-    if (!this.lasso) {
-      Plotly.restyle('graph', update);
-    }
-    //Override the default Plotly post-lasso view by re-drawing graph
-    if (this.lasso) {
-      this.createGraph(false);
-    }
+    this.createGraph(false);
 
-    console.log('this.flaggedData', this.flaggedData);
     updateGraphCalled = false;
     this.lasso = false;
     this.flagAll = false;
@@ -761,15 +860,30 @@ export class GraphOptionsComponent implements OnInit {
     this.closeFlagOptions();
   }
 
+  //Disable/enable 'Next' button depending on whether or not an axis is checked
+  public xyFlagClicked() {
+    let xChecked = this.axisFlagForm.get('xFlagControl').value;
+    let yChecked = this.axisFlagForm.get('yFlagControl').value;
+    let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
+
+    if (xChecked || yChecked || xyChecked) {
+      this.disableEnable('continueToFlagOptions', true, true);
+    } else {
+      this.disableEnable('continueToFlagOptions', false, true);
+    }
+  }
+
   public goToFlagTypes() {
     let xChecked = this.axisFlagForm.get('xFlagControl').value;
     let yChecked = this.axisFlagForm.get('yFlagControl').value;
     let xyChecked = this.axisFlagForm.get('xyFlagControl').value;
     this.showFlagOptions = false;
+
     if (xChecked || xyChecked) {
       this.showFlagOptionsX = true;
     }
-    if (!xChecked && !xyChecked) {
+    if (!xChecked && !xyChecked && yChecked) {
+      this.onlyYflags = true;
       this.showFlagOptionsY = true;
     }
     if (yChecked) {
@@ -778,11 +892,28 @@ export class GraphOptionsComponent implements OnInit {
     if (!yChecked) {
       this.submitAfterX = true;
     }
+
+    setTimeout(() => {
+      document.getElementById('flagModals').style.height = 'auto';
+      this.maxFlagModalHeight =
+        document.getElementById('flagModals').clientHeight - 20;
+      this.resizeDivs();
+    }, 1);
   }
 
   public goToFlagTypesY() {
     this.showFlagOptionsX = false;
     this.showFlagOptionsY = true;
+
+    this.maxFlagModalHeight =
+      document.getElementById('flagModals').clientHeight;
+
+    setTimeout(() => {
+      document.getElementById('flagModals').style.height = 'auto';
+      this.maxFlagModalHeight =
+        document.getElementById('flagModals').clientHeight - 20;
+      this.resizeDivs();
+    }, 1);
   }
 
   public getAnnotation(axis: String) {
@@ -800,9 +931,7 @@ export class GraphOptionsComponent implements OnInit {
     }
     annotation = input?.value;
     annotation = annotation.replace(/,/g, ';');
-    if (input.value) {
-      input.value = null;
-    }
+
     return annotation;
   }
 
@@ -810,9 +939,20 @@ export class GraphOptionsComponent implements OnInit {
   submitFlagSelections() {
     //Capture user input in the annotation box
     let annotationX = this.getAnnotation('x');
-    let annotationY = this.getAnnotation('y');
+    let annotationY;
     let flagTypesX = this.flagTypes('x');
-    let flagTypesY = this.flagTypes('y');
+    let flagTypesY;
+    //if user chose different flag types for the y-axis, get responses from form
+    if (this.differentYflags || this.onlyYflags) {
+      flagTypesY = this.flagTypes('y');
+      annotationY = this.getAnnotation('y');
+    }
+    this.stringArray(flagTypesX);
+    //if user chose to use the same responses for both axes, duplicate x responses
+    if (!this.differentYflags && !this.onlyYflags) {
+      flagTypesY = flagTypesX;
+      annotationY = annotationX;
+    }
     if (!this.sameQuery) {
       let xChecked = this.axisFlagForm.get('xFlagControl').value;
       let yChecked = this.axisFlagForm.get('yFlagControl').value;
@@ -893,15 +1033,12 @@ export class GraphOptionsComponent implements OnInit {
       }
     }
 
-    //Clear annotation form
-    /*   if (input.value) {
-      input.value = null;
-    } */
     //Close flag modal and clear selections
     this.closeFlagOptions();
   }
 
   public flagTypes(axis: String) {
+    //All flag type options
     let centralTendency;
     let outlier;
     let matrixInterference;
@@ -909,6 +1046,7 @@ export class GraphOptionsComponent implements OnInit {
     let phytoChl;
     let unknown;
 
+    //Get x flag types
     if (axis == 'x') {
       centralTendency = this.flagTypesX.get('centralTendency').value;
       outlier = this.flagTypesX.get('outlier').value;
@@ -917,6 +1055,8 @@ export class GraphOptionsComponent implements OnInit {
       phytoChl = this.flagTypesX.get('phytoChl').value;
       unknown = this.flagTypesX.get('unknown').value;
     }
+
+    //Get y flag types
     if (axis == 'y') {
       centralTendency = this.flagTypesY.get('centralTendency').value;
       outlier = this.flagTypesY.get('outlier').value;
@@ -926,6 +1066,7 @@ export class GraphOptionsComponent implements OnInit {
       unknown = this.flagTypesY.get('unknown').value;
     }
 
+    //Convert flag types selections into a string for the csv
     let flagTypes = '';
     if (centralTendency) {
       flagTypes += 'Central tendency; ';
@@ -943,24 +1084,13 @@ export class GraphOptionsComponent implements OnInit {
       flagTypes += 'Phytoplankton vs Chl; ';
     }
     if (unknown) {
-      flagTypes += 'Unknown';
+      flagTypes += 'Unknown; ';
     }
-    if (axis == 'x') {
-      this.flagTypesX.get('centralTendency').setValue(null);
-      this.flagTypesX.get('outlier').setValue(null);
-      this.flagTypesX.get('matrixInterference').setValue(null);
-      this.flagTypesX.get('dissolvedGTTotal').setValue(null);
-      this.flagTypesX.get('phytoChl').setValue(null);
-      this.flagTypesX.get('unknown').setValue(null);
-    }
-    if (axis == 'y') {
-      this.flagTypesY.get('centralTendency').setValue(null);
-      this.flagTypesY.get('outlier').setValue(null);
-      this.flagTypesY.get('matrixInterference').setValue(null);
-      this.flagTypesY.get('dissolvedGTTotal').setValue(null);
-      this.flagTypesY.get('phytoChl').setValue(null);
-      this.flagTypesY.get('unknown').setValue(null);
-    }
+
+    //remove final semicolon and space
+    flagTypes = flagTypes.slice(0, -2);
+
+    //Return string of all selected flag types for one axis
     return flagTypes;
   }
 
@@ -985,10 +1115,17 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public selectPoints() {
+    document.getElementById('flagModals').style.height = 'auto';
     //Prevent user from clicking on features outside the modal
     this.disableEnable('graph', false, false);
     this.disableEnable('graphOptionsBackgroundID', false, false);
-    //Plotly.react(this.bivariatePlot, {}, {'staticPlot': 'true'});
+
+    //Get original flag modal height
+    setTimeout(() => {
+      this.maxFlagModalHeight =
+        document.getElementById('flagModals').clientHeight - 20;
+      this.resizeDivs();
+    }, 1);
   }
 
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
@@ -999,29 +1136,117 @@ export class GraphOptionsComponent implements OnInit {
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
       this.axisFlagForm.get('xyFlagControl').setValue(true);
+      this.autoCheckFlagTypes('x', selectedPoints);
+      this.autoCheckFlagTypes('y', selectedPoints);
     }
     if (selectedColor == this.xFlaggedColor) {
       //check the x box
       this.axisFlagForm.get('xFlagControl').setValue(true);
+      this.autoCheckFlagTypes('x', selectedPoints);
     }
     if (selectedColor == this.yFlaggedColor) {
       //check the y box
       this.axisFlagForm.get('yFlagControl').setValue(true);
+      this.autoCheckFlagTypes('y', selectedPoints);
+    }
+    //Disable/enable 'Next' button depending on whether or not an axis is checked
+    this.xyFlagClicked();
+  }
+
+  autoCheckFlagTypes(axis: String, selectedPoints) {
+    if (axis === 'x') {
+      this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+        let selectedRcodeX = xdata[selectedPoints[0].pointIndex].rcode;
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          if (this.flaggedData[i].rcode == selectedRcodeX) {
+            let currentAnnotation = this.flaggedData[i].annotation;
+            let insertAnnotation = document.getElementById(
+              'flagAnnotationX'
+            ) as HTMLInputElement | null;
+            insertAnnotation.value = currentAnnotation;
+            let currentFlagType = this.flaggedData[i].flagType;
+            let flagArray = this.stringArray(currentFlagType);
+            if (flagArray) {
+              for (let j = 0; j < flagArray.length; j++) {
+                if (flagArray[j] == 'Central tendency') {
+                  this.flagTypesX.get('centralTendency').setValue(true);
+                }
+                if (flagArray[j] == 'Outlier') {
+                  this.flagTypesX.get('outlier').setValue(true);
+                }
+                if (flagArray[j] == 'Matrix or recovery problem') {
+                  this.flagTypesX.get('matrixInterference').setValue(true);
+                }
+                if (flagArray[j] == 'Dissolved result > Total') {
+                  this.flagTypesX.get('dissolvedGTTotal').setValue(true);
+                }
+                if (flagArray[j] == 'Phytoplankton vs Chl') {
+                  this.flagTypesX.get('phytoChl').setValue(true);
+                }
+                if (flagArray[j] == 'Unknown') {
+                  this.flagTypesX.get('unknown').setValue(true);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    if (axis === 'y') {
+      this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+        let selectedRcodeY = ydata[selectedPoints[0].pointIndex].rcode;
+        for (let i = 0; i < this.flaggedData.length; i++) {
+          if (this.flaggedData[i].rcode == selectedRcodeY) {
+            let currentAnnotation = this.flaggedData[i].annotation;
+            let insertAnnotation = document.getElementById(
+              'flagAnnotationY'
+            ) as HTMLInputElement | null;
+            insertAnnotation.value = currentAnnotation;
+            let currentFlagType = this.flaggedData[i].flagType;
+            let flagArray = this.stringArray(currentFlagType);
+            if (flagArray) {
+              for (let j = 0; j < flagArray.length; j++) {
+                if (flagArray[j] == 'Central tendency') {
+                  this.flagTypesY.get('centralTendency').setValue(true);
+                }
+                if (flagArray[j] == 'Outlier') {
+                  this.flagTypesY.get('outlier').setValue(true);
+                }
+                if (flagArray[j] == 'Matrix or recovery problem') {
+                  this.flagTypesY.get('matrixInterference').setValue(true);
+                }
+                if (flagArray[j] == 'Dissolved result > Total') {
+                  this.flagTypesY.get('dissolvedGTTotal').setValue(true);
+                }
+                if (flagArray[j] == 'Phytoplankton vs Chl') {
+                  this.flagTypesY.get('phytoChl').setValue(true);
+                }
+                if (flagArray[j] == 'Unknown') {
+                  this.flagTypesY.get('unknown').setValue(true);
+                }
+              }
+            }
+          }
+        }
+      });
     }
   }
 
   //Called when user clicks 'Plot Data'
   public clickPlotData() {
+    //Whenever user attempts to create a new graph, clear previous one even if it's a failed query
+    this.showGraph = false;
     this.alreadyGraphed = false;
     //Get parameter and method user selections
-    let tempP_X = this.graphSelectionsForm.get('ParametersX').value.pcode;
-    let tempP_Y = this.graphSelectionsForm.get('ParametersY').value.pcode;
+    let tempP_X_value = this.graphSelectionsForm.get('ParametersX').value;
+    let tempP_Y_value = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
+
     //If any parameter or method is left blank, prompt user to make a selection
     if (
-      tempP_X === null ||
-      tempP_Y === null ||
+      tempP_X_value === null ||
+      tempP_Y_value === null ||
       tempM_X == null ||
       tempM_Y == null
     ) {
@@ -1314,8 +1539,17 @@ export class GraphOptionsComponent implements OnInit {
       'graphOptionsCollapsedID'
     );
 
-    this.graphHeight = 0.7 * mapHeight;
-    graphBackgroundID.style.height = (0.7 * mapHeight).toString() + 'px';
+    let flagModals = document.getElementById('flagModals');
+
+    if (this.maxFlagModalHeight > mapHeight - 130) {
+      let newFlagModalHeight = (mapHeight - 130).toString() + 'px';
+      flagModals.style.height = newFlagModalHeight;
+    } else {
+      flagModals.style.height = 'auto';
+    }
+
+    this.graphHeight = 0.99 * mapHeight - 100;
+    graphBackgroundID.style.height = (0.99 * mapHeight - 100).toString() + 'px';
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');

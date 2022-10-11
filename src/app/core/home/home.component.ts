@@ -21,7 +21,7 @@ export class HomeComponent implements AfterViewInit {
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
   public selectedColor = 'rgb(255, 255, 255)';
-  public homeColor = '#f2e6b1';
+  public homeColor = '#f2ccb1';
   public infoColor = '#95dab6';
   public mapColor = '#83b2d0';
   public graphColor = '#7f87b2';
@@ -98,9 +98,9 @@ export class HomeComponent implements AfterViewInit {
     }
     if (button !== 'home') {
       homeBtnFullID.style.color = 'rgb(255, 255, 255)';
-      homeBtnFullID.style.backgroundColor = '#f2e6b1';
+      homeBtnFullID.style.backgroundColor = this.homeColor;
       homeBtnSmID.style.color = 'rgb(255, 255, 255)';
-      homeBtnSmID.style.backgroundColor = '#f2e6b1';
+      homeBtnSmID.style.backgroundColor = this.homeColor;
     }
     if (button == 'graph') {
       graphBtnID.style.color = this.graphColor;
