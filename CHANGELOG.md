@@ -38,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Option for users to auto-fill y-axis flag types with their x-axis selections
 - 'Next' button in flag modal is disabled when neither axis is selected
 - Graph legend
+- USGS disclaimer & FAQ
 
 ### Changed
 

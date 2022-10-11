@@ -9,6 +9,10 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 export class AboutComponent implements OnInit {
   constructor(private componentDisplayService: ComponentDisplayService) {}
 
+  public faq: Boolean = true;
+  public disclaimer: Boolean = false;
+  public userGuide: Boolean = false;
+
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -23,6 +27,24 @@ export class AboutComponent implements OnInit {
         }, 0.1);
       }
     );
+  }
+
+  public aboutView(view: String) {
+    if (view === 'faqView') {
+      this.faq = true;
+      this.disclaimer = false;
+      this.userGuide = false;
+    }
+    if (view === 'disclaimerView') {
+      this.faq = false;
+      this.disclaimer = true;
+      this.userGuide = false;
+    }
+    if (view === 'userGuideView') {
+      this.faq = false;
+      this.disclaimer = false;
+      this.userGuide = true;
+    }
   }
 
   public resizeDivs() {
