@@ -418,10 +418,26 @@ export class GraphOptionsComponent implements OnInit {
       mode: 'markers',
       type: 'scatter',
       name: 'None',
+      showlegend: false,
       hovertemplate: 'x: %{x} <br> y: %{y} <extra></extra>',
       textposition: 'bottom center',
       marker: { size: 12, color: this.allColors, symbol: this.allShapes },
     };
+
+    let AxisLegendFillerAllData = {
+      x: [null],
+      y: [null],
+      showlegend: true,
+      name: 'None',
+      mode: 'markers',
+      type: 'scatter',
+      marker: {
+        size: 12,
+        color: this.unflaggedColor,
+        symbol: this.unflaggedSymbol,
+      },
+    };
+
     let AxisLegendFillerX = {
       x: [null],
       y: [null],
@@ -466,6 +482,7 @@ export class GraphOptionsComponent implements OnInit {
 
     var data = [
       allData,
+      AxisLegendFillerAllData,
       AxisLegendFillerX,
       AxisLegendFillerY,
       AxisLegendFillerXY,
