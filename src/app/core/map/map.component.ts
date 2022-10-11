@@ -45,6 +45,7 @@ export class MapComponent implements AfterViewInit {
             if (points._leaflet_id) {
               this.currentPoints = points;
               this.currentPoints.addTo(this.map);
+
               this.zoomToPoints(points);
               this.currentPoints.on('clusterclick', (cluster) => {
                 setTimeout(() => {
@@ -192,6 +193,8 @@ export class MapComponent implements AfterViewInit {
       }
     );
     tiles.addTo(this.map);
+    this.componentDisplayService.getDisableMap(true);
+    this.disableMap();
   }
   private getMapBoundingBox() {
     this.northBounds = this.map.getBounds().getNorth();
@@ -203,5 +206,29 @@ export class MapComponent implements AfterViewInit {
     this.componentDisplayService.getSouthBounds(this.southBounds);
     this.componentDisplayService.getEastBounds(this.eastBounds);
     this.componentDisplayService.getWestBounds(this.westBounds);
+  }
+  public disableMap() {
+    this.componentDisplayService.disableMapSubject.subscribe((disableMap) => {
+      console.log('mapBtnClicked', disableMap);
+      if (disableMap) {
+        this.map.dragging.disable();
+        this.map.touchZoom.disable();
+        this.map.doubleClickZoom.disable();
+        this.map.scrollWheelZoom.disable();
+        this.map.boxZoom.disable();
+        this.map.keyboard.disable();
+        if (this.map.tap) this.map.tap.disable();
+        document.getElementById('map').style.cursor = 'default';
+      } else {
+        this.map.dragging.enable();
+        this.map.touchZoom.enable();
+        this.map.doubleClickZoom.enable();
+        this.map.scrollWheelZoom.enable();
+        this.map.boxZoom.enable();
+        this.map.keyboard.enable();
+        if (this.map.tap) this.map.tap.enable();
+        document.getElementById('map').style.cursor = 'grab';
+      }
+    });
   }
 }

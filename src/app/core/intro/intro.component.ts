@@ -31,10 +31,12 @@ export class IntroComponent implements OnInit {
   public clickIntroMap() {
     this.componentDisplayService.getMapBtn(true);
     this.componentDisplayService.getMapBtn(false);
+    this.componentDisplayService.getDisableMap(false);
   }
   public clickIntroGraph() {
     this.componentDisplayService.getGraphBtn(true);
     this.componentDisplayService.getGraphBtn(false);
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public resizeDivs() {

@@ -29,116 +29,102 @@
     </label>
   </div>
 </div>
-<div class="flex-container" style="width: 660px">
-  <div id="mapOptionsContainer" class="optionsBackgroundMapFull marginLeftFullWidth marginTopFullHeight"
-    [hidden]="!mapFilters">
-    <div class="minimize">
-      <mat-icon matTooltip="minimize" (click)="displayMapFilters(false)"
-        aria-label="Clicking this button will minimize the map filters panel">minimize</mat-icon>
+<div id="mapOptionsContainer" class="optionsBackgroundMapFull marginLeftFullWidth marginTopFullHeight floating-body"
+  [hidden]="!mapFilters">
+  <div class="minimize">
+    <mat-icon matTooltip="minimize" (click)="displayMapFilters(false)"
+      aria-label="Clicking this button will minimize the map filters panel">minimize</mat-icon>
+  </div>
+  <form [formGroup]="paramMethodForm">
+    <div class="leftBreak">
+      <mat-form-field appearance="fill">
+        <mat-chip-list #paramList>
+          <mat-chip *ngFor="let parameter of chipParams" [selectable]="selectable" [removable]="removable"
+            (removed)="remove(parameter)">
+            {{parameter}}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input matInput placeholder="Parameters" #paramInput formControlName="parameterControl"
+            [matAutocomplete]="auto" [matChipInputFor]="paramList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map." />
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedParameter($event)">
+          <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.short_name">
+            {{ parameter.short_name }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="fill"
+        aria-label="This is a dropdown filters menu. Select one or more methods to plot on the map. The methods list is based on the parameter(s) selected above">
+        <mat-label>Methods</mat-label>
+        <mat-select formControlName="methodControl" multiple>
+          <mat-option *ngFor="let method of matchingMcodes" [value]="method.mcode">{{ method.short_name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-    <form [formGroup]="paramMethodForm">
-      <div class="leftBreak">
-        <mat-form-field appearance="fill">
-          <mat-chip-list #paramList>
-            <mat-chip *ngFor="let parameter of chipParams" [selectable]="selectable" [removable]="removable"
-              (removed)="remove(parameter)">
-              {{parameter}}
-              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-            </mat-chip>
-            <input matInput placeholder="Parameters" #paramInput formControlName="parameterControl"
-              [matAutocomplete]="auto" [matChipInputFor]="paramList"
-              [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
-              aria-label="This is a dropdown filters menu. Select one or more parameters to plot on the map." />
-          </mat-chip-list>
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedParameter($event)">
-            <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.short_name">
-              {{ parameter.short_name }}
-            </mat-option>
-          </mat-autocomplete>
+  </form>
+  <div class="custom-slider leftBreak"
+    aria-label="This is a slider filter. It determines the minimum and maximum years of the points displayed in the map">
+    <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions" (userChange)="updateYears($event)">
+    </ngx-slider>
+  </div>
+  <div style="margin-left: 10px; margin-top: 10px">
+    <form [formGroup]="regionForm">
+      <mat-form-field appearance="fill" aria-label="This is a dropdown menu containing geographic regions.">
+        <mat-label>Regions</mat-label>
+        <mat-select formControlName="regionControl" multiple (ngModelChange)="regionSelected()">
+          <mat-option *ngFor="let region of regions" [value]="region">{{
+            region
+            }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+    <button class="boundingBoxBtn" (click)="populateMapBounds(true)"
+      aria-label="Clicking this button will populate the bounding box with the current map extent">
+      Populate map bounds
+    </button>
+    <form class="boundingBoxForm" [formGroup]="boundingBoxForm">
+      <div class="flex-container">
+        <mat-form-field class="boundingBoxFullWidth rightBreak" appearance="fill"
+          aria-label="Enter the northern coordinate for the points to be displayed in the map">
+          <mat-label>North</mat-label>
+          <input (change)="storeNorth()" matInput #northControl formControlName="northControl" />
         </mat-form-field>
-        <mat-form-field appearance="fill"
-          aria-label="This is a dropdown filters menu. Select one or more methods to plot on the map. The methods list is based on the parameter(s) selected above">
-          <mat-label>Methods</mat-label>
-          <mat-select formControlName="methodControl" multiple>
-            <mat-option *ngFor="let method of matchingMcodes" [value]="method.mcode">{{ method.short_name }}
-            </mat-option>
-          </mat-select>
+        <mat-form-field class="boundingBoxFullWidth" appearance="fill"
+          aria-label="Enter the southern coordinate for the points to be displayed in the map">
+          <mat-label>South</mat-label>
+          <input (change)="storeSouth()" matInput formControlName="southControl" />
+        </mat-form-field>
+      </div>
+      <div class="flex-container">
+        <mat-form-field class="boundingBoxFullWidth rightBreak" appearance="fill"
+          aria-label="Enter the eastern coordinate for the points to be displayed in the map">
+          <mat-label>East</mat-label>
+          <input (change)="storeEast()" matInput formControlName="eastControl" />
+        </mat-form-field>
+        <mat-form-field class="boundingBoxFullWidth" appearance="fill"
+          aria-label="Enter the western coordinate for the points to be displayed in the map">
+          <mat-label>West</mat-label>
+          <input (change)="storeWest()" matInput formControlName="westControl" />
         </mat-form-field>
       </div>
     </form>
-    <div class="custom-slider leftBreak"
-      aria-label="This is a slider filter. It determines the minimum and maximum years of the points displayed in the map">
-      <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions"
-        (userChange)="updateYears($event)"></ngx-slider>
-    </div>
-    <div style="margin-left: 10px; margin-top: 10px">
-      <form [formGroup]="regionForm">
-        <mat-form-field appearance="fill" aria-label="This is a dropdown menu containing geographic regions.">
-          <mat-label>Regions</mat-label>
-          <mat-select formControlName="regionControl" multiple (ngModelChange)="regionSelected()">
-            <mat-option *ngFor="let region of regions" [value]="region">{{
-              region
-              }}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </form>
-      <button class="boundingBoxBtn" (click)="populateMapBounds(true)"
-        aria-label="Clicking this button will populate the bounding box with the current map extent">
-        Populate map bounds
-      </button>
-      <form class="boundingBoxForm" [formGroup]="boundingBoxForm">
-        <div class="flex-container">
-          <mat-form-field class="boundingBoxFullWidth rightBreak" appearance="fill"
-            aria-label="Enter the northern coordinate for the points to be displayed in the map">
-            <mat-label>North</mat-label>
-            <input (change)="storeNorth()" matInput #northControl formControlName="northControl" />
-          </mat-form-field>
-          <mat-form-field class="boundingBoxFullWidth" appearance="fill"
-            aria-label="Enter the southern coordinate for the points to be displayed in the map">
-            <mat-label>South</mat-label>
-            <input (change)="storeSouth()" matInput formControlName="southControl" />
-          </mat-form-field>
-        </div>
-        <div class="flex-container">
-          <mat-form-field class="boundingBoxFullWidth rightBreak" appearance="fill"
-            aria-label="Enter the eastern coordinate for the points to be displayed in the map">
-            <mat-label>East</mat-label>
-            <input (change)="storeEast()" matInput formControlName="eastControl" />
-          </mat-form-field>
-          <mat-form-field class="boundingBoxFullWidth" appearance="fill"
-            aria-label="Enter the western coordinate for the points to be displayed in the map">
-            <mat-label>West</mat-label>
-            <input (change)="storeWest()" matInput formControlName="westControl" />
-          </mat-form-field>
-        </div>
-      </form>
-      <mat-checkbox [disableRipple]="true" (change)="clickSatelliteAlignment($event)"
-        aria-label="Check this box to filter points that have optimal satellite alignment">Optimal satellite alignment
-      </mat-checkbox>
-      <mat-checkbox [disableRipple]="true" [checked]="nullDataChecked" (change)="nullwarning($event)" id="nullCheckbox"
-        aria-label="Check this box to include sites with null values">Inclue null values</mat-checkbox>
-    </div>
-    <button class="mapFilterBtn dataBtn" (click)="runFilters()"
-      aria-label="Click this button to filter points and plot them on the map">
-      Plot Points
-    </button>
-    <button class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download CSV" id="mapDownloadBtn"
-      (click)="downloadMapData()">
-      <mat-icon>cloud_download</mat-icon>
-    </button>
+    <mat-checkbox [disableRipple]="true" (change)="clickSatelliteAlignment($event)"
+      aria-label="Check this box to filter points that have optimal satellite alignment">Optimal satellite alignment
+    </mat-checkbox>
+    <mat-checkbox [disableRipple]="true" [checked]="nullDataChecked" (change)="nullwarning($event)" id="nullCheckbox"
+      aria-label="Check this box to include sites with null values">Inclue null values</mat-checkbox>
   </div>
-  <div class="optionModal" style="position: relative; height: 125px" [hidden]="!showNullWarning">
-    Are you sure you want to include sites with null values? This will
-    significantly slow processing times. <br />
-    <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitNullWarning(false)" matTooltip="Recommended"
-      aria-label="Click this button to exclude null values from the map">
-      No
-    </button>
-    <button class="mapFilterBtn dataBtn disabledDataBtn" (click)="submitNullWarning(true)" matTooltip="Not Recommended"
-      aria-label="Click this button to include null values from the map">
-      Yes
-    </button>
-  </div>
+  <button class="mapFilterBtn dataBtn" (click)="runFilters()"
+    aria-label="Click this button to filter points and plot them on the map">
+    Plot Points
+  </button>
+  <button class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download CSV" id="mapDownloadBtn"
+    (click)="downloadMapData()">
+    <mat-icon>cloud_download</mat-icon>
+  </button>
 </div>
 <div [hidden]="mapFilters" class="optionsBackgroundMini marginLeftFullWidth floating-body"
   (click)="displayMapFilters(true)" id="filterPointsCollapsed"
