@@ -47,6 +47,14 @@ export class ComponentDisplayService {
     this.graphBtnSubject.next(collapse);
   }
 
+  //disable map
+  public disableMapSubject = new BehaviorSubject<Boolean>(undefined);
+  disableMap$ = this.disableMapSubject.asObservable();
+
+  public getDisableMap(disable: Boolean) {
+    this.disableMapSubject.next(disable);
+  }
+
   //get bounding box: north
   public northBoundsSubject = new BehaviorSubject<number>(undefined);
   northBounds$ = this.northBoundsSubject.asObservable();

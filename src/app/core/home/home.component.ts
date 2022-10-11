@@ -58,6 +58,7 @@ export class HomeComponent implements AfterViewInit {
     this.showGraph = false;
     this.showIntro = true;
     this.selectBtn('home');
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public clickMap() {
@@ -66,6 +67,7 @@ export class HomeComponent implements AfterViewInit {
     this.showGraph = false;
     this.showIntro = false;
     this.selectBtn('map');
+    this.componentDisplayService.getDisableMap(false);
   }
 
   public clickInfo() {
@@ -74,6 +76,7 @@ export class HomeComponent implements AfterViewInit {
     this.showGraph = false;
     this.showIntro = false;
     this.selectBtn('info');
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public clickGraph() {
@@ -82,6 +85,7 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showIntro = false;
     this.selectBtn('graph');
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public selectBtn(button) {
