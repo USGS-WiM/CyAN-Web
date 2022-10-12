@@ -48,50 +48,64 @@
           Any
           field left blank will do nothing to filter/limit your returned results.<ul>
             <li>
-              <i>Year Slider</i> <br />Only samples collected in the selected date range will be returned. Minimum and
-              maximum
-              dates on
-              the
-              slider will be included in the returned result. For example, a selection of 1990-2010 will return results
-              from
-              January 1, 1990-December 31, 2010.
+              Year Slider<br />
+              <ol>
+                Only samples collected in the selected date range will be returned. Minimum and
+                maximum
+                dates on
+                the
+                slider will be included in the returned result. For example, a selection of 1990-2010 will return
+                results
+                from
+                January 1, 1990-December 31, 2010.
+              </ol>
             </li>
             <li>
-              <i>
-                Region
-              </i> <br />Selecting a region will only return samples taken that region. The region menu is populated
-              with
-              regions
-              designated in the GLRI database. Many samples in our database do not have a specified region, so use this
-              option
-              with caution.
+
+              Region
+              <ol>
+                Selecting a region will only return samples taken that region. The region menu is populated
+                with
+                regions
+                designated in the GLRI database. Many samples in our database do not have a specified region, so use
+                this
+                option
+                with caution.
+              </ol>
             </li>
             <li>
-              <i>
-                North/South/East/West
-              </i> <br />You may enter latitude and longitude values to create a bounding box for the
-              returned
-              data.
-              Any latitude/longitude left blank will assume that you do not wish to place limits on that direction. For
-              example,
-              when all four options are left blank, we use North: 90, South -90, East: 180, West: -180 to
-              query
-              results. If you click 'Populate map bounds', the latitude/longitude boxes will be populated with the
-              dimensions
-              created by the bounding box of your screen.
+
+              North/South/East/West
+              <ol>
+                You may enter latitude and longitude values to create a bounding box for the
+                returned
+                data.
+                Any latitude/longitude left blank will assume that you do not wish to place limits on that direction.
+                For
+                example,
+                when all four options are left blank, we use North: 90, South -90, East: 180, West: -180 to
+                query
+                results. If you click 'Populate map bounds', the latitude/longitude boxes will be populated with the
+                dimensions
+                created by the bounding box of your screen.
+              </ol>
             </li>
             <li>
-              <i>
-                Optimal satellite alignment
-              </i> <br />Checking this box will only return samples with optimal satellite
-              alignment. This
-              is a true/false field in our database.
+
+              Optimal satellite alignment
+              <ol>
+                Checking this box will only return samples with optimal satellite
+                alignment. This
+                is a true/false field in our database.
+              </ol>
             </li>
             <li>
-              <i>Include null values</i><br /> Some samples in our database do not have results associated with them.
-              Checking
-              this box
-              will include those samples in your returned results.
+              Include null values <ol>
+                Some samples in our database do not have results associated with them.
+                Checking
+                this box
+                will include those samples in your returned results.
+              </ol>
             </li>
           </ul>
         <li>
@@ -167,7 +181,7 @@
               <li>
                 <i>
                   Uploading flags
-                </i>If you downloaded your flags from a previous session and wish to use them now, click on
+                </i><br />If you downloaded your flags from a previous session and wish to use them now, click on
                 the
                 green 'Upload Flags' button. A box will open allowing you to select your file. Make sure that your file
                 is
@@ -179,7 +193,7 @@
               </li>
               <li><i>
                   Year Slider
-                </i>
+                </i><br />
                 Only samples collected in the selected date range will be returned. Minimum and maximum
                 dates
                 on
@@ -194,20 +208,20 @@
               </li>
               <li><i>
                   Log Scale
-                </i>
+                </i><br />
                 Checking x or y will apply a log scale to the corresponding axis.
               </li>
               <li>
                 <i>
                   Limit by study area specified in map options
-                </i>
+                </i><br />
                 Checking this box will add the region and
                 latitude/longitude
                 bounding box from the map filters menu to your query.
               </li>
               <li><i>
                   Optimal satellite alignment
-                </i>
+                </i><br />
                 Checking this box will only return samples with optimal satellite
                 alignment.
                 This
@@ -255,7 +269,7 @@
             Once you have successfully generated a graph, you are ready to create flags. There are three ways to create
             new
             flags.<ul>
-              <li><i>Flag an individual point</i>
+              <li><i>Flag an individual point</i><br />
                 The 'Zoom' icon in the upper right corner of the plot doubles as a flag
                 selector.
                 If
@@ -263,7 +277,7 @@
               </li>
               <li><i>
                   Flag multiple points by using the lasso tool
-                </i>
+                </i><br />
                 The 'Lasso' icon in the upper right corner of the plot
                 allows
                 you to flag multiple points at once by clicking on the graph and dragging your cursor to create a shape
@@ -272,7 +286,7 @@
               </li>
               <li><i>
                   Flag all plotted points
-                </i>
+                </i><br />
                 The 'Flag' icon in the upper right corner of the plot allows you to
                 flag all plotted points at the same time.
               </li>
@@ -313,7 +327,7 @@
           <li>
             <i>
               Flags
-            </i>
+            </i><br />
             You save your work by downloading a CSV of your flags. Click the 'Download Flags' button (located
             next
             to the
@@ -325,14 +339,14 @@
           <li>
             <i>
               Metadata
-            </i>
+            </i><br />
             Clicking the 'Download Metadata' button will download two CSVs. One of them contains information
             associated with the query used to generate your graph. The other contains descriptions of flag types.
           </li>
           <li>
             <i>
               Plotted Data
-            </i>
+            </i><br />
             Clicking the 'Download all plotted data' button in the upper right-hand corner of the graph
             will
             download a CSV of the data associated with the plotted points. Clicking this button does not flag any data,
