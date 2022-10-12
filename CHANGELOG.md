@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - 'Next' button in flag modal is disabled when neither axis is selected
 - Graph legend
 - USGS disclaimer & FAQ
+- User's Guide
 
 ### Changed
 
