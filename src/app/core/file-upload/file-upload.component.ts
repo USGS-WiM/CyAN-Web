@@ -68,7 +68,7 @@ export class FileUploadComponent {
       }
     }
     if (filetype !== 'text/csv') {
-      ///if file extension is not a csv, show warning message
+      //if file extension is not a csv, show warning message
       this.incorrectFileMessage();
     }
   }
