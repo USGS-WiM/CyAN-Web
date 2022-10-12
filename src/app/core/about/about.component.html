@@ -47,7 +47,7 @@
           1980-2010 and a region of Lake Erie, each returned result must have been collected 1980-2010 AND in Lake Erie.
           Any
           field left blank will do nothing to filter/limit your returned results.<ul>
-            <li class="bulletBreak">
+            <li>
               <i>Year Slider</i> <br />Only samples collected in the selected date range will be returned. Minimum and
               maximum
               dates on
@@ -56,7 +56,7 @@
               from
               January 1, 1990-December 31, 2010.
             </li>
-            <li class="bulletBreak">
+            <li>
               <i>
                 Region
               </i> <br />Selecting a region will only return samples taken that region. The region menu is populated
@@ -66,7 +66,7 @@
               option
               with caution.
             </li>
-            <li class="bulletBreak">
+            <li>
               <i>
                 North/South/East/West
               </i> <br />You may enter latitude and longitude values to create a bounding box for the
@@ -80,14 +80,14 @@
               dimensions
               created by the bounding box of your screen.
             </li>
-            <li class="bulletBreak">
+            <li>
               <i>
                 Optimal satellite alignment
               </i> <br />Checking this box will only return samples with optimal satellite
               alignment. This
               is a true/false field in our database.
             </li>
-            <li class="bulletBreak">
+            <li>
               <i>Include null values</i><br /> Some samples in our database do not have results associated with them.
               Checking
               this box
@@ -116,7 +116,6 @@
         also click and drag to move the map or
         use the scroll function on your mouse/touchpad to zoom.
       </ol>
-
       <div class="subHeader">
         Downloading Data
       </div>
@@ -139,7 +138,6 @@
           The primary purpose of the graph interface is to help identify outliers and other potential errors in the
           data.
         </ol>
-
       </div>
       <div class="subHeader">
         Creating a Query
@@ -167,7 +165,9 @@
             select additional options.
             <ul>
               <li>
-                Uploading flags: If you downloaded your flags from a previous session and wish to use them now, click on
+                <i>
+                  Uploading flags
+                </i>If you downloaded your flags from a previous session and wish to use them now, click on
                 the
                 green 'Upload Flags' button. A box will open allowing you to select your file. Make sure that your file
                 is
@@ -177,8 +177,10 @@
                 to
                 upload, you must upload them one at a time.
               </li>
-              <li>
-                Year Slider: Only samples collected in the selected date range will be returned. Minimum and maximum
+              <li><i>
+                  Year Slider
+                </i>
+                Only samples collected in the selected date range will be returned. Minimum and maximum
                 dates
                 on
                 the
@@ -190,16 +192,23 @@
                 in
                 the map options
               </li>
-              <li>
-                Log Scale: Checking x or y will apply a log scale to the corresponding axis.
+              <li><i>
+                  Log Scale
+                </i>
+                Checking x or y will apply a log scale to the corresponding axis.
               </li>
               <li>
-                Limit by study area specified in map option: Checking this box will add the region and
+                <i>
+                  Limit by study area specified in map options
+                </i>
+                Checking this box will add the region and
                 latitude/longitude
                 bounding box from the map filters menu to your query.
               </li>
-              <li>
-                Optimal satellite alignment: Checking this box will only return samples with optimal satellite
+              <li><i>
+                  Optimal satellite alignment
+                </i>
+                Checking this box will only return samples with optimal satellite
                 alignment.
                 This
                 is a true/false field in our database.
@@ -207,9 +216,7 @@
             </ul>
           </li>
         </ol>
-
       </div>
-
       <div class="subHeader">
         Generating a Graph
       </div>
@@ -224,9 +231,7 @@
           were data returned, but there were no common sampling sites for which to match the data. For every
           plotted point, there is an x and y value. These values are paired based on the site ID.
         </ol>
-
       </div>
-
       <div class="subHeader">
         Uploading Flags
       </div>
@@ -241,7 +246,6 @@
           is clicked. These flags will be applied to all new graphs you generate throughout your session.
         </ol>
       </div>
-
       <div class="subHeader">
         Creating Flags
       </div>
@@ -251,21 +255,25 @@
             Once you have successfully generated a graph, you are ready to create flags. There are three ways to create
             new
             flags.<ul>
-              <li>
-                Flag an individual point: The 'Zoom' icon in the upper right corner of the plot doubles as a flag
+              <li><i>Flag an individual point</i>
+                The 'Zoom' icon in the upper right corner of the plot doubles as a flag
                 selector.
                 If
                 you click on a point while the Zoom icon is selected, you will be prompted to create a new flag.
               </li>
-              <li>
-                Flag multiple points by using the lasso tool: The 'Lasso' icon in the upper right corner of the plot
+              <li><i>
+                  Flag multiple points by using the lasso tool
+                </i>
+                The 'Lasso' icon in the upper right corner of the plot
                 allows
                 you to flag multiple points at once by clicking on the graph and dragging your cursor to create a shape
                 around
                 your desired selection.
               </li>
-              <li>
-                Flag all plotted points: The 'Flag' icon in the upper right corner of the plot allows you to
+              <li><i>
+                  Flag all plotted points
+                </i>
+                The 'Flag' icon in the upper right corner of the plot allows you to
                 flag all plotted points at the same time.
               </li>
             </ul>
@@ -280,13 +288,8 @@
             that
             contains flagged data, those points will be displayed accordingly.
           </li>
-
-
-
         </ol>
-
       </div>
-
       <div class="subHeader">
         Removing Flags
       </div>
@@ -308,7 +311,10 @@
       <div class="normalText">
         <ul>
           <li>
-            Flags: You save your work by downloading a CSV of your flags. Click the 'Download Flags' button (located
+            <i>
+              Flags
+            </i>
+            You save your work by downloading a CSV of your flags. Click the 'Download Flags' button (located
             next
             to the
             'Upload Flags' button) to download the CSV. Upload this file in your next session. If you uploaded CSV(s)
@@ -317,20 +323,23 @@
             created.
           </li>
           <li>
-            Metadata: Clicking the 'Download Metadata' button will download two CSVs. One of them contains information
+            <i>
+              Metadata
+            </i>
+            Clicking the 'Download Metadata' button will download two CSVs. One of them contains information
             associated with the query used to generate your graph. The other contains descriptions of flag types.
           </li>
           <li>
-            Plotted Data: Clicking the 'Download all plotted data' button in the upper right-hand corner of the graph
+            <i>
+              Plotted Data
+            </i>
+            Clicking the 'Download all plotted data' button in the upper right-hand corner of the graph
             will
             download a CSV of the data associated with the plotted points. Clicking this button does not flag any data,
             nor does it contain any flag information associated with the flagged data.
           </li>
         </ul>
-
       </div>
-
-
     </div>
     <div style="margin-top: 20px;" [hidden]="!faq">
       <div style="font-size:large; margin-top: 15px; margin-bottom: 5px;">
