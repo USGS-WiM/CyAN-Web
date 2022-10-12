@@ -189,6 +189,9 @@ export class GraphOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
+    this.graphSelectionsService.flagsSubject.subscribe((currentFlags) => {
+      this.flaggedData = currentFlags;
+    });
   }
 
   ngDoCheck() {

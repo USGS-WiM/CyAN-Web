@@ -51,6 +51,7 @@ export class FileUploadComponent {
     //check file extension
     let filetype = this.file.type;
     if (filetype == 'text/csv') {
+      console.log('file is a csv');
       //if file is a csv, check headers
       //if everything is good, process the flags
       let uploadedFlags = this.csvJSON(file);
@@ -67,7 +68,7 @@ export class FileUploadComponent {
       }
     }
     if (filetype !== 'text/csv') {
-      //if file extension is not a csv, show warning message
+      ///if file extension is not a csv, show warning message
       this.incorrectFileMessage();
     }
   }
@@ -129,13 +130,28 @@ export class FileUploadComponent {
     ];
     //get uploaded headers
     let uploadedHeaders = Object.keys(uploadedFlags[0]);
+    let lenHeaders = uploadedHeaders.length;
+
+    //If user opens csv and saves in Excel, there's an extra character added onto the last field name
+    //Get the last field name
+    let lastItem = uploadedHeaders[lenHeaders - 1];
+    let lastItemLen = lastItem.length;
+    //Get new field name to replace the uploaded one, if the initial check fails
+    let formattedLastEntry = lastItem.slice(0, lastItemLen - 1);
     let matchingHeaders = true;
+
+    //Ensure that the uploaded file has headers
     if (!uploadedHeaders) {
       matchingHeaders = false;
     }
     for (let i = 0; i < uploadedHeaders.length; i++) {
       if (uploadedHeaders[i] !== expectedHeaders[i]) {
-        matchingHeaders = false;
+        //If the header doesn't match the expected header, check if it matches after using the header formatted to account for Excel error
+        if (formattedLastEntry == expectedHeaders[i]) {
+          uploadedHeaders[i] = formattedLastEntry;
+        } else {
+          matchingHeaders = false;
+        }
       }
     }
     return matchingHeaders;
