@@ -189,9 +189,6 @@ export class GraphOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
-    this.graphSelectionsService.flagsSubject.subscribe((currentFlags) => {
-      this.flaggedData = currentFlags;
-    });
   }
 
   ngDoCheck() {
@@ -243,6 +240,7 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.flagsSubject.subscribe((flags) => {
       if (flags) {
         if (flags.length > 0) {
+          this.flaggedData = flags;
           this.disableEnable('flagBtn', true, true);
         } else {
           this.disableEnable('flagBtn', false, true);
