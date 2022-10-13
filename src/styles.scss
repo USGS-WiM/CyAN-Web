@@ -61,18 +61,30 @@ a.modebar-btn svg {
 .infoBtnColor {
   background-color: #95dab6;
   color: rgb(255, 255, 255);
+  border-color: #ffffff;
+  border-width: 6px 3px 6px 3px;
+  border-style: solid;
 }
 .mapBtnColor {
   background-color: #83b2d0;
   color: white;
+  border-color: #ffffff;
+  border-width: 6px 3px 6px 3px;
+  border-style: solid;
 }
 .homeBtnColor {
   color: #f2ccb1;
   background-color: rgba(255, 255, 255, 1);
+  border-color: #ffffff;
+  border-width: 6px 3px 6px 6px;
+  border-style: solid;
 }
 .graphBtnColor {
   background-color: #7f87b2;
   color: white;
+  border-color: #ffffff;
+  border-width: 6px 6px 6px 3px;
+  border-style: solid;
 }
 /* nav buttons - universal */
 
