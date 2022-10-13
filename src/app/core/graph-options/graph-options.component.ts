@@ -173,19 +173,19 @@ export class GraphOptionsComponent implements OnInit {
   //Adjust the css (via resizeDivs()) when the window is resized
   @HostListener('window:resize')
   onResize() {
-    this.resizeDivs();
+    this.resizeDivs(true);
   }
 
   ngOnInit(): void {
     //Set the display according to the initial screen dimensions
-    this.resizeDivs();
+    this.resizeDivs(false);
     this.getDataForDropdowns();
     this.initiateGraphService();
     this.getUnits();
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
         setTimeout(() => {
-          this.resizeDivs();
+          this.resizeDivs(true);
         }, 0.1);
       }
     );
@@ -402,7 +402,7 @@ export class GraphOptionsComponent implements OnInit {
   //Shrinks Graph Options panel into a button and expands the graph
   public collapseGraphOptions(collapsed: Boolean) {
     this.graphOptionsVisible = collapsed;
-    this.resizeDivs();
+    this.resizeDivs(true);
   }
 
   public createGraph(newPlot: Boolean) {
@@ -899,7 +899,7 @@ export class GraphOptionsComponent implements OnInit {
       document.getElementById('flagModals').style.height = 'auto';
       this.maxFlagModalHeight =
         document.getElementById('flagModals').clientHeight - 20;
-      this.resizeDivs();
+      this.resizeDivs(false);
     }, 1);
   }
 
@@ -914,7 +914,7 @@ export class GraphOptionsComponent implements OnInit {
       document.getElementById('flagModals').style.height = 'auto';
       this.maxFlagModalHeight =
         document.getElementById('flagModals').clientHeight - 20;
-      this.resizeDivs();
+      this.resizeDivs(true);
     }, 1);
   }
 
@@ -1128,7 +1128,7 @@ export class GraphOptionsComponent implements OnInit {
     setTimeout(() => {
       this.maxFlagModalHeight =
         document.getElementById('flagModals').clientHeight - 20;
-      this.resizeDivs();
+      this.resizeDivs(false);
     }, 1);
   }
 
@@ -1270,7 +1270,7 @@ export class GraphOptionsComponent implements OnInit {
       this.disableEnable('graphDataDownloadBtn', false, true);
       this.showGraph = false;
       this.populateGraphData();
-      this.resizeDivs();
+      this.resizeDivs(true);
 
       //minimize graph options panel if the screen width is small
       let windowWidth = window.innerWidth;
@@ -1527,7 +1527,7 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   //Every time the window is resized, change size and position of elements accordingly
-  public resizeDivs() {
+  public resizeDivs(redrawGraph) {
     //get map height
     let mapContainer = document.getElementById('mapContainer');
     let mapHeight = parseInt(window.getComputedStyle(mapContainer).height);
@@ -1623,7 +1623,7 @@ export class GraphOptionsComponent implements OnInit {
       //this.graphMargins = 20;
     }
 
-    if (this.showGraph) {
+    if (this.showGraph && redrawGraph) {
       this.createGraph(false);
     }
   }
