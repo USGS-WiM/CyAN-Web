@@ -51,6 +51,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Separates x and y axes in flag modal
 - Clears previous graph each time 'Create Graph' is clicked regardless of whether or no data are returned
 - Flag modal resizing
+- Lasso works to click on a single point
 
 ### Fixed
 
