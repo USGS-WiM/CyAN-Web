@@ -490,6 +490,7 @@ export class GraphOptionsComponent implements OnInit {
     ];
 
     var layout = {
+      dragmode: 'lasso',
       font: {
         size: 18,
       },
@@ -1106,12 +1107,14 @@ export class GraphOptionsComponent implements OnInit {
       this.disableEnableGraph(true);
     });
     this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
-      this.selectedPoints = selectedPoints.points;
-      //Open flag options modal
-      this.showFlagOptions = true;
-      this.lasso = true;
-      this.selectPoints();
-      this.disableEnableGraph(true);
+      if (selectedPoints) {
+        this.selectedPoints = selectedPoints.points;
+        //Open flag options modal
+        this.showFlagOptions = true;
+        this.lasso = true;
+        this.selectPoints();
+        this.disableEnableGraph(true);
+      }
     });
   }
 
