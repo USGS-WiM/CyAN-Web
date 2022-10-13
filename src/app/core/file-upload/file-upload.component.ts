@@ -51,7 +51,6 @@ export class FileUploadComponent {
     //check file extension
     let filetype = this.file.type;
     if (filetype == 'text/csv') {
-      console.log('file is a csv');
       //if file is a csv, check headers
       //if everything is good, process the flags
       let uploadedFlags = this.csvJSON(file);
