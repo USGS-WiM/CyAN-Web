@@ -141,6 +141,9 @@
           <div>
             <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
               [hidden]="sameQuery">
+              <div style="font-weight:500;">
+                Flag Data
+              </div>
               <mat-checkbox formControlName="xFlagControl" class="example-margin" [disableRipple]="true"
                 (change)="xyFlagClicked()">X-Axis
               </mat-checkbox>
@@ -169,7 +172,7 @@
         </form>
       </div>
       <div [hidden]="!showFlagOptionsX">
-        <div class="leftTopBreak" [hidden]="sameQuery">
+        <div class="leftTopBreak" [hidden]="sameQuery" style="font-weight:500;">
           X-Axis Flags
         </div>
         <div>
@@ -238,11 +241,11 @@
         </button>
       </div>
       <div [hidden]="!showFlagOptionsY">
-        <div class="leftTopBreak">
+        <div class="leftTopBreak" style="font-weight:500;">
           Y-Axis Flags
         </div>
         <div>
-          <form [formGroup]="flagTypesY">
+          <form [formGroup]=" flagTypesY">
             <div class="leftTopBreak"
               aria-label="Checking this box will add 'Central tendency' to the list of flag types">
               <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central
