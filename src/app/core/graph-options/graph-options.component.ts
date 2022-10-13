@@ -550,7 +550,7 @@ export class GraphOptionsComponent implements OnInit {
       modeBarButtonsToRemove: ['select', 'resetscale', 'zoomin', 'zoomout'],
       modeBarButtonsToAdd: [
         {
-          name: 'Flag plotted data',
+          name: 'Flag all',
           icon: flagIcon,
           click: (e) => {
             this.flagAllData();
