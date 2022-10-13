@@ -5,7 +5,7 @@
         aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
         <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
           <div id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth" (click)="clickHome()"
-            [hidden]="!showFullCyanHomeBtn">
+            [hidden]="!showFullCyanHomeBtn" matTooltip="Home">
             <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home
             </mat-icon>
             CyAN FIELD
@@ -16,7 +16,7 @@
         <div class="flex-child flex-container">
           <div [hidden]="windowWidthResize">
             <div id='homeBtnSmID' class="homeBtnColor smNavBtn marginLeftSmallWidth" (click)="clickHome()"
-              matTooltip="CyAN Home"
+              matTooltip="Home"
               aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
               <p>
                 <mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home

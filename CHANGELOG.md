@@ -63,3 +63,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - USWDS broken images in deployments
 - Fixes ability to interact with map
 - Map disabled on all views except Map
+- CSV upload works when user saves file in Excel
