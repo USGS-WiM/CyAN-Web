@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Flag modal resizing
 - Lasso works to click on a single point
 - Changes look of landing page and About modal buttons
+- Changes size and transparency of unflagged points to help identify overlapping points
 
 ### Fixed
 

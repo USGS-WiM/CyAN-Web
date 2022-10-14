@@ -98,15 +98,24 @@ export class GraphOptionsComponent implements OnInit {
   });
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
-  public unflaggedColor: string = 'rgb(242, 204, 177)';
+  public unflaggedColor: string = 'rgba(242, 204, 177, 0.2)';
   public xyFlaggedColor: string = 'rgb(0, 153, 0)';
   public xFlaggedColor: string = 'rgb(255, 0, 255)';
   public yFlaggedColor: string = 'rgb(0, 204, 204)';
+  public pointBorderColor: string = 'rgba(242, 204, 177, 1)';
   //Symbols for flagged vs unflagged
   public allColors = [];
   public allShapes = [];
-  public unflaggedSymbol: string = 'circle-open';
+  public allBorderWidths = [];
+  public allSizes = [];
+  public unflaggedSymbol: string = 'circle';
   public flaggedSymbol: string = 'circle';
+  public unflaggedSize: number = 16;
+  public flaggedSize: number = 12;
+  public flaggedBorderWidth: number = 0;
+  public unflaggedBorderWidth: number = 2;
+  public singlePointSelected: Boolean = true;
+
   public selectedPoints;
 
   //Intermediate data
@@ -409,6 +418,8 @@ export class GraphOptionsComponent implements OnInit {
     if (newPlot) {
       this.allColors = this.graphSelectionsService.pointColors;
       this.allShapes = this.graphSelectionsService.pointSymbol;
+      this.allBorderWidths = this.graphSelectionsService.allBorderWidths;
+      this.allSizes = this.graphSelectionsService.allSizes;
     }
     //Designate div to put graph
     this.bivariatePlot = document.getElementById('graph');
@@ -422,7 +433,15 @@ export class GraphOptionsComponent implements OnInit {
       showlegend: false,
       hovertemplate: 'x: %{x} <br> y: %{y} <extra></extra>',
       textposition: 'bottom center',
-      marker: { size: 12, color: this.allColors, symbol: this.allShapes },
+      marker: {
+        size: this.allSizes,
+        color: this.allColors,
+        symbol: this.allShapes,
+        line: {
+          color: this.pointBorderColor,
+          width: this.allBorderWidths,
+        },
+      },
     };
 
     let AxisLegendFillerAllData = {
@@ -433,9 +452,13 @@ export class GraphOptionsComponent implements OnInit {
       mode: 'markers',
       type: 'scatter',
       marker: {
-        size: 12,
+        size: 16,
         color: this.unflaggedColor,
         symbol: this.unflaggedSymbol,
+        line: {
+          color: this.pointBorderColor,
+          width: this.allBorderWidths,
+        },
       },
     };
 
@@ -623,6 +646,9 @@ export class GraphOptionsComponent implements OnInit {
       this.lasso = false;
     }
 
+    //Reset single flag designation
+    this.singlePointSelected = false;
+
     //Reset boolean that controls flagging all data at once
     this.flagAll = false;
 
@@ -712,6 +738,8 @@ export class GraphOptionsComponent implements OnInit {
     color: String,
     axis: String,
     symbol: String,
+    border: Number,
+    size: Number,
     flagTypesX,
     flagTypesY,
     annotationX: String,
@@ -720,6 +748,8 @@ export class GraphOptionsComponent implements OnInit {
     let updateGraphCalled = true;
     let colors = this.allColors;
     let symbols = this.allShapes;
+    let borders = this.allBorderWidths;
+    let sizes = this.allSizes;
     let numPts;
 
     //If flagAll button is clicked, need to get attributes outside of Plotly
@@ -761,6 +791,8 @@ export class GraphOptionsComponent implements OnInit {
       colors[pointIndex] = color;
       //Change the symbol of the point at the correct index (flagged pts become filled circles; unflagged becomes hollow circle)
       symbols[pointIndex] = symbol;
+      borders[pointIndex] = border;
+      sizes[pointIndex] = size;
 
       //if only the x-axis is selected, make sure the y-value at that point isn't in the flaggedData array
       //if neither are selected, ensure that neither are in the flaggedData array
@@ -834,8 +866,27 @@ export class GraphOptionsComponent implements OnInit {
 
     this.allColors = colors;
     this.allShapes = symbols;
+    this.allBorderWidths = borders;
+    this.allSizes = sizes;
 
-    this.createGraph(false);
+    //If only one point was selected, do not need to re-create graph
+    if (!this.singlePointSelected) {
+      this.createGraph(false);
+    } else {
+      //New styling for new plot
+      let update = {
+        marker: {
+          size: this.allSizes,
+          color: this.allColors,
+          symbol: this.allShapes,
+          line: {
+            color: this.pointBorderColor,
+            width: this.allBorderWidths,
+          },
+        },
+      };
+      Plotly.restyle('graph', update, [1]);
+    }
 
     updateGraphCalled = false;
     this.lasso = false;
@@ -853,6 +904,8 @@ export class GraphOptionsComponent implements OnInit {
       this.unflaggedColor,
       'none',
       this.unflaggedSymbol,
+      this.unflaggedBorderWidth,
+      this.unflaggedSize,
       ', ',
       ',',
       ',',
@@ -964,6 +1017,8 @@ export class GraphOptionsComponent implements OnInit {
           this.xyFlaggedColor,
           'both',
           this.flaggedSymbol,
+          this.flaggedBorderWidth,
+          this.flaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
@@ -976,6 +1031,8 @@ export class GraphOptionsComponent implements OnInit {
           this.yFlaggedColor,
           'y',
           this.flaggedSymbol,
+          this.flaggedBorderWidth,
+          this.flaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
@@ -989,6 +1046,8 @@ export class GraphOptionsComponent implements OnInit {
           this.xFlaggedColor,
           'x',
           this.flaggedSymbol,
+          this.flaggedBorderWidth,
+          this.flaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
@@ -1002,6 +1061,8 @@ export class GraphOptionsComponent implements OnInit {
           this.unflaggedColor,
           'none',
           this.unflaggedSymbol,
+          this.unflaggedBorderWidth,
+          this.unflaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
@@ -1017,6 +1078,8 @@ export class GraphOptionsComponent implements OnInit {
           this.xyFlaggedColor,
           'x',
           this.flaggedSymbol,
+          this.flaggedBorderWidth,
+          this.unflaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
@@ -1027,6 +1090,8 @@ export class GraphOptionsComponent implements OnInit {
           this.unflaggedColor,
           'none',
           this.unflaggedSymbol,
+          this.unflaggedBorderWidth,
+          this.unflaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
@@ -1098,6 +1163,7 @@ export class GraphOptionsComponent implements OnInit {
 
   public initiateSelectPoints() {
     this.bivariatePlot.on('plotly_click', (selectedPoints) => {
+      this.singlePointSelected = true;
       this.selectPoints();
       //If there is a flag at the selected point, pre-check the boxes in the flag options modal
       this.axisFlagFormCheckBoxes(selectedPoints.points);
