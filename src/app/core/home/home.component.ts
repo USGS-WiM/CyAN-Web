@@ -22,9 +22,9 @@ export class HomeComponent implements AfterViewInit {
   public showFullCyanHomeBtn: Boolean = true;
   public selectedColor = 'rgb(255, 255, 255)';
   public homeColor = '#f2ccb1';
-  public infoColor = '#95dab6';
-  public mapColor = '#83b2d0';
-  public graphColor = '#7f87b2';
+  public infoColor = '#7f87b2';
+  public mapColor = '#95dab6';
+  public graphColor = '#83b2d0';
 
   ngAfterViewInit(): void {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 900);
