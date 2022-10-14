@@ -1044,8 +1044,8 @@ export class GraphOptionsComponent implements OnInit {
       if (!yChecked && xChecked) {
         this.updateGraph(
           this.xFlaggedColor,
-          this.flaggedSymbol,
           'x',
+          this.flaggedSymbol,
           this.flaggedBorderWidth,
           this.flaggedSize,
           flagTypesX,
