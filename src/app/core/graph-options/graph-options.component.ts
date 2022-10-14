@@ -15,6 +15,8 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+
 
 @Component({
   selector: 'app-graph-options',
@@ -22,11 +24,13 @@ import { map, startWith } from 'rxjs/operators';
   styleUrls: ['./../core.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
+  /* @ViewChild(MatAutocompleteTrigger) _auto: MatAutocompleteTrigger; */
   //Overall display
   public graphOptionsVisible: Boolean = true;
   public showGraph = false;
   public bivariatePlot: any;
   public alreadyGraphed: Boolean = false;
+  public repopulatingFlags = false;
 
   //Graph options
   graphSelectionsForm = new FormGroup({
@@ -141,7 +145,7 @@ export class GraphOptionsComponent implements OnInit {
     private graphSelectionsService: GraphSelectionsService,
     public snackBar: MatSnackBar,
     private componentDisplayService: ComponentDisplayService,
-    private iterableDiffers: IterableDiffers
+    private iterableDiffers: IterableDiffers,
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
@@ -156,12 +160,35 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs();
   }
 
+  @HostListener("window:beforeunload")
+  alert() {
+    if (this.flaggedData.length > 0) {
+      // returning false will show a browser warning
+      return false;
+    } else {
+      // returning true will navigate without confirmation
+      return true;
+    }
+  }
+
   ngOnInit(): void {
     //Set the display according to the initial screen dimensions
     this.resizeDivs();
     this.getDataForDropdowns();
     this.initiateGraphService();
     this.getUnits();
+    this.graphSelectionsService.getFlagConfirmClickEvent().subscribe(() => {
+      this.repopulatingFlags = true;
+       /* JSON.parse(localStorage["cyanFlags"]); */ 
+      console.log(JSON.parse(localStorage["cyanFlags"]))
+      this.graphSelectionsForm.get('ParametersX').setValue(JSON.parse(localStorage.getItem("tempP_X")));
+      this.graphSelectionsForm.get('ParametersY').setValue(JSON.parse(localStorage.getItem("tempP_Y")));
+      this.populateMcodeDropdown('xaxis');
+      this.populateMcodeDropdown('yaxis');
+      this.graphSelectionsForm.get('MethodsX').setValue(localStorage.getItem("tempM_X"));
+      this.graphSelectionsForm.get('MethodsY').setValue(localStorage.getItem("tempM_Y"));
+      this.clickPlotData();
+    })
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
         setTimeout(() => {
@@ -703,7 +730,9 @@ export class GraphOptionsComponent implements OnInit {
       this.createGraph(false);
     }
 
-    console.log('this.flaggedData', this.flaggedData);
+    // storing the cyanFlags in browser local storage
+    localStorage.setItem("cyanFlags", JSON.stringify(this.flaggedData));
+
     updateGraphCalled = false;
     this.lasso = false;
     this.flagAll = false;
@@ -898,6 +927,16 @@ export class GraphOptionsComponent implements OnInit {
     let tempP_Y = this.graphSelectionsForm.get('ParametersY').value.pcode;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
+
+    //Set those selections in local storage for return
+    if (this.repopulatingFlags == false) {
+      localStorage.setItem("tempP_X", JSON.stringify(this.graphSelectionsForm.get('ParametersX').value));
+      localStorage.setItem("tempP_Y", JSON.stringify(this.graphSelectionsForm.get('ParametersY').value));
+      localStorage.setItem("tempM_X", this.graphSelectionsForm.get('MethodsX').value);
+      localStorage.setItem("tempM_Y", this.graphSelectionsForm.get('MethodsY').value);
+    }
+    
+
     //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X === null ||
@@ -937,6 +976,11 @@ export class GraphOptionsComponent implements OnInit {
     if (this.flaggedPointIndices.y) {
       this.flaggedPointIndices.y = [];
     }
+    if (this.repopulatingFlags == true) {
+      this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
+    }
+
+    this.repopulatingFlags = false;
   }
 
   //retrieve data from service and put it in a format that can be used to populate graph

@@ -36,7 +36,7 @@
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
             <mat-label>Methods</mat-label>
             <mat-select formControlName="MethodsX">
-              <mat-option *ngFor="let method of this.matchingMcodesX" [value]="method.mcode">{{ method.short_name }}
+              <mat-option *ngFor="let method of matchingMcodesX" [value]="method.mcode">{{ method.short_name }}
               </mat-option>
             </mat-select>
           </mat-form-field>

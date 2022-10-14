@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatAutocompleteModule, } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AboutComponent } from './core/about/about.component';
 import { HomeComponent } from './core/home/home.component';
@@ -29,6 +30,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FileUploadComponent } from './core/file-upload/file-upload.component';
 import { IntroComponent } from './core/intro/intro.component';
+import { ConfirmFlagsComponent } from './core/confirm/confirm-flags.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,7 @@ import { IntroComponent } from './core/intro/intro.component';
     HomeComponent,
     FileUploadComponent,
     IntroComponent,
+    ConfirmFlagsComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,6 +65,7 @@ import { IntroComponent } from './core/intro/intro.component';
     ScrollingModule,
     HttpClientModule,
     MatSnackBarModule,
+    MatDialogModule,
   ],
   providers: [MatSnackBar],
   bootstrap: [AppComponent],

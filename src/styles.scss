@@ -705,3 +705,48 @@ a.modebar-btn svg {
   line-height: 35px;
 }
 /* end: about section */
+
+h2,
+.mat-dialog-content,
+.mat-dialog-actions{
+    max-width: 320px;
+}
+.mat-dialog-content{
+    line-height: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #313B57;
+    margin-bottom: 20px;
+}
+
+.confirmButton{
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: white;
+  cursor: pointer;
+  background-color: #83b87c;
+  height: 35px;
+  margin-left: 10px;
+  width: 80px;
+  margin-top: 10px;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+  font-weight: bold;
+}
+
+.cancel{
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: white;
+  cursor: pointer;
+  background-color: #83b87c;
+  height: 35px;
+  margin-left: 10px;
+  margin-top: 10px;
+  text-align: center;
+  vertical-align: middle;
+  border: none;
+  font-weight: bold;
+}
+

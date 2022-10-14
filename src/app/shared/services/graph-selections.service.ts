@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -68,6 +68,15 @@ export class GraphSelectionsService {
   public updateFlags(flags) {
     this.flagsSubject.next(flags);
   }
+
+  private subject = new Subject<any>();
+  sendFlagConfirmClickEvent() {
+    this.subject.next();
+  }
+  getFlagConfirmClickEvent(): Observable<any> {
+    return this.subject.asObservable();
+  }
+
 
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
