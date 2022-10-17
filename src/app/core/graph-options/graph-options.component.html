@@ -162,8 +162,12 @@
             </div>
           </div>
           <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()" id="continueToFlagOptions"
-            aria-label="Click this button to save flag options">
+            [hidden]="noFlagsSelected" aria-label="Click this button to save flag options">
             Next
+          </button>
+          <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()" [hidden]="!noFlagsSelected"
+            aria-label="Click this button to save flag options">
+            Submit
           </button>
           <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
             aria-label="Click this button to close the flag options modal without saving changes">
