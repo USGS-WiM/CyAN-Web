@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { Observable } from 'rxjs/Observable';
+import { FiltersService } from '../../shared/services/filters.service';
 
 @Component({
   selector: 'app-about',
@@ -7,7 +9,13 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
   styleUrls: ['./../core.component.scss'],
 })
 export class AboutComponent implements OnInit {
-  constructor(private componentDisplayService: ComponentDisplayService) {}
+  constructor(
+    private componentDisplayService: ComponentDisplayService,
+    private filterService: FiltersService
+  ) {
+    this.parameterTypes$ = this.filterService.parameterTypes$;
+    this.methodTypes$ = this.filterService.methodTypes$;
+  }
 
   public faq: Boolean = true;
   public disclaimer: Boolean = false;
@@ -17,12 +25,19 @@ export class AboutComponent implements OnInit {
   public buttonBackground = '#f2ccb1';
   public buttonBorder = '3px solid #83b2d0';
 
+  //Data retrieved from service
+  public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public mcodeShortName;
+  public parameterTypes;
+
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
+    this.getMetadata();
     this.selectBtn('faqView');
     this.resizeDivs();
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
@@ -31,6 +46,13 @@ export class AboutComponent implements OnInit {
           this.resizeDivs();
         }, 0.1);
       }
+    );
+  }
+
+  public getMetadata() {
+    this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+    this.parameterTypes$.subscribe(
+      (parameters) => (this.parameterTypes = parameters)
     );
   }
 

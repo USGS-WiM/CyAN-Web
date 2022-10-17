@@ -319,6 +319,8 @@ export class GraphOptionsComponent implements OnInit {
       (minDate) => (minDateReturned = minDate)
     );
 
+    console.log('this.pcodeToMcode', this.pcodeToMcode);
+    console.log('this.mcodeShortName', this.mcodeShortName);
     //Remove commas so they don't interfere with the csv format
     let formattedRegion = String(this.filterQueryX.meta.region);
     formattedRegion = formattedRegion.replace(/,/g, '; ');
