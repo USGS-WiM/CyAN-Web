@@ -837,8 +837,19 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
-            tempData[pointIndex]['flagType'] = flagTypesX;
-            tempData[pointIndex]['annotation'] = annotationX;
+            let newFlag = tempData[pointIndex];
+            for (let i = 0; i < this.parameterTypes.length; i++) {
+              if (newFlag.pcode == this.parameterTypes[i].pcode) {
+                newFlag['parameterName'] = this.parameterTypes[i].short_name;
+              }
+            }
+            for (let j = 0; j < this.mcodeShortName.length; j++) {
+              if (newFlag.mcode == this.mcodeShortName[j].mcode) {
+                newFlag['methodName'] = this.mcodeShortName[j].short_name;
+              }
+            }
+            newFlag['flagType'] = flagTypesX;
+            newFlag['annotation'] = annotationX;
             if (!existingDupX) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -851,8 +862,19 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
-            tempData[pointIndex]['flagType'] = flagTypesY;
-            tempData[pointIndex]['annotation'] = annotationY;
+            let newFlag = tempData[pointIndex];
+            for (let i = 0; i < this.parameterTypes.length; i++) {
+              if (newFlag.pcode == this.parameterTypes[i].pcode) {
+                newFlag['parameterName'] = this.parameterTypes[i].short_name;
+              }
+            }
+            for (let j = 0; j < this.mcodeShortName.length; j++) {
+              if (newFlag.mcode == this.mcodeShortName[j].mcode) {
+                newFlag['methodName'] = this.mcodeShortName[j].short_name;
+              }
+            }
+            newFlag['flagType'] = flagTypesY;
+            newFlag['annotation'] = annotationY;
             if (!existingDupY) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
