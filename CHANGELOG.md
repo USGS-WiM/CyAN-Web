@@ -40,6 +40,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Graph legend
 - USGS disclaimer & FAQ
 - User's Guide
+- Metadata section with CSV downloads in user's guide
 
 ### Changed
 
