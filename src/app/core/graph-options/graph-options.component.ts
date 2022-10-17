@@ -59,6 +59,7 @@ export class GraphOptionsComponent implements OnInit {
   showFlagOptionsX: Boolean = false;
   showFlagOptionsY: Boolean = false;
   submitAfterX: Boolean = false;
+  noFlagsSelected: Boolean = false;
   onlyYflags: Boolean = false;
   differentYflags: Boolean = false;
   maxFlagModalHeight;
@@ -941,8 +942,10 @@ export class GraphOptionsComponent implements OnInit {
 
     if (xChecked || yChecked || xyChecked) {
       this.disableEnable('continueToFlagOptions', true, true);
+      this.noFlagsSelected = false;
     } else {
       this.disableEnable('continueToFlagOptions', false, true);
+      this.noFlagsSelected = true;
     }
   }
 
@@ -1219,10 +1222,14 @@ export class GraphOptionsComponent implements OnInit {
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
   public axisFlagFormCheckBoxes(selectedPoints) {
     let selectedColor = selectedPoints[0]['marker.color'];
-    if (selectedColor == this.xyFlaggedColor) {
+    if (selectedColor == this.xyFlaggedColor && !this.sameQuery) {
       //check both boxes
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
+      this.autoCheckFlagTypes('x', selectedPoints);
+      this.autoCheckFlagTypes('y', selectedPoints);
+    }
+    if (selectedColor == this.xyFlaggedColor && this.sameQuery) {
       this.axisFlagForm.get('xyFlagControl').setValue(true);
       this.autoCheckFlagTypes('x', selectedPoints);
       this.autoCheckFlagTypes('y', selectedPoints);
