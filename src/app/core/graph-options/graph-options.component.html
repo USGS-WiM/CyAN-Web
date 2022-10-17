@@ -212,7 +212,7 @@
             </div>
           </form>
         </div>
-        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate" class="leftBreak">
           <mat-label>Notes</mat-label>
           <textarea style="resize: none" id='flagAnnotationX' matInput
             placeholder="Enter a custom flag annotation here"></textarea>
@@ -228,11 +228,11 @@
             </div>
           </form>
         </div>
-        <button class="mapFilterBtn dataBtn" (click)="goToFlagTypesY()" [hidden]="!differentYflags || submitAfterX"
-          aria-label="Click this button to save flag options">
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="goToFlagTypesY()"
+          [hidden]="!differentYflags || submitAfterX" aria-label="Click this button to save flag options">
           Next
         </button>
-        <button class="mapFilterBtn dataBtn" (click)="submitFlagSelections()" [hidden]="differentYflags"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="submitFlagSelections()" [hidden]="differentYflags"
           aria-label="Click this button to save flag options">
           Submit
         </button>
@@ -281,12 +281,12 @@
             </div>
           </form>
         </div>
-        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate" class="leftBreak">
           <mat-label>Notes</mat-label>
           <textarea style="resize: none" id='flagAnnotationY' matInput
             placeholder="Enter a custom flag annotation here"></textarea>
         </mat-form-field>
-        <button class="mapFilterBtn dataBtn" (click)="submitFlagSelections()"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="submitFlagSelections()"
           aria-label="Click this button to save flag options">
           Submit
         </button>
