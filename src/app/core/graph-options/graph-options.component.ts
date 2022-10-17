@@ -132,7 +132,6 @@ export class GraphOptionsComponent implements OnInit {
   public pcodeToMcode;
   public mcodeShortName;
   public parameterTypes;
-  public allFlagTypes;
 
   //Autocomplete
   filteredParametersX: Observable<any[]>;
@@ -175,7 +174,6 @@ export class GraphOptionsComponent implements OnInit {
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
-    this.allFlagTypes = this.filterService.flagTypes;
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -1569,7 +1567,6 @@ export class GraphOptionsComponent implements OnInit {
 
   //creates a csv containing all of the user-defined filters
   public downloadGraphMetadata() {
-    this.createCSV(this.allFlagTypes, 'flagTypes.csv');
     let graphMetadataContent = 'data:text/csv;charset=utf-8,';
     //Create and download a csv of the graph metadata
     //The following code was adapted from this example:
@@ -1631,15 +1628,15 @@ export class GraphOptionsComponent implements OnInit {
 
     let flagModals = document.getElementById('flagModals');
 
-    if (this.maxFlagModalHeight > mapHeight - 130) {
-      let newFlagModalHeight = (mapHeight - 130).toString() + 'px';
+    if (this.maxFlagModalHeight > mapHeight - 140) {
+      let newFlagModalHeight = (mapHeight - 140).toString() + 'px';
       flagModals.style.height = newFlagModalHeight;
     } else {
       flagModals.style.height = 'auto';
     }
 
-    this.graphHeight = 0.99 * mapHeight - 100;
-    graphBackgroundID.style.height = (0.99 * mapHeight - 100).toString() + 'px';
+    this.graphHeight = 0.99 * mapHeight - 110;
+    graphBackgroundID.style.height = (0.99 * mapHeight - 110).toString() + 'px';
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
@@ -1686,7 +1683,7 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.add('marginTopSmallHeight');
 
       graphOptionsBackgroundID.style.height =
-        (mapHeight - 75).toString() + 'px';
+        (mapHeight - 85).toString() + 'px';
     }
     if (mapHeight > 570) {
       graphOptionsBackgroundID.classList.add('marginTopFullHeight');
@@ -1699,7 +1696,7 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
 
       graphOptionsBackgroundID.style.height =
-        (mapHeight - 95).toString() + 'px';
+        (mapHeight - 105).toString() + 'px';
     }
     if (windowWidth > 1200 && mapHeight > 450) {
       this.graphMargins = 80;
