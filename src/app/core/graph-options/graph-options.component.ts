@@ -15,7 +15,6 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
-import { NONE_TYPE } from '@angular/compiler';
 
 @Component({
   selector: 'app-graph-options',
@@ -318,9 +317,6 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.minDateSubject.subscribe(
       (minDate) => (minDateReturned = minDate)
     );
-
-    console.log('this.pcodeToMcode', this.pcodeToMcode);
-    console.log('this.mcodeShortName', this.mcodeShortName);
     //Remove commas so they don't interfere with the csv format
     let formattedRegion = String(this.filterQueryX.meta.region);
     formattedRegion = formattedRegion.replace(/,/g, '; ');
@@ -459,7 +455,7 @@ export class GraphOptionsComponent implements OnInit {
         symbol: this.unflaggedSymbol,
         line: {
           color: this.pointBorderColor,
-          width: this.allBorderWidths,
+          width: this.unflaggedBorderWidth,
         },
       },
     };
