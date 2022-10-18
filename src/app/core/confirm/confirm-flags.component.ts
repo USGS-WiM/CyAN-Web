@@ -19,10 +19,6 @@ export class ConfirmFlagsComponent implements OnInit {
 
   clearFlags() {
     localStorage.removeItem('cyanFlags');
-    localStorage.removeItem("tempP_X");
-    localStorage.removeItem("tempP_Y");
-    localStorage.removeItem("tempM_X");
-    localStorage.removeItem("tempM_Y");
   }
 
   repopulateGraphFlags(){

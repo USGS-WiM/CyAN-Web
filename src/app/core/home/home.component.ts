@@ -21,6 +21,7 @@ export class HomeComponent implements AfterViewInit {
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
+  public loadedFlagsFromPreviousSession: Boolean = false;
   public windowWidthResize = false;
   public showIntro = true;
   public fullHomeScreen = true;
@@ -92,8 +93,14 @@ export class HomeComponent implements AfterViewInit {
     this.selectBtn('graph');
 
     let flags = localStorage.getItem('cyanFlags');
-    if (flags != null) {
-      this.dialog.open(ConfirmFlagsComponent);
+
+    //checking if any flags were stored locally in a previous session
+    if (flags != null) { 
+      // prevents popup from opening again if users clicks graph button again after loading locally stored flags
+      if (!this.loadedFlagsFromPreviousSession) {
+        this.loadedFlagsFromPreviousSession = true;
+        this.dialog.open(ConfirmFlagsComponent);
+      }
     } else {
       return;
     }

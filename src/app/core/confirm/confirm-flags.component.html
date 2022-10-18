@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>
-    <mat-icon>flag</mat-icon> Flag Found from a previous session
+    <mat-icon>flag</mat-icon> Flags found from a previous session
 </h2>
 <mat-dialog-content>
     <!-- <mat-icon *ngIf="data.messageIcon !== ''">{{data.messageIcon}}</mat-icon> -->
@@ -8,7 +8,7 @@
 <mat-dialog-actions>
     <div class="detail-section-buttons centered">
         <button matDialogClose color="warn" class="cancel" (click)="clearFlags()">
-            <mat-icon>cancel</mat-icon>&nbsp;No
+            <mat-icon>cancel</mat-icon>&nbsp;NO
         </button>
         <!-- The matDialogClose directive optionally accepts a value as a result for the dialog. -->
         <button [matDialogClose]="true" class="confirmButton" (click)="repopulateGraphFlags()">

@@ -27,7 +27,6 @@ export class GraphOptionsComponent implements OnInit {
   public showGraph = false;
   public bivariatePlot: any;
   public alreadyGraphed: Boolean = false;
-  public repopulatingFlags = false;
 
   //Graph options
   graphSelectionsForm = new FormGroup({
@@ -204,14 +203,8 @@ export class GraphOptionsComponent implements OnInit {
     this.initiateGraphService();
     this.getUnits();
     this.graphSelectionsService.getFlagConfirmClickEvent().subscribe(() => {
-      this.repopulatingFlags = true;
-      this.graphSelectionsForm.get('ParametersX').setValue(JSON.parse(localStorage.getItem("tempP_X")));
-      this.graphSelectionsForm.get('ParametersY').setValue(JSON.parse(localStorage.getItem("tempP_Y")));
-      this.populateMcodeDropdown('xaxis');
-      this.populateMcodeDropdown('yaxis');
-      this.graphSelectionsForm.get('MethodsX').setValue(localStorage.getItem("tempM_X"));
-      this.graphSelectionsForm.get('MethodsY').setValue(localStorage.getItem("tempM_Y"));
-      this.clickPlotData();
+        this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
+        this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
     })
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
@@ -959,6 +952,8 @@ export class GraphOptionsComponent implements OnInit {
       ','
     );
     this.showUnflagOptions = false;
+    // clearing from local storage
+    localStorage.removeItem('cyanFlags');
     this.closeFlagOptions();
   }
 
@@ -1365,16 +1360,7 @@ export class GraphOptionsComponent implements OnInit {
     let tempP_Y_value = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
-
-    //Set those selections in local storage for return
-    if (this.repopulatingFlags == false) {
-      localStorage.setItem("tempP_X", JSON.stringify(this.graphSelectionsForm.get('ParametersX').value));
-      localStorage.setItem("tempP_Y", JSON.stringify(this.graphSelectionsForm.get('ParametersY').value));
-      localStorage.setItem("tempM_X", this.graphSelectionsForm.get('MethodsX').value);
-      localStorage.setItem("tempM_Y", this.graphSelectionsForm.get('MethodsY').value);
-    }
     
-
     //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X_value === null ||
@@ -1414,12 +1400,6 @@ export class GraphOptionsComponent implements OnInit {
     if (this.flaggedPointIndices.y) {
       this.flaggedPointIndices.y = [];
     }
-    if (this.repopulatingFlags == true) {
-      this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
-      this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
-    }
-
-    this.repopulatingFlags = false;
   }
 
   //retrieve data from service and put it in a format that can be used to populate graph
