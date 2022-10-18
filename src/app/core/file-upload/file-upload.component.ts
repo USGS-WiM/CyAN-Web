@@ -124,6 +124,8 @@ export class FileUploadComponent {
       'result',
       'units',
       'region',
+      'parameterName',
+      'methodName',
       'flagType',
       'annotation',
     ];

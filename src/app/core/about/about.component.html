@@ -447,6 +447,30 @@
           </li>
         </ul>
       </div>
+      <hr>
+      <div class="mainHeader">
+        Metadata
+      </div>
+      <ol>
+        Each parameter and method have a corresponding code. For example, <i>P400</i> corresponds with
+        <i>Chlorophyta_Parapediastrum_count</i>. When it is reasonable, we spell out the full name, but there are
+        instances in which we use the code to improve legibility. You may download tables containing the keys for
+        parameter and
+        methods codes here. We also use abbreviated names for the different flag types. For explanations of these flag
+        types, download the <i>Flag Types</i> table.
+        <div class="flex-container">
+          <div class="mapFilterBtn dataBtn" (click)="pcodeDownload()">
+            Parameters
+          </div>
+          <div class="mapFilterBtn dataBtn leftBreak" (click)="mcodeDownload()">
+            Methods
+          </div>
+          <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
+            Flag Types
+          </div>
+        </div>
+
+      </ol>
     </div>
     <div style="margin-top: 20px;" [hidden]="!faq">
       <div style="font-size:large; margin-top: 15px; margin-bottom: 5px;">

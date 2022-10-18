@@ -15,9 +15,12 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
+<<<<<<< HEAD
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 import { NONE_TYPE } from '@angular/compiler';
+=======
+>>>>>>> 681bb5cd476cb792f68c11e62bc049e245d5f4d1
 
 @Component({
   selector: 'app-graph-options',
@@ -64,6 +67,7 @@ export class GraphOptionsComponent implements OnInit {
   showFlagOptionsX: Boolean = false;
   showFlagOptionsY: Boolean = false;
   submitAfterX: Boolean = false;
+  noFlagsSelected: Boolean = false;
   onlyYflags: Boolean = false;
   differentYflags: Boolean = false;
   maxFlagModalHeight;
@@ -137,7 +141,6 @@ export class GraphOptionsComponent implements OnInit {
   public pcodeToMcode;
   public mcodeShortName;
   public parameterTypes;
-  public allFlagTypes;
 
   //Autocomplete
   filteredParametersX: Observable<any[]>;
@@ -180,7 +183,6 @@ export class GraphOptionsComponent implements OnInit {
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
-    this.allFlagTypes = this.filterService.flagTypes;
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -345,7 +347,6 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.minDateSubject.subscribe(
       (minDate) => (minDateReturned = minDate)
     );
-
     //Remove commas so they don't interfere with the csv format
     let formattedRegion = String(this.filterQueryX.meta.region);
     formattedRegion = formattedRegion.replace(/,/g, '; ');
@@ -484,7 +485,7 @@ export class GraphOptionsComponent implements OnInit {
         symbol: this.unflaggedSymbol,
         line: {
           color: this.pointBorderColor,
-          width: this.allBorderWidths,
+          width: this.unflaggedBorderWidth,
         },
       },
     };
@@ -866,8 +867,19 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataXSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
-            tempData[pointIndex]['flagType'] = flagTypesX;
-            tempData[pointIndex]['annotation'] = annotationX;
+            let newFlag = tempData[pointIndex];
+            for (let i = 0; i < this.parameterTypes.length; i++) {
+              if (newFlag.pcode == this.parameterTypes[i].pcode) {
+                newFlag['parameterName'] = this.parameterTypes[i].short_name;
+              }
+            }
+            for (let j = 0; j < this.mcodeShortName.length; j++) {
+              if (newFlag.mcode == this.mcodeShortName[j].mcode) {
+                newFlag['methodName'] = this.mcodeShortName[j].short_name;
+              }
+            }
+            newFlag['flagType'] = flagTypesX;
+            newFlag['annotation'] = annotationX;
             if (!existingDupX) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -880,8 +892,19 @@ export class GraphOptionsComponent implements OnInit {
         this.graphSelectionsService.allGraphDataYSubject.subscribe((data) => {
           if (updateGraphCalled) {
             tempData = data;
-            tempData[pointIndex]['flagType'] = flagTypesY;
-            tempData[pointIndex]['annotation'] = annotationY;
+            let newFlag = tempData[pointIndex];
+            for (let i = 0; i < this.parameterTypes.length; i++) {
+              if (newFlag.pcode == this.parameterTypes[i].pcode) {
+                newFlag['parameterName'] = this.parameterTypes[i].short_name;
+              }
+            }
+            for (let j = 0; j < this.mcodeShortName.length; j++) {
+              if (newFlag.mcode == this.mcodeShortName[j].mcode) {
+                newFlag['methodName'] = this.mcodeShortName[j].short_name;
+              }
+            }
+            newFlag['flagType'] = flagTypesY;
+            newFlag['annotation'] = annotationY;
             if (!existingDupY) {
               this.flaggedData.push(tempData[pointIndex]);
               this.graphSelectionsService.flagsSubject.next(this.flaggedData);
@@ -953,8 +976,10 @@ export class GraphOptionsComponent implements OnInit {
 
     if (xChecked || yChecked || xyChecked) {
       this.disableEnable('continueToFlagOptions', true, true);
+      this.noFlagsSelected = false;
     } else {
       this.disableEnable('continueToFlagOptions', false, true);
+      this.noFlagsSelected = true;
     }
   }
 
@@ -1231,10 +1256,14 @@ export class GraphOptionsComponent implements OnInit {
   //If there is a flag at the selected point, pre-check the boxes in the flag options modal
   public axisFlagFormCheckBoxes(selectedPoints) {
     let selectedColor = selectedPoints[0]['marker.color'];
-    if (selectedColor == this.xyFlaggedColor) {
+    if (selectedColor == this.xyFlaggedColor && !this.sameQuery) {
       //check both boxes
       this.axisFlagForm.get('xFlagControl').setValue(true);
       this.axisFlagForm.get('yFlagControl').setValue(true);
+      this.autoCheckFlagTypes('x', selectedPoints);
+      this.autoCheckFlagTypes('y', selectedPoints);
+    }
+    if (selectedColor == this.xyFlaggedColor && this.sameQuery) {
       this.axisFlagForm.get('xyFlagControl').setValue(true);
       this.autoCheckFlagTypes('x', selectedPoints);
       this.autoCheckFlagTypes('y', selectedPoints);
@@ -1593,7 +1622,6 @@ export class GraphOptionsComponent implements OnInit {
 
   //creates a csv containing all of the user-defined filters
   public downloadGraphMetadata() {
-    this.createCSV(this.allFlagTypes, 'flagTypes.csv');
     let graphMetadataContent = 'data:text/csv;charset=utf-8,';
     //Create and download a csv of the graph metadata
     //The following code was adapted from this example:
@@ -1655,15 +1683,15 @@ export class GraphOptionsComponent implements OnInit {
 
     let flagModals = document.getElementById('flagModals');
 
-    if (this.maxFlagModalHeight > mapHeight - 130) {
-      let newFlagModalHeight = (mapHeight - 130).toString() + 'px';
+    if (this.maxFlagModalHeight > mapHeight - 140) {
+      let newFlagModalHeight = (mapHeight - 140).toString() + 'px';
       flagModals.style.height = newFlagModalHeight;
     } else {
       flagModals.style.height = 'auto';
     }
 
-    this.graphHeight = 0.99 * mapHeight - 100;
-    graphBackgroundID.style.height = (0.99 * mapHeight - 100).toString() + 'px';
+    this.graphHeight = 0.99 * mapHeight - 110;
+    graphBackgroundID.style.height = (0.99 * mapHeight - 110).toString() + 'px';
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
@@ -1710,7 +1738,7 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.add('marginTopSmallHeight');
 
       graphOptionsBackgroundID.style.height =
-        (mapHeight - 75).toString() + 'px';
+        (mapHeight - 85).toString() + 'px';
     }
     if (mapHeight > 570) {
       graphOptionsBackgroundID.classList.add('marginTopFullHeight');
@@ -1723,7 +1751,7 @@ export class GraphOptionsComponent implements OnInit {
       graphOptionsCollapsedID.classList.remove('marginTopSmallHeight');
 
       graphOptionsBackgroundID.style.height =
-        (mapHeight - 95).toString() + 'px';
+        (mapHeight - 105).toString() + 'px';
     }
     if (windowWidth > 1200 && mapHeight > 450) {
       this.graphMargins = 80;

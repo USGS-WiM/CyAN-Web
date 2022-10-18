@@ -1,5 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { Observable } from 'rxjs/Observable';
+import { FiltersService } from '../../shared/services/filters.service';
 
 @Component({
   selector: 'app-about',
@@ -7,7 +9,13 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
   styleUrls: ['./../core.component.scss'],
 })
 export class AboutComponent implements OnInit {
-  constructor(private componentDisplayService: ComponentDisplayService) {}
+  constructor(
+    private componentDisplayService: ComponentDisplayService,
+    private filterService: FiltersService
+  ) {
+    this.parameterTypes$ = this.filterService.parameterTypes$;
+    this.methodTypes$ = this.filterService.methodTypes$;
+  }
 
   public faq: Boolean = true;
   public disclaimer: Boolean = false;
@@ -17,12 +25,20 @@ export class AboutComponent implements OnInit {
   public buttonBackground = '#f2ccb1';
   public buttonBorder = '3px solid #83b2d0';
 
+  //Data retrieved from service
+  public parameterTypes$: Observable<any[]>;
+  public methodTypes$: Observable<any[]>;
+  public mcodeShortName;
+  public parameterTypes;
+  public allFlagTypes;
+
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
   }
 
   ngOnInit(): void {
+    this.getMetadata();
     this.selectBtn('faqView');
     this.resizeDivs();
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
@@ -32,6 +48,39 @@ export class AboutComponent implements OnInit {
         }, 0.1);
       }
     );
+  }
+
+  public getMetadata() {
+    this.methodTypes$.subscribe((codes) => (this.mcodeShortName = codes));
+    this.parameterTypes$.subscribe(
+      (parameters) => (this.parameterTypes = parameters)
+    );
+    this.allFlagTypes = this.filterService.flagTypes;
+  }
+
+  pcodeDownload() {
+    this.createCSV(this.parameterTypes, 'pcodes.csv');
+  }
+
+  mcodeDownload() {
+    this.createCSV(this.mcodeShortName, 'mcodes.csv');
+  }
+
+  flagTypesDownload() {
+    this.createCSV(this.allFlagTypes, 'flagTypes.csv');
+  }
+
+  createCSV(data, filename) {
+    let csvContent = 'data:text/csv;charset=utf-8,';
+    let csv = data.map((row) => Object.values(row));
+    csv.unshift(Object.keys(data[0]));
+    csvContent += csv.join('\n');
+    let encodedUri = encodeURI(csvContent);
+    let link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
   }
 
   public aboutView(view: String) {
@@ -117,12 +166,12 @@ export class AboutComponent implements OnInit {
     if (mapHeight < 570) {
       infoPanelID.classList.add('marginTopSmallHeight');
       infoPanelID.classList.remove('marginTopFullHeight');
-      infoPanelID.style.height = (mapHeight - 110).toString() + 'px';
+      infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
     }
     if (mapHeight > 570) {
       infoPanelID.classList.remove('marginTopSmallHeight');
       infoPanelID.classList.add('marginTopFullHeight');
-      infoPanelID.style.height = (mapHeight - 110).toString() + 'px';
+      infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
     }
   }
 }

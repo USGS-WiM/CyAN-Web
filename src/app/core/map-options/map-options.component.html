@@ -11,7 +11,7 @@
   <div class="minimize" aria-label="Click on this button to minimize the map filters panel.">
     <mat-icon matTooltip="minimize" (click)="displayMapLayerOptions(false)">minimize</mat-icon>
   </div>
-  <div class="mapLayers" id="mapLayersID">
+  <div class="mapLayers leftBreak" id="mapLayersID">
     <label class="radioContainer" id="radioContainerResize0"
       aria-label="This button changes the base map to display streets">Streets & Cities
       <input id="streetRadio" (change)="newBasemap()" type="radio" checked="checked" name="radio" />
@@ -70,7 +70,7 @@
     <ngx-slider [(value)]="minYear" [(highValue)]="maxYear" [options]="timeOptions" (userChange)="updateYears($event)">
     </ngx-slider>
   </div>
-  <div style="margin-left: 10px; margin-top: 10px">
+  <div class="leftTopBreak">
     <form [formGroup]="regionForm">
       <mat-form-field appearance="fill" aria-label="This is a dropdown menu containing geographic regions.">
         <mat-label>Regions</mat-label>
@@ -117,11 +117,11 @@
     <mat-checkbox [disableRipple]="true" [checked]="nullDataChecked" (change)="nullwarning($event)" id="nullCheckbox"
       aria-label="Check this box to include sites with null values">Inclue null values</mat-checkbox>
   </div>
-  <button class="mapFilterBtn dataBtn" (click)="runFilters()"
+  <button class="mapFilterBtn dataBtn leftBreak" (click)="runFilters()"
     aria-label="Click this button to filter points and plot them on the map">
     Plot Points
   </button>
-  <button class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download CSV" id="mapDownloadBtn"
+  <button class="downloadBtn dataBtn disabledDataBtn leftBreak" matTooltip="Download CSV" id="mapDownloadBtn"
     (click)="downloadMapData()">
     <mat-icon>cloud_download</mat-icon>
   </button>
