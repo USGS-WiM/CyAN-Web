@@ -15,12 +15,6 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
-<<<<<<< HEAD
-import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
-
-import { NONE_TYPE } from '@angular/compiler';
-=======
->>>>>>> 681bb5cd476cb792f68c11e62bc049e245d5f4d1
 
 @Component({
   selector: 'app-graph-options',
@@ -28,7 +22,6 @@ import { NONE_TYPE } from '@angular/compiler';
   styleUrls: ['./../core.component.scss'],
 })
 export class GraphOptionsComponent implements OnInit {
-  /* @ViewChild(MatAutocompleteTrigger) _auto: MatAutocompleteTrigger; */
   //Overall display
   public graphOptionsVisible: Boolean = true;
   public showGraph = false;
@@ -141,6 +134,7 @@ export class GraphOptionsComponent implements OnInit {
   public pcodeToMcode;
   public mcodeShortName;
   public parameterTypes;
+  public allFlagTypes;
 
   //Autocomplete
   filteredParametersX: Observable<any[]>;
@@ -183,6 +177,7 @@ export class GraphOptionsComponent implements OnInit {
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
+    this.allFlagTypes = this.filterService.flagTypes;
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -210,8 +205,6 @@ export class GraphOptionsComponent implements OnInit {
     this.getUnits();
     this.graphSelectionsService.getFlagConfirmClickEvent().subscribe(() => {
       this.repopulatingFlags = true;
-       /* JSON.parse(localStorage["cyanFlags"]); */ 
-      console.log(JSON.parse(localStorage["cyanFlags"]))
       this.graphSelectionsForm.get('ParametersX').setValue(JSON.parse(localStorage.getItem("tempP_X")));
       this.graphSelectionsForm.get('ParametersY').setValue(JSON.parse(localStorage.getItem("tempP_Y")));
       this.populateMcodeDropdown('xaxis');
@@ -347,6 +340,7 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.minDateSubject.subscribe(
       (minDate) => (minDateReturned = minDate)
     );
+
     //Remove commas so they don't interfere with the csv format
     let formattedRegion = String(this.filterQueryX.meta.region);
     formattedRegion = formattedRegion.replace(/,/g, '; ');
@@ -1422,6 +1416,7 @@ export class GraphOptionsComponent implements OnInit {
     }
     if (this.repopulatingFlags == true) {
       this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
+      this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
     }
 
     this.repopulatingFlags = false;
