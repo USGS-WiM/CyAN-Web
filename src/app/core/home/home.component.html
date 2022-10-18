@@ -5,7 +5,7 @@
         aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
         <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
           <div id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth" (click)="clickHome()"
-            [hidden]="!showFullCyanHomeBtn">
+            [hidden]="!showFullCyanHomeBtn" matTooltip="Home">
             <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home
             </mat-icon>
             CyAN FIELD
@@ -16,18 +16,12 @@
         <div class="flex-child flex-container">
           <div [hidden]="windowWidthResize">
             <div id='homeBtnSmID' class="homeBtnColor smNavBtn marginLeftSmallWidth" (click)="clickHome()"
-              matTooltip="CyAN Home"
+              matTooltip="Home"
               aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
               <p>
                 <mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home
                 </mat-icon>
               </p>
-            </div>
-          </div>
-          <div>
-            <div id='infoBtnID' class="infoBtnColor smNavBtn" (click)="clickInfo()" matTooltip="About"
-              aria-label="This is an orange button feature a white icon logo (letter i with a circle around it). Clicking on this button will lead ot the info page.">
-              <mat-icon class="smBtnIcon">info</mat-icon>
             </div>
           </div>
           <div>
@@ -42,19 +36,25 @@
               <mat-icon class="smBtnIcon">scatter_plot</mat-icon>
             </div>
           </div>
+          <div>
+            <div id='infoBtnID' class="infoBtnColor smNavBtn" (click)="clickInfo()" matTooltip="About"
+              aria-label="This is an orange button feature a white icon logo (letter i with a circle around it). Clicking on this button will lead ot the info page.">
+              <mat-icon class="smBtnIcon">info</mat-icon>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div [hidden]="!showMap" class="floating-body">
+    <div [hidden]="!showMap">
       <app-map-options></app-map-options>
     </div>
-    <div [hidden]="!showGraph" class="floating-body">
+    <div [hidden]="!showGraph">
       <app-graph-options></app-graph-options>
     </div>
-    <div [hidden]="!showIntro" class="floating-body">
+    <div [hidden]="!showIntro">
       <app-intro></app-intro>
     </div>
-    <div [hidden]="!showInfo" class="floating-body">
+    <div [hidden]="!showInfo">
       <app-about></app-about>
     </div>
   </div>

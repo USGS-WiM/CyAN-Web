@@ -33,6 +33,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Checkbox to use map option min/max years in graph options
 - USGS header and footer
 - Filler landing page that corresponds with the CyAN button
+- Ability to select/deselect x-axis flag types for y-axis
+- Auto-checks flag types and annotations
+- Option for users to auto-fill y-axis flag types with their x-axis selections
+- 'Next' button in flag modal is disabled when neither axis is selected
+- Graph legend
+- USGS disclaimer & FAQ
+- User's Guide
 
 ### Changed
 
@@ -41,6 +48,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - New colors for nav buttons; selected btn changes color
 - Responsive resizing to account for top bars
 - Prevents user interaction with graph when Flag Options modal is open
+- Separates x and y axes in flag modal
+- Clears previous graph each time 'Create Graph' is clicked regardless of whether or no data are returned
+- Flag modal resizing
+- Lasso works to click on a single point
+- Changes look of landing page and About modal buttons
+- Changes size and transparency of unflagged points to help identify overlapping points
 
 ### Fixed
 
@@ -51,3 +64,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Resets unflag status
 - Removes old home layout from html
 - USWDS broken images in deployments
+- Fixes ability to interact with map
+- Map disabled on all views except Map
+- CSV upload works when user saves file in Excel
+- Waits to rescale plot until after flag selections are submitted

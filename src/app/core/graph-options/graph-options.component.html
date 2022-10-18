@@ -132,76 +132,170 @@
         No
       </button>
     </div>
-    <div class="optionModal" [hidden]=" !showFlagOptions">
-      <form [formGroup]="axisFlagForm">
-        <div style="background-color: rgb(242, 189, 161, 0.2)">
-          <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
-            [hidden]="sameQuery">
-            <mat-checkbox formControlName="xFlagControl" class="example-margin" [disableRipple]="true">X-Axis
-            </mat-checkbox>
+    <div>
+
+    </div>
+    <div class="optionModal" [hidden]="!showFlagOptions && !showFlagOptionsX && !showFlagOptionsY" id="flagModals">
+      <div [hidden]=" !showFlagOptions">
+        <form [formGroup]="axisFlagForm">
+          <div>
+            <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
+              [hidden]="sameQuery">
+              <div style="font-weight:500;">
+                Flag Data
+              </div>
+              <mat-checkbox formControlName="xFlagControl" class="example-margin" [disableRipple]="true"
+                (change)="xyFlagClicked()">X-Axis
+              </mat-checkbox>
+            </div>
+            <div class=" leftTopBreak" aria-label="Checking this box will flag the Y-Axis data from this point"
+              [hidden]="sameQuery">
+              <mat-checkbox class=" example-margin" formControlName="yFlagControl" [disableRipple]="true"
+                (change)="xyFlagClicked()">Y-Axis
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
+              [hidden]="!sameQuery">
+              <mat-checkbox formControlName="xyFlagControl" class="example-margin" [disableRipple]="true"
+                (change)="xyFlagClicked()">Create flag
+              </mat-checkbox>
+            </div>
           </div>
-          <div class=" leftTopBreak" aria-label="Checking this box will flag the Y-Axis data from this point"
-            [hidden]="sameQuery">
-            <mat-checkbox class=" example-margin" formControlName="yFlagControl" [disableRipple]="true">Y-Axis
-            </mat-checkbox>
-          </div>
-          <div class="leftTopBreak" aria-label="Checking this box will flag the X-Axis data from this point"
-            [hidden]="!sameQuery">
-            <mat-checkbox formControlName="xyFlagControl" class="example-margin" [disableRipple]="true">Create flag
-            </mat-checkbox>
-          </div>
+          <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()" id="continueToFlagOptions"
+            aria-label="Click this button to save flag options">
+            Next
+          </button>
+          <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+            aria-label="Click this button to close the flag options modal without saving changes">
+            Cancel
+          </button>
+        </form>
+      </div>
+      <div [hidden]="!showFlagOptionsX">
+        <div class="leftTopBreak" [hidden]="sameQuery" style="font-weight:500;">
+          X-Axis Flags
         </div>
-        <div style="background-color: rgb(254, 254, 204, 0.4)">
-          <div class="leftTopBreak"
-            aria-label="Checking this box will add 'Central tendency' to the list of flag types">
-            <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central
-              tendency
-            </mat-checkbox>
-          </div>
-          <div class="leftTopBreak" aria-label="Checking this box will add 'Outlier' to the list of flag types">
-            <mat-checkbox formControlName="outlier" class="example-margin" [disableRipple]="true">Outlier
-            </mat-checkbox>
-          </div>
-          <div class="leftTopBreak"
-            aria-label="Checking this box will add 'Matrix or recovery problem' to the list of flag types">
-            <mat-checkbox formControlName="matrixInterference" class="example-margin" [disableRipple]="true">Matrix or
-              recovery problem
-            </mat-checkbox>
-          </div>
-          <div class="leftTopBreak"
-            aria-label="Checking this box will add 'Dissolved result > Total' to the list of flag types">
-            <mat-checkbox formControlName="dissolvedGTTotal" class="example-margin" [disableRipple]="true">Dissolved
-              result > Total
-            </mat-checkbox>
-          </div>
-          <div class="leftTopBreak"
-            aria-label="Checking this box will add 'Phytoplankton vs Chl' to the list of flag types">
-            <mat-checkbox formControlName="phytoChl" class="example-margin" [disableRipple]="true">Phytoplankton vs Chl
-            </mat-checkbox>
-          </div>
-          <div class="leftTopBreak" aria-label="Checking this box will add 'Unknown' to the list of flag types">
-            <mat-checkbox formControlName="unknown" class="example-margin" [disableRipple]="true">Unknown
-            </mat-checkbox>
-          </div>
+        <div>
+          <form [formGroup]="flagTypesX">
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Central tendency' to the list of flag types">
+              <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central
+                tendency
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak" aria-label="Checking this box will add 'Outlier' to the list of flag types">
+              <mat-checkbox formControlName="outlier" class="example-margin" [disableRipple]="true">Outlier
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Matrix or recovery problem' to the list of flag types">
+              <mat-checkbox formControlName="matrixInterference" class="example-margin" [disableRipple]="true">Matrix or
+                recovery problem
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Dissolved result > Total' to the list of flag types">
+              <mat-checkbox formControlName="dissolvedGTTotal" class="example-margin" [disableRipple]="true">Dissolved
+                result > Total
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Phytoplankton vs Chl' to the list of flag types">
+              <mat-checkbox formControlName="phytoChl" class="example-margin" [disableRipple]="true">Phytoplankton vs
+                Chl
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak" aria-label="Checking this box will add 'Unknown' to the list of flag types">
+              <mat-checkbox formControlName="unknown" class="example-margin" [disableRipple]="true">Unknown
+              </mat-checkbox>
+            </div>
+          </form>
         </div>
         <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
           <mat-label>Notes</mat-label>
-          <textarea style="resize: none" id='flagAnnotation' matInput
+          <textarea style="resize: none" id='flagAnnotationX' matInput
             placeholder="Enter a custom flag annotation here"></textarea>
         </mat-form-field>
-      </form>
-      <form>
-
-      </form>
-      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
-        aria-label="Click this button to save flag options">
-        Save
-      </button>
-      <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
-        aria-label="Click this button to close the flag options modal without saving changes">
-        Cancel
-      </button>
+        <div [hidden]="submitAfterX || sameQuery">
+          <form [formGroup]="sameXYFlag">
+            <div class="leftTopBreak"
+              aria-label="Checking this box will allow you to choose different flag types and annotations for the y-axis data">
+              <mat-checkbox formControlName="diffY" (change)="diffYflags($event)" [disableRipple]="true">Record
+                different
+                responses <br /> for y-axis data
+              </mat-checkbox>
+            </div>
+          </form>
+        </div>
+        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypesY()"
+          [hidden]="!differentYflags || submitAfterX" aria-label="Click this button to save flag options">
+          Next
+        </button>
+        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()" [hidden]="differentYflags"
+          aria-label="Click this button to save flag options">
+          Submit
+        </button>
+        <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+          aria-label="Click this button to close the flag options modal without saving changes">
+          Cancel
+        </button>
+      </div>
+      <div [hidden]="!showFlagOptionsY">
+        <div class="leftTopBreak" style="font-weight:500;">
+          Y-Axis Flags
+        </div>
+        <div>
+          <form [formGroup]=" flagTypesY">
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Central tendency' to the list of flag types">
+              <mat-checkbox formControlName="centralTendency" class="example-margin" [disableRipple]="true">Central
+                tendency
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak" aria-label="Checking this box will add 'Outlier' to the list of flag types">
+              <mat-checkbox formControlName="outlier" class="example-margin" [disableRipple]="true">Outlier
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Matrix or recovery problem' to the list of flag types">
+              <mat-checkbox formControlName="matrixInterference" class="example-margin" [disableRipple]="true">Matrix or
+                recovery problem
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Dissolved result > Total' to the list of flag types">
+              <mat-checkbox formControlName="dissolvedGTTotal" class="example-margin" [disableRipple]="true">Dissolved
+                result > Total
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak"
+              aria-label="Checking this box will add 'Phytoplankton vs Chl' to the list of flag types">
+              <mat-checkbox formControlName="phytoChl" class="example-margin" [disableRipple]="true">Phytoplankton vs
+                Chl
+              </mat-checkbox>
+            </div>
+            <div class="leftTopBreak" aria-label="Checking this box will add 'Unknown' to the list of flag types">
+              <mat-checkbox formControlName="unknown" class="example-margin" [disableRipple]="true">Unknown
+              </mat-checkbox>
+            </div>
+          </form>
+        </div>
+        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+          <mat-label>Notes</mat-label>
+          <textarea style="resize: none" id='flagAnnotationY' matInput
+            placeholder="Enter a custom flag annotation here"></textarea>
+        </mat-form-field>
+        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
+          aria-label="Click this button to save flag options">
+          Submit
+        </button>
+        <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+          aria-label="Click this button to close the flag options modal without saving changes">
+          Cancel
+        </button>
+      </div>
     </div>
-    <div id="graph"></div>
+
+    <div id="graph" [hidden]="!this.showGraph"></div>
   </div>
 </div>

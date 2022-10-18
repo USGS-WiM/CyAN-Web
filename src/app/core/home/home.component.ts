@@ -26,10 +26,10 @@ export class HomeComponent implements AfterViewInit {
   public fullHomeScreen = true;
   public showFullCyanHomeBtn: Boolean = true;
   public selectedColor = 'rgb(255, 255, 255)';
-  public homeColor = '#f2e6b1';
-  public infoColor = '#95dab6';
-  public mapColor = '#83b2d0';
-  public graphColor = '#7f87b2';
+  public homeColor = '#f2ccb1';
+  public infoColor = '#7f87b2';
+  public mapColor = '#95dab6';
+  public graphColor = '#83b2d0';
 
   ngAfterViewInit(): void {
     window.onload = () => (this.windowWidthResize = window.innerWidth >= 900);
@@ -63,6 +63,7 @@ export class HomeComponent implements AfterViewInit {
     this.showGraph = false;
     this.showIntro = true;
     this.selectBtn('home');
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public clickMap() {
@@ -71,6 +72,7 @@ export class HomeComponent implements AfterViewInit {
     this.showGraph = false;
     this.showIntro = false;
     this.selectBtn('map');
+    this.componentDisplayService.getDisableMap(false);
   }
 
   public clickInfo() {
@@ -79,6 +81,7 @@ export class HomeComponent implements AfterViewInit {
     this.showGraph = false;
     this.showIntro = false;
     this.selectBtn('info');
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public clickGraph() {
@@ -90,11 +93,11 @@ export class HomeComponent implements AfterViewInit {
 
     let flags = localStorage.getItem('cyanFlags');
     if (flags != null) {
-      console.log(flags);
       this.dialog.open(ConfirmFlagsComponent);
     } else {
       return;
     }
+    this.componentDisplayService.getDisableMap(true);
   }
 
   public selectBtn(button) {
@@ -111,9 +114,9 @@ export class HomeComponent implements AfterViewInit {
     }
     if (button !== 'home') {
       homeBtnFullID.style.color = 'rgb(255, 255, 255)';
-      homeBtnFullID.style.backgroundColor = '#f2e6b1';
+      homeBtnFullID.style.backgroundColor = this.homeColor;
       homeBtnSmID.style.color = 'rgb(255, 255, 255)';
-      homeBtnSmID.style.backgroundColor = '#f2e6b1';
+      homeBtnSmID.style.backgroundColor = this.homeColor;
     }
     if (button == 'graph') {
       graphBtnID.style.color = this.graphColor;
