@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, HostListener, Inject, Optional } from '@angular/core';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ConfirmFlagsComponent} from '../confirm/confirm-flags.component';
+import { ConfirmFlagsComponent} from '../confirm-flags/confirm-flags.component';
 
 @Component({
   selector: 'app-home',

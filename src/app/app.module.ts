@@ -30,7 +30,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { FileUploadComponent } from './core/file-upload/file-upload.component';
 import { IntroComponent } from './core/intro/intro.component';
-import { ConfirmFlagsComponent } from './core/confirm/confirm-flags.component';
+import { ConfirmFlagsComponent } from './core/confirm-flags/confirm-flags.component';
 
 @NgModule({
   declarations: [
