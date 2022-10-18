@@ -133,6 +133,7 @@ export class GraphOptionsComponent implements OnInit {
   public pcodeToMcode;
   public mcodeShortName;
   public parameterTypes;
+  public allFlagTypes;
 
   //Autocomplete
   filteredParametersX: Observable<any[]>;
@@ -169,12 +170,13 @@ export class GraphOptionsComponent implements OnInit {
     private graphSelectionsService: GraphSelectionsService,
     public snackBar: MatSnackBar,
     private componentDisplayService: ComponentDisplayService,
-    private iterableDiffers: IterableDiffers
+    private iterableDiffers: IterableDiffers,
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
+    this.allFlagTypes = this.filterService.flagTypes;
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -183,12 +185,27 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs(true);
   }
 
+  @HostListener("window:beforeunload")
+  alert() {
+    if (this.flaggedData.length > 0) {
+      // returning false will show a browser warning
+      return false;
+    } else {
+      // returning true will navigate without confirmation
+      return true;
+    }
+  }
+
   ngOnInit(): void {
     //Set the display according to the initial screen dimensions
     this.resizeDivs(false);
     this.getDataForDropdowns();
     this.initiateGraphService();
     this.getUnits();
+    this.graphSelectionsService.getFlagConfirmClickEvent().subscribe(() => {
+        this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
+        this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
+    })
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
         setTimeout(() => {
@@ -316,6 +333,7 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.minDateSubject.subscribe(
       (minDate) => (minDateReturned = minDate)
     );
+
     //Remove commas so they don't interfere with the csv format
     let formattedRegion = String(this.filterQueryX.meta.region);
     formattedRegion = formattedRegion.replace(/,/g, '; ');
@@ -907,6 +925,9 @@ export class GraphOptionsComponent implements OnInit {
       Plotly.restyle('graph', update, [1]);
     }
 
+    // storing the cyanFlags in browser local storage
+    localStorage.setItem("cyanFlags", JSON.stringify(this.flaggedData));
+
     updateGraphCalled = false;
     this.lasso = false;
     this.flagAll = false;
@@ -931,6 +952,8 @@ export class GraphOptionsComponent implements OnInit {
       ','
     );
     this.showUnflagOptions = false;
+    // clearing from local storage
+    localStorage.removeItem('cyanFlags');
     this.closeFlagOptions();
   }
 
@@ -1337,7 +1360,7 @@ export class GraphOptionsComponent implements OnInit {
     let tempP_Y_value = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
-
+    
     //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X_value === null ||

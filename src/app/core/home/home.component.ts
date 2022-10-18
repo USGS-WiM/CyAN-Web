@@ -1,5 +1,7 @@
-import { Component, AfterViewInit, HostListener } from '@angular/core';
+import { Component, AfterViewInit, HostListener} from '@angular/core';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmFlagsComponent} from '../confirm-flags/confirm-flags.component';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +9,10 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements AfterViewInit {
-  constructor(private componentDisplayService: ComponentDisplayService) {}
+  constructor(
+    private componentDisplayService: ComponentDisplayService,
+    public dialog: MatDialog,
+    ) {}
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -16,6 +21,7 @@ export class HomeComponent implements AfterViewInit {
   public showMap: Boolean = false;
   public showInfo: Boolean = false;
   public showGraph: Boolean = false;
+  public loadedFlagsFromPreviousSession: Boolean = false;
   public windowWidthResize = false;
   public showIntro = true;
   public fullHomeScreen = true;
@@ -85,6 +91,19 @@ export class HomeComponent implements AfterViewInit {
     this.showMap = false;
     this.showIntro = false;
     this.selectBtn('graph');
+
+    let flags = localStorage.getItem('cyanFlags');
+
+    //checking if any flags were stored locally in a previous session
+    if (flags != null) { 
+      // prevents popup from opening again if users clicks graph button again after loading locally stored flags
+      if (!this.loadedFlagsFromPreviousSession) {
+        this.loadedFlagsFromPreviousSession = true;
+        this.dialog.open(ConfirmFlagsComponent);
+      }
+    } else {
+      return;
+    }
     this.componentDisplayService.getDisableMap(true);
   }
 

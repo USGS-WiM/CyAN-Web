@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>
+    <mat-icon>flag</mat-icon> Flags found from a previous session
+</h2>
+<mat-dialog-content>
+    <!-- <mat-icon *ngIf="data.messageIcon !== ''">{{data.messageIcon}}</mat-icon> -->
+    Would you like to upload those flags? Selecting 'NO' will permanently delete them.
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div class="detail-section-buttons centered">
+        <button matDialogClose color="warn" class="confirm-flags-button" (click)="clearFlags()">
+            <mat-icon style="margin-left: -30px;">cancel</mat-icon><span style="position: absolute; margin-top: 5px;">&nbsp; NO</span>
+        </button>
+        <!-- The matDialogClose directive optionally accepts a value as a result for the dialog. -->
+        <button [matDialogClose]="true" class="confirm-flags-button" (click)="repopulateGraphFlags()">
+            <mat-icon style="margin-left: -30px;">done</mat-icon><span style="position: absolute; margin-top: 5px;">&nbsp; OK</span>
+        </button>
+    </div>
+</mat-dialog-actions>
