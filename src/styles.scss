@@ -93,7 +93,7 @@ a.modebar-btn svg {
 /* Start full home screen nav buttons */
 .homeBtn {
   height: 60px;
-  width: 240px;
+  width: 265px;
   font-size: 30px;
   vertical-align: middle;
   line-height: 60px;
@@ -274,12 +274,10 @@ a.modebar-btn svg {
   cursor: pointer;
   background-color: rgb(131, 184, 124);
   height: 35px;
-  margin-left: 10px;
   margin-top: 10px;
   text-align: center;
   vertical-align: middle;
-  border: none;
-  font-weight: bold;
+  border: 2px solid rgb(185, 185, 185);
 }
 .disabledDataBtn {
   background-color: rgb(185, 185, 185) !important;
@@ -300,20 +298,20 @@ a.modebar-btn svg {
 /* start: map layers box */
 .mapLayerOptionsBackground {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 240px !important;
+  width: 270px !important;
   height: 130px;
   position: relative;
 }
 .mapLayerOptionsBackgroundResizeH {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 240px !important;
+  width: 270px !important;
   height: 105px;
   margin-top: 5px;
   position: relative;
 }
 .mapLayerOptionsBackgroundResizeW {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 240px !important;
+  width: 270px !important;
   height: 130px;
   margin-left: 0px;
   position: relative;
@@ -339,14 +337,14 @@ a.modebar-btn svg {
 /* start: map filter options box */
 .optionsBackgroundMapFull {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 240px !important;
+  width: 270px !important;
   position: relative;
   overflow-y: auto;
   max-height: 579px;
 }
 .optionsBackgroundMini {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 240px !important;
+  width: 270px !important;
   height: 60px;
   margin-top: 20px;
   position: relative;
@@ -377,7 +375,7 @@ a.modebar-btn svg {
 /* start: graph options box */
 .optionsBackground {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 240px !important;
+  width: 270px !important;
   position: relative;
 }
 .optionsBackgroundResponsive {
@@ -386,14 +384,14 @@ a.modebar-btn svg {
   min-height: 100px;
 }
 .optionsMarginRightLarge {
-  margin-right: 60px;
+  margin-right: 70px;
 }
 .optionsMarginRightSmall {
   margin-right: 5px;
 }
 .graphOptionsBackgroundMini {
   background-color: rgba(255, 255, 255, 0.85);
-  width: 60px !important;
+  width: 65px !important;
   height: 190px;
   position: relative;
   cursor: pointer;
@@ -413,14 +411,14 @@ a.modebar-btn svg {
   height: 10px;
 }
 .leftBreak {
-  margin-left: 10px;
+  margin-left: 20px;
 }
 .rightBreak {
   margin-right: 10px;
 }
 .leftTopBreak {
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 20px;
 }
 .noLeftBreak {
   margin-left: 0px !important;
@@ -464,7 +462,7 @@ a.modebar-btn svg {
 .infoPanel {
   background-color: rgba(255, 255, 255, 0.85);
   width: 45vw;
-  min-width: 240px;
+  min-width: 270px;
   max-width: 700px;
   position: relative;
   padding-bottom: 20px;
@@ -637,7 +635,7 @@ a.modebar-btn svg {
 /* start graph overlays */
 .optionModal {
   z-index: 300;
-  width: 235px !important;
+  width: 245px !important;
   background-color: rgb(255, 255, 255, 0.95);
   position: absolute;
   border: 4px solid #687980;
@@ -652,7 +650,7 @@ a.modebar-btn svg {
 .unflagModal {
   z-index: 300;
   height: 90px;
-  width: 210px !important;
+  width: 220px !important;
   background-color: rgb(255, 255, 255, 0.95);
   position: absolute;
   border: 4px solid #687980;

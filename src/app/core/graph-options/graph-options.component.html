@@ -101,19 +101,20 @@
       </div>
       <div class="flex-container">
         <app-file-upload></app-file-upload>
-        <button class="downloadBtn dataBtn disabledDataBtn" id="flagBtn"
+        <button class="downloadBtn dataBtn disabledDataBtn leftBreak" id="flagBtn"
           (click)="createCSV(this.flaggedData, 'flags.csv')" matTooltip="Download CSV"
           aria-label="Clicking this button will download a CSV of the flagged data">
           <mat-icon>cloud_download</mat-icon>
           <mat-icon>flag</mat-icon>
         </button>
       </div>
-      <button id='createGraph' class="plotDataBtn dataBtn" (click)="clickPlotData()"
+      <button id='createGraph' class="plotDataBtn dataBtn leftBreak" (click)="clickPlotData()"
         aria-label="Clicking this button will create a graph using the points defined by the user-defined filters">
         Create Graph
       </button>
-      <button id="graphDataDownloadBtn" class="downloadBtn dataBtn disabledDataBtn" matTooltip="Download Metadata"
-        aria-label="Clicking this button will download a CSV of the filtered points" (click)="downloadGraphMetadata()">
+      <button id="graphDataDownloadBtn" class="downloadBtn dataBtn disabledDataBtn leftBreak"
+        matTooltip="Download Metadata" aria-label="Clicking this button will download a CSV of the filtered points"
+        (click)="downloadGraphMetadata()">
         <mat-icon>cloud_download</mat-icon>
         <mat-icon>library_books</mat-icon>
       </button>
@@ -123,11 +124,11 @@
     aria-label="This is a graph displaying the points that were filtered using the menu located to the left of this graph">
     <div class="unflagModal" [hidden]="!showUnflagOptions">
       <div>Are you sure you want to remove all plotted flags?</div>
-      <button class="mapFilterBtn dataBtn noLeftBreak" (click)="sumbitUnflagSelections()"
+      <button class="mapFilterBtn dataBtn" (click)="sumbitUnflagSelections()"
         aria-label="Click this button to save flag options">
         Yes
       </button>
-      <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+      <button class="mapFilterBtn dataBtn leftBreak" (click)="closeFlagOptions()"
         aria-label="Click this button to close the flag options modal without saving changes">
         No
       </button>
@@ -161,11 +162,15 @@
               </mat-checkbox>
             </div>
           </div>
-          <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypes()" id="continueToFlagOptions"
-            aria-label="Click this button to save flag options">
+          <button class="mapFilterBtn dataBtn leftBreak" (click)="goToFlagTypes()" id="continueToFlagOptions"
+            [hidden]="noFlagsSelected" aria-label="Click this button to save flag options">
             Next
           </button>
-          <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+          <button class="mapFilterBtn dataBtn leftBreak" (click)="submitFlagSelections()" [hidden]="!noFlagsSelected"
+            aria-label="Click this button to save flag options">
+            Submit
+          </button>
+          <button class="mapFilterBtn dataBtn leftBreak" (click)="closeFlagOptions()"
             aria-label="Click this button to close the flag options modal without saving changes">
             Cancel
           </button>
@@ -211,7 +216,7 @@
             </div>
           </form>
         </div>
-        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate" class="leftBreak">
           <mat-label>Notes</mat-label>
           <textarea style="resize: none" id='flagAnnotationX' matInput
             placeholder="Enter a custom flag annotation here"></textarea>
@@ -227,15 +232,15 @@
             </div>
           </form>
         </div>
-        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="goToFlagTypesY()"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="goToFlagTypesY()"
           [hidden]="!differentYflags || submitAfterX" aria-label="Click this button to save flag options">
           Next
         </button>
-        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()" [hidden]="differentYflags"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="submitFlagSelections()" [hidden]="differentYflags"
           aria-label="Click this button to save flag options">
           Submit
         </button>
-        <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="closeFlagOptions()"
           aria-label="Click this button to close the flag options modal without saving changes">
           Cancel
         </button>
@@ -280,22 +285,21 @@
             </div>
           </form>
         </div>
-        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate">
+        <mat-form-field style="margin-top: 10px;" appearance="fill" id="annotate" class="leftBreak">
           <mat-label>Notes</mat-label>
           <textarea style="resize: none" id='flagAnnotationY' matInput
             placeholder="Enter a custom flag annotation here"></textarea>
         </mat-form-field>
-        <button class="mapFilterBtn dataBtn noLeftBreak" (click)="submitFlagSelections()"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="submitFlagSelections()"
           aria-label="Click this button to save flag options">
           Submit
         </button>
-        <button class="mapFilterBtn dataBtn" (click)="closeFlagOptions()"
+        <button class="mapFilterBtn dataBtn leftBreak" (click)="closeFlagOptions()"
           aria-label="Click this button to close the flag options modal without saving changes">
           Cancel
         </button>
       </div>
     </div>
-
     <div id="graph" [hidden]="!this.showGraph"></div>
   </div>
 </div>
