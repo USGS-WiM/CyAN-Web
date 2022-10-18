@@ -7,12 +7,12 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <div class="detail-section-buttons centered">
-        <button matDialogClose color="warn" class="cancel" (click)="clearFlags()">
-            <mat-icon>cancel</mat-icon>&nbsp;NO
+        <button matDialogClose color="warn" class="confirm-flags-button" (click)="clearFlags()">
+            <mat-icon style="margin-left: -30px;">cancel</mat-icon><span style="position: absolute; margin-top: 5px;">&nbsp; NO</span>
         </button>
         <!-- The matDialogClose directive optionally accepts a value as a result for the dialog. -->
-        <button [matDialogClose]="true" class="confirmButton" (click)="repopulateGraphFlags()">
-            <mat-icon>done</mat-icon>&nbsp; OK
+        <button [matDialogClose]="true" class="confirm-flags-button" (click)="repopulateGraphFlags()">
+            <mat-icon style="margin-left: -30px;">done</mat-icon><span style="position: absolute; margin-top: 5px;">&nbsp; OK</span>
         </button>
     </div>
 </mat-dialog-actions>

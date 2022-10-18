@@ -714,15 +714,16 @@ h2,
     margin-bottom: 20px;
 }
 
-.confirmButton{
+/* Confirm Flags Dialog Styles */
+.confirm-flags-button{
   font-size: 16px;
   margin-bottom: 5px;
   color: white;
   cursor: pointer;
   background-color: #83b87c;
   height: 35px;
+  width: 85px;
   margin-left: 10px;
-  width: 80px;
   margin-top: 10px;
   text-align: center;
   vertical-align: middle;
@@ -730,18 +731,14 @@ h2,
   font-weight: bold;
 }
 
-.cancel{
-  font-size: 16px;
-  margin-bottom: 5px;
-  color: white;
-  cursor: pointer;
-  background-color: #83b87c;
-  height: 35px;
-  margin-left: 10px;
-  margin-top: 10px;
-  text-align: center;
-  vertical-align: middle;
-  border: none;
-  font-weight: bold;
+// Prev and next buttons
+.detail-section-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  &.centered {
+      justify-content: center;
+  }
 }
 
