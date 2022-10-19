@@ -77,7 +77,6 @@ export class GraphSelectionsService {
     return this.subject.asObservable();
   }
 
-
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
@@ -205,6 +204,8 @@ export class GraphSelectionsService {
     this.allDataY = [];
     this.pointColors = [];
     this.pointSymbol = [];
+    this.allBorderWidths = [];
+    this.allSizes = [];
     this.sid = [];
     let flagX = [];
     let flagY = [];
