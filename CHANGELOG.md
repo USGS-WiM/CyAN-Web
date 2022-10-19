@@ -72,3 +72,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - CSV upload works when user saves file in Excel
 - Waits to rescale plot until after flag selections are submitted
 - In flag modal, 'Next' button changes to 'Submit' when both axes are unchecked
+- Reset point size and border arrays when new graph is generated
