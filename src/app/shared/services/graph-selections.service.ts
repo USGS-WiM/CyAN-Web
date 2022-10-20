@@ -207,6 +207,8 @@ export class GraphSelectionsService {
     this.allDataY = [];
     this.pointColors = [];
     this.pointSymbol = [];
+    this.allBorderWidths = [];
+    this.allSizes = [];
     this.sid = [];
     let flagX = [];
     let flagY = [];
