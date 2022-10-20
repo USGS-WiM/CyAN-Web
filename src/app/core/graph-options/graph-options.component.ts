@@ -99,9 +99,9 @@ export class GraphOptionsComponent implements OnInit {
   public flags$: Observable<any[]>;
   //Colors for all 4 flagging options
   public unflaggedColor: string = 'rgba(242, 204, 177, 0.2)';
-  public xyFlaggedColor: string = 'rgb(0, 153, 0)';
-  public xFlaggedColor: string = 'rgb(255, 0, 255)';
-  public yFlaggedColor: string = 'rgb(0, 204, 204)';
+  public xyFlaggedColor: string = 'rgb(17, 119, 51)';
+  public xFlaggedColor: string = 'rgb(136, 204, 238)';
+  public yFlaggedColor: string = 'rgb(170, 68, 153)';
   public pointBorderColor: string = 'rgba(242, 204, 177, 1)';
   //Symbols for flagged vs unflagged
   public allColors = [];
@@ -111,10 +111,13 @@ export class GraphOptionsComponent implements OnInit {
   public unflaggedSymbol: string = 'circle';
   public flaggedSymbol: string = 'circle';
   public unflaggedSize: number = 16;
-  public flaggedSize: number = 12;
+  public flaggedSize: number = 13;
   public flaggedBorderWidth: number = 0;
   public unflaggedBorderWidth: number = 2;
   public singlePointSelected: Boolean = true;
+  public xySymbol: string = 'cross';
+  public xSymbol: string = 'triangle-up';
+  public ySymbol: string = 'square';
 
   public selectedPoints;
 
@@ -170,7 +173,7 @@ export class GraphOptionsComponent implements OnInit {
     private graphSelectionsService: GraphSelectionsService,
     public snackBar: MatSnackBar,
     private componentDisplayService: ComponentDisplayService,
-    private iterableDiffers: IterableDiffers,
+    private iterableDiffers: IterableDiffers
   ) {
     this.parameterTypes$ = this.filterService.parameterTypes$;
     this.methodTypes$ = this.filterService.methodTypes$;
@@ -185,7 +188,7 @@ export class GraphOptionsComponent implements OnInit {
     this.resizeDivs(true);
   }
 
-  @HostListener("window:beforeunload")
+  @HostListener('window:beforeunload')
   alert() {
     if (this.flaggedData.length > 0) {
       // returning false will show a browser warning
@@ -203,9 +206,11 @@ export class GraphOptionsComponent implements OnInit {
     this.initiateGraphService();
     this.getUnits();
     this.graphSelectionsService.getFlagConfirmClickEvent().subscribe(() => {
-        this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
-        this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
-    })
+      this.graphSelectionsService.flagsSubject.next(
+        JSON.parse(localStorage['cyanFlags'])
+      );
+      this.flaggedData = JSON.parse(localStorage['cyanFlags']);
+    });
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
         setTimeout(() => {
@@ -487,7 +492,7 @@ export class GraphOptionsComponent implements OnInit {
       marker: {
         size: 12,
         color: this.xFlaggedColor,
-        symbol: this.flaggedSymbol,
+        symbol: this.xSymbol,
       },
     };
 
@@ -501,7 +506,7 @@ export class GraphOptionsComponent implements OnInit {
       marker: {
         size: 12,
         color: this.yFlaggedColor,
-        symbol: this.flaggedSymbol,
+        symbol: this.ySymbol,
       },
     };
 
@@ -515,7 +520,7 @@ export class GraphOptionsComponent implements OnInit {
       marker: {
         size: 12,
         color: this.xyFlaggedColor,
-        symbol: this.flaggedSymbol,
+        symbol: this.xySymbol,
       },
     };
 
@@ -926,7 +931,7 @@ export class GraphOptionsComponent implements OnInit {
     }
 
     // storing the cyanFlags in browser local storage
-    localStorage.setItem("cyanFlags", JSON.stringify(this.flaggedData));
+    localStorage.setItem('cyanFlags', JSON.stringify(this.flaggedData));
 
     updateGraphCalled = false;
     this.lasso = false;
@@ -1060,7 +1065,7 @@ export class GraphOptionsComponent implements OnInit {
         this.updateGraph(
           this.xyFlaggedColor,
           'both',
-          this.flaggedSymbol,
+          this.xySymbol,
           this.flaggedBorderWidth,
           this.flaggedSize,
           flagTypesX,
@@ -1074,7 +1079,7 @@ export class GraphOptionsComponent implements OnInit {
         this.updateGraph(
           this.yFlaggedColor,
           'y',
-          this.flaggedSymbol,
+          this.ySymbol,
           this.flaggedBorderWidth,
           this.flaggedSize,
           flagTypesX,
@@ -1089,7 +1094,7 @@ export class GraphOptionsComponent implements OnInit {
         this.updateGraph(
           this.xFlaggedColor,
           'x',
-          this.flaggedSymbol,
+          this.xSymbol,
           this.flaggedBorderWidth,
           this.flaggedSize,
           flagTypesX,
@@ -1121,7 +1126,7 @@ export class GraphOptionsComponent implements OnInit {
         this.updateGraph(
           this.xyFlaggedColor,
           'x',
-          this.flaggedSymbol,
+          this.xSymbol,
           this.flaggedBorderWidth,
           this.unflaggedSize,
           flagTypesX,
@@ -1360,7 +1365,7 @@ export class GraphOptionsComponent implements OnInit {
     let tempP_Y_value = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
-    
+
     //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X_value === null ||

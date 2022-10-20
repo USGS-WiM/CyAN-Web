@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Metadata section with CSV downloads in user's guide
 - Stores flag data in local storage which gives user option to use them after closing tab
 - Browser warning when refreshing or closing tab on graph tab
+- Guidance/changes related to accessibility
 
 ### Changed
 

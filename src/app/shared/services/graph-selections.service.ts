@@ -77,7 +77,6 @@ export class GraphSelectionsService {
     return this.subject.asObservable();
   }
 
-
   public sidSubject = new BehaviorSubject<any>(undefined);
   sid$ = this.sidSubject.asObservable();
 
@@ -97,13 +96,13 @@ export class GraphSelectionsService {
   //Colors for all 4 flagging options
   public pointColors: Array<String> = [];
   public unflaggedColor: string = 'rgba(242, 204, 177, 0.2)';
-  public xyFlaggedColor: string = 'rgb(0, 153, 0)';
-  public xFlaggedColor: string = 'rgb(255, 0, 255)';
-  public yFlaggedColor: string = 'rgb(0, 204, 204)';
+  public xyFlaggedColor: string = 'rgb(17, 119, 51)';
+  public xFlaggedColor: string = 'rgb(136, 204, 238)';
+  public yFlaggedColor: string = 'rgb(170, 68, 153)';
   public pointBorderColor: string = 'rgba(242, 204, 177, 1)';
   public flaggedBorderWidth: number = 0;
   public unflaggedBorderWidth: number = 2;
-  public flaggedSize: number = 12;
+  public flaggedSize: number = 13;
   public unflaggedSize: number = 16;
   public allBorderWidths: Array<Number> = [];
   public allSizes: Array<Number> = [];
@@ -111,6 +110,9 @@ export class GraphSelectionsService {
   public pointSymbol: Array<String> = [];
   public unflaggedSymbol: string = 'circle';
   public flaggedSymbol: string = 'circle';
+  public xySymbol: string = 'cross';
+  public xSymbol: string = 'triangle-up';
+  public ySymbol: string = 'square';
 
   //Retrieve x and y data from service
   public getTempArrays(
@@ -279,19 +281,19 @@ export class GraphSelectionsService {
     //Add an x flag marker to the color and symbol arrays
     if (xFlag == true && yFlag == false) {
       this.pointColors.push(this.xFlaggedColor);
-      this.pointSymbol.push(this.flaggedSymbol);
+      this.pointSymbol.push(this.xSymbol);
       this.allBorderWidths.push(this.flaggedBorderWidth);
       this.allSizes.push(this.flaggedSize);
       //Add a y flag marker to the color and symbol arrays
     } else if (xFlag == false && yFlag == true) {
       this.pointColors.push(this.yFlaggedColor);
-      this.pointSymbol.push(this.flaggedSymbol);
+      this.pointSymbol.push(this.ySymbol);
       this.allBorderWidths.push(this.flaggedBorderWidth);
       this.allSizes.push(this.flaggedSize);
       //Add an xy flag marker to the color and symbol arrays
     } else if (xFlag == true && yFlag == true) {
       this.pointColors.push(this.xyFlaggedColor);
-      this.pointSymbol.push(this.flaggedSymbol);
+      this.pointSymbol.push(this.xySymbol);
       this.allBorderWidths.push(this.flaggedBorderWidth);
       this.allSizes.push(this.flaggedSize);
       //No flags; add a default marker to the color and symbol arrays
