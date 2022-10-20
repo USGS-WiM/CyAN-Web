@@ -2,19 +2,14 @@
   aria-label="This panel contains information about CyAN">
   <div class="aboutModal">
     <div class="flex-container">
-      <div matTooltip="FAQ" style="cursor: pointer; height: 45px; width: 45px; margin-right: 5px; text-align: center;"
-        (click)=" aboutView('faqView')" id="faqViewID">
-        <mat-icon class="aboutText flex-child" style="margin-left: -5px; margin-top: 5px">question_answer</mat-icon>
+      <div matTooltip="FAQ" class="aboutBtn" (click)=" aboutView('faqView')" id="faqViewID">
+        <mat-icon class="aboutText flex-child aboutIcon">question_answer</mat-icon>
       </div>
-      <div matTooltip="User's Guide"
-        style="cursor: pointer; height: 45px; width: 45px; margin-right: 5px; text-align: center"
-        (click)="aboutView('userGuideView')" id="userGuideViewID">
-        <mat-icon class="aboutText flex-child" style="margin-left: -5px; margin-top: 5px">library_books</mat-icon>
+      <div matTooltip="User's Guide" class="aboutBtn" (click)="aboutView('userGuideView')" id="userGuideViewID">
+        <mat-icon class="aboutText flex-child aboutIcon">library_books</mat-icon>
       </div>
-      <div matTooltip="Disclaimer"
-        style="cursor: pointer; height: 45px; width: 45px; margin-right: 5px; text-align: center"
-        (click)="aboutView('disclaimerView')" id="disclaimerViewID">
-        <mat-icon class="aboutText flex-child" style="margin-left: -5px; margin-top: 5px">warning</mat-icon>
+      <div matTooltip="Disclaimer" class="aboutBtn" (click)="aboutView('disclaimerView')" id="disclaimerViewID">
+        <mat-icon class="aboutText flex-child aboutIcon">warning</mat-icon>
       </div>
     </div>
     <div style="margin-top: 20px;" [hidden]="!userGuide">

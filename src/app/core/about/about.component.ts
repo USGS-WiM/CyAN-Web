@@ -23,7 +23,8 @@ export class AboutComponent implements OnInit {
   public selectedBackground = null;
   public buttonText = 'rgb(255, 255, 255)';
   public buttonBackground = '#f2ccb1';
-  public buttonBorder = '3px solid #83b2d0';
+  public buttonBorderSelected = '2px solid white';
+  public buttonBorder = '2px solid rgb(163, 152, 152)';
 
   //Data retrieved from service
   public parameterTypes$: Observable<any[]>;
@@ -109,7 +110,7 @@ export class AboutComponent implements OnInit {
     if (button == 'faqView') {
       faqViewID.style.color = this.buttonBackground;
       faqViewID.style.backgroundColor = this.selectedBackground;
-      faqViewID.style.border = null;
+      faqViewID.style.border = this.buttonBorderSelected;
 
       userGuideViewID.style.color = this.buttonText;
       userGuideViewID.style.backgroundColor = this.buttonBackground;
@@ -122,7 +123,7 @@ export class AboutComponent implements OnInit {
     if (button == 'disclaimerView') {
       disclaimerViewID.style.color = this.buttonBackground;
       disclaimerViewID.style.backgroundColor = this.selectedBackground;
-      disclaimerViewID.style.border = null;
+      disclaimerViewID.style.border = this.buttonBorderSelected;
 
       userGuideViewID.style.color = this.buttonText;
       userGuideViewID.style.backgroundColor = this.buttonBackground;
@@ -135,7 +136,7 @@ export class AboutComponent implements OnInit {
     if (button == 'userGuideView') {
       userGuideViewID.style.color = this.buttonBackground;
       userGuideViewID.style.backgroundColor = this.selectedBackground;
-      userGuideViewID.style.border = null;
+      userGuideViewID.style.border = this.buttonBorderSelected;
 
       disclaimerViewID.style.color = this.buttonText;
       disclaimerViewID.style.backgroundColor = this.buttonBackground;
