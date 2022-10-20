@@ -1126,9 +1126,9 @@ export class GraphOptionsComponent implements OnInit {
         this.updateGraph(
           this.xyFlaggedColor,
           'x',
-          this.xSymbol,
+          this.xySymbol,
           this.flaggedBorderWidth,
-          this.unflaggedSize,
+          this.flaggedSize,
           flagTypesX,
           flagTypesY,
           annotationX,
