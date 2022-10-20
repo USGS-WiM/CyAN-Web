@@ -913,8 +913,10 @@ export class GraphOptionsComponent implements OnInit {
 
     //If only one point was selected, do not need to re-create graph
     if (!this.singlePointSelected) {
+      console.log('mulitple points selected');
       this.createGraph(false);
     } else {
+      console.log('only one point selected');
       //New styling for new plot
       let update = {
         marker: {
@@ -1223,6 +1225,7 @@ export class GraphOptionsComponent implements OnInit {
     });
     this.bivariatePlot.on('plotly_selected', (selectedPoints) => {
       if (selectedPoints) {
+        this.singlePointSelected = false;
         this.selectedPoints = selectedPoints.points;
         //Open flag options modal
         this.showFlagOptions = true;

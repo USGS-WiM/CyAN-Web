@@ -1,4 +1,4 @@
-<input type="file" class="hidden" multiple (change)="uploadedFlags($event)" #fileUpload>
+<input type="file" class="hidden" multiple (change)="uploadedFlags($event)" #fileUpload aria-hidden="true">
 <div>
     <button id='flagUpload' class="downloadBtn dataBtn leftBreak" (click)="fileUpload.click(); uploadOneFile()"
         matTooltip="Upload CSV">
