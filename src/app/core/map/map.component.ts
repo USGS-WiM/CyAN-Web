@@ -35,6 +35,7 @@ export class MapComponent implements AfterViewInit {
         base.removeFrom(this.map);
       }
     });
+    // listening for clear map click event issued from map-options.component
     this.mapLayersService.getClearMapClickEvent().subscribe(() => {
       this.clearMap();
     });
@@ -105,7 +106,7 @@ export class MapComponent implements AfterViewInit {
                             count = 0;
                           }
                         }
-                        if (i === pCodes.length - 1) {
+                        if (i !== 0) {
                           pCodeSummary.push({
                             pCode: tempCode,
                             count: count,
@@ -200,8 +201,10 @@ export class MapComponent implements AfterViewInit {
     this.disableMap();
   }
   private clearMap() {
+      //clearing map observables in services
       this.mapLayersService.filterWqSample(undefined);
 
+      //resetting map view
       const startingBounds = [45.2, -85.62];
       this.map.setView(startingBounds, 7);
   }

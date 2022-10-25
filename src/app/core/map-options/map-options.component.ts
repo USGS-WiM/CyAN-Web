@@ -340,7 +340,6 @@ export class MapOptionsComponent implements OnInit {
   public nullwarning(nullChecked: MatCheckboxChange) {
     this.nullDataChecked = false; // Forces value to always remain false, remove when working correctly
     nullChecked.checked = false; // Forces value to always remain false, remove when working correctly
-    nullChecked.checked = false; // Forces value to always remain false, remove when working correctly
     let mapLayersOptions = document.getElementById('mapLayersOptions');
     let mapOptionsContainer = document.getElementById('mapOptionsContainer');
     if (nullChecked.checked) {
@@ -629,7 +628,8 @@ export class MapOptionsComponent implements OnInit {
     this.maxYear = 2021;
     this.matchingMcodes = [];
     this.snToPcode = [];
-    // reseting checkboxes
+
+    // resetting checkboxes
     let nullCheckboxElement = document.getElementById('nullCheckbox');
     nullCheckboxElement.classList.remove('mat-checkbox-checked');
     if (this.optimalAlignment == true) {
@@ -638,10 +638,11 @@ export class MapOptionsComponent implements OnInit {
     if (this.nullDataChecked == true) {
       this.nullDataChecked = false;
     }
+
     // resetting chip list else the selected param chip remains
     this.chipParams = [];
     
-    //passing object to service to trigger map updates
+    //sending click trigger for recognition in map.component
     this.mapLayersService.sendClearMapClickEvent();
   }
 }
