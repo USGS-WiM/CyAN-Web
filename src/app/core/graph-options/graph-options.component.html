@@ -80,23 +80,23 @@
       </div>
       <div class="leftBreak">
         Log Scale &nbsp;
-        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogX($event)"
+        <mat-checkbox  class="example-margin" [disableRipple]="true" (change)="applyLogX($event)" id="xLogCheckbox"
           aria-label="Checking this box will add a logarithmic scale to the x-axis">x
         </mat-checkbox>
         &nbsp;
-        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogY($event)"
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogY($event)" id="yLogCheckbox"
           aria-label="Checking this box will add a logarithmic scale to the y-axis">y
         </mat-checkbox>
       </div>
       <div class="leftTopBreak" aria-label="Checking this box will filter points using the current map extent">
-        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)">Limit by study
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)" id="applyBoundingCheckbox">Limit by study
           area <br />
           specified in map options
         </mat-checkbox>
       </div>
       <div class="leftTopBreak" aria-label="Checking this box will filter points that have optimal satellite alignment"
         (change)="clickSatAlign($event)">
-        <mat-checkbox class="example-margin" [disableRipple]="true">Optimal satellite alignment
+        <mat-checkbox class="example-margin" [disableRipple]="true" id="optSatCheckbox">Optimal satellite alignment
         </mat-checkbox>
       </div>
       <div class="flex-container">
@@ -117,6 +117,10 @@
         (click)="downloadGraphMetadata()">
         <mat-icon>cloud_download</mat-icon>
         <mat-icon>library_books</mat-icon>
+      </button>
+      <button class="plotDataBtn dataBtn leftBreak"
+        aria-label="Click this button to clear the graph" (click)="clearGraph()">
+        Clear Filters
       </button>
     </div>
   </div>

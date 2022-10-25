@@ -111,12 +111,16 @@
         </mat-form-field>
       </div>
     </form>
-    <mat-checkbox [disableRipple]="true" (change)="clickSatelliteAlignment($event)"
+    <mat-checkbox [checked]="optimalAlignment" [disableRipple]="true" (change)="clickSatelliteAlignment($event)"
       aria-label="Check this box to filter points that have optimal satellite alignment">Optimal satellite alignment
     </mat-checkbox>
     <mat-checkbox [disableRipple]="true" [checked]="nullDataChecked" (change)="nullwarning($event)" id="nullCheckbox"
       aria-label="Check this box to include sites with null values">Include null values</mat-checkbox>
   </div>
+  <button class="mapFilterBtn dataBtn leftBreak"
+    aria-label="Click this button to clear map filters" (click)="clearMapFilters()">
+    Clear Map
+  </button>
   <button class="mapFilterBtn dataBtn leftBreak" (click)="runFilters()"
     aria-label="Click this button to filter points and plot them on the map">
     Plot Points
