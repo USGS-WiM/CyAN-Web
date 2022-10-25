@@ -200,14 +200,17 @@ export class MapComponent implements AfterViewInit {
     this.componentDisplayService.getDisableMap(true);
     this.disableMap();
   }
+
   private clearMap() {
       //clearing map observables in services
       this.mapLayersService.filterWqSample(undefined);
 
-      //resetting map view
+      //resetting map view and closing any popups
       const startingBounds = [45.2, -85.62];
       this.map.setView(startingBounds, 7);
+      this.map.closePopup();
   }
+  
   private getMapBoundingBox() {
     this.northBounds = this.map.getBounds().getNorth();
     this.southBounds = this.map.getBounds().getSouth();
