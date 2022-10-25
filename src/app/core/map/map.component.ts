@@ -106,7 +106,7 @@ export class MapComponent implements AfterViewInit {
                             count = 0;
                           }
                         }
-                        if (i !== 0) {
+                        if (i === pCodes.length - 1) {
                           pCodeSummary.push({
                             pCode: tempCode,
                             count: count,
