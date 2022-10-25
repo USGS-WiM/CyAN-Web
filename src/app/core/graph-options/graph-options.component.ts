@@ -203,9 +203,9 @@ export class GraphOptionsComponent implements OnInit {
     this.initiateGraphService();
     this.getUnits();
     this.graphSelectionsService.getFlagConfirmClickEvent().subscribe(() => {
-        this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
-        this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
-    })
+      this.graphSelectionsService.flagsSubject.next(JSON.parse(localStorage["cyanFlags"]));
+      this.flaggedData = JSON.parse(localStorage["cyanFlags"]);
+    });
     this.componentDisplayService.usaBarCollapseSubject.subscribe(
       (usaBarBoolean) => {
         setTimeout(() => {
@@ -1360,7 +1360,7 @@ export class GraphOptionsComponent implements OnInit {
     let tempP_Y_value = this.graphSelectionsForm.get('ParametersY').value;
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
-    
+
     //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X_value === null ||
@@ -1784,5 +1784,70 @@ export class GraphOptionsComponent implements OnInit {
   }
   uncheckDatefromMapOptions() {
     this.datefromMap.checked = false;
+  }
+
+  clearGraph() {
+    // resetting forms
+    this.graphSelectionsForm.reset();
+    this.axisFlagForm.reset();
+    this.flagTypesX.reset();
+    this.flagTypesY.reset();
+    this.sameXYFlag.reset();
+
+    //resetting checkboxes
+    this.datefromMap.checked = false;
+    let xLogCheckbox = document.getElementById('xLogCheckbox');
+    xLogCheckbox.classList.remove('mat-checkbox-checked');
+    let yLogCheckbox = document.getElementById('yLogCheckbox');
+    yLogCheckbox.classList.remove('mat-checkbox-checked');
+    let applyBoundingCheckbox = document.getElementById('applyBoundingCheckbox');
+    applyBoundingCheckbox.classList.remove('mat-checkbox-checked');
+    let optSatCheckbox = document.getElementById('optSatCheckbox');
+    optSatCheckbox.classList.remove('mat-checkbox-checked');
+
+
+    //resetting graph data
+    this.currentXaxisValues = [];
+    this.currentYaxisValues = [];
+    this.flaggedPointIndices = { x: [], y: [] };
+    this.allGraphData;
+    this.graphMetadata;
+
+    //resetting graph layout
+    this.xAxisType = 'scatter';
+    this.yAxisType = 'scatter';
+    this.yAxisTitle = '';
+    this.xAxisTitle = '';
+    this.yAxisParameter = '';
+    this.xAxisParameter = '';
+    this.autotickEnabled = true;
+    this.xAxisUnits = '';
+    this.yAxisUnits = '';
+
+    // resetting graph options
+    this.optimalAlignment = false;
+    this.useBoundingBox = false;
+    this.minYear = 1975;
+    this.maxYear = 2021;
+    this.timeOptions = {
+      floor: 1975,
+      ceil: 2021,
+      barDimension: 210,
+      animate: false,
+    };
+    this.north = 90;
+    this.south = -90;
+    this.east = 180;
+    this.west = -180;
+    this.regions = [];
+    this.datefromMapChecked = false;
+
+    // purging the graph and hiding the div
+    if (this.bivariatePlot == undefined) {
+      Plotly.purge(this.bivariatePlot);
+    }
+    if (this.showGraph){
+      this.showGraph = false;
+    }   
   }
 }

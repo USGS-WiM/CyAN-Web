@@ -338,7 +338,9 @@ export class MapOptionsComponent implements OnInit {
 
   //Warn user that including null values is probably a bad idea
   public nullwarning(nullChecked: MatCheckboxChange) {
-    this.nullDataChecked = false;
+    this.nullDataChecked = false; // Forces value to always remain false, remove when working correctly
+    nullChecked.checked = false; // Forces value to always remain false, remove when working correctly
+    nullChecked.checked = false; // Forces value to always remain false, remove when working correctly
     let mapLayersOptions = document.getElementById('mapLayersOptions');
     let mapOptionsContainer = document.getElementById('mapOptionsContainer');
     if (nullChecked.checked) {
@@ -612,5 +614,34 @@ export class MapOptionsComponent implements OnInit {
       //set height of point filters according to map height
       mapPointFilterDiv.style.height = (mapHeight - 250).toString() + 'px';
     }
+  }
+
+  clearMapFilters(){
+    // resetting forms
+    this.paramMethodForm.reset();
+    this.boundingBoxForm.reset();
+    this.regionForm.reset();
+
+    //resetting variables
+    this.filterService.getMaxYear(2021);
+    this.filterService.getMinYear(1975);
+    this.minYear = 1975;
+    this.maxYear = 2021;
+    this.matchingMcodes = [];
+    this.snToPcode = [];
+    // reseting checkboxes
+    let nullCheckboxElement = document.getElementById('nullCheckbox');
+    nullCheckboxElement.classList.remove('mat-checkbox-checked');
+    if (this.optimalAlignment == true) {
+      this.optimalAlignment = false;
+    }
+    if (this.nullDataChecked == true) {
+      this.nullDataChecked = false;
+    }
+    // resetting chip list else the selected param chip remains
+    this.chipParams = [];
+    
+    //passing object to service to trigger map updates
+    this.mapLayersService.sendClearMapClickEvent();
   }
 }

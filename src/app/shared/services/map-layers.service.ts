@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
@@ -82,20 +82,23 @@ export class MapLayersService {
     let base = document.getElementById('base');
     base.classList.add('initial-loader');
 
-    //if one of the bounding boxes is blank, don't constrain the query in that direction
-    if (isNaN(options.meta.south)) {
-      options.meta.south = -90;
-    }
-    if (isNaN(options.meta.north)) {
-      options.meta.north = 90;
-    }
-    if (isNaN(options.meta.east)) {
-      options.meta.east = 180;
-    }
-    if (isNaN(options.meta.west)) {
-      options.meta.west = -180;
-    }
-
+    // if options are not defined do not make request
+    if(options !== undefined) {
+      //if one of the bounding boxes is blank, don't constrain the query in that direction
+      if (isNaN(options.meta.south)) {
+        options.meta.south = -90;
+      }
+      if (isNaN(options.meta.north)) {
+        options.meta.north = 90;
+      }
+      if (isNaN(options.meta.east)) {
+        options.meta.east = 180;
+      }
+      if (isNaN(options.meta.west)) {
+        options.meta.west = -180;
+      }
+    
+    
     return this.httpClient
       .post(APP_SETTINGS.wqDataURL, options)
       .subscribe((res: any[]) => {
@@ -125,6 +128,21 @@ export class MapLayersService {
           mapDownloadBtn.classList.remove('disabledDataBtn');
         }
       });
+    } else if (options == undefined) { //Clears observables, resetting the map and map options for a new query
+      this.filterWqSampleSubject.next(undefined);
+      this.mapQueryResultsSubject.next(undefined);
+      base.classList.remove('initial-loader');
+      let mapDownloadBtn = document.getElementById('mapDownloadBtn');
+      mapDownloadBtn.classList.add('disabledDataBtn');
+    }
+  }
+
+  private clearMapSubject = new Subject<any>();
+  sendClearMapClickEvent() {
+    this.clearMapSubject.next();
+  }
+  getClearMapClickEvent(): Observable<any> {
+    return this.clearMapSubject.asObservable();
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

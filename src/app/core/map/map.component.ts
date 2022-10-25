@@ -35,123 +35,126 @@ export class MapComponent implements AfterViewInit {
         base.removeFrom(this.map);
       }
     });
+    this.mapLayersService.getClearMapClickEvent().subscribe(() => {
+      this.clearMap();
+    });
     this.mapLayersService.filterWqSampleSubject.subscribe((points) => {
-      this.mapLayersService.mapQueryResultsSubject.subscribe(
-        (mapQueryResults) => {
-          if (this.currentPoints) {
-            this.currentPoints.removeFrom(this.map);
-          }
-          if (points) {
-            if (points._leaflet_id) {
-              this.currentPoints = points;
-              this.currentPoints.addTo(this.map);
-
-              this.zoomToPoints(points);
-              this.currentPoints.on('clusterclick', (cluster) => {
-                setTimeout(() => {
-                  if (mapQueryResults) {
-                    //Created this timeout because otherwise it returns the data of the full screen before it zooms to the clicked point
-                    //Should probably create some variable (observable?) and an observable at the zoomend thing where if they're both true, then the following code is triggered to remove timeout
-                    let northCoords;
-                    let southCoords;
-                    let eastCoords;
-                    let westCoords;
-                    this.componentDisplayService.northBoundsSubject.subscribe(
-                      (coord: number) => (northCoords = coord)
-                    );
-                    this.componentDisplayService.southBoundsSubject.subscribe(
-                      (coord: number) => (southCoords = coord)
-                    );
-                    this.componentDisplayService.eastBoundsSubject.subscribe(
-                      (coord: number) => (eastCoords = coord)
-                    );
-                    this.componentDisplayService.westBoundsSubject.subscribe(
-                      (coord: number) => (westCoords = coord)
-                    );
-                    let matchingPoints = [];
-                    let pCodes = [];
-
-                    for (let i = 0; i < mapQueryResults.length; i++) {
-                      let lat = Number(mapQueryResults[i].latitude);
-                      let lng = Number(mapQueryResults[i].longitude);
-                      if (
-                        lng > westCoords &&
-                        lng < eastCoords &&
-                        lat < northCoords &&
-                        lat > southCoords
-                      ) {
-                        matchingPoints.push(mapQueryResults[i]);
-                        pCodes.push(mapQueryResults[i].pcode);
-                      }
-                    }
-                    pCodes.sort();
-                    let pCodeSummary = [];
-                    let tempCode;
-                    let count = 0;
-                    for (let i = 0; i < pCodes.length; i++) {
-                      if (pCodes[i] !== tempCode) {
-                        if (i === 0) {
-                          count = 1;
+        this.mapLayersService.mapQueryResultsSubject.subscribe(
+          (mapQueryResults) => {
+            if (this.currentPoints) {
+              this.currentPoints.removeFrom(this.map);
+            }
+            if (points) {
+              if (points._leaflet_id) {
+                this.currentPoints = points;
+                this.currentPoints.addTo(this.map);
+  
+                this.zoomToPoints(points);
+                this.currentPoints.on('clusterclick', (cluster) => {
+                  setTimeout(() => {
+                    if (mapQueryResults) {
+                      //Created this timeout because otherwise it returns the data of the full screen before it zooms to the clicked point
+                      //Should probably create some variable (observable?) and an observable at the zoomend thing where if they're both true, then the following code is triggered to remove timeout
+                      let northCoords;
+                      let southCoords;
+                      let eastCoords;
+                      let westCoords;
+                      this.componentDisplayService.northBoundsSubject.subscribe(
+                        (coord: number) => (northCoords = coord)
+                      );
+                      this.componentDisplayService.southBoundsSubject.subscribe(
+                        (coord: number) => (southCoords = coord)
+                      );
+                      this.componentDisplayService.eastBoundsSubject.subscribe(
+                        (coord: number) => (eastCoords = coord)
+                      );
+                      this.componentDisplayService.westBoundsSubject.subscribe(
+                        (coord: number) => (westCoords = coord)
+                      );
+                      let matchingPoints = [];
+                      let pCodes = [];
+  
+                      for (let i = 0; i < mapQueryResults.length; i++) {
+                        let lat = Number(mapQueryResults[i].latitude);
+                        let lng = Number(mapQueryResults[i].longitude);
+                        if (
+                          lng > westCoords &&
+                          lng < eastCoords &&
+                          lat < northCoords &&
+                          lat > southCoords
+                        ) {
+                          matchingPoints.push(mapQueryResults[i]);
+                          pCodes.push(mapQueryResults[i].pcode);
                         }
-                        if (i !== 0) {
+                      }
+                      pCodes.sort();
+                      let pCodeSummary = [];
+                      let tempCode;
+                      let count = 0;
+                      for (let i = 0; i < pCodes.length; i++) {
+                        if (pCodes[i] !== tempCode) {
+                          if (i === 0) {
+                            count = 1;
+                          }
+                          if (i !== 0) {
+                            pCodeSummary.push({
+                              pCode: tempCode,
+                              count: count,
+                              result: 0,
+                            });
+                            count = 0;
+                          }
+                        }
+                        if (i === pCodes.length - 1) {
                           pCodeSummary.push({
                             pCode: tempCode,
                             count: count,
                             result: 0,
                           });
-                          count = 0;
+                        }
+  
+                        tempCode = pCodes[i];
+                        count += 1;
+                      }
+                      for (let i = 0; i < pCodeSummary.length; i++) {
+                        for (let x = 0; x < matchingPoints.length; x++) {
+                          if (pCodeSummary[i].pCode === matchingPoints[x].pcode) {
+                            pCodeSummary[i].result =
+                              pCodeSummary[i].result + matchingPoints[x].result;
+                          }
                         }
                       }
-                      if (i === pCodes.length - 1) {
-                        pCodeSummary.push({
-                          pCode: tempCode,
-                          count: count,
-                          result: 0,
-                        });
-                      }
-
-                      tempCode = pCodes[i];
-                      count += 1;
-                    }
-                    for (let i = 0; i < pCodeSummary.length; i++) {
-                      for (let x = 0; x < matchingPoints.length; x++) {
-                        if (pCodeSummary[i].pCode === matchingPoints[x].pcode) {
-                          pCodeSummary[i].result =
-                            pCodeSummary[i].result + matchingPoints[x].result;
+                      let popupContent =
+                        '<b> Water Samples </b><br/> <hr> <table> <tr> <th>Parameter &nbsp</th> <th>Quantity &nbsp</th> <th>Mean Value &nbsp</th> </tr>';
+                      let totalSamples = matchingPoints.length;
+                      for (let i = 0; i < pCodeSummary.length; i++) {
+                        popupContent =
+                          popupContent +
+                          '<tr><td>' +
+                          pCodeSummary[i].pCode +
+                          '</td><td>' +
+                          pCodeSummary[i].count.toString() +
+                          '</td><td>' +
+                          (
+                            Math.round(pCodeSummary[i].result * 100) / 100
+                          ).toString() +
+                          '</td>';
+                        if (i === pCodeSummary.length - 1) {
+                          popupContent = popupContent + '</tr></table>';
                         }
                       }
+  
+                      let centerLatLng = this.map.getCenter();
+                      this.map.openPopup(popupContent, centerLatLng, {
+                        className: 'custom',
+                      });
                     }
-                    let popupContent =
-                      '<b> Water Samples </b><br/> <hr> <table> <tr> <th>Parameter &nbsp</th> <th>Quantity &nbsp</th> <th>Mean Value &nbsp</th> </tr>';
-                    let totalSamples = matchingPoints.length;
-                    for (let i = 0; i < pCodeSummary.length; i++) {
-                      popupContent =
-                        popupContent +
-                        '<tr><td>' +
-                        pCodeSummary[i].pCode +
-                        '</td><td>' +
-                        pCodeSummary[i].count.toString() +
-                        '</td><td>' +
-                        (
-                          Math.round(pCodeSummary[i].result * 100) / 100
-                        ).toString() +
-                        '</td>';
-                      if (i === pCodeSummary.length - 1) {
-                        popupContent = popupContent + '</tr></table>';
-                      }
-                    }
-
-                    let centerLatLng = this.map.getCenter();
-                    this.map.openPopup(popupContent, centerLatLng, {
-                      className: 'custom',
-                    });
-                  }
-                }, 1000);
-              });
+                  }, 1000);
+                });
+              }
             }
           }
-        }
-      );
+        );  
     });
 
     L.control.scale({ position: 'bottomright' }).addTo(this.map);
@@ -195,6 +198,12 @@ export class MapComponent implements AfterViewInit {
     tiles.addTo(this.map);
     this.componentDisplayService.getDisableMap(true);
     this.disableMap();
+  }
+  private clearMap() {
+      this.mapLayersService.filterWqSample(undefined);
+
+      const startingBounds = [45.2, -85.62];
+      this.map.setView(startingBounds, 7);
   }
   private getMapBoundingBox() {
     this.northBounds = this.map.getBounds().getNorth();
