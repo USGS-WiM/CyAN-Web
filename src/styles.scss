@@ -335,6 +335,12 @@ a.modebar-btn svg {
 /* end: map layers box */
 
 /* start: map filter options box */
+// word-break address very long parameters with underscores that act as spaces
+// this can be removed if underscores get changed to spaces
+mat-chip {
+  max-width: 200px;
+  word-break: break-all;
+}
 .optionsBackgroundMapFull {
   background-color: rgba(255, 255, 255, 0.85);
   width: 270px !important;
