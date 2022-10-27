@@ -1232,6 +1232,7 @@ export class GraphOptionsComponent implements OnInit {
         this.lasso = true;
         this.selectPoints();
         this.disableEnableGraph(true);
+        this.xyFlagClicked();
       }
     });
   }
@@ -1808,11 +1809,12 @@ export class GraphOptionsComponent implements OnInit {
     xLogCheckbox.classList.remove('mat-checkbox-checked');
     let yLogCheckbox = document.getElementById('yLogCheckbox');
     yLogCheckbox.classList.remove('mat-checkbox-checked');
-    let applyBoundingCheckbox = document.getElementById('applyBoundingCheckbox');
+    let applyBoundingCheckbox = document.getElementById(
+      'applyBoundingCheckbox'
+    );
     applyBoundingCheckbox.classList.remove('mat-checkbox-checked');
     let optSatCheckbox = document.getElementById('optSatCheckbox');
     optSatCheckbox.classList.remove('mat-checkbox-checked');
-
 
     //resetting graph data
     this.currentXaxisValues = [];
@@ -1854,8 +1856,8 @@ export class GraphOptionsComponent implements OnInit {
     if (this.bivariatePlot == undefined) {
       Plotly.purge(this.bivariatePlot);
     }
-    if (this.showGraph){
+    if (this.showGraph) {
       this.showGraph = false;
-    }   
+    }
   }
 }

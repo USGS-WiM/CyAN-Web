@@ -77,3 +77,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - In flag modal, 'Next' button changes to 'Submit' when both axes are unchecked
 - Reset point size and border arrays when new graph is generated
 - Horizontal scroll bar appearing and scrolling to white space
+- Submit button appears on lasso select before x/y checkboxes are selected
