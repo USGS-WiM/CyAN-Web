@@ -62,7 +62,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Lasso works to click on a single point
 - Changes look of landing page and About modal buttons
 - Changes size and transparency of unflagged points to help identify overlapping points
-- Graph tab icon to show_graph material icon
 - Put units on second line in graph axis titles
 
 ### Fixed
