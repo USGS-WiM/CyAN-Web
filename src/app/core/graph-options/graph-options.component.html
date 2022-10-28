@@ -31,6 +31,9 @@
                 {{parameter.short_name}}
               </mat-option>
             </mat-autocomplete>
+            <button mat-button *ngIf="graphSelectionsForm && graphSelectionsForm.get('ParametersX').value" matSuffix mat-icon-button aria-label="Clear selected parameter" class="clear-icon" (click)="clearParameter('x')">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
           <mat-form-field appearance="fill"
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
@@ -56,6 +59,9 @@
                 {{parameter.short_name}}
               </mat-option>
             </mat-autocomplete>
+            <button mat-button *ngIf="graphSelectionsForm && graphSelectionsForm.get('ParametersY').value" matSuffix mat-icon-button aria-label="Clear selected parameter" class="clear-icon" (click)="clearParameter('y')">
+              <mat-icon>close</mat-icon>
+            </button>
           </mat-form-field>
           <mat-form-field appearance="fill"
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's y-axis.">
@@ -101,12 +107,14 @@
       </div>
       <div class="flex-container">
         <app-file-upload></app-file-upload>
-        <button class="downloadBtn dataBtn disabledDataBtn leftBreak" id="flagBtn"
-          (click)="createCSV(this.flaggedData, 'flags.csv')" matTooltip="Download CSV"
-          aria-label="Clicking this button will download a CSV of the flagged data">
-          <mat-icon>cloud_download</mat-icon>
-          <mat-icon>flag</mat-icon>
-        </button>
+        <span matTooltip="{{disabledFlagButtonTooltip()}}" [matTooltipDisabled]="flaggedData.length > 0" [matTooltipPosition]="'right'">
+          <button class="downloadBtn dataBtn disabledDataBtn leftBreak" id="flagBtn"
+            (click)="createCSV(this.flaggedData, 'flags.csv')" matTooltip="Download CSV"
+            aria-label="Clicking this button will download a CSV of the flagged data">
+            <mat-icon>cloud_download</mat-icon>
+            <mat-icon>flag</mat-icon>
+          </button>
+        </span>
       </div>
       <button id='createGraph' class="plotDataBtn dataBtn leftBreak" (click)="clickPlotData()"
         aria-label="Clicking this button will create a graph using the points defined by the user-defined filters">
@@ -119,7 +127,7 @@
         <mat-icon>library_books</mat-icon>
       </button>
       <button class="plotDataBtn dataBtn leftBreak"
-        aria-label="Click this button to clear the graph" (click)="clearGraph()">
+        aria-label="Click this button to clear the graph" (click)="clearGraph()" matTooltip="{{clearFiltersTooltip()}}" [matTooltipPosition]="'right'">
         Clear Filters
       </button>
     </div>

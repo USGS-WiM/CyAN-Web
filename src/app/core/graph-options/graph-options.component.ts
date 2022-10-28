@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
+import { TOOLTIPS } from "../../app.tooltips";
 
 @Component({
   selector: 'app-graph-options',
@@ -257,11 +258,11 @@ export class GraphOptionsComponent implements OnInit {
     //Get units for axes labels
     this.graphSelectionsService.xAxisUnitsSubject.subscribe((xUnits) => {
       this.xAxisUnits = xUnits;
-      this.xAxisTitle = this.xAxisParameter + ' ' + xUnits;
+      this.xAxisTitle = this.xAxisParameter + ' <br> ' + xUnits;
     });
     this.graphSelectionsService.yAxisUnitsSubject.subscribe((yUnits) => {
       this.yAxisUnits = yUnits;
-      this.yAxisTitle = this.yAxisParameter + ' ' + yUnits;
+      this.yAxisTitle = this.yAxisParameter + ' <br> ' + yUnits;
     });
   }
 
@@ -542,6 +543,9 @@ export class GraphOptionsComponent implements OnInit {
         type: this.xAxisType,
         title: {
           text: this.xAxisTitle,
+          font: {
+            size: 18
+          },
         },
       },
       yaxis: {
@@ -549,6 +553,9 @@ export class GraphOptionsComponent implements OnInit {
         type: this.yAxisType,
         title: {
           text: this.yAxisTitle,
+          font: {
+            size: 18
+          },
         },
       },
       paper_bgcolor: 'rgba(255, 255, 255, 0)',
@@ -1795,6 +1802,17 @@ export class GraphOptionsComponent implements OnInit {
     this.datefromMap.checked = false;
   }
 
+  //clears selected parameters/form values when 'x' icon is clicked
+  clearParameter(axis) {
+    if (axis == 'x') {
+      this.graphSelectionsForm.get('ParametersX').setValue('');
+      this.graphSelectionsForm.get('MethodsX').setValue('');
+    } else if (axis == 'y') {
+      this.graphSelectionsForm.get('ParametersY').setValue('');
+      this.graphSelectionsForm.get('MethodsY').setValue('');
+    }
+}
+
   clearGraph() {
     // resetting forms
     this.graphSelectionsForm.reset();
@@ -1859,5 +1877,15 @@ export class GraphOptionsComponent implements OnInit {
     if (this.showGraph) {
       this.showGraph = false;
     }
+  }
+
+  //functions for retrieving mat-tooltip text from config file
+  disabledFlagButtonTooltip() {
+    const string = TOOLTIPS.disabledFlagButtonTooltip;
+    return string;
+  }
+  clearFiltersTooltip() {
+    const string = TOOLTIPS.clearFiltersTooltip;
+    return string;
   }
 }
