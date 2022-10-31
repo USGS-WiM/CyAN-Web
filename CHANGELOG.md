@@ -82,3 +82,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Horizontal scroll bar appearing and scrolling to white space
 - Submit button appears on lasso select before x/y checkboxes are selected
 - Mat-chips going outside of sidebar
+- Corrected axis label
