@@ -266,7 +266,7 @@ export class GraphSelectionsService {
             xResultsIndex > tempResultsX.length - 2
           ) {
             this.formatMetadata(this.allDataX, 'xAxis');
-            this.formatMetadata(this.allDataX, 'yAxis');
+            this.formatMetadata(this.allDataY, 'yAxis');
             this.flagIndexX.next(flagX);
             this.flagIndexY.next(flagY);
             this.finalGraphValues();
