@@ -1,40 +1,40 @@
 [
   {
-    "name": "CyAN Web App",
+    "name": "Great Lakes FIELD",
     "organization": "U.S. Geological Survey",
-    "description": "Cyanobacterial Assessment Network (CyAN)",
-    "version": "v0.0.0",
-    "status": ["Development"],
-
+    "description": "Web app for exploring water quality field samples",
+    "version": "v1.0.0-beta",
+    "status": [
+      "Development"
+    ],
     "permissions": {
       "usageType": "openSource",
       "licenses": [
         {
           "name": "Public Domain, CC0-1.0",
-          "URL": "https://github.com/usgs/best-practices/blob/master/LICENSE.md"
+          "URL": "https://github.com/USGS-WiM/CyAN-Web/-/raw/dev/LICENSE.md"
         }
       ]
     },
-
-    "homepageURL": "https://wim.usgs.gov",
-    "downloadURL": "https://github.com/USGS-WiM/CyAN-Web/tree/master.zip",
-    "disclaimerURL": "https://github.com/USGS-WiM/CyAN-Web/blob/master/DISCLAIMER.md",
-    "repositoryUrl": "https://github.com/USGS-WiM/CyAN-Web",
+    "homepageURL": "https://github.com/USGS-WiM/CyAN-Web/",
+    "downloadURL": "https://github.com/USGS-WiM/CyAN-Web/-/archive/dev/-dev.zip",
+    "disclaimerURL": "https://github.com/USGS-WiM/CyAN-Web/-/raw/dev/DISCLAIMER.md",
+    "repositoryUrl": "https://github.com/USGS-WiM/CyAN-Web.git",
     "vcs": "git",
-
     "laborHours": null,
-
-    "tags": ["client"],
-
-    "languages": ["markdown", "Typescript"],
-
+    "tags": [
+      "client"
+    ],
+    "languages": [
+      "markdown",
+      "Typescript"
+    ],
     "contact": {
       "name": "Kathy Dooley",
       "email": "kdooley@usgs.gov"
     },
-
     "date": {
-      "metadataLastUpdated": "2021-07-16"
+      "metadataLastUpdated": "2022-11-01"
     }
   }
 ]
