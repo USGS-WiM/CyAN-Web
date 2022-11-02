@@ -3,7 +3,7 @@
     "name": "Great Lakes FIELD",
     "organization": "U.S. Geological Survey",
     "description": "Web app for exploring water quality field samples",
-    "version": "v0.0.0",
+    "version": "v1.0.0-beta",
     "status": [
       "Development"
     ],
