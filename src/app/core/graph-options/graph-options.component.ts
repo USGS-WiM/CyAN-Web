@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
-import { TOOLTIPS } from "../../app.tooltips";
+import { TOOLTIPS } from '../../app.tooltips';
 
 @Component({
   selector: 'app-graph-options',
@@ -544,7 +544,7 @@ export class GraphOptionsComponent implements OnInit {
         title: {
           text: this.xAxisTitle,
           font: {
-            size: 18
+            size: 18,
           },
         },
       },
@@ -554,7 +554,7 @@ export class GraphOptionsComponent implements OnInit {
         title: {
           text: this.yAxisTitle,
           font: {
-            size: 18
+            size: 18,
           },
         },
       },
@@ -1431,10 +1431,8 @@ export class GraphOptionsComponent implements OnInit {
   public applyLogX(logXChecked: MatCheckboxChange) {
     if (logXChecked.checked) {
       this.xAxisType = 'log';
-      this.autotickEnabled = false;
     } else {
       this.xAxisType = 'scatter';
-      this.autotickEnabled = true;
     }
   }
 
@@ -1442,10 +1440,8 @@ export class GraphOptionsComponent implements OnInit {
   public applyLogY(logYChecked: MatCheckboxChange) {
     if (logYChecked.checked) {
       this.yAxisType = 'log';
-      this.autotickEnabled = false;
     } else {
       this.yAxisType = 'scatter';
-      this.autotickEnabled = true;
     }
   }
 
@@ -1811,7 +1807,7 @@ export class GraphOptionsComponent implements OnInit {
       this.graphSelectionsForm.get('ParametersY').setValue('');
       this.graphSelectionsForm.get('MethodsY').setValue('');
     }
-}
+  }
 
   clearGraph() {
     // resetting forms
@@ -1848,7 +1844,6 @@ export class GraphOptionsComponent implements OnInit {
     this.xAxisTitle = '';
     this.yAxisParameter = '';
     this.xAxisParameter = '';
-    this.autotickEnabled = true;
     this.xAxisUnits = '';
     this.yAxisUnits = '';
 
