@@ -7,14 +7,6 @@ import { BehaviorSubject } from 'rxjs';
 export class ComponentDisplayService {
   constructor() {}
 
-  //About modal
-  public aboutVisibleSubject = new BehaviorSubject<Boolean>(undefined);
-  aboutVisible$ = this.aboutVisibleSubject.asObservable();
-
-  public getAboutVisible(display: boolean) {
-    this.aboutVisibleSubject.next(display);
-  }
-
   //default home screen configuration
   public homeLayoutSubject = new BehaviorSubject<Boolean>(undefined);
   homeLayout$ = this.homeLayoutSubject.asObservable();
@@ -45,6 +37,14 @@ export class ComponentDisplayService {
 
   public getGraphBtn(collapse: Boolean) {
     this.graphBtnSubject.next(collapse);
+  }
+
+  //about button clicked
+  public aboutBtnSubject = new BehaviorSubject<Boolean>(undefined);
+  aboutBtn$ = this.aboutBtnSubject.asObservable();
+
+  public getAboutBtn(collapse: Boolean) {
+    this.aboutBtnSubject.next(collapse);
   }
 
   //disable map
