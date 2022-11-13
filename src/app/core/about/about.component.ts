@@ -20,6 +20,7 @@ export class AboutComponent implements OnInit {
   public faq: Boolean = true;
   public disclaimer: Boolean = false;
   public userGuide: Boolean = false;
+  public accessibility: Boolean = false;
   public selectedBackground = null;
   public buttonText = 'rgb(255, 255, 255)';
   public buttonBackground = '#f2ccb1';
@@ -89,16 +90,25 @@ export class AboutComponent implements OnInit {
       this.faq = true;
       this.disclaimer = false;
       this.userGuide = false;
+      this.accessibility = false;
     }
     if (view === 'disclaimerView') {
       this.faq = false;
       this.disclaimer = true;
       this.userGuide = false;
+      this.accessibility = false;
     }
     if (view === 'userGuideView') {
       this.faq = false;
       this.disclaimer = false;
       this.userGuide = true;
+      this.accessibility = false;
+    }
+    if (view === 'accessibilityView') {
+      this.faq = false;
+      this.disclaimer = false;
+      this.userGuide = false;
+      this.accessibility = true;
     }
     this.selectBtn(view);
   }
@@ -107,6 +117,7 @@ export class AboutComponent implements OnInit {
     let faqViewID = document.getElementById('faqViewID');
     let userGuideViewID = document.getElementById('userGuideViewID');
     let disclaimerViewID = document.getElementById('disclaimerViewID');
+    let accessibilityViewID = document.getElementById('accessibilityViewID');
     if (button == 'faqView') {
       faqViewID.style.color = this.buttonBackground;
       faqViewID.style.backgroundColor = this.selectedBackground;
@@ -119,6 +130,10 @@ export class AboutComponent implements OnInit {
       disclaimerViewID.style.color = this.buttonText;
       disclaimerViewID.style.backgroundColor = this.buttonBackground;
       disclaimerViewID.style.border = this.buttonBorder;
+
+      accessibilityViewID.style.color = this.buttonText;
+      accessibilityViewID.style.backgroundColor = this.buttonBackground;
+      accessibilityViewID.style.border = this.buttonBorder;
     }
     if (button == 'disclaimerView') {
       disclaimerViewID.style.color = this.buttonBackground;
@@ -132,6 +147,10 @@ export class AboutComponent implements OnInit {
       faqViewID.style.color = this.buttonText;
       faqViewID.style.backgroundColor = this.buttonBackground;
       faqViewID.style.border = this.buttonBorder;
+
+      accessibilityViewID.style.color = this.buttonText;
+      accessibilityViewID.style.backgroundColor = this.buttonBackground;
+      accessibilityViewID.style.border = this.buttonBorder;
     }
     if (button == 'userGuideView') {
       userGuideViewID.style.color = this.buttonBackground;
@@ -145,6 +164,27 @@ export class AboutComponent implements OnInit {
       faqViewID.style.color = this.buttonText;
       faqViewID.style.backgroundColor = this.buttonBackground;
       faqViewID.style.border = this.buttonBorder;
+
+      accessibilityViewID.style.color = this.buttonText;
+      accessibilityViewID.style.backgroundColor = this.buttonBackground;
+      accessibilityViewID.style.border = this.buttonBorder;
+    }
+    if (button == 'accessibilityView') {
+      accessibilityViewID.style.color = this.buttonBackground;
+      accessibilityViewID.style.backgroundColor = this.selectedBackground;
+      accessibilityViewID.style.border = this.buttonBorderSelected;
+
+      disclaimerViewID.style.color = this.buttonText;
+      disclaimerViewID.style.backgroundColor = this.buttonBackground;
+      disclaimerViewID.style.border = this.buttonBorder;
+
+      faqViewID.style.color = this.buttonText;
+      faqViewID.style.backgroundColor = this.buttonBackground;
+      faqViewID.style.border = this.buttonBorder;
+
+      userGuideViewID.style.color = this.buttonText;
+      userGuideViewID.style.backgroundColor = this.buttonBackground;
+      userGuideViewID.style.border = this.buttonBorder;
     }
   }
 
