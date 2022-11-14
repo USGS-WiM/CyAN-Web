@@ -66,10 +66,9 @@ export class AboutComponent implements OnInit {
           //turn on high contrast
           this.buttonBackground = '#643411';
           this.aboutView('accessibilityView');
-          // Get a NodeList of all .demo elements
+          //get list of all dataBtn elements
           const demoClasses = document.querySelectorAll('.dataBtn');
-
-          // Change the text of multiple elements with a loop
+          //change color of all dataBtn elements to high contrast
           demoClasses.forEach((element) => {
             element.classList.add('highContrastGreen');
           });
@@ -78,10 +77,9 @@ export class AboutComponent implements OnInit {
           //turn off high contrast
           this.buttonBackground = '#f2ccb1';
           this.aboutView('accessibilityView');
-          // Get a NodeList of all .demo elements
+          //get list of all dataBtn elements
           const demoClasses = document.querySelectorAll('.dataBtn');
-
-          // Change the text of multiple elements with a loop
+          //change color of all dataBtn elements to normal contrast
           demoClasses.forEach((element) => {
             element.classList.remove('highContrastGreen');
           });
