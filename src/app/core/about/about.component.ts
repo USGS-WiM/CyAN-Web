@@ -33,6 +33,7 @@ export class AboutComponent implements OnInit {
   public mcodeShortName;
   public parameterTypes;
   public allFlagTypes;
+  public sampleFlags;
 
   @HostListener('window:resize')
   onResize() {
@@ -65,6 +66,7 @@ export class AboutComponent implements OnInit {
       (parameters) => (this.parameterTypes = parameters)
     );
     this.allFlagTypes = this.filterService.flagTypes;
+    this.sampleFlags = this.filterService.sampleFlags;
   }
 
   pcodeDownload() {
@@ -77,6 +79,10 @@ export class AboutComponent implements OnInit {
 
   flagTypesDownload() {
     this.createCSV(this.allFlagTypes, 'flagTypes.csv');
+  }
+
+  flagTemplateDownload() {
+    this.createCSV(this.sampleFlags, 'flagTemplate.csv');
   }
 
   createCSV(data, filename) {

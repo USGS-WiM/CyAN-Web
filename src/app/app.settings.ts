@@ -43,4 +43,22 @@ export class APP_SETTINGS {
     ];
     return flagTypes;
   }
+  public static sampleFlags() {
+    let sampleFlags = [
+      {
+        rcode: 'DELETE_THIS_ROW_R15e',
+        pcode: 'EXAMPLE_P12',
+        date_time_group: 'EXAMPLE_1439470800000',
+        sid: 'EXAMPLE_S1c1',
+        latitude: 41.8292,
+        longitude: -83.3739,
+        result: 2.66,
+        units: 'micrograms per liter',
+        region: 'Lake Erie',
+        flagType: 'Central tendency; Outlier',
+        annotation: 'type custom annotation here',
+      },
+    ];
+    return sampleFlags;
+  }
 }

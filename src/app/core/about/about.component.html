@@ -468,7 +468,6 @@
             Flag Types
           </div>
         </div>
-
       </ol>
     </div>
     <div style="margin-top: 20px;" [hidden]="!faq">
@@ -562,14 +561,19 @@
         plotted data in CSV format. After selecting your filters and clicking <i>Create Graph,</i> click on the
         <i>Download all plotted data</i> button located in the upper right-hand corner of the graph. You may flag data
         in this CSV using a spreadsheet editor of your choice, such as Excel. To flag data manually, download our
-        <i>Sample Flags CSV</i>. Delete the first example entry, and populate it with data you wish to flag in the CSV
+        <i>Flag Template</i>. Delete the first example entry, and populate it with data you wish to flag in the CSV
         of
         graph data you downloaded. In the <i>flagType</i> column, you may use any flag type(s) listed in the <i>Flag
           Types</i> CSV. Be sure to copy the names exactly and separate multiple flag types with semicolons. The
         <i>annotation</i> column is for you to type custom notes; there is no required format for this.
       </div>
-      <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
-        Flag Types
+      <div class="flex-container">
+        <div class="flagTemplateBtn dataBtn" (click)="flagTemplateDownload()">
+          Flag Template
+        </div>
+        <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
+          Flag Types
+        </div>
       </div>
       <div class="subHeader">High Contrast</div>
       <div class="normalText">If you benefit from a high contrast view, we recommend using a high contrast browser
