@@ -572,6 +572,13 @@
           not accessible to all people. We have developed alternative solutions for accessing and editing
           data for people who may have difficulty seeing and/or clicking on the plotted points on the map and graph.
         </div>
+        <div class="subHeader">High Contrast</div>
+        <div class="normalText">If you have difficulty using this app due to low color contrast, enable high contrast
+          mode.
+          <mat-checkbox [disableRipple]="true" (change)="changeContrast($event)"
+            aria-label="Check this box to enable high contrast">Turn on high contrast
+          </mat-checkbox>
+        </div>
         <div class="subHeader">Map</div>
         <div class="normalText">As an alternative to clicking on points plotted in the map, we have all
           the data available
@@ -595,13 +602,6 @@
           <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()" matTooltip="{{flagTypesTooltip()}}">
             Flag Types
           </div>
-        </div>
-        <div class="subHeader">High Contrast</div>
-        <div class="normalText">If you have difficulty using this app due to low color contrast, enable high contrast
-          mode.
-          <mat-checkbox [disableRipple]="true" (change)="changeContrast($event)"
-            aria-label="Check this box to enable high contrast">Turn on high contrast
-          </mat-checkbox>
         </div>
       </div>
     </div>

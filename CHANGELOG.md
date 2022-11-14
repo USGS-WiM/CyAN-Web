@@ -58,6 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Clear Map button for Map
 - Tooltips to Clear Filters and Download Flags buttons on graph page
 - Inline Ability to clear X and Y parameters on graph page
+- Adds accessibility features: tab in About modal and high contrast mode
 
 ### Changed
 
