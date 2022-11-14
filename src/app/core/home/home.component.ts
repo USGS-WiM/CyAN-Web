@@ -57,20 +57,21 @@ export class HomeComponent implements AfterViewInit {
     );
     this.componentDisplayService.highContrastSubject.subscribe(
       (highContrast) => {
-        if (highContrast) {
-          console.log('high contrast on');
+        if (highContrast === true) {
           //turn on high contrast
           this.homeColor = '#643411';
           this.infoColor = '#393F60';
           this.mapColor = '#1B4B32';
           this.graphColor = '#224459';
-        } else {
-          console.log('high contrast off');
+          this.clickInfo();
+        }
+        if (highContrast === false) {
           //turn off high contrast
           this.homeColor = '#f2ccb1';
           this.infoColor = '#7f87b2';
           this.mapColor = '#95dab6';
           this.graphColor = '#83b2d0';
+          this.clickInfo();
         }
       }
     );

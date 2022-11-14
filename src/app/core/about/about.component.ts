@@ -60,6 +60,34 @@ export class AboutComponent implements OnInit {
         }
       }
     );
+    this.componentDisplayService.highContrastSubject.subscribe(
+      (highContrast) => {
+        if (highContrast === true) {
+          //turn on high contrast
+          this.buttonBackground = '#643411';
+          this.aboutView('accessibilityView');
+          // Get a NodeList of all .demo elements
+          const demoClasses = document.querySelectorAll('.dataBtn');
+
+          // Change the text of multiple elements with a loop
+          demoClasses.forEach((element) => {
+            element.classList.add('highContrastGreen');
+          });
+        }
+        if (highContrast === false) {
+          //turn off high contrast
+          this.buttonBackground = '#f2ccb1';
+          this.aboutView('accessibilityView');
+          // Get a NodeList of all .demo elements
+          const demoClasses = document.querySelectorAll('.dataBtn');
+
+          // Change the text of multiple elements with a loop
+          demoClasses.forEach((element) => {
+            element.classList.remove('highContrastGreen');
+          });
+        }
+      }
+    );
   }
 
   public getMetadata() {

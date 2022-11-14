@@ -287,6 +287,9 @@ a.modebar-btn svg {
   background-color: rgb(185, 185, 185) !important;
   pointer-events: none;
 }
+.highContrastGreen {
+  background-color: #2b4927 !important;
+}
 /* end: data buttons */
 
 /* start: map panels */
@@ -367,17 +370,6 @@ mat-chip {
 }
 .boundingBoxFullWidth {
   width: 100%;
-}
-.boundingBoxBtn {
-  font-size: 15px;
-  margin-bottom: 5px;
-  color: white;
-  cursor: pointer;
-  background-color: rgb(131, 184, 124);
-  height: 25px;
-  text-align: center;
-  vertical-align: middle;
-  border: none;
 }
 /* end: filter options box */
 /* end: map panels */
@@ -687,18 +679,6 @@ mat-chip {
   padding: 10px;
   margin-top: 20px;
   margin-left: 15px;
-}
-
-.graphDataDownload {
-  position: absolute;
-  z-index: 200;
-  color: white;
-  cursor: pointer;
-  background-color: rgb(131, 184, 124);
-  border: none;
-  margin-top: 3px;
-  margin-left: 3px;
-  margin-right: 3px;
 }
 
 .btnMargin {
