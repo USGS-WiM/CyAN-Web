@@ -568,10 +568,10 @@
         <i>annotation</i> column is for you to type custom notes; there is no required format for this.
       </div>
       <div class="flex-container">
-        <div class="flagTemplateBtn dataBtn" (click)="flagTemplateDownload()">
+        <div class="flagTemplateBtn dataBtn" (click)="flagTemplateDownload()" matTooltip="{{flagTemplateTooltip()}}">
           Flag Template
         </div>
-        <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
+        <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()" matTooltip="{{flagTypesTooltip()}}">
           Flag Types
         </div>
       </div>

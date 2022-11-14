@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { Observable } from 'rxjs/Observable';
 import { FiltersService } from '../../shared/services/filters.service';
+import { TOOLTIPS } from '../../app.tooltips';
 
 @Component({
   selector: 'app-about',
@@ -227,5 +228,14 @@ export class AboutComponent implements OnInit {
       infoPanelID.classList.add('marginTopFullHeight');
       infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
     }
+  }
+
+  flagTypesTooltip() {
+    const string = TOOLTIPS.flagTypesTooltip;
+    return string;
+  }
+  flagTemplateTooltip() {
+    const string = TOOLTIPS.flagTemplateTooltip;
+    return string;
   }
 }
