@@ -8,7 +8,7 @@
       <div matTooltip="User's Guide" class="aboutBtn" (click)="aboutView('userGuideView')" id="userGuideViewID">
         <mat-icon class="aboutText flex-child aboutIcon">library_books</mat-icon>
       </div>
-      <div matTooltip="Accessibility Features" class="aboutBtn" (click)="aboutView('accessibilityView')"
+      <div matTooltip="Accessibility Tips" class="aboutBtn" (click)="aboutView('accessibilityView')"
         id="accessibilityViewID">
         <mat-icon class="aboutText flex-child aboutIcon">accessibility_new</mat-icon>
       </div>
@@ -543,20 +543,37 @@
     </div>
     <div style="margin-top: 20px;" [hidden]="!accessibility">
       <div class="mainHeader">
-        Accessibility Features
+        Accessibility Tips
       </div>
-      <div class="subHeader">General Info</div>
+      <div class="subHeader">Overview</div>
       <div class="normalText">
         We incorporated accessibility features and design to the best
         of our ability. However, we acknowledge that aspects of our app, particularly the interactive map and graph, are
-        not accessible to all people. If you are unable to view and/or navigate the data plotted on our map and graph,
-        we
-        recommend downloading your queried data and opening it in your preferred spreadsheet editor (see our
-        User's Guide for information on data downloads). If you benefit from a high-contrast visual layout, we recommend
-        enabling this feature in your browser settings.
+        not accessible to all people. We have developed alternative solutions for accessing and editing
+        data for people who may have difficulty seeing and/or clicking on the plotted points on the map and graph.
       </div>
-      <div class="subHeader">High contrast</div>
-      <div class="normalText">high contrast info</div>
+      <div class="subHeader">Map</div>
+      <div class="normalText">As an alternative to clicking on points plotted in the map, we have all
+        the data available
+        for download in CSV format. After selecting your filters and clicking <i>Plot Points,</i> you may download the
+        filtered data by clicking on the <i>Download CSV</i> button.</div>
+      <div class="subHeader">Graph</div>
+      <div class="normalText">Similar to the map interface, the graph interface includes the ability to download the
+        plotted data in CSV format. After selecting your filters and clicking <i>Create Graph,</i> click on the
+        <i>Download all plotted data</i> button located in the upper right-hand corner of the graph. You may flag data
+        in this CSV using a spreadsheet editor of your choice, such as Excel. To flag data manually, download our
+        <i>Sample Flags CSV</i>. Delete the first example entry, and populate it with data you wish to flag in the CSV
+        of
+        graph data you downloaded. In the <i>flagType</i> column, you may use any flag type(s) listed in the <i>Flag
+          Types</i> CSV. Be sure to copy the names exactly and separate multiple flag types with semicolons. The
+        <i>annotation</i> column is for you to type custom notes; there is no required format for this.
+      </div>
+      <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
+        Flag Types
+      </div>
+      <div class="subHeader">High Contrast</div>
+      <div class="normalText">If you benefit from a high contrast view, we recommend using a high contrast browser
+        setting.</div>
     </div>
   </div>
 </div>
