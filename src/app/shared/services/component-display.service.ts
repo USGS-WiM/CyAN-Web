@@ -47,6 +47,14 @@ export class ComponentDisplayService {
     this.aboutBtnSubject.next(collapse);
   }
 
+  //accessibility button clicked
+  public accessibilityBtnSubject = new BehaviorSubject<Boolean>(undefined);
+  accessibilityBtn$ = this.accessibilityBtnSubject.asObservable();
+
+  public getAccessibilityBtn(collapse: Boolean) {
+    this.accessibilityBtnSubject.next(collapse);
+  }
+
   //disable map
   public disableMapSubject = new BehaviorSubject<Boolean>(undefined);
   disableMap$ = this.disableMapSubject.asObservable();

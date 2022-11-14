@@ -50,6 +50,13 @@ export class AboutComponent implements OnInit {
         }, 0.1);
       }
     );
+    this.componentDisplayService.accessibilityBtnSubject.subscribe(
+      (accessibilityBtnDisplay) => {
+        if (accessibilityBtnDisplay) {
+          this.aboutView('accessibilityView');
+        }
+      }
+    );
   }
 
   public getMetadata() {

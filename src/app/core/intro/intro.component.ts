@@ -41,6 +41,8 @@ export class IntroComponent implements OnInit {
   public clickAccessibility() {
     this.componentDisplayService.getAboutBtn(true);
     this.componentDisplayService.getAboutBtn(false);
+    this.componentDisplayService.getAccessibilityBtn(true);
+    this.componentDisplayService.getAccessibilityBtn(false);
     this.componentDisplayService.getDisableMap(true);
   }
 
