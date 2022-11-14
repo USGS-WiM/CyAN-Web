@@ -501,8 +501,7 @@
           style="font-size:large; margin-top: 20px; margin-bottom: 5px">
           Who uses CyAN FIELD?</div>
         Anyone can use CyAN FIELD. This app was custom-built for USGS, NASA, and EPA scientists and researchers who are
-        studying HABs.<div style="font-size:large; margin-top: 20px; margin-bottom: 5px">
-          Does CyAN FIELD have accessibility features?</div>Click here to access accessibility tips and features.
+        studying HABs.
         <div style="font-size:large; margin-top: 20px; margin-bottom: -5px;">What are some related resources?</div>
         <ul>
           <li>CyAN FIELD is one tool in the larger CyAN project. Visit the <a
@@ -598,8 +597,12 @@
           </div>
         </div>
         <div class="subHeader">High Contrast</div>
-        <div class="normalText">If you benefit from a high contrast view, we recommend using a high contrast browser
-          setting.</div>
+        <div class="normalText">If you have difficulty using this app due to low color contrast, enable high contrast
+          mode.
+          <mat-checkbox [disableRipple]="true" (change)="changeContrast($event)"
+            aria-label="Check this box to enable high contrast">Turn on high contrast
+          </mat-checkbox>
+        </div>
       </div>
     </div>
   </div>

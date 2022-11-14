@@ -27,24 +27,24 @@ export class ComponentDisplayService {
   public mapBtnSubject = new BehaviorSubject<Boolean>(undefined);
   mapBtn$ = this.mapBtnSubject.asObservable();
 
-  public getMapBtn(collapse: Boolean) {
-    this.mapBtnSubject.next(collapse);
+  public getMapBtn(display: Boolean) {
+    this.mapBtnSubject.next(display);
   }
 
   //graph button clicked
   public graphBtnSubject = new BehaviorSubject<Boolean>(undefined);
   graphBtn$ = this.graphBtnSubject.asObservable();
 
-  public getGraphBtn(collapse: Boolean) {
-    this.graphBtnSubject.next(collapse);
+  public getGraphBtn(display: Boolean) {
+    this.graphBtnSubject.next(display);
   }
 
   //about button clicked
   public aboutBtnSubject = new BehaviorSubject<Boolean>(undefined);
   aboutBtn$ = this.aboutBtnSubject.asObservable();
 
-  public getAboutBtn(collapse: Boolean) {
-    this.aboutBtnSubject.next(collapse);
+  public getAboutBtn(display: Boolean) {
+    this.aboutBtnSubject.next(display);
   }
 
   //accessibility button clicked
@@ -133,5 +133,13 @@ export class ComponentDisplayService {
 
   public getStoreRegionSubject(region: any[]) {
     this.storeRegionSubject.next(region);
+  }
+
+  //for turning on and off high contrast
+  public highContrastSubject = new BehaviorSubject<Boolean>(undefined);
+  highContrast$ = this.highContrastSubject.asObservable();
+
+  public getHighContrastSubject(contrast: Boolean) {
+    this.highContrastSubject.next(contrast);
   }
 }

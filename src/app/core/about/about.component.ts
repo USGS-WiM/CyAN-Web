@@ -3,6 +3,7 @@ import { ComponentDisplayService } from 'src/app/shared/services/component-displ
 import { Observable } from 'rxjs/Observable';
 import { FiltersService } from '../../shared/services/filters.service';
 import { TOOLTIPS } from '../../app.tooltips';
+import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-about',
@@ -97,6 +98,16 @@ export class AboutComponent implements OnInit {
     link.setAttribute('download', filename);
     document.body.appendChild(link);
     link.click();
+  }
+
+  changeContrast(contrastChecked: MatCheckboxChange) {
+    if (contrastChecked.checked) {
+      //turn on high contrast
+      this.componentDisplayService.getHighContrastSubject(true);
+    } else {
+      //turn off high contrast
+      this.componentDisplayService.getHighContrastSubject(false);
+    }
   }
 
   public aboutView(view: String) {
