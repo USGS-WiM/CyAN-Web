@@ -210,6 +210,10 @@ export class AboutComponent implements OnInit {
     //get window width
     let windowWidth = window.innerWidth;
     let infoPanelID = document.getElementById('infoPanelID');
+    let infoContentID = document.getElementById('infoContentID');
+
+    infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
+    infoContentID.style.height = (mapHeight - 210).toString() + 'px';
     if (windowWidth < 900) {
       infoPanelID.classList.remove('marginLeftFullWidth');
       infoPanelID.classList.add('marginLeftSmallWidth');
@@ -221,12 +225,10 @@ export class AboutComponent implements OnInit {
     if (mapHeight < 570) {
       infoPanelID.classList.add('marginTopSmallHeight');
       infoPanelID.classList.remove('marginTopFullHeight');
-      infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
     }
     if (mapHeight > 570) {
       infoPanelID.classList.remove('marginTopSmallHeight');
       infoPanelID.classList.add('marginTopFullHeight');
-      infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
     }
   }
 
