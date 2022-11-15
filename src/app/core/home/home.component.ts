@@ -1,7 +1,7 @@
-import { Component, AfterViewInit, HostListener} from '@angular/core';
+import { Component, AfterViewInit, HostListener } from '@angular/core';
 import { ComponentDisplayService } from 'src/app/shared/services/component-display.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmFlagsComponent} from '../confirm-flags/confirm-flags.component';
+import { ConfirmFlagsComponent } from '../confirm-flags/confirm-flags.component';
 
 @Component({
   selector: 'app-home',
@@ -11,8 +11,8 @@ import { ConfirmFlagsComponent} from '../confirm-flags/confirm-flags.component';
 export class HomeComponent implements AfterViewInit {
   constructor(
     private componentDisplayService: ComponentDisplayService,
-    public dialog: MatDialog,
-    ) {}
+    public dialog: MatDialog
+  ) {}
   @HostListener('window:resize')
   onResize() {
     this.resizeDivs();
@@ -45,6 +45,33 @@ export class HomeComponent implements AfterViewInit {
       (graphBtnDisplay) => {
         if (graphBtnDisplay) {
           this.clickGraph();
+        }
+      }
+    );
+    this.componentDisplayService.aboutBtnSubject.subscribe(
+      (aboutBtnDisplay) => {
+        if (aboutBtnDisplay) {
+          this.clickInfo();
+        }
+      }
+    );
+    this.componentDisplayService.highContrastSubject.subscribe(
+      (highContrast) => {
+        if (highContrast === true) {
+          //turn on high contrast
+          this.homeColor = '#643411';
+          this.infoColor = '#393F60';
+          this.mapColor = '#1B4B32';
+          this.graphColor = '#224459';
+          this.clickInfo();
+        }
+        if (highContrast === false) {
+          //turn off high contrast
+          this.homeColor = '#f2ccb1';
+          this.infoColor = '#7f87b2';
+          this.mapColor = '#95dab6';
+          this.graphColor = '#83b2d0';
+          this.clickInfo();
         }
       }
     );
@@ -95,7 +122,7 @@ export class HomeComponent implements AfterViewInit {
     let flags = localStorage.getItem('cyanFlags');
 
     //checking if any flags were stored locally in a previous session
-    if (flags != null) { 
+    if (flags != null) {
       // prevents popup from opening again if users clicks graph button again after loading locally stored flags
       if (!this.loadedFlagsFromPreviousSession) {
         this.loadedFlagsFromPreviousSession = true;

@@ -267,6 +267,10 @@ a.modebar-btn svg {
   width: 100px;
   line-height: 35px;
 }
+.flagTemplateBtn {
+  width: 130px;
+  line-height: 35px;
+}
 .dataBtn {
   font-size: 16px;
   margin-bottom: 5px;
@@ -282,6 +286,9 @@ a.modebar-btn svg {
 .disabledDataBtn {
   background-color: rgb(185, 185, 185) !important;
   pointer-events: none;
+}
+.highContrastGreen {
+  background-color: #2b4927 !important;
 }
 /* end: data buttons */
 
@@ -363,17 +370,6 @@ mat-chip {
 }
 .boundingBoxFullWidth {
   width: 100%;
-}
-.boundingBoxBtn {
-  font-size: 15px;
-  margin-bottom: 5px;
-  color: white;
-  cursor: pointer;
-  background-color: rgb(131, 184, 124);
-  height: 25px;
-  text-align: center;
-  vertical-align: middle;
-  border: none;
 }
 /* end: filter options box */
 /* end: map panels */
@@ -476,12 +472,15 @@ mat-chip {
   max-width: 700px;
   position: relative;
   padding-bottom: 20px;
-  overflow-y: auto;
-  max-height: 600px;
+  max-height: 700px;
   width: calc(97vw - 90px);
 }
+.infoContent {
+  max-height: 640px;
+  overflow-y: auto;
+}
 .introSize {
-  max-height: 280px;
+  max-height: 320px;
 }
 .aboutSize {
   max-height: 319px;
@@ -680,18 +679,6 @@ mat-chip {
   padding: 10px;
   margin-top: 20px;
   margin-left: 15px;
-}
-
-.graphDataDownload {
-  position: absolute;
-  z-index: 200;
-  color: white;
-  cursor: pointer;
-  background-color: rgb(131, 184, 124);
-  border: none;
-  margin-top: 3px;
-  margin-left: 3px;
-  margin-right: 3px;
 }
 
 .btnMargin {

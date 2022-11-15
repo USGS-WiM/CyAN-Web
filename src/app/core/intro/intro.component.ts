@@ -38,6 +38,13 @@ export class IntroComponent implements OnInit {
     this.componentDisplayService.getGraphBtn(false);
     this.componentDisplayService.getDisableMap(true);
   }
+  public clickAccessibility() {
+    this.componentDisplayService.getAboutBtn(true);
+    this.componentDisplayService.getAboutBtn(false);
+    this.componentDisplayService.getAccessibilityBtn(true);
+    this.componentDisplayService.getAccessibilityBtn(false);
+    this.componentDisplayService.getDisableMap(true);
+  }
 
   public resizeDivs() {
     //get map height

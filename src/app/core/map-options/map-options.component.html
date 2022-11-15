@@ -81,7 +81,7 @@
         </mat-select>
       </mat-form-field>
     </form>
-    <button class="boundingBoxBtn" (click)="populateMapBounds(true)"
+    <button class="dataBtn" (click)="populateMapBounds(true)"
       aria-label="Clicking this button will populate the bounding box with the current map extent">
       Populate map bounds
     </button>
@@ -117,8 +117,8 @@
     <mat-checkbox [disableRipple]="true" [checked]="nullDataChecked" (change)="nullwarning($event)" id="nullCheckbox"
       aria-label="Check this box to include sites with null values">Include null values</mat-checkbox>
   </div>
-  <button class="mapFilterBtn dataBtn leftBreak"
-    aria-label="Click this button to clear map filters" (click)="clearMapFilters()">
+  <button class="mapFilterBtn dataBtn leftBreak" aria-label="Click this button to clear map filters"
+    (click)="clearMapFilters()">
     Clear Map
   </button>
   <button class="mapFilterBtn dataBtn leftBreak" (click)="runFilters()"
