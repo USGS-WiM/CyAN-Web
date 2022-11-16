@@ -67,10 +67,10 @@ export class MapOptionsComponent implements OnInit {
   public nullDataChecked: Boolean = false;
   public optimalAlignment: Boolean = false;
   public nullCheckboxElement = document.getElementById('nullCheckbox');
-  minYear: number = 1975;
+  minYear: number = 1980;
   maxYear: number = 2021;
   timeOptions: Options = {
-    floor: 1975,
+    floor: 1980,
     ceil: 2021,
     animate: false,
     barDimension: 210,
@@ -623,8 +623,8 @@ export class MapOptionsComponent implements OnInit {
 
     //resetting variables
     this.filterService.getMaxYear(2021);
-    this.filterService.getMinYear(1975);
-    this.minYear = 1975;
+    this.filterService.getMinYear(1980);
+    this.minYear = 1980;
     this.maxYear = 2021;
     this.matchingMcodes = [];
     this.snToPcode = [];

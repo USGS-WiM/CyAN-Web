@@ -38,10 +38,10 @@ export class GraphOptionsComponent implements OnInit {
   });
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
-  minYear: number = 1975;
+  minYear: number = 1980;
   maxYear: number = 2021;
   timeOptions: Options = {
-    floor: 1975,
+    floor: 1980,
     ceil: 2021,
     barDimension: 210,
     animate: false,
@@ -920,10 +920,8 @@ export class GraphOptionsComponent implements OnInit {
 
     //If only one point was selected, do not need to re-create graph
     if (!this.singlePointSelected) {
-      console.log('mulitple points selected');
       this.createGraph(false);
     } else {
-      console.log('only one point selected');
       //New styling for new plot
       let update = {
         marker: {
@@ -1790,7 +1788,7 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       // reseting graph min & max but leaving map options observables alone
       // if user checks box it will default to map option again
-      this.minYear = 1975;
+      this.minYear = 1980;
       this.maxYear = 2021;
     }
   }
@@ -1850,10 +1848,10 @@ export class GraphOptionsComponent implements OnInit {
     // resetting graph options
     this.optimalAlignment = false;
     this.useBoundingBox = false;
-    this.minYear = 1975;
+    this.minYear = 1980;
     this.maxYear = 2021;
     this.timeOptions = {
-      floor: 1975,
+      floor: 1980,
       ceil: 2021,
       barDimension: 210,
       animate: false,

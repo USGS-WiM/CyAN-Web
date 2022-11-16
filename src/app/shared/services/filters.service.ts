@@ -39,7 +39,7 @@ export class FiltersService {
   }
 
   // Observables for min and max year of map options
-  public minYearSubject = new BehaviorSubject<number>(1975);
+  public minYearSubject = new BehaviorSubject<number>(1980);
   minYear$ = this.minYearSubject.asObservable();
 
   public maxYearSubject = new BehaviorSubject<number>(2021);
