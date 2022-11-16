@@ -113,7 +113,7 @@
         <span matTooltip="{{disabledFlagButtonTooltip()}}" [matTooltipDisabled]="flaggedData.length > 0"
           [matTooltipPosition]="'right'">
           <button class="downloadBtn dataBtn disabledDataBtn leftBreak" id="flagBtn"
-            (click)="createCSV(this.flaggedData, 'flags.csv')" matTooltip="Download CSV"
+            (click)="createCSV(this.flaggedData, 'flags.csv', true)" matTooltip="Download CSV"
             aria-label="Clicking this button will download a CSV of the flagged data">
             <mat-icon>cloud_download</mat-icon>
             <mat-icon>flag</mat-icon>

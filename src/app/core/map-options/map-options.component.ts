@@ -21,6 +21,7 @@ import 'leaflet.markercluster';
 import { map, startWith } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-options',
@@ -171,11 +172,17 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.mapQueryResultsSubject.subscribe(
       (mapQueryResults) => {
         this.allMapData = mapQueryResults;
+        console.log('this.allMapData', this.allMapData);
       }
     );
   }
 
   public downloadMapData() {
+    for (let i = 0; i < this.allMapData.length; i++) {
+      let currDate = this.allMapData[i].date_time_group;
+      let formattedDate = moment(currDate).format('MM-DD-YYYY HH:mm:ss');
+      this.allMapData[i]['date_formatted'] = formattedDate;
+    }
     let mapContent = 'data:text/csv;charset=utf-8,';
     let csv = this.allMapData.map((row) => Object.values(row));
     csv.unshift(Object.keys(this.allMapData[0]));

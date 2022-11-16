@@ -16,6 +16,7 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
 import { TOOLTIPS } from '../../app.tooltips';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-graph-options',
@@ -1632,11 +1633,20 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
       xData = xdata;
     });
+
     let allGraphData = xData.concat(yData);
-    this.createCSV(allGraphData, 'plottedData.csv');
+
+    this.createCSV(allGraphData, 'plottedData.csv', true);
   }
 
-  createCSV(data, filename) {
+  createCSV(data, filename, formatDate) {
+    if (formatDate) {
+      for (let i = 0; i < data.length; i++) {
+        let currDate = data[i].date_time_group;
+        let formattedDate = moment(currDate).format('MM-DD-YYYY HH:mm:ss');
+        data[i]['date_formatted'] = formattedDate;
+      }
+    }
     let csvContent = 'data:text/csv;charset=utf-8,';
     let csv = data.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
