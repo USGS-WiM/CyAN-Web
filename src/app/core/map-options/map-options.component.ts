@@ -515,6 +515,7 @@ export class MapOptionsComponent implements OnInit {
 
   // selected param
   selectedParameter(event: MatAutocompleteSelectedEvent): void {
+    console.log('this.chipParams', this.chipParams);
     this.chipParams.push(event.option.value);
     this.paramInput.nativeElement.value = '';
     this.paramMethodForm.get('parameterControl').setValue(null);
@@ -615,7 +616,7 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
-  clearMapFilters(){
+  clearMapFilters() {
     // resetting forms
     this.paramMethodForm.reset();
     this.boundingBoxForm.reset();
@@ -641,7 +642,7 @@ export class MapOptionsComponent implements OnInit {
 
     // resetting chip list else the selected param chip remains
     this.chipParams = [];
-    
+
     //sending click trigger for recognition in map.component
     this.mapLayersService.sendClearMapClickEvent();
   }
