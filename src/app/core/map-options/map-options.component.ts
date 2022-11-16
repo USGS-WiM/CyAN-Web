@@ -515,7 +515,6 @@ export class MapOptionsComponent implements OnInit {
 
   // selected param
   selectedParameter(event: MatAutocompleteSelectedEvent): void {
-    console.log('this.chipParams', this.chipParams);
     this.chipParams.push(event.option.value);
     this.paramInput.nativeElement.value = '';
     this.paramMethodForm.get('parameterControl').setValue(null);

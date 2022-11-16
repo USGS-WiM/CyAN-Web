@@ -51,7 +51,7 @@
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectedParameter($event)">
           <mat-option *ngFor="let parameter of filteredParameters | async" [value]="parameter.short_name">
-            {{ parameter.short_name }} ({{parameter.pcode}})
+            {{ parameter.short_name }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
@@ -59,8 +59,7 @@
         aria-label="This is a dropdown filters menu. Select one or more methods to plot on the map. The methods list is based on the parameter(s) selected above">
         <mat-label>Methods</mat-label>
         <mat-select formControlName="methodControl" multiple>
-          <mat-option *ngFor="let method of matchingMcodes" [value]="method.mcode">{{ method.short_name }} ({{
-            method.mcode }})
+          <mat-option *ngFor="let method of matchingMcodes" [value]="method.mcode">{{ method.short_name }}
           </mat-option>
         </mat-select>
       </mat-form-field>
