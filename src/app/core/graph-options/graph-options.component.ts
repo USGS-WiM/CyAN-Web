@@ -16,6 +16,7 @@ import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map, startWith } from 'rxjs/operators';
 import { TOOLTIPS } from '../../app.tooltips';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-graph-options',
@@ -38,10 +39,10 @@ export class GraphOptionsComponent implements OnInit {
   });
   public optimalAlignment: Boolean = false;
   public useBoundingBox: Boolean = false;
-  minYear: number = 1975;
+  minYear: number = 1980;
   maxYear: number = 2021;
   timeOptions: Options = {
-    floor: 1975,
+    floor: 1980,
     ceil: 2021,
     barDimension: 210,
     animate: false,
@@ -920,10 +921,8 @@ export class GraphOptionsComponent implements OnInit {
 
     //If only one point was selected, do not need to re-create graph
     if (!this.singlePointSelected) {
-      console.log('mulitple points selected');
       this.createGraph(false);
     } else {
-      console.log('only one point selected');
       //New styling for new plot
       let update = {
         marker: {
@@ -1634,11 +1633,20 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
       xData = xdata;
     });
+
     let allGraphData = xData.concat(yData);
-    this.createCSV(allGraphData, 'plottedData.csv');
+
+    this.createCSV(allGraphData, 'plottedData.csv', true);
   }
 
-  createCSV(data, filename) {
+  createCSV(data, filename, formatDate) {
+    if (formatDate) {
+      for (let i = 0; i < data.length; i++) {
+        let currDate = data[i].date_time_group;
+        let formattedDate = moment(currDate).format('MM-DD-YYYY HH:mm:ss');
+        data[i]['date_formatted'] = formattedDate;
+      }
+    }
     let csvContent = 'data:text/csv;charset=utf-8,';
     let csv = data.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
@@ -1790,7 +1798,7 @@ export class GraphOptionsComponent implements OnInit {
     } else {
       // reseting graph min & max but leaving map options observables alone
       // if user checks box it will default to map option again
-      this.minYear = 1975;
+      this.minYear = 1980;
       this.maxYear = 2021;
     }
   }
@@ -1850,10 +1858,10 @@ export class GraphOptionsComponent implements OnInit {
     // resetting graph options
     this.optimalAlignment = false;
     this.useBoundingBox = false;
-    this.minYear = 1975;
+    this.minYear = 1980;
     this.maxYear = 2021;
     this.timeOptions = {
-      floor: 1975,
+      floor: 1980,
       ceil: 2021,
       barDimension: 210,
       animate: false,

@@ -59,6 +59,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Tooltips to Clear Filters and Download Flags buttons on graph page
 - Inline Ability to clear X and Y parameters on graph page
 - Adds accessibility features: tab in About modal and high contrast mode
+- Adds format date to csv downloads
 
 ### Changed
 
@@ -74,6 +75,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changes look of landing page and About modal buttons
 - Changes size and transparency of unflagged points to help identify overlapping points
 - Put units on second line in graph axis titles
+- Replace pcode with short name in map popups
 
 ### Fixed
 

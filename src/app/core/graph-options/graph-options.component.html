@@ -31,7 +31,8 @@
                 {{parameter.short_name}}
               </mat-option>
             </mat-autocomplete>
-            <button mat-button *ngIf="graphSelectionsForm && graphSelectionsForm.get('ParametersX').value" matSuffix mat-icon-button aria-label="Clear selected parameter" class="clear-icon" (click)="clearParameter('x')">
+            <button mat-button *ngIf="graphSelectionsForm && graphSelectionsForm.get('ParametersX').value" matSuffix
+              mat-icon-button aria-label="Clear selected parameter" class="clear-icon" (click)="clearParameter('x')">
               <mat-icon>close</mat-icon>
             </button>
           </mat-form-field>
@@ -59,7 +60,8 @@
                 {{parameter.short_name}}
               </mat-option>
             </mat-autocomplete>
-            <button mat-button *ngIf="graphSelectionsForm && graphSelectionsForm.get('ParametersY').value" matSuffix mat-icon-button aria-label="Clear selected parameter" class="clear-icon" (click)="clearParameter('y')">
+            <button mat-button *ngIf="graphSelectionsForm && graphSelectionsForm.get('ParametersY').value" matSuffix
+              mat-icon-button aria-label="Clear selected parameter" class="clear-icon" (click)="clearParameter('y')">
               <mat-icon>close</mat-icon>
             </button>
           </mat-form-field>
@@ -86,7 +88,7 @@
       </div>
       <div class="leftBreak">
         Log Scale &nbsp;
-        <mat-checkbox  class="example-margin" [disableRipple]="true" (change)="applyLogX($event)" id="xLogCheckbox"
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyLogX($event)" id="xLogCheckbox"
           aria-label="Checking this box will add a logarithmic scale to the x-axis">x
         </mat-checkbox>
         &nbsp;
@@ -95,7 +97,8 @@
         </mat-checkbox>
       </div>
       <div class="leftTopBreak" aria-label="Checking this box will filter points using the current map extent">
-        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)" id="applyBoundingCheckbox">Limit by study
+        <mat-checkbox class="example-margin" [disableRipple]="true" (change)="applyBoundingBox($event)"
+          id="applyBoundingCheckbox">Limit by study
           area <br />
           specified in map options
         </mat-checkbox>
@@ -107,9 +110,10 @@
       </div>
       <div class="flex-container">
         <app-file-upload></app-file-upload>
-        <span matTooltip="{{disabledFlagButtonTooltip()}}" [matTooltipDisabled]="flaggedData.length > 0" [matTooltipPosition]="'right'">
+        <span matTooltip="{{disabledFlagButtonTooltip()}}" [matTooltipDisabled]="flaggedData.length > 0"
+          [matTooltipPosition]="'right'">
           <button class="downloadBtn dataBtn disabledDataBtn leftBreak" id="flagBtn"
-            (click)="createCSV(this.flaggedData, 'flags.csv')" matTooltip="Download CSV"
+            (click)="createCSV(this.flaggedData, 'flags.csv', true)" matTooltip="Download CSV"
             aria-label="Clicking this button will download a CSV of the flagged data">
             <mat-icon>cloud_download</mat-icon>
             <mat-icon>flag</mat-icon>
@@ -126,8 +130,8 @@
         <mat-icon>cloud_download</mat-icon>
         <mat-icon>library_books</mat-icon>
       </button>
-      <button class="plotDataBtn dataBtn leftBreak"
-        aria-label="Click this button to clear the graph" (click)="clearGraph()" matTooltip="{{clearFiltersTooltip()}}" [matTooltipPosition]="'right'">
+      <button class="plotDataBtn dataBtn leftBreak" aria-label="Click this button to clear the graph"
+        (click)="clearGraph()" matTooltip="{{clearFiltersTooltip()}}" [matTooltipPosition]="'right'">
         Clear Filters
       </button>
     </div>

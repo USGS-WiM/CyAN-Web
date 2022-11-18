@@ -21,6 +21,7 @@ import 'leaflet.markercluster';
 import { map, startWith } from 'rxjs/operators';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-map-options',
@@ -67,10 +68,10 @@ export class MapOptionsComponent implements OnInit {
   public nullDataChecked: Boolean = false;
   public optimalAlignment: Boolean = false;
   public nullCheckboxElement = document.getElementById('nullCheckbox');
-  minYear: number = 1975;
+  minYear: number = 1980;
   maxYear: number = 2021;
   timeOptions: Options = {
-    floor: 1975,
+    floor: 1980,
     ceil: 2021,
     animate: false,
     barDimension: 210,
@@ -171,11 +172,17 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.mapQueryResultsSubject.subscribe(
       (mapQueryResults) => {
         this.allMapData = mapQueryResults;
+        console.log('this.allMapData', this.allMapData);
       }
     );
   }
 
   public downloadMapData() {
+    for (let i = 0; i < this.allMapData.length; i++) {
+      let currDate = this.allMapData[i].date_time_group;
+      let formattedDate = moment(currDate).format('MM-DD-YYYY HH:mm:ss');
+      this.allMapData[i]['date_formatted'] = formattedDate;
+    }
     let mapContent = 'data:text/csv;charset=utf-8,';
     let csv = this.allMapData.map((row) => Object.values(row));
     csv.unshift(Object.keys(this.allMapData[0]));
@@ -615,7 +622,7 @@ export class MapOptionsComponent implements OnInit {
     }
   }
 
-  clearMapFilters(){
+  clearMapFilters() {
     // resetting forms
     this.paramMethodForm.reset();
     this.boundingBoxForm.reset();
@@ -623,8 +630,8 @@ export class MapOptionsComponent implements OnInit {
 
     //resetting variables
     this.filterService.getMaxYear(2021);
-    this.filterService.getMinYear(1975);
-    this.minYear = 1975;
+    this.filterService.getMinYear(1980);
+    this.minYear = 1980;
     this.maxYear = 2021;
     this.matchingMcodes = [];
     this.snToPcode = [];
@@ -641,7 +648,7 @@ export class MapOptionsComponent implements OnInit {
 
     // resetting chip list else the selected param chip remains
     this.chipParams = [];
-    
+
     //sending click trigger for recognition in map.component
     this.mapLayersService.sendClearMapClickEvent();
   }
