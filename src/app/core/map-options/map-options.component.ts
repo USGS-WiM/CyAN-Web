@@ -63,11 +63,7 @@ export class MapOptionsComponent implements OnInit {
   public eastBounds: number;
   public westBounds: number;
   public mapBoundsChecked: Boolean = false;
-  public showNullWarning: Boolean = false;
-  public includeNullSites: Boolean = false;
-  public nullDataChecked: Boolean = false;
   public optimalAlignment: Boolean = false;
-  public nullCheckboxElement = document.getElementById('nullCheckbox');
   minYear: number = 1980;
   maxYear: number = 2021;
   timeOptions: Options = {
@@ -312,7 +308,7 @@ export class MapOptionsComponent implements OnInit {
           west: parseFloat(this.boundingBoxForm.get('westControl').value),
           min_year: this.minYear,
           max_year: this.maxYear,
-          include_NULL: this.includeNullSites,
+          include_NULL: false,
           satellite_align: this.optimalAlignment,
           region: this.regionForm.get('regionControl').value,
         },
@@ -341,48 +337,6 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayerOptions = display;
     //because toggling the panels changes the layout, resize elements as necessary
     this.resizeDivs();
-  }
-
-  //Warn user that including null values is probably a bad idea
-  public nullwarning(nullChecked: MatCheckboxChange) {
-    this.nullDataChecked = false; // Forces value to always remain false, remove when working correctly
-    nullChecked.checked = false; // Forces value to always remain false, remove when working correctly
-    let mapLayersOptions = document.getElementById('mapLayersOptions');
-    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
-    if (nullChecked.checked) {
-      this.showNullWarning = true;
-      mapLayersOptions.classList.add('disableClick');
-      mapOptionsContainer.classList.add('disableClick');
-    } else {
-      this.showNullWarning = false;
-      mapOptionsContainer.classList.remove('disableClick');
-      mapLayersOptions.classList.remove('disableClick');
-    }
-  }
-
-  //This is called when a user selects 'Yes' or 'No' in the null warning popup
-  public submitNullWarning(showNullSites: Boolean) {
-    let mapLayersOptions = document.getElementById('mapLayersOptions');
-    let mapOptionsContainer = document.getElementById('mapOptionsContainer');
-
-    //When an option is selected, enable the Map Options panel
-    mapLayersOptions.classList.remove('disableClick');
-    mapOptionsContainer.classList.remove('disableClick');
-
-    let nullCheckboxElement = document.getElementById(
-      'nullCheckbox'
-    ) as HTMLInputElement;
-
-    //Keep the checkbox checked or remove the check, depending on the user selection
-    this.showNullWarning = false;
-    if (showNullSites) {
-      this.includeNullSites = true;
-      this.nullDataChecked = true;
-    } else {
-      nullCheckboxElement.classList.remove('mat-checkbox-checked');
-      this.includeNullSites = false;
-      this.nullDataChecked = false;
-    }
   }
 
   //This is called when a user checks/unchecks the satellite alignment option
@@ -637,15 +591,9 @@ export class MapOptionsComponent implements OnInit {
     this.snToPcode = [];
 
     // resetting checkboxes
-    let nullCheckboxElement = document.getElementById('nullCheckbox');
-    nullCheckboxElement.classList.remove('mat-checkbox-checked');
     if (this.optimalAlignment == true) {
       this.optimalAlignment = false;
     }
-    if (this.nullDataChecked == true) {
-      this.nullDataChecked = false;
-    }
-
     // resetting chip list else the selected param chip remains
     this.chipParams = [];
 
