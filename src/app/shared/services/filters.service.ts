@@ -15,6 +15,7 @@ export class FiltersService {
   regions$: Observable<any>;
   flagTypes;
   sampleFlags;
+  resultsKey;
 
   constructor(private httpClient: HttpClient) {
     //Each of these is used to retrieve data for populating dropdown menus
@@ -36,6 +37,7 @@ export class FiltersService {
     );
     this.flagTypes = APP_SETTINGS.flagTypes();
     this.sampleFlags = APP_SETTINGS.sampleFlags();
+    this.resultsKey = APP_SETTINGS.resultsKey();
   }
 
   // Observables for min and max year of map options

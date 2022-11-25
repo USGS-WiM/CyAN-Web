@@ -61,4 +61,61 @@ export class APP_SETTINGS {
     ];
     return sampleFlags;
   }
+  public static resultsKey() {
+    let resultsKey = [
+      {
+        attribute: 'rcode',
+        explanation: 'result code',
+      },
+      {
+        attribute: 'pcode',
+        explanation: 'parameter code',
+      },
+      {
+        attribute: 'mcode',
+        explanation: 'method code',
+      },
+      {
+        attribute: 'date_time_group',
+        explanation: 'date time group',
+      },
+      {
+        attribute: 'sid',
+        explanation: 'site ID',
+      },
+      {
+        attribute: 'latitude',
+        explanation: 'latitude at sample site',
+      },
+      {
+        attribute: 'longitude',
+        explanation: 'longitude at sample site',
+      },
+      {
+        attribute: 'result',
+        explanation: 'result',
+      },
+      {
+        attribute: 'units',
+        explanation: 'units',
+      },
+      {
+        attribute: 'region',
+        explanation: 'region',
+      },
+      {
+        attribute: 'parameterName',
+        explanation: 'abbreviated parameter name',
+      },
+      {
+        attribute: 'methodName',
+        explanation: 'abbreviated method name',
+      },
+      {
+        attribute: 'date_formatted',
+        explanation: 'date_time_group converted to mm/dd/yyyy HH:mm:ss',
+      },
+    ];
+    return resultsKey;
+  }
 }

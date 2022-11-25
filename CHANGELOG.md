@@ -60,6 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Inline Ability to clear X and Y parameters on graph page
 - Adds accessibility features: tab in About modal and high contrast mode
 - Adds format date to csv downloads
+- Adds CSV download for interpreting results column headers
 
 ### Changed
 
