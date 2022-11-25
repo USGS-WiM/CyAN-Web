@@ -61,6 +61,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adds accessibility features: tab in About modal and high contrast mode
 - Adds format date to csv downloads
 - Adds CSV download for interpreting results column headers
+- Adds lat/lng coordinates on cursor move
 
 ### Changed
 
