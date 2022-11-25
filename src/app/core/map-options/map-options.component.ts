@@ -168,7 +168,6 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.mapQueryResultsSubject.subscribe(
       (mapQueryResults) => {
         this.allMapData = mapQueryResults;
-        console.log('this.allMapData', this.allMapData);
       }
     );
   }
