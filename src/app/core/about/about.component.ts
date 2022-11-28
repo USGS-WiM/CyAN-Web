@@ -34,6 +34,7 @@ export class AboutComponent implements OnInit {
   public methodTypes$: Observable<any[]>;
   public mcodeShortName;
   public parameterTypes;
+  public resultsKey;
   public allFlagTypes;
   public sampleFlags;
 
@@ -93,6 +94,7 @@ export class AboutComponent implements OnInit {
     this.parameterTypes$.subscribe(
       (parameters) => (this.parameterTypes = parameters)
     );
+    this.resultsKey = this.filterService.resultsKey;
     this.allFlagTypes = this.filterService.flagTypes;
     this.sampleFlags = this.filterService.sampleFlags;
   }
@@ -107,6 +109,10 @@ export class AboutComponent implements OnInit {
 
   flagTypesDownload() {
     this.createCSV(this.allFlagTypes, 'flagTypes.csv');
+  }
+
+  resultsKeyDownload() {
+    this.createCSV(this.resultsKey, 'resultsKey.csv');
   }
 
   flagTemplateDownload() {

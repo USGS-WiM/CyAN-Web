@@ -21,6 +21,10 @@ export class MapComponent implements AfterViewInit {
   public longitude: number;
   public parameterTypes$: Observable<any[]>;
   public parameterTypes;
+  public currLatLng = '45.200, -85.620';
+  public enableLatLng: Boolean = false;
+  public centerLat = 45.2;
+  public centerLng = -85.62;
 
   constructor(
     private componentDisplayService: ComponentDisplayService,
@@ -187,13 +191,24 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
+  private getLatLng() {
+    //Get lat lng of user's cursor
+    this.map.addEventListener('mousemove', (event) => {
+      if (this.enableLatLng) {
+        let lat = Math.round(event.latlng.lat * 1000) / 1000;
+        let lng = Math.round(event.latlng.lng * 1000) / 1000;
+        this.currLatLng = lat.toString() + ', ' + lng.toString();
+      }
+    });
+  }
+
   private zoomToPoints(layer) {
     this.map.fitBounds(layer.getBounds());
   }
 
   private initMap(): void {
     this.map = L.map('map', {
-      center: [45.2, -85.62],
+      center: [this.centerLat, this.centerLng],
       zoom: 7,
       zoomControl: false,
     });
@@ -220,6 +235,7 @@ export class MapComponent implements AfterViewInit {
     tiles.addTo(this.map);
     this.componentDisplayService.getDisableMap(true);
     this.disableMap();
+    this.getLatLng();
   }
 
   private clearMap() {
@@ -254,6 +270,7 @@ export class MapComponent implements AfterViewInit {
         this.map.keyboard.disable();
         if (this.map.tap) this.map.tap.disable();
         document.getElementById('map').style.cursor = 'default';
+        this.enableLatLng = false;
       } else {
         this.map.dragging.enable();
         this.map.touchZoom.enable();
@@ -263,6 +280,7 @@ export class MapComponent implements AfterViewInit {
         this.map.keyboard.enable();
         if (this.map.tap) this.map.tap.enable();
         document.getElementById('map').style.cursor = 'grab';
+        this.enableLatLng = true;
       }
     });
   }

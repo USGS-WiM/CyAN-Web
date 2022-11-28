@@ -2,10 +2,10 @@
 	<div class="map-frame">
 		<div id="map">
 			<div class="northPosition">
-				<div class="northArrow"></div>
+				<div class="northArrow wimMargin"></div>
 			</div>
 			<div class="northPosition">
-				<div class="northArrow">
+				<div class="northArrow wimMargin">
 					<p class="arrow up" aria-label="This is a north arrow. North is straight up."></p>
 					<div class="northLabel" aria-label="This is a north arrow. North is straight up.">
 						N
@@ -15,6 +15,9 @@
 							matTooltip="Created by WIM" src="assets/logo_only_web.png" class="wimLogo" />
 					</a>
 				</div>
+			</div>
+			<div class="northPosition">
+				<div class="northArrow latLngBox">{{currLatLng}}</div>
 			</div>
 		</div>
 	</div>

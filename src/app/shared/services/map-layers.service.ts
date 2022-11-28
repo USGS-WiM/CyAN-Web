@@ -83,7 +83,7 @@ export class MapLayersService {
     base.classList.add('initial-loader');
 
     // if options are not defined do not make request
-    if(options !== undefined) {
+    if (options !== undefined) {
       //if one of the bounding boxes is blank, don't constrain the query in that direction
       if (isNaN(options.meta.south)) {
         options.meta.south = -90;
@@ -97,38 +97,38 @@ export class MapLayersService {
       if (isNaN(options.meta.west)) {
         options.meta.west = -180;
       }
-    
-    
-    return this.httpClient
-      .post(APP_SETTINGS.wqDataURL, options)
-      .subscribe((res: any[]) => {
-        if (res.length === 0) {
-          this.snackBar.open('No sites match your query.', 'OK', {
-            duration: 4000,
-            verticalPosition: 'top',
-          });
 
-          base.classList.remove('initial-loader');
-        } else {
-          mapData = res;
-          for (let i = 0; i < res.length; i++) {
-            let lat = Number(res[i].latitude);
-            let lng = Number(res[i].longitude);
+      return this.httpClient
+        .post(APP_SETTINGS.wqDataURL, options)
+        .subscribe((res: any[]) => {
+          if (res.length === 0) {
+            this.snackBar.open('No sites match your query.', 'OK', {
+              duration: 4000,
+              verticalPosition: 'top',
+            });
 
-            L.marker([lat, lng], {
-              icon: L.divIcon({
-                className: 'allSiteIcon',
-              }),
-            }).addTo(this.mapWQSites);
+            base.classList.remove('initial-loader');
+          } else {
+            mapData = res;
+            for (let i = 0; i < res.length; i++) {
+              let lat = Number(res[i].latitude);
+              let lng = Number(res[i].longitude);
+
+              L.marker([lat, lng], {
+                icon: L.divIcon({
+                  className: 'allSiteIcon',
+                }),
+              }).addTo(this.mapWQSites);
+            }
+            this.filterWqSampleSubject.next(this.mapWQSites);
+            this.mapQueryResultsSubject.next(mapData);
+            base.classList.remove('initial-loader');
+            let mapDownloadBtn = document.getElementById('mapDownloadBtn');
+            mapDownloadBtn.classList.remove('disabledDataBtn');
           }
-          this.filterWqSampleSubject.next(this.mapWQSites);
-          this.mapQueryResultsSubject.next(mapData);
-          base.classList.remove('initial-loader');
-          let mapDownloadBtn = document.getElementById('mapDownloadBtn');
-          mapDownloadBtn.classList.remove('disabledDataBtn');
-        }
-      });
-    } else if (options == undefined) { //Clears observables, resetting the map and map options for a new query
+        });
+    } else if (options == undefined) {
+      //Clears observables, resetting the map and map options for a new query
       this.filterWqSampleSubject.next(undefined);
       this.mapQueryResultsSubject.next(undefined);
       base.classList.remove('initial-loader');
