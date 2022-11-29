@@ -32,6 +32,7 @@ export class GraphOptionsComponent implements OnInit {
 
   //Graph options
   graphSelectionsForm = new FormGroup({
+    Database: new FormControl(),
     ParametersX: new FormControl(),
     MethodsX: new FormControl(),
     ParametersY: new FormControl(),
@@ -126,6 +127,7 @@ export class GraphOptionsComponent implements OnInit {
   //Intermediate data
   public matchingMcodesY = [];
   public matchingMcodesX = [];
+  public databaseChoices = [];
 
   //Data sent to service
   public filterQueryX;
@@ -182,6 +184,7 @@ export class GraphOptionsComponent implements OnInit {
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
     this.allFlagTypes = this.filterService.flagTypes;
+    this.databaseChoices = this.filterService.databaseChoices;
   }
 
   //Adjust the css (via resizeDivs()) when the window is resized
@@ -341,6 +344,17 @@ export class GraphOptionsComponent implements OnInit {
       (minDate) => (minDateReturned = minDate)
     );
 
+    let orgValue = this.graphSelectionsForm.get('Database').value;
+    let orgName: string = '';
+    for (let i = 0; i < orgValue.length; i++) {
+      let tempOrg = this.databaseChoices[i].toString();
+      if (i !== orgValue.length - 1) {
+        orgName = orgName + tempOrg + ', ';
+      } else {
+        orgName = orgName + tempOrg;
+      }
+    }
+
     //Remove commas so they don't interfere with the csv format
     let formattedRegion = String(this.filterQueryX.meta.region);
     formattedRegion = formattedRegion.replace(/,/g, '; ');
@@ -371,6 +385,7 @@ export class GraphOptionsComponent implements OnInit {
         'Y_Method',
         'X_Units',
         'Y_Units',
+        'Database',
       ],
       [
         this.filterQueryX.meta.north,
@@ -389,6 +404,7 @@ export class GraphOptionsComponent implements OnInit {
         formattedMcodeY,
         this.xAxisUnits,
         this.yAxisUnits,
+        orgName,
       ],
     ];
   }
@@ -1374,15 +1390,25 @@ export class GraphOptionsComponent implements OnInit {
     let tempM_X = this.graphSelectionsForm.get('MethodsX').value;
     let tempM_Y = this.graphSelectionsForm.get('MethodsY').value;
 
+    let org = this.graphSelectionsForm.get('Database').value;
+    //If all databases are selected, submit 0
+    //Otherwise, submit the first (only) one from the array
+    if (org) {
+      if (org.length == 0) {
+        org = null;
+      }
+    }
+
     //If any parameter or method is left blank, prompt user to make a selection
     if (
       tempP_X_value === null ||
       tempP_Y_value === null ||
       tempM_X == null ||
-      tempM_Y == null
+      tempM_Y == null ||
+      org == null
     ) {
       this.snackBar.open(
-        'Please select a parameter and method for each axis.',
+        'Please select a database and a parameter & method for each axis.',
         'OK',
         {
           duration: 4000,
@@ -1504,6 +1530,15 @@ export class GraphOptionsComponent implements OnInit {
       tempM = this.graphSelectionsForm.get('MethodsY').value;
     }
 
+    let org = this.graphSelectionsForm.get('Database').value;
+    //If all databases are selected, submit 0
+    //Otherwise, submit the first (only) one from the array
+    if (org.length == this.databaseChoices.length) {
+      org = 0;
+    } else {
+      org = org[0];
+    }
+
     let items = new Object();
     //Populate the 'items' object (parameters & methods) in the query object
     //Method form is a single-select dropdown, but service requires an array, so add method string to empty array
@@ -1540,6 +1575,7 @@ export class GraphOptionsComponent implements OnInit {
             include_NULL: false,
             satellite_align: this.optimalAlignment,
             region: this.regions,
+            organization: org,
           },
           items,
         };
@@ -1555,6 +1591,7 @@ export class GraphOptionsComponent implements OnInit {
             include_NULL: false,
             satellite_align: this.optimalAlignment,
             region: [],
+            organization: org,
           },
           items,
         };
@@ -1576,6 +1613,7 @@ export class GraphOptionsComponent implements OnInit {
             include_NULL: false,
             satellite_align: this.optimalAlignment,
             region: this.regions,
+            organization: org,
           },
           items,
         };
@@ -1591,6 +1629,7 @@ export class GraphOptionsComponent implements OnInit {
             include_NULL: false,
             satellite_align: this.optimalAlignment,
             region: [],
+            organization: org,
           },
           items,
         };
@@ -1809,9 +1848,11 @@ export class GraphOptionsComponent implements OnInit {
     if (axis == 'x') {
       this.graphSelectionsForm.get('ParametersX').setValue('');
       this.graphSelectionsForm.get('MethodsX').setValue('');
+      this.graphSelectionsForm.get('Database').setValue(null);
     } else if (axis == 'y') {
       this.graphSelectionsForm.get('ParametersY').setValue('');
       this.graphSelectionsForm.get('MethodsY').setValue('');
+      this.graphSelectionsForm.get('Database').setValue(null);
     }
   }
 

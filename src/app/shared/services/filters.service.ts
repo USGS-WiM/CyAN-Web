@@ -16,6 +16,7 @@ export class FiltersService {
   flagTypes;
   sampleFlags;
   resultsKey;
+  databaseChoices;
 
   constructor(private httpClient: HttpClient) {
     //Each of these is used to retrieve data for populating dropdown menus
@@ -38,6 +39,7 @@ export class FiltersService {
     this.flagTypes = APP_SETTINGS.flagTypes();
     this.sampleFlags = APP_SETTINGS.sampleFlags();
     this.resultsKey = APP_SETTINGS.resultsKey();
+    this.databaseChoices = APP_SETTINGS.databaseChoices();
   }
 
   // Observables for min and max year of map options

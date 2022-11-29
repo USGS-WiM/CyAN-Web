@@ -46,9 +46,11 @@ export class MapOptionsComponent implements OnInit {
 
   //Intermediate data
   public matchingMcodes = [];
+  public databaseChoices = [];
 
   //Map options
   public paramMethodForm = new FormGroup({
+    databaseControl: new FormControl(),
     parameterControl: new FormControl(),
     methodControl: new FormControl(),
   });
@@ -127,6 +129,7 @@ export class MapOptionsComponent implements OnInit {
     this.pcodeToMcode$ = this.filterService.pcodeToMcode$;
     this.regions$ = this.filterService.regions$;
     this.iterableDiffer = iterableDiffers.find([]).create(null);
+    this.databaseChoices = this.filterService.databaseChoices;
   }
 
   @HostListener('window:resize')
@@ -245,13 +248,14 @@ export class MapOptionsComponent implements OnInit {
   //This is called when 'Filter' button is clicked
   //It formats the user's selections into an object that can be used to retrieve data from the service
   public runFilters() {
-    //Users must select at least one parameter and at least one method
+    //Users must select at least one parameter, method, and database
     if (
       this.snToPcode == null ||
-      this.paramMethodForm.get('methodControl').value == null
+      this.paramMethodForm.get('methodControl').value == null ||
+      this.paramMethodForm.get('databaseControl').value == null
     ) {
       this.snackBar.open(
-        'Please select at least one parameter and method.',
+        'Please select at least one parameter, method, and database.',
         'OK',
         {
           duration: 4000,
@@ -260,10 +264,11 @@ export class MapOptionsComponent implements OnInit {
       );
     } else if (
       this.snToPcode.length == 0 ||
-      this.paramMethodForm.get('methodControl').value.length == 0
+      this.paramMethodForm.get('methodControl').value.length == 0 ||
+      this.paramMethodForm.get('databaseControl').value.length == 0
     ) {
       this.snackBar.open(
-        'Please select at least one parameter and method.',
+        'Please select at least one parameter, method, and database.',
         'OK',
         {
           duration: 4000,
@@ -298,6 +303,14 @@ export class MapOptionsComponent implements OnInit {
           items[tempP[i]] = matchMcodes;
         }
       }
+      let org = this.paramMethodForm.get('databaseControl').value;
+      //If all databases are selected, submit 0
+      //Otherwise, submit the first (only) one from the array
+      if (org.length == this.databaseChoices.length) {
+        org = 0;
+      } else {
+        org = org[0];
+      }
       //Create the object used to retrieve data from the service
       let filterParameters = {
         meta: {
@@ -310,6 +323,7 @@ export class MapOptionsComponent implements OnInit {
           include_NULL: false,
           satellite_align: this.optimalAlignment,
           region: this.regionForm.get('regionControl').value,
+          organization: org,
         },
         items,
       };
