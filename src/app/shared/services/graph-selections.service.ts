@@ -127,6 +127,7 @@ export class GraphSelectionsService {
         include_NULL: false;
         satellite_align: boolean;
         region: any[];
+        organization: number;
       };
       items;
     },
@@ -339,6 +340,8 @@ export class GraphSelectionsService {
       );
       let graphOptions = document.getElementById('graphOptionsBackgroundID');
       graphOptions.classList.remove('disableClick');
+      let base = document.getElementById('base');
+      base.classList.remove('initial-loader');
     }
   }
 }

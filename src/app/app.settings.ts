@@ -118,4 +118,18 @@ export class APP_SETTINGS {
     ];
     return resultsKey;
   }
+
+  public static databaseChoices() {
+    let databaseChoices = [
+      {
+        name: 'GLRI',
+        code: 2,
+      },
+      {
+        name: 'Water Quality Portal',
+        code: 1,
+      },
+    ];
+    return databaseChoices;
+  }
 }

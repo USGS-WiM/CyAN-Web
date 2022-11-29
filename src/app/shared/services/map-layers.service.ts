@@ -56,6 +56,7 @@ export class MapLayersService {
       include_NULL: Boolean;
       satellite_align: Boolean;
       region: any[];
+      organization: number;
     };
     items: {};
   }) {
