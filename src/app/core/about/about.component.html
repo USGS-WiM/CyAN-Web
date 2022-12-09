@@ -46,7 +46,8 @@
             one
             method for every parameter you choose.
           </li>
-          <li>After selecting your parameter(s) and method(s), you have fulfilled your minimum requirements to create a
+          <li>After selecting your database(s), parameter(s), and method(s), you have fulfilled your minimum
+            requirements to create a
             query. At this point, you can select <i>Create Map</i> and view your results. However, there are several
             additional
             options. Each of them will filter (limit) the returned results. For example, if you chose a date range of
@@ -94,7 +95,7 @@
                   query
                   results. If you click <i>Populate map bounds</i>, the latitude/longitude boxes will be populated with
                   the
-                  dimensions
+                  coordinates
                   created by the bounding box of your screen.
                 </ol>
               </li>
@@ -102,8 +103,7 @@
                 Optimal satellite alignment
                 <ol>
                   Checking this box will only return samples with optimal satellite
-                  alignment. This
-                  is a true/false field in our database.
+                  alignment.
                 </ol>
               </li>
             </ul>
@@ -185,7 +185,7 @@
               You have fulfilled the minimum requirements for creating a graph. You may now either click <i>Create
                 Graph</i>,
               upload flags, or
-              select additional options.
+              apply additional filters.
               <ul>
                 <li>
 
@@ -245,8 +245,6 @@
                   <ol>
                     Checking this box will only return samples with optimal satellite
                     alignment.
-                    This
-                    is a true/false field in our database.
                   </ol>
                 </li>
               </ul>
@@ -297,11 +295,11 @@
               new
               flags.<ul>
                 <li>Flag an individual point<ol>
-                    The <i>Zoom</i> icon in the upper right corner of the plot doubles as a flag
-                    selector.
+                    The <i>Lasso</i> icon in the upper right corner can select individual points or a group of points.
                     If
-                    you click on a point while the <i>Zoom</i> icon is selected, you will be prompted to create a new
-                    flag.
+                    you click on a point while the <i>Lasso</i> icon is selected, you will be prompted to create a new
+                    flag. If you click on an individual point, the flagging pop-up menu will be populated with any
+                    pre-existing flag data associated with that point, such as flag types and custom annotations.
                   </ol>
                 </li>
                 <li>
@@ -312,30 +310,34 @@
                     you to flag multiple points at once by clicking on the graph and dragging your cursor to create a
                     shape
                     around
-                    your desired selection.
+                    your desired selection. If you select a group of points, the flagging pop-up menu will not be
+                    populated with any flag data associated with the multiple points you selected. Any information you
+                    save here will overwrite any pre-existing data. To see pre-existing data associated with an
+                    individual point, select the point by itself instead of in a group.
                   </ol>
                 </li>
                 <li>
                   Flag all plotted points
                   <ol>
                     The <i>Flag</i> icon in the upper right corner of the plot allows you to
-                    flag all plotted points at the same time.
+                    flag all plotted points at the same time. This will overwrite all existing flags associated with the
+                    current plotted points.
                   </ol>
                 </li>
               </ul>
             </li>
             <li>
-              After you select new point(s) to flag using any of the three methods listed above, you will need to record
+              After you select point(s) using any of the three methods listed above, you will need to record
               information about the flags you are creating.
               <ul>
                 <li>
                   Select an axis <ol>
                     You will be prompted to check X-Axis and/or Y-Axis. Checking X-Axis will flag the data
                     that is
-                    associated with the X-Axis of the scatter plot, while checking Y-Axis will flag the data associated
+                    associated with the x-axis of the scatter plot, while checking Y-Axis will flag the data associated
                     with
                     the
-                    Y-Axis. If you wish to flag both, check both boxes. Click <i>Next</i>.
+                    y-axis. If you wish to flag both, check both boxes. Click <i>Next</i>.
                   </ol>
                 </li>
                 <li>
@@ -375,7 +377,7 @@
                   Cancel <ol>
                     If at any time you decide not to flag your selected data, click <i>Cancel</i>, and no new flags will
                     be
-                    created.
+                    created or overwritten.
                   </ol>
                 </li>
                 <li>
@@ -386,10 +388,8 @@
                     individual
                     point
                     is a good way
-                    to review your previous work and make edits to a single point. If you choose to flag data through
-                    the
-                    lasso
-                    tool or by flagging all plotted data at once, you will not be able to see your previous selections.
+                    to review your previous work and make edits to a single point. If you choose to select multiple
+                    points at once, you will not be able to see your previous selections.
                     This
                     is
                     because the points you selected may have multiple different responses associated with
@@ -402,7 +402,8 @@
               When you click <i>Submit</i>, your new flags will be created. You will see this visually on the graph,
               with
               three
-              different colors indicating which data are flagged (x-axis, y-axis, or both). If you generate a new graph
+              different colors and symbols indicating which data are flagged (x-axis, y-axis, or both). If you generate
+              a new graph
               that
               contains flagged data, those points will be displayed accordingly.
             </li>
@@ -446,8 +447,8 @@
             </li>
             <li>
               Metadata <ol>
-                Clicking the <i>Download Metadata</i> button will download two CSVs. One of them contains information
-                associated with the query used to generate your graph. The other contains descriptions of flag types.
+                Clicking the <i>Download Metadata</i> button will download a CSV containing information
+                associated with the query used to generate your graph.
               </ol>
             </li>
             <li>
