@@ -101,10 +101,25 @@ export class AboutComponent implements OnInit {
 
   pcodeDownload() {
     this.createCSV(this.parameterTypes, 'pcodes.csv');
+    let editedPcode = this.parameterTypes;
+    for (let i = 0; i < editedPcode.length; i++) {
+      editedPcode[i].column_definition = editedPcode[
+        i
+      ].column_definition.replace(/,/g, ';');
+      editedPcode[i].short_name = editedPcode[i].short_name.replace(/,/g, ';');
+    }
+    this.createCSV(editedPcode, 'pcodes.csv');
   }
 
   mcodeDownload() {
-    this.createCSV(this.mcodeShortName, 'mcodes.csv');
+    let editedMcode = this.mcodeShortName;
+    for (let i = 0; i < editedMcode.length; i++) {
+      editedMcode[i].nwis_method_descriptions = editedMcode[
+        i
+      ].nwis_method_descriptions.replace(/,/g, ';');
+      editedMcode[i].short_name = editedMcode[i].short_name.replace(/,/g, ';');
+    }
+    this.createCSV(editedMcode, 'mcodes.csv');
   }
 
   flagTypesDownload() {
@@ -124,6 +139,7 @@ export class AboutComponent implements OnInit {
     let csv = data.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
     csvContent += csv.join('\n');
+
     let encodedUri = encodeURI(csvContent);
     let link = document.createElement('a');
     link.setAttribute('href', encodedUri);

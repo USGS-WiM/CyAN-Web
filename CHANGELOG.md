@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adds CSV download for interpreting results column headers
 - Adds lat/lng coordinates on cursor move
 - Adds database selection
+- Adds formatting for new mcode and pcode fields
 
 ### Changed
 
@@ -100,3 +101,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Submit button appears on lasso select before x/y checkboxes are selected
 - Mat-chips going outside of sidebar
 - Corrected axis label
+-
