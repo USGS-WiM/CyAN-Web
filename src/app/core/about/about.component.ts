@@ -105,6 +105,9 @@ export class AboutComponent implements OnInit {
 
   mcodeDownload() {
     this.createCSV(this.mcodeShortName, 'mcodes.csv');
+    for (let i = 0; i < this.mcodeShortName; i++) {
+      //annotation = annotation.replace(/,/g, ';');
+    }
   }
 
   flagTypesDownload() {
@@ -124,6 +127,7 @@ export class AboutComponent implements OnInit {
     let csv = data.map((row) => Object.values(row));
     csv.unshift(Object.keys(data[0]));
     csvContent += csv.join('\n');
+
     let encodedUri = encodeURI(csvContent);
     let link = document.createElement('a');
     link.setAttribute('href', encodedUri);
