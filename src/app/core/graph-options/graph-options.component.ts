@@ -610,6 +610,7 @@ export class GraphOptionsComponent implements OnInit {
 
     //build the graph
     Plotly.newPlot(this.bivariatePlot, data, layout, {
+      responsive: true,
       displayModeBar: true,
       displaylogo: false,
       modeBarButtonsToRemove: ['select', 'resetscale', 'zoomin', 'zoomout'],
@@ -1723,7 +1724,10 @@ export class GraphOptionsComponent implements OnInit {
     }
 
     this.graphHeight = 0.99 * mapHeight - 110;
-    graphBackgroundID.style.height = (0.99 * mapHeight - 110).toString() + 'px';
+    if (!this.showFlagOptions) {
+      graphBackgroundID.style.height =
+        (0.99 * mapHeight - 110).toString() + 'px';
+    }
 
     if (windowWidth < 900) {
       graphOptionsBackgroundID.classList.remove('marginLeftFullWidth');
@@ -1793,7 +1797,7 @@ export class GraphOptionsComponent implements OnInit {
       //this.graphMargins = 20;
     }
 
-    if (this.showGraph && redrawGraph) {
+    if (this.showGraph && redrawGraph && !this.showFlagOptions) {
       this.createGraph(false);
     }
   }
