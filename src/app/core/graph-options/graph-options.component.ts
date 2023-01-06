@@ -1848,11 +1848,9 @@ export class GraphOptionsComponent implements OnInit {
     if (axis == 'x') {
       this.graphSelectionsForm.get('ParametersX').setValue('');
       this.graphSelectionsForm.get('MethodsX').setValue('');
-      this.graphSelectionsForm.get('Database').setValue(null);
     } else if (axis == 'y') {
       this.graphSelectionsForm.get('ParametersY').setValue('');
       this.graphSelectionsForm.get('MethodsY').setValue('');
-      this.graphSelectionsForm.get('Database').setValue(null);
     }
   }
 
