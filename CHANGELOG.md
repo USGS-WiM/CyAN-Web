@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased](https://github.com/USGS-WiM/CyAN-Web/tree/dev)
 
 ### Added
+- Text to graph stating exlcuded count
+- Text to generating graph section of userguide
 
 ### Changed
 
