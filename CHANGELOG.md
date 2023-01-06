@@ -82,6 +82,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Put units on second line in graph axis titles
 - Replace pcode with short name in map popups
 - Removes null checkbox and related code
+- Removes database from clearParameter function
 
 ### Fixed
 
