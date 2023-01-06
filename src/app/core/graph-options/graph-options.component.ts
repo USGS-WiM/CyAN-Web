@@ -42,6 +42,7 @@ export class GraphOptionsComponent implements OnInit {
   public useBoundingBox: Boolean = false;
   minYear: number = 1980;
   maxYear: number = 2021;
+  count: 0;
   timeOptions: Options = {
     floor: 1980,
     ceil: 2021,
@@ -451,6 +452,12 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public createGraph(newPlot: Boolean) {
+
+    // getting count of not plotted results (less thans)
+    this.graphSelectionsService.excludedFromGraphCountSubject.subscribe(
+      (num) => { this.count = num}
+    );
+
     if (newPlot) {
       this.allColors = this.graphSelectionsService.pointColors;
       this.allShapes = this.graphSelectionsService.pointSymbol;
@@ -549,9 +556,10 @@ export class GraphOptionsComponent implements OnInit {
     ];
 
     var layout = {
+      title: "Excluded less thans from plot: " + this.count,
       dragmode: 'lasso',
       font: {
-        size: 18,
+        size: 14,
       },
       xaxis: {
         autotick: this.autotickEnabled,
@@ -1664,10 +1672,10 @@ export class GraphOptionsComponent implements OnInit {
   public downloadAllGraphData() {
     let xData;
     let yData;
-    this.graphSelectionsService.allGraphDataYSubject.subscribe((ydata) => {
+    this.graphSelectionsService.downloadGraphDataYSubject.subscribe((ydata) => {
       yData = ydata;
     });
-    this.graphSelectionsService.allGraphDataXSubject.subscribe((xdata) => {
+    this.graphSelectionsService.downloadGraphDataXSubject.subscribe((xdata) => {
       xData = xdata;
     });
 
