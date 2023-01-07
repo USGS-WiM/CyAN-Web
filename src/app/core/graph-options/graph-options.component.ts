@@ -223,6 +223,8 @@ export class GraphOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
+
+    this.buildAccessibleDatabase();
   }
 
   ngDoCheck() {
@@ -645,6 +647,59 @@ export class GraphOptionsComponent implements OnInit {
     this.showFlagOptions = true;
     this.disableEnableGraph(true);
     this.selectPoints();
+  }
+
+  //Creates html for the accessible form for selecting databases
+  buildAccessibleDatabase() {
+    let databaseHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.databaseChoices.length; i++) {
+      databaseHTML +=
+        "<input id='" +
+        'database' +
+        i +
+        "' type='checkbox'><label for='" +
+        'database' +
+        i +
+        "'>" +
+        this.databaseChoices[i].name +
+        '</label><br>';
+    }
+
+    //Insert the checkbox html into the database fieldset
+    document.getElementById('databaseCheckboxGraph').innerHTML = databaseHTML;
+  }
+
+  databaseCheckboxes(clear: Boolean) {
+    //Find number of databases listed in the fieldset
+    let numDatabaseOptions = this.databaseChoices.length;
+    //To be populated with code from each checked database
+    let selectedDatabase = [];
+    for (let i = 0; i < numDatabaseOptions; i++) {
+      //Get the ID of each database
+      let databaseID = 'database' + i.toString();
+      //Retrieve the element containing the database checkbox
+      let currentDatabase = document.getElementById(
+        databaseID
+      ) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentDatabase.checked = false;
+      }
+
+      if (!clear) {
+        let currDatabaseSelected = currentDatabase.checked;
+        //See if the current database checkbox is checked
+        if (currDatabaseSelected) {
+          //If checked, add database code to the selectedDatabase array
+          selectedDatabase.push(this.databaseChoices[i].code);
+        }
+      }
+    }
+    //Apply the database selections from the accessible form to the default form
+    this.graphSelectionsForm.get('Database').setValue(selectedDatabase);
   }
 
   unflagAllData() {
@@ -1863,6 +1918,7 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesX.reset();
     this.flagTypesY.reset();
     this.sameXYFlag.reset();
+    this.databaseCheckboxes(true);
 
     //resetting checkboxes
     this.datefromMap.checked = false;
