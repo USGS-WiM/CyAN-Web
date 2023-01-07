@@ -17,7 +17,7 @@
         aria-label="clicking here will maximize the panel that contains graph options">minimize</mat-icon>
     </div>
     <div class="break"></div>
-    <fieldset [hidden]="!displayAccessibleForms" class="leftBreak" style="width: 175px;">
+    <fieldset [hidden]="!displayAccessibleForms" class="leftBreak" style="width: 175px; margin-bottom: 10px;">
       <legend>Database</legend>
       <div id="databaseCheckboxGraph" (click)="databaseCheckboxes(false)"></div>
     </fieldset>
@@ -54,14 +54,17 @@
             <legend>X-Axis Methods</legend>
             <div id="xMethodCheckboxGraph" (click)="methodGraph('x', false)">Select a parameter first</div>
           </fieldset>
-          <mat-form-field appearance="fill"
-            aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
-            <mat-label>Methods</mat-label>
-            <mat-select formControlName="MethodsX">
-              <mat-option *ngFor="let method of this.matchingMcodesX" [value]="method.mcode">{{ method.short_name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <div [hidden]="displayAccessibleForms">
+            <mat-form-field appearance="fill"
+              aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
+              <mat-label>Methods</mat-label>
+              <mat-select formControlName="MethodsX">
+                <mat-option *ngFor="let method of this.matchingMcodesX" [value]="method.mcode">{{ method.short_name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
         </div>
       </div>
       <div class="break"></div>
