@@ -610,7 +610,6 @@ export class GraphOptionsComponent implements OnInit {
 
     //build the graph
     Plotly.newPlot(this.bivariatePlot, data, layout, {
-      responsive: true,
       displayModeBar: true,
       displaylogo: false,
       modeBarButtonsToRemove: ['select', 'resetscale', 'zoomin', 'zoomout'],

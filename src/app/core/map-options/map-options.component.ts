@@ -516,6 +516,11 @@ export class MapOptionsComponent implements OnInit {
       'filterPointsCollapsed'
     );
     let mapLayersCollapsed = document.getElementById('mapLayersCollapsed');
+    let additionalSpace: number = 0;
+
+    if (!this.mapLayerOptions) {
+      additionalSpace = 60;
+    }
 
     //move everything to the left when the width shrinks
     if (windowWidth < 900) {
@@ -565,7 +570,8 @@ export class MapOptionsComponent implements OnInit {
       mapPointFilterDiv.classList.add('marginTopSmallHeight');
 
       //set height of point filters according to map height
-      mapPointFilterDiv.style.height = (mapHeight - 220).toString() + 'px';
+      mapPointFilterDiv.style.height =
+        (mapHeight - 220 + additionalSpace).toString() + 'px';
     }
     if (mapHeight > 570) {
       //increase spacing between collapsed map layers and nav buttons
@@ -585,7 +591,8 @@ export class MapOptionsComponent implements OnInit {
       mapPointFilterDiv.classList.remove('marginTopSmallHeight');
 
       //set height of point filters according to map height
-      mapPointFilterDiv.style.height = (mapHeight - 250).toString() + 'px';
+      mapPointFilterDiv.style.height =
+        (mapHeight - 250 + additionalSpace).toString() + 'px';
     }
   }
 
