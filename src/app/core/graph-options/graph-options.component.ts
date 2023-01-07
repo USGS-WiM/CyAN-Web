@@ -31,6 +31,7 @@ export class GraphOptionsComponent implements OnInit {
   public alreadyGraphed: Boolean = false;
 
   //Graph options
+  displayAccessibleForms: Boolean = false;
   graphSelectionsForm = new FormGroup({
     Database: new FormControl(),
     ParametersX: new FormControl(),
@@ -223,7 +224,7 @@ export class GraphOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
-
+    this.loadFormType();
     this.buildAccessibleDatabase();
   }
 
@@ -249,6 +250,19 @@ export class GraphOptionsComponent implements OnInit {
           )
         );
     }
+  }
+
+  public loadFormType() {
+    //Load accessible or default forms according to selection in Accessibility Tips
+    this.componentDisplayService.accessibleFormSubject.subscribe(
+      (accessibleForms) => {
+        if (accessibleForms) {
+          this.displayAccessibleForms = true;
+        } else {
+          this.displayAccessibleForms = false;
+        }
+      }
+    );
   }
 
   public getDataForDropdowns() {
@@ -700,6 +714,10 @@ export class GraphOptionsComponent implements OnInit {
     }
     //Apply the database selections from the accessible form to the default form
     this.graphSelectionsForm.get('Database').setValue(selectedDatabase);
+  }
+
+  xMethodGraph(axis: String, clear: Boolean) {
+    //add stuff here
   }
 
   unflagAllData() {
