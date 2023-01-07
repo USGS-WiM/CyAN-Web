@@ -457,6 +457,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     }
+    this.buildAccessibleMethods();
   }
 
   //Called when minimize options is clicked
@@ -716,8 +717,66 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsForm.get('Database').setValue(selectedDatabase);
   }
 
-  xMethodGraph(axis: String, clear: Boolean) {
-    //add stuff here
+  buildAccessibleMethods() {
+    let xMethodsHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.matchingMcodesX.length; i++) {
+      xMethodsHTML +=
+        "<input id='" +
+        'xmethods' +
+        i +
+        "' type='radio' name='xMethodRadio'><label for='" +
+        'xmethods' +
+        i +
+        "'>" +
+        this.matchingMcodesX[i].short_name +
+        '</label><br>';
+    }
+
+    if (xMethodsHTML == '') {
+      xMethodsHTML = 'Select a parameter first';
+    }
+    //Insert the checkbox html into the database fieldset
+    document.getElementById('xMethodCheckboxGraph').innerHTML = xMethodsHTML;
+  }
+
+  methodGraph(axis: String, clear: Boolean) {
+    //Find number of methods listed in the fieldset
+    let numOptions: number;
+
+    if (axis == 'x') {
+      numOptions = this.matchingMcodesX.length;
+    }
+    //To be populated with code from each checked method
+    let selectedMethods;
+    for (let i = 0; i < numOptions; i++) {
+      //Get the ID of each method
+      let methodID: string;
+      if (axis == 'x') {
+        methodID = 'xmethods' + i.toString();
+      }
+      //Retrieve the element containing the checkbox
+      let currentMethod = document.getElementById(methodID) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentMethod.checked = false;
+      }
+
+      if (!clear) {
+        let currDatabaseSelected = currentMethod.checked;
+        //See if the current checkbox is checked
+        if (currDatabaseSelected) {
+          //If checked, add code to the selectedDatabase array
+          selectedMethods = this.matchingMcodesX[i].mcode;
+        }
+      }
+    }
+    //Apply selections from the accessible form to the default form
+    if (axis == 'x') {
+      this.graphSelectionsForm.get('MethodsX').setValue(selectedMethods);
+    }
   }
 
   unflagAllData() {
@@ -1937,6 +1996,9 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesY.reset();
     this.sameXYFlag.reset();
     this.databaseCheckboxes(true);
+    this.matchingMcodesX = [];
+    this.buildAccessibleMethods();
+    this.methodGraph('x', true);
 
     //resetting checkboxes
     this.datefromMap.checked = false;

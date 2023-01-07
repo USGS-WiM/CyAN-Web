@@ -17,7 +17,7 @@
         aria-label="clicking here will maximize the panel that contains graph options">minimize</mat-icon>
     </div>
     <div class="break"></div>
-    <fieldset [hidden]="!displayAccessibleForms" class="leftBreak">
+    <fieldset [hidden]="!displayAccessibleForms" class="leftBreak" style="width: 175px;">
       <legend>Database</legend>
       <div id="databaseCheckboxGraph" (click)="databaseCheckboxes(false)"></div>
     </fieldset>
@@ -50,9 +50,9 @@
               <mat-icon>close</mat-icon>
             </button>
           </mat-form-field>
-          <fieldset [hidden]="!displayAccessibleForms" class="leftBreak">
+          <fieldset [hidden]="!displayAccessibleForms" style="width: 175px;">
             <legend>X-Axis Methods</legend>
-            <div id="xMethodCheckboxGraph" (click)="xMethodGraph('x', false)"></div>
+            <div id="xMethodCheckboxGraph" (click)="methodGraph('x', false)">Select a parameter first</div>
           </fieldset>
           <mat-form-field appearance="fill"
             aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
