@@ -150,6 +150,7 @@ export class MapOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
+    this.buildAccessibleDatabase();
   }
   ngDoCheck() {
     // Data processing slower then lifecycle hooks so waiting for array to be set before watching parameter control for changes
@@ -359,6 +360,59 @@ export class MapOptionsComponent implements OnInit {
     } else {
       this.optimalAlignment = false;
     }
+  }
+
+  //Creates html for the accessible form for selecting databases
+  buildAccessibleDatabase() {
+    let databaseHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.databaseChoices.length; i++) {
+      databaseHTML +=
+        "<input id='" +
+        'databaseMap' +
+        i +
+        "' type='checkbox'><label for='" +
+        'databaseMap' +
+        i +
+        "'>" +
+        this.databaseChoices[i].name +
+        '</label><br>';
+    }
+
+    //Insert the checkbox html into the database fieldset
+    document.getElementById('databaseCheckboxMap').innerHTML = databaseHTML;
+  }
+
+  databaseCheckboxes(clear: Boolean) {
+    //Find number of databases listed in the fieldset
+    let numDatabaseOptions = this.databaseChoices.length;
+    //To be populated with code from each checked database
+    let selectedDatabase = [];
+    for (let i = 0; i < numDatabaseOptions; i++) {
+      //Get the ID of each database
+      let databaseID = 'databaseMap' + i.toString();
+      //Retrieve the element containing the database checkbox
+      let currentDatabase = document.getElementById(
+        databaseID
+      ) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentDatabase.checked = false;
+      }
+
+      if (!clear) {
+        let currDatabaseSelected = currentDatabase.checked;
+        //See if the current database checkbox is checked
+        if (currDatabaseSelected) {
+          //If checked, add database code to the selectedDatabase array
+          selectedDatabase.push(this.databaseChoices[i].code);
+        }
+      }
+    }
+    //Apply the database selections from the accessible form to the default form
+    this.paramMethodForm.get('databaseControl').setValue(selectedDatabase);
   }
 
   //This is called when the base map changes
@@ -594,6 +648,7 @@ export class MapOptionsComponent implements OnInit {
     this.paramMethodForm.reset();
     this.boundingBoxForm.reset();
     this.regionForm.reset();
+    this.databaseCheckboxes(true);
 
     //resetting variables
     this.filterService.getMaxYear(2021);
