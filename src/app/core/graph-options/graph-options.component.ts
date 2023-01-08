@@ -719,6 +719,9 @@ export class GraphOptionsComponent implements OnInit {
 
   buildAccessibleMethods() {
     let xMethodsHTML = '';
+    let yMethodsHTML = '';
+
+    console.log('this.matchingMcodesY', this.matchingMcodesY);
 
     //Create a checkbox for each of database option
     for (let i = 0; i < this.matchingMcodesX.length; i++) {
@@ -733,12 +736,28 @@ export class GraphOptionsComponent implements OnInit {
         this.matchingMcodesX[i].short_name +
         '</label><br>';
     }
+    for (let i = 0; i < this.matchingMcodesY.length; i++) {
+      yMethodsHTML +=
+        "<input id='" +
+        'ymethods' +
+        i +
+        "' type='radio' name='yMethodRadio'><label for='" +
+        'ymethods' +
+        i +
+        "'>" +
+        this.matchingMcodesY[i].short_name +
+        '</label><br>';
+    }
 
     if (xMethodsHTML == '') {
       xMethodsHTML = 'Select a parameter first';
     }
-    //Insert the checkbox html into the database fieldset
+    if (yMethodsHTML == '') {
+      yMethodsHTML = 'Select a parameter first';
+    }
+    //Insert the checkbox html into the fieldset
     document.getElementById('xMethodCheckboxGraph').innerHTML = xMethodsHTML;
+    document.getElementById('yMethodCheckboxGraph').innerHTML = yMethodsHTML;
   }
 
   methodGraph(axis: String, clear: Boolean) {
@@ -748,6 +767,9 @@ export class GraphOptionsComponent implements OnInit {
     if (axis == 'x') {
       numOptions = this.matchingMcodesX.length;
     }
+    if (axis == 'y') {
+      numOptions = this.matchingMcodesY.length;
+    }
     //To be populated with code from each checked method
     let selectedMethods;
     for (let i = 0; i < numOptions; i++) {
@@ -755,6 +777,9 @@ export class GraphOptionsComponent implements OnInit {
       let methodID: string;
       if (axis == 'x') {
         methodID = 'xmethods' + i.toString();
+      }
+      if (axis == 'y') {
+        methodID = 'ymethods' + i.toString();
       }
       //Retrieve the element containing the checkbox
       let currentMethod = document.getElementById(methodID) as HTMLInputElement;
@@ -765,17 +790,26 @@ export class GraphOptionsComponent implements OnInit {
       }
 
       if (!clear) {
-        let currDatabaseSelected = currentMethod.checked;
+        let currMethodSelected = currentMethod.checked;
         //See if the current checkbox is checked
-        if (currDatabaseSelected) {
-          //If checked, add code to the selectedDatabase array
-          selectedMethods = this.matchingMcodesX[i].mcode;
+        if (currMethodSelected) {
+          if (axis == 'x') {
+            //If checked, add code to the selectedDatabase array
+            selectedMethods = this.matchingMcodesX[i].mcode;
+          }
+          if (axis == 'y') {
+            //If checked, add code to the selectedDatabase array
+            selectedMethods = this.matchingMcodesY[i].mcode;
+          }
         }
       }
     }
     //Apply selections from the accessible form to the default form
     if (axis == 'x') {
       this.graphSelectionsForm.get('MethodsX').setValue(selectedMethods);
+    }
+    if (axis == 'y') {
+      this.graphSelectionsForm.get('MethodsY').setValue(selectedMethods);
     }
   }
 
@@ -1999,6 +2033,7 @@ export class GraphOptionsComponent implements OnInit {
     this.matchingMcodesX = [];
     this.buildAccessibleMethods();
     this.methodGraph('x', true);
+    this.methodGraph('y', true);
 
     //resetting checkboxes
     this.datefromMap.checked = false;
