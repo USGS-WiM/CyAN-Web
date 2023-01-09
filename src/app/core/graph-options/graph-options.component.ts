@@ -729,8 +729,6 @@ export class GraphOptionsComponent implements OnInit {
     let xMethodsHTML = '';
     let yMethodsHTML = '';
 
-    console.log('this.matchingMcodesY', this.matchingMcodesY);
-
     //Create a checkbox for each of database option
     if (axis === 'xaxis') {
       for (let i = 0; i < this.matchingMcodesX.length; i++) {

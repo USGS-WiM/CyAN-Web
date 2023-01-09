@@ -300,9 +300,7 @@ export class GraphSelectionsService {
             counter += 1;
             let xFlag: Boolean = false;
             let yFlag: Boolean = false;
-            console.log(this.flagsSubject.value)
             if (this.flagsSubject.value) {
-              console.log("in flags");
               for (
                 let flagIndex = 0;
                 flagIndex < this.flagsSubject.value.length;
@@ -336,8 +334,6 @@ export class GraphSelectionsService {
             yResultsIndex > filteredY.length - 2 &&
             xResultsIndex > filteredX.length - 2
           ) {
-            /* console.log(yResultsIndex, "filt", filteredY.length)
-            console.log(xResultsIndex, "filt", filteredX.length) */
             this.formatMetadata(this.allDataX, 'xAxis');
             this.formatMetadata(this.allDataY, 'yAxis');
             this.flagIndexX.next(flagX);
