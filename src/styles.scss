@@ -260,7 +260,7 @@ a.modebar-btn svg {
   line-height: 35px;
 }
 .downloadBtn {
-  width: 70px;
+  width: 73px;
   line-height: 3px;
 }
 .mapFilterBtn {
@@ -379,6 +379,7 @@ mat-chip {
   background-color: rgba(255, 255, 255, 0.85);
   width: 270px !important;
   position: relative;
+  overflow-x: hidden;
 }
 .optionsBackgroundResponsive {
   max-height: 670px;

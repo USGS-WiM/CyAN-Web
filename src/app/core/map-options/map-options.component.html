@@ -37,14 +37,20 @@
   </div>
   <form [formGroup]="paramMethodForm">
     <div class="leftBreak">
-      <mat-form-field appearance="fill"
-        aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
-        <mat-label>Database</mat-label>
-        <mat-select formControlName="databaseControl" multiple>
-          <mat-option *ngFor="let database of this.databaseChoices" [value]="database.code">{{ database.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <fieldset style="width: 175px; margin-bottom: 10px;" [hidden]="!displayAccessibleForms">
+        <legend>Database</legend>
+        <div id="databaseCheckboxMap" (click)="databaseCheckboxes(false)"></div>
+      </fieldset>
+      <div [hidden]="displayAccessibleForms">
+        <mat-form-field appearance="fill"
+          aria-label="This dropdown selector contains a list of method names, which are based on the parameter chosen above. Select one or more methods for the graph's x-axis.">
+          <mat-label>Database</mat-label>
+          <mat-select formControlName="databaseControl" multiple>
+            <mat-option *ngFor="let database of this.databaseChoices" [value]="database.code">{{ database.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
     <div class="leftBreak">
       <mat-form-field appearance="fill">
@@ -65,14 +71,20 @@
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
-      <mat-form-field appearance="fill"
-        aria-label="This is a dropdown filters menu. Select one or more methods to plot on the map. The methods list is based on the parameter(s) selected above">
-        <mat-label>Methods</mat-label>
-        <mat-select formControlName="methodControl" multiple>
-          <mat-option *ngFor="let method of matchingMcodes" [value]="method.mcode">{{ method.short_name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <fieldset style="width: 175px;" [hidden]="!displayAccessibleForms">
+        <legend>Methods</legend>
+        <div id="methodCheckbox" (click)="methodMap(false)">Select a parameter first</div>
+      </fieldset>
+      <div [hidden]="displayAccessibleForms">
+        <mat-form-field appearance="fill"
+          aria-label="This is a dropdown filters menu. Select one or more methods to plot on the map. The methods list is based on the parameter(s) selected above">
+          <mat-label>Methods</mat-label>
+          <mat-select formControlName="methodControl" multiple>
+            <mat-option *ngFor="let method of matchingMcodes" [value]="method.mcode">{{ method.short_name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
   </form>
   <div class="custom-slider leftBreak"
@@ -91,7 +103,7 @@
         </mat-select>
       </mat-form-field>
     </form>
-    <button class="dataBtn" (click)="populateMapBounds(true)"
+    <button style="margin-top: -10px" class="dataBtn" (click)="populateMapBounds(true)"
       aria-label="Clicking this button will populate the bounding box with the current map extent">
       Populate map bounds
     </button>
@@ -128,7 +140,7 @@
   <button class="mapFilterBtn dataBtn leftBreak" aria-label="Click this button to clear map filters"
     (click)="clearMapFilters()">
     Clear Map
-  </button>
+  </button><br>
   <button class="mapFilterBtn dataBtn leftBreak" (click)="runFilters()"
     aria-label="Click this button to filter points and plot them on the map">
     Plot Points
