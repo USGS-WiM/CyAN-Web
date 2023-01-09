@@ -65,6 +65,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adds database selection
 - Adds formatting for new mcode and pcode fields
 - Adds additional links to the FAQ
+- Adds option for accessible forms
 
 ### Changed
 

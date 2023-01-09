@@ -49,6 +49,7 @@ export class MapOptionsComponent implements OnInit {
   public databaseChoices = [];
 
   //Map options
+  displayAccessibleForms: Boolean = false;
   public paramMethodForm = new FormGroup({
     databaseControl: new FormControl(),
     parameterControl: new FormControl(),
@@ -150,6 +151,8 @@ export class MapOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
+    this.loadFormType();
+    this.buildAccessibleDatabase();
   }
   ngDoCheck() {
     // Data processing slower then lifecycle hooks so waiting for array to be set before watching parameter control for changes
@@ -171,6 +174,19 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.mapQueryResultsSubject.subscribe(
       (mapQueryResults) => {
         this.allMapData = mapQueryResults;
+      }
+    );
+  }
+
+  public loadFormType() {
+    //Load accessible or default forms according to selection in Accessibility Tips
+    this.componentDisplayService.accessibleFormSubject.subscribe(
+      (accessibleForms) => {
+        if (accessibleForms) {
+          this.displayAccessibleForms = true;
+        } else {
+          this.displayAccessibleForms = false;
+        }
       }
     );
   }
@@ -235,6 +251,7 @@ export class MapOptionsComponent implements OnInit {
         }
       }
     }
+    this.buildAccessibleMethods();
   }
 
   //This is called whenever the region selection changes
@@ -358,6 +375,117 @@ export class MapOptionsComponent implements OnInit {
       this.optimalAlignment = true;
     } else {
       this.optimalAlignment = false;
+    }
+  }
+
+  //Creates html for the accessible form for selecting databases
+  buildAccessibleDatabase() {
+    let databaseHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.databaseChoices.length; i++) {
+      databaseHTML +=
+        "<input id='" +
+        'databaseMap' +
+        i +
+        "' type='checkbox'><label for='" +
+        'databaseMap' +
+        i +
+        "'>" +
+        this.databaseChoices[i].name +
+        '</label><br>';
+    }
+
+    //Insert the checkbox html into the database fieldset
+    document.getElementById('databaseCheckboxMap').innerHTML = databaseHTML;
+  }
+
+  databaseCheckboxes(clear: Boolean) {
+    //Find number of databases listed in the fieldset
+    let numDatabaseOptions = this.databaseChoices.length;
+    //To be populated with code from each checked database
+    let selectedDatabase = [];
+    for (let i = 0; i < numDatabaseOptions; i++) {
+      //Get the ID of each database
+      let databaseID = 'databaseMap' + i.toString();
+      //Retrieve the element containing the database checkbox
+      let currentDatabase = document.getElementById(
+        databaseID
+      ) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentDatabase.checked = false;
+      }
+
+      if (!clear) {
+        let currDatabaseSelected = currentDatabase.checked;
+        //See if the current database checkbox is checked
+        if (currDatabaseSelected) {
+          //If checked, add database code to the selectedDatabase array
+          selectedDatabase.push(this.databaseChoices[i].code);
+        }
+      }
+    }
+    //Apply the database selections from the accessible form to the default form
+    this.paramMethodForm.get('databaseControl').setValue(selectedDatabase);
+  }
+
+  buildAccessibleMethods() {
+    let methodsHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.matchingMcodes.length; i++) {
+      methodsHTML +=
+        "<input id='" +
+        'methods' +
+        i +
+        "' type='checkbox' name='methodMapCheck'><label for='" +
+        'methods' +
+        i +
+        "'>" +
+        this.matchingMcodes[i].short_name +
+        '</label><br>';
+    }
+
+    if (methodsHTML == '') {
+      methodsHTML = 'Select a parameter first';
+    }
+    //Insert the checkbox html into the fieldset
+    document.getElementById('methodCheckbox').innerHTML = methodsHTML;
+  }
+
+  methodMap(clear: Boolean) {
+    //Find number of methods listed in the fieldset
+    let numOptions: number;
+
+    numOptions = this.matchingMcodes.length;
+
+    //To be populated with code from each checked method
+    let selectedMethods = [];
+    for (let i = 0; i < numOptions; i++) {
+      //Get the ID of each method
+      let methodID: string;
+      methodID = 'methods' + i.toString();
+
+      //Retrieve the element containing the checkbox
+      let currentMethod = document.getElementById(methodID) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentMethod.checked = false;
+      }
+
+      if (!clear) {
+        let currMethodSelected = currentMethod.checked;
+        //See if the current checkbox is checked
+        if (currMethodSelected) {
+          //If checked, add code to the selectedDatabase array
+          selectedMethods.push(this.matchingMcodes[i].mcode);
+        }
+        //Apply selections from the accessible form to the default form
+        this.paramMethodForm.get('methodControl').setValue(selectedMethods);
+      }
     }
   }
 
@@ -612,5 +740,10 @@ export class MapOptionsComponent implements OnInit {
 
     //sending click trigger for recognition in map.component
     this.mapLayersService.sendClearMapClickEvent();
+
+    //Clear accessible forms
+    this.databaseCheckboxes(true);
+    this.methodMap(true);
+    this.buildAccessibleMethods();
   }
 }

@@ -598,6 +598,14 @@
             aria-label="Check this box to enable high contrast">Turn on high contrast
           </mat-checkbox>
         </div>
+        <div class="subHeader">Accessible Forms</div>
+        <div class="normalText">If you would like the forms in this app to be compatible with screen readers and
+          keyboard
+          navigation, enable accessible forms.<br>
+          <mat-checkbox [disableRipple]="true" (change)="changeFormAccessibility($event)"
+            aria-label="Check this box to enable accessible forms">Turn on accessible forms
+          </mat-checkbox>
+        </div>
         <div class="subHeader">Map</div>
         <div class="normalText">As an alternative to clicking on points plotted in the map, we have all
           the data available

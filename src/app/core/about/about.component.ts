@@ -158,6 +158,16 @@ export class AboutComponent implements OnInit {
     }
   }
 
+  changeFormAccessibility(formAccessChecked: MatCheckboxChange) {
+    if (formAccessChecked.checked) {
+      //replace default forms with accessible version
+      this.componentDisplayService.getAccessibleForm(true);
+    } else {
+      //replace accessible forms with the default version
+      this.componentDisplayService.getAccessibleForm(false);
+    }
+  }
+
   public aboutView(view: String) {
     if (view === 'faqView') {
       this.faq = true;

@@ -31,6 +31,7 @@ export class GraphOptionsComponent implements OnInit {
   public alreadyGraphed: Boolean = false;
 
   //Graph options
+  displayAccessibleForms: Boolean = false;
   graphSelectionsForm = new FormGroup({
     Database: new FormControl(),
     ParametersX: new FormControl(),
@@ -223,6 +224,8 @@ export class GraphOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
+    this.loadFormType();
+    this.buildAccessibleDatabase();
   }
 
   ngDoCheck() {
@@ -247,6 +250,19 @@ export class GraphOptionsComponent implements OnInit {
           )
         );
     }
+  }
+
+  public loadFormType() {
+    //Load accessible or default forms according to selection in Accessibility Tips
+    this.componentDisplayService.accessibleFormSubject.subscribe(
+      (accessibleForms) => {
+        if (accessibleForms) {
+          this.displayAccessibleForms = true;
+        } else {
+          this.displayAccessibleForms = false;
+        }
+      }
+    );
   }
 
   public getDataForDropdowns() {
@@ -441,6 +457,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     }
+    this.buildAccessibleMethods(axis);
   }
 
   //Called when minimize options is clicked
@@ -645,6 +662,159 @@ export class GraphOptionsComponent implements OnInit {
     this.showFlagOptions = true;
     this.disableEnableGraph(true);
     this.selectPoints();
+  }
+
+  //Creates html for the accessible form for selecting databases
+  buildAccessibleDatabase() {
+    let databaseHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.databaseChoices.length; i++) {
+      databaseHTML +=
+        "<input id='" +
+        'database' +
+        i +
+        "' type='checkbox'><label for='" +
+        'database' +
+        i +
+        "'>" +
+        this.databaseChoices[i].name +
+        '</label><br>';
+    }
+
+    //Insert the checkbox html into the database fieldset
+    document.getElementById('databaseCheckboxGraph').innerHTML = databaseHTML;
+  }
+
+  databaseCheckboxes(clear: Boolean) {
+    //Find number of databases listed in the fieldset
+    let numDatabaseOptions = this.databaseChoices.length;
+    //To be populated with code from each checked database
+    let selectedDatabase = [];
+    for (let i = 0; i < numDatabaseOptions; i++) {
+      //Get the ID of each database
+      let databaseID = 'database' + i.toString();
+      //Retrieve the element containing the database checkbox
+      let currentDatabase = document.getElementById(
+        databaseID
+      ) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentDatabase.checked = false;
+      }
+
+      if (!clear) {
+        let currDatabaseSelected = currentDatabase.checked;
+        //See if the current database checkbox is checked
+        if (currDatabaseSelected) {
+          //If checked, add database code to the selectedDatabase array
+          selectedDatabase.push(this.databaseChoices[i].code);
+        }
+      }
+    }
+    //Apply the database selections from the accessible form to the default form
+    this.graphSelectionsForm.get('Database').setValue(selectedDatabase);
+  }
+
+  buildAccessibleMethods(axis: string) {
+    let xMethodsHTML = '';
+    let yMethodsHTML = '';
+
+    console.log('this.matchingMcodesY', this.matchingMcodesY);
+
+    //Create a checkbox for each of database option
+    if (axis === 'xaxis') {
+      for (let i = 0; i < this.matchingMcodesX.length; i++) {
+        xMethodsHTML +=
+          "<input id='" +
+          'xmethods' +
+          i +
+          "' type='radio' name='xMethodRadio'><label for='" +
+          'xmethods' +
+          i +
+          "'>" +
+          this.matchingMcodesX[i].short_name +
+          '</label><br>';
+      }
+      if (xMethodsHTML == '') {
+        xMethodsHTML = 'Select a parameter first';
+      }
+      //Insert the checkbox html into the fieldset
+      document.getElementById('xMethodCheckboxGraph').innerHTML = xMethodsHTML;
+    }
+    if (axis === 'yaxis') {
+      for (let i = 0; i < this.matchingMcodesY.length; i++) {
+        yMethodsHTML +=
+          "<input id='" +
+          'ymethods' +
+          i +
+          "' type='radio' name='yMethodRadio'><label for='" +
+          'ymethods' +
+          i +
+          "'>" +
+          this.matchingMcodesY[i].short_name +
+          '</label><br>';
+      }
+      if (yMethodsHTML == '') {
+        yMethodsHTML = 'Select a parameter first';
+      }
+      //Insert the checkbox html into the fieldset
+      document.getElementById('yMethodCheckboxGraph').innerHTML = yMethodsHTML;
+    }
+  }
+
+  methodGraph(axis: String, clear: Boolean) {
+    //Find number of methods listed in the fieldset
+    let numOptions: number;
+
+    if (axis == 'x') {
+      numOptions = this.matchingMcodesX.length;
+    }
+    if (axis == 'y') {
+      numOptions = this.matchingMcodesY.length;
+    }
+    //To be populated with code from each checked method
+    let selectedMethods;
+    for (let i = 0; i < numOptions; i++) {
+      //Get the ID of each method
+      let methodID: string;
+      if (axis == 'x') {
+        methodID = 'xmethods' + i.toString();
+      }
+      if (axis == 'y') {
+        methodID = 'ymethods' + i.toString();
+      }
+      //Retrieve the element containing the checkbox
+      let currentMethod = document.getElementById(methodID) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentMethod.checked = false;
+      }
+
+      if (!clear) {
+        let currMethodSelected = currentMethod.checked;
+        //See if the current checkbox is checked
+        if (currMethodSelected) {
+          if (axis == 'x') {
+            //If checked, add code to the selectedDatabase array
+            selectedMethods = this.matchingMcodesX[i].mcode;
+          }
+          if (axis == 'y') {
+            //If checked, add code to the selectedDatabase array
+            selectedMethods = this.matchingMcodesY[i].mcode;
+          }
+        }
+        //Apply selections from the accessible form to the default form
+        if (axis == 'x') {
+          this.graphSelectionsForm.get('MethodsX').setValue(selectedMethods);
+        }
+        if (axis == 'y') {
+          this.graphSelectionsForm.get('MethodsY').setValue(selectedMethods);
+        }
+      }
+    }
   }
 
   unflagAllData() {
@@ -1848,11 +2018,9 @@ export class GraphOptionsComponent implements OnInit {
     if (axis == 'x') {
       this.graphSelectionsForm.get('ParametersX').setValue('');
       this.graphSelectionsForm.get('MethodsX').setValue('');
-      this.graphSelectionsForm.get('Database').setValue(null);
     } else if (axis == 'y') {
       this.graphSelectionsForm.get('ParametersY').setValue('');
       this.graphSelectionsForm.get('MethodsY').setValue('');
-      this.graphSelectionsForm.get('Database').setValue(null);
     }
   }
 
@@ -1863,6 +2031,8 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesX.reset();
     this.flagTypesY.reset();
     this.sameXYFlag.reset();
+    this.matchingMcodesX = [];
+    this.matchingMcodesY = [];
 
     //resetting checkboxes
     this.datefromMap.checked = false;
@@ -1919,6 +2089,13 @@ export class GraphOptionsComponent implements OnInit {
     if (this.showGraph) {
       this.showGraph = false;
     }
+
+    //Clear accessible forms
+    this.databaseCheckboxes(true);
+    this.buildAccessibleMethods('xaxis');
+    this.buildAccessibleMethods('yaxis');
+    this.methodGraph('x', true);
+    this.methodGraph('y', true);
   }
 
   //functions for retrieving mat-tooltip text from config file
