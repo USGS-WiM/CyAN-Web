@@ -5,7 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build-test": "npm install && npm run build",
+    "build-staging": "ng build --prod --base-href=/cyan-staging/ --deploy-url=/cyan-staging/ --aot=false --build-optimizer=false",
     "build": "ng build --prod --base-href=/cyan-field-test/ --deploy-url=/cyan-field-test/ --aot=false --build-optimizer=false",
+    "staging": "npm install && npm run build-staging",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
