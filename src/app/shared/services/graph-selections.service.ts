@@ -4,6 +4,7 @@ import { APP_SETTINGS } from 'src/app/app.settings';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
+import { E } from '@angular/cdk/keycodes';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,18 @@ export class GraphSelectionsService {
 
   public allGraphDataXSubject = new BehaviorSubject<any>(undefined);
   allGraphDataX$ = this.allGraphDataXSubject.asObservable();
+
+  // will contain results including less thans
+  public downloadGraphDataYSubject = new BehaviorSubject<any>(undefined);
+  downloadGraphDataY$ = this.downloadGraphDataYSubject.asObservable();
+
+  // will contain results including less thans
+  public downloadGraphDataXSubject = new BehaviorSubject<any>(undefined);
+  downloadGraphDataX$ = this.downloadGraphDataXSubject.asObservable();
+
+  // will contain results including less thans
+  public excludedFromGraphCountSubject = new BehaviorSubject<any>(0);
+  excludedFromGraphCount$ = this.excludedFromGraphCountSubject.asObservable();
 
   public tempResultsYSubject = new BehaviorSubject<any>(undefined);
   tempResultsY$ = this.tempResultsYSubject.asObservable();
@@ -88,10 +101,17 @@ export class GraphSelectionsService {
   public allDataX = [];
   public allDataY = [];
 
+  // includes less thans for download
+  public valuesLessThansX = [];
+  public valuesLessThansY = [];
+  public allDataLessThansX = [];
+  public allDataLessThansY = [];
+
   public rawX;
   public rawY;
 
   public sid = [];
+  public sidLessThans = [];
 
   //Colors for all 4 flagging options
   public pointColors: Array<String> = [];
@@ -214,7 +234,30 @@ export class GraphSelectionsService {
     let flagX = [];
     let flagY = [];
     let counter = 0;
+    let excludedCount = 0;
+    let filteredX = [];
+    let filteredY = [];
     if (tempResultsX && tempResultsY) {
+      // filtering out less thans
+      for (let i = 0; i < tempResultsX.length; i++) {
+        if ((tempResultsX[i].minimum_reporting_level == '<') || (tempResultsX[i].minimum_reporting_level == ' < ')) {
+          excludedCount++;
+        } else {
+          filteredX.push(tempResultsX[i]);
+        }
+      }
+      for (let i = 0; i < tempResultsY.length; i++) {
+        if ((tempResultsY[i].minimum_reporting_level == '<') || (tempResultsY[i].minimum_reporting_level == ' < ')) {
+          excludedCount++;
+        } else {
+          filteredY.push(tempResultsY[i]);
+        }
+      }
+
+      // storing number excluded
+      this.excludedFromGraphCountSubject.next(excludedCount);
+      
+      // matching for download, includes less thans
       for (
         let xResultsIndex = 0;
         xResultsIndex < tempResultsX.length;
@@ -229,6 +272,31 @@ export class GraphSelectionsService {
             //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
             tempResultsY[yResultsIndex].sid == tempResultsX[xResultsIndex].sid
           ) {
+            this.valuesLessThansX.push(tempResultsX[xResultsIndex].result);
+            this.valuesLessThansY.push(tempResultsY[yResultsIndex].result);
+            this.allDataLessThansX.push(tempResultsX[xResultsIndex]);
+            this.allDataLessThansY.push(tempResultsY[yResultsIndex]);
+            this.sidLessThans.push(tempResultsY[yResultsIndex].sid);
+          }
+        }
+      }
+
+      
+      // matching results that don't have less thans and checking for flags
+      for (
+        let xResultsIndex = 0;
+        xResultsIndex < filteredX.length;
+        xResultsIndex++
+      ) {
+        for (
+          let yResultsIndex = 0;
+          yResultsIndex < filteredY.length;
+          yResultsIndex++
+        ) {
+          if (
+            //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
+            filteredY[yResultsIndex].sid == filteredX[xResultsIndex].sid
+          ) {
             counter += 1;
             let xFlag: Boolean = false;
             let yFlag: Boolean = false;
@@ -240,14 +308,14 @@ export class GraphSelectionsService {
               ) {
                 if (
                   this.flagsSubject.value[flagIndex].rcode ==
-                  tempResultsX[xResultsIndex].rcode
+                  filteredX[xResultsIndex].rcode
                 ) {
                   flagX.push(xResultsIndex);
                   xFlag = true;
                 }
                 if (
                   this.flagsSubject.value[flagIndex].rcode ==
-                  tempResultsY[yResultsIndex].rcode
+                  filteredY[yResultsIndex].rcode
                 ) {
                   flagY.push(yResultsIndex);
                   yFlag = true;
@@ -256,15 +324,15 @@ export class GraphSelectionsService {
             }
 
             this.assignColors(xFlag, yFlag);
-            this.valuesX.push(tempResultsX[xResultsIndex].result);
-            this.valuesY.push(tempResultsY[yResultsIndex].result);
-            this.allDataX.push(tempResultsX[xResultsIndex]);
-            this.allDataY.push(tempResultsY[yResultsIndex]);
-            this.sid.push(tempResultsY[yResultsIndex].sid);
+            this.valuesX.push(filteredX[xResultsIndex].result);
+            this.valuesY.push(filteredY[yResultsIndex].result);
+            this.allDataX.push(filteredX[xResultsIndex]);
+            this.allDataY.push(filteredY[yResultsIndex]);
+            this.sid.push(filteredY[yResultsIndex].sid);
           }
           if (
-            yResultsIndex > tempResultsY.length - 2 &&
-            xResultsIndex > tempResultsX.length - 2
+            yResultsIndex > filteredY.length - 2 &&
+            xResultsIndex > filteredX.length - 2
           ) {
             this.formatMetadata(this.allDataX, 'xAxis');
             this.formatMetadata(this.allDataY, 'yAxis');
@@ -327,6 +395,8 @@ export class GraphSelectionsService {
       this.allGraphDataYSubject.next(this.allDataY);
       this.graphPointsXSubject.next(this.valuesX);
       this.allGraphDataXSubject.next(this.allDataX);
+      this.downloadGraphDataXSubject.next(this.allDataLessThansX);
+      this.downloadGraphDataYSubject.next(this.allDataLessThansY);
       this.sidSubject.next(this.sid);
       this.makeGraphSubject.next(true);
     } else {
