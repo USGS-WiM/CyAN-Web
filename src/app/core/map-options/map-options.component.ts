@@ -236,6 +236,7 @@ export class MapOptionsComponent implements OnInit {
         }
       }
     }
+    this.buildAccessibleMethods();
   }
 
   //This is called whenever the region selection changes
@@ -413,6 +414,64 @@ export class MapOptionsComponent implements OnInit {
     }
     //Apply the database selections from the accessible form to the default form
     this.paramMethodForm.get('databaseControl').setValue(selectedDatabase);
+  }
+
+  buildAccessibleMethods() {
+    let methodsHTML = '';
+
+    //Create a checkbox for each of database option
+    for (let i = 0; i < this.matchingMcodes.length; i++) {
+      methodsHTML +=
+        "<input id='" +
+        'methods' +
+        i +
+        "' type='checkbox' name='methodMapCheck'><label for='" +
+        'methods' +
+        i +
+        "'>" +
+        this.matchingMcodes[i].short_name +
+        '</label><br>';
+    }
+
+    if (methodsHTML == '') {
+      methodsHTML = 'Select a parameter first';
+    }
+    //Insert the checkbox html into the fieldset
+    document.getElementById('methodCheckbox').innerHTML = methodsHTML;
+  }
+
+  methodMap(clear: Boolean) {
+    //Find number of methods listed in the fieldset
+    let numOptions: number;
+
+    numOptions = this.matchingMcodes.length;
+
+    //To be populated with code from each checked method
+    let selectedMethods = [];
+    for (let i = 0; i < numOptions; i++) {
+      //Get the ID of each method
+      let methodID: string;
+      methodID = 'methods' + i.toString();
+
+      //Retrieve the element containing the checkbox
+      let currentMethod = document.getElementById(methodID) as HTMLInputElement;
+
+      //Uncheck checkboxes if "Clear Filters" was clicked
+      if (clear) {
+        currentMethod.checked = false;
+      }
+
+      if (!clear) {
+        let currMethodSelected = currentMethod.checked;
+        //See if the current checkbox is checked
+        if (currMethodSelected) {
+          //If checked, add code to the selectedDatabase array
+          selectedMethods.push(this.matchingMcodes[i].mcode);
+        }
+        //Apply selections from the accessible form to the default form
+        this.paramMethodForm.get('methodControl').setValue(selectedMethods);
+      }
+    }
   }
 
   //This is called when the base map changes
@@ -648,7 +707,6 @@ export class MapOptionsComponent implements OnInit {
     this.paramMethodForm.reset();
     this.boundingBoxForm.reset();
     this.regionForm.reset();
-    this.databaseCheckboxes(true);
 
     //resetting variables
     this.filterService.getMaxYear(2021);
@@ -667,5 +725,10 @@ export class MapOptionsComponent implements OnInit {
 
     //sending click trigger for recognition in map.component
     this.mapLayersService.sendClearMapClickEvent();
+
+    //Clear accessible forms
+    this.databaseCheckboxes(true);
+    this.methodMap(true);
+    this.buildAccessibleMethods();
   }
 }

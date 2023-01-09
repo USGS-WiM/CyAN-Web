@@ -457,7 +457,7 @@ export class GraphOptionsComponent implements OnInit {
         }
       }
     }
-    this.buildAccessibleMethods();
+    this.buildAccessibleMethods(axis);
   }
 
   //Called when minimize options is clicked
@@ -717,47 +717,51 @@ export class GraphOptionsComponent implements OnInit {
     this.graphSelectionsForm.get('Database').setValue(selectedDatabase);
   }
 
-  buildAccessibleMethods() {
+  buildAccessibleMethods(axis: string) {
     let xMethodsHTML = '';
     let yMethodsHTML = '';
 
     console.log('this.matchingMcodesY', this.matchingMcodesY);
 
     //Create a checkbox for each of database option
-    for (let i = 0; i < this.matchingMcodesX.length; i++) {
-      xMethodsHTML +=
-        "<input id='" +
-        'xmethods' +
-        i +
-        "' type='radio' name='xMethodRadio'><label for='" +
-        'xmethods' +
-        i +
-        "'>" +
-        this.matchingMcodesX[i].short_name +
-        '</label><br>';
+    if (axis === 'xaxis') {
+      for (let i = 0; i < this.matchingMcodesX.length; i++) {
+        xMethodsHTML +=
+          "<input id='" +
+          'xmethods' +
+          i +
+          "' type='radio' name='xMethodRadio'><label for='" +
+          'xmethods' +
+          i +
+          "'>" +
+          this.matchingMcodesX[i].short_name +
+          '</label><br>';
+      }
+      if (xMethodsHTML == '') {
+        xMethodsHTML = 'Select a parameter first';
+      }
+      //Insert the checkbox html into the fieldset
+      document.getElementById('xMethodCheckboxGraph').innerHTML = xMethodsHTML;
     }
-    for (let i = 0; i < this.matchingMcodesY.length; i++) {
-      yMethodsHTML +=
-        "<input id='" +
-        'ymethods' +
-        i +
-        "' type='radio' name='yMethodRadio'><label for='" +
-        'ymethods' +
-        i +
-        "'>" +
-        this.matchingMcodesY[i].short_name +
-        '</label><br>';
+    if (axis === 'yaxis') {
+      for (let i = 0; i < this.matchingMcodesY.length; i++) {
+        yMethodsHTML +=
+          "<input id='" +
+          'ymethods' +
+          i +
+          "' type='radio' name='yMethodRadio'><label for='" +
+          'ymethods' +
+          i +
+          "'>" +
+          this.matchingMcodesY[i].short_name +
+          '</label><br>';
+      }
+      if (yMethodsHTML == '') {
+        yMethodsHTML = 'Select a parameter first';
+      }
+      //Insert the checkbox html into the fieldset
+      document.getElementById('yMethodCheckboxGraph').innerHTML = yMethodsHTML;
     }
-
-    if (xMethodsHTML == '') {
-      xMethodsHTML = 'Select a parameter first';
-    }
-    if (yMethodsHTML == '') {
-      yMethodsHTML = 'Select a parameter first';
-    }
-    //Insert the checkbox html into the fieldset
-    document.getElementById('xMethodCheckboxGraph').innerHTML = xMethodsHTML;
-    document.getElementById('yMethodCheckboxGraph').innerHTML = yMethodsHTML;
   }
 
   methodGraph(axis: String, clear: Boolean) {
@@ -802,14 +806,14 @@ export class GraphOptionsComponent implements OnInit {
             selectedMethods = this.matchingMcodesY[i].mcode;
           }
         }
+        //Apply selections from the accessible form to the default form
+        if (axis == 'x') {
+          this.graphSelectionsForm.get('MethodsX').setValue(selectedMethods);
+        }
+        if (axis == 'y') {
+          this.graphSelectionsForm.get('MethodsY').setValue(selectedMethods);
+        }
       }
-    }
-    //Apply selections from the accessible form to the default form
-    if (axis == 'x') {
-      this.graphSelectionsForm.get('MethodsX').setValue(selectedMethods);
-    }
-    if (axis == 'y') {
-      this.graphSelectionsForm.get('MethodsY').setValue(selectedMethods);
     }
   }
 
@@ -2014,11 +2018,9 @@ export class GraphOptionsComponent implements OnInit {
     if (axis == 'x') {
       this.graphSelectionsForm.get('ParametersX').setValue('');
       this.graphSelectionsForm.get('MethodsX').setValue('');
-      this.graphSelectionsForm.get('Database').setValue(null);
     } else if (axis == 'y') {
       this.graphSelectionsForm.get('ParametersY').setValue('');
       this.graphSelectionsForm.get('MethodsY').setValue('');
-      this.graphSelectionsForm.get('Database').setValue(null);
     }
   }
 
@@ -2029,11 +2031,8 @@ export class GraphOptionsComponent implements OnInit {
     this.flagTypesX.reset();
     this.flagTypesY.reset();
     this.sameXYFlag.reset();
-    this.databaseCheckboxes(true);
     this.matchingMcodesX = [];
-    this.buildAccessibleMethods();
-    this.methodGraph('x', true);
-    this.methodGraph('y', true);
+    this.matchingMcodesY = [];
 
     //resetting checkboxes
     this.datefromMap.checked = false;
@@ -2090,6 +2089,13 @@ export class GraphOptionsComponent implements OnInit {
     if (this.showGraph) {
       this.showGraph = false;
     }
+
+    //Clear accessible forms
+    this.databaseCheckboxes(true);
+    this.buildAccessibleMethods('xaxis');
+    this.buildAccessibleMethods('yaxis');
+    this.methodGraph('x', true);
+    this.methodGraph('y', true);
   }
 
   //functions for retrieving mat-tooltip text from config file
