@@ -142,4 +142,12 @@ export class ComponentDisplayService {
   public getHighContrastSubject(contrast: Boolean) {
     this.highContrastSubject.next(contrast);
   }
+
+  //for turning on and off accessible forms
+  public accessibleFormSubject = new BehaviorSubject<Boolean>(undefined);
+  accessibleForm$ = this.accessibleFormSubject.asObservable();
+
+  public getAccessibleForm(accessibleForm: Boolean) {
+    this.accessibleFormSubject.next(accessibleForm);
+  }
 }
