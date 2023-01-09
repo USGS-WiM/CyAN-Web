@@ -49,6 +49,7 @@ export class MapOptionsComponent implements OnInit {
   public databaseChoices = [];
 
   //Map options
+  displayAccessibleForms: Boolean = false;
   public paramMethodForm = new FormGroup({
     databaseControl: new FormControl(),
     parameterControl: new FormControl(),
@@ -150,6 +151,7 @@ export class MapOptionsComponent implements OnInit {
         }, 0.1);
       }
     );
+    this.loadFormType();
     this.buildAccessibleDatabase();
   }
   ngDoCheck() {
@@ -172,6 +174,19 @@ export class MapOptionsComponent implements OnInit {
     this.mapLayersService.mapQueryResultsSubject.subscribe(
       (mapQueryResults) => {
         this.allMapData = mapQueryResults;
+      }
+    );
+  }
+
+  public loadFormType() {
+    //Load accessible or default forms according to selection in Accessibility Tips
+    this.componentDisplayService.accessibleFormSubject.subscribe(
+      (accessibleForms) => {
+        if (accessibleForms) {
+          this.displayAccessibleForms = true;
+        } else {
+          this.displayAccessibleForms = false;
+        }
       }
     );
   }
