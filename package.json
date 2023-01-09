@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build-test": "npm install && npm run build",
+    "build-staging": "npm install && npm run ng build --prod --base-href=/cyan-staging/ --deploy-url=/cyan-staging/ --aot=false --build-optimizer=false",
     "build": "ng build --prod --base-href=/cyan-field-test/ --deploy-url=/cyan-field-test/ --aot=false --build-optimizer=false",
     "test": "ng test",
     "lint": "ng lint",
