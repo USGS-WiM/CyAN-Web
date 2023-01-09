@@ -272,31 +272,6 @@ export class GraphSelectionsService {
             //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
             tempResultsY[yResultsIndex].sid == tempResultsX[xResultsIndex].sid
           ) {
-            counter += 1;
-            let xFlag: Boolean = false;
-            let yFlag: Boolean = false;
-            if (this.flagsSubject.value) {
-              for (
-                let flagIndex = 0;
-                flagIndex < this.flagsSubject.value.length;
-                flagIndex++
-              ) {
-                if (
-                  this.flagsSubject.value[flagIndex].rcode ==
-                  tempResultsX[xResultsIndex].rcode
-                ) {
-                  flagX.push(xResultsIndex);
-                  xFlag = true;
-                }
-                if (
-                  this.flagsSubject.value[flagIndex].rcode ==
-                  tempResultsY[yResultsIndex].rcode
-                ) {
-                  flagY.push(yResultsIndex);
-                  yFlag = true;
-                }
-              }
-            }
             this.valuesLessThansX.push(tempResultsX[xResultsIndex].result);
             this.valuesLessThansY.push(tempResultsY[yResultsIndex].result);
             this.allDataLessThansX.push(tempResultsX[xResultsIndex]);
@@ -305,10 +280,12 @@ export class GraphSelectionsService {
           }
         }
       }
-      // matching less than results
+
+      
+      // matching results that don't have less thans and checking for flags
       for (
         let xResultsIndex = 0;
-        xResultsIndex < filteredY.length;
+        xResultsIndex < filteredX.length;
         xResultsIndex++
       ) {
         for (
@@ -318,12 +295,14 @@ export class GraphSelectionsService {
         ) {
           if (
             //Matches are based on sid. One value for an sid for each axis = 1 point on the graph
-            filteredY[yResultsIndex].sid == filteredY[xResultsIndex].sid
+            filteredY[yResultsIndex].sid == filteredX[xResultsIndex].sid
           ) {
             counter += 1;
             let xFlag: Boolean = false;
             let yFlag: Boolean = false;
+            console.log(this.flagsSubject.value)
             if (this.flagsSubject.value) {
+              console.log("in flags");
               for (
                 let flagIndex = 0;
                 flagIndex < this.flagsSubject.value.length;
@@ -331,7 +310,7 @@ export class GraphSelectionsService {
               ) {
                 if (
                   this.flagsSubject.value[flagIndex].rcode ==
-                  filteredY[xResultsIndex].rcode
+                  filteredX[xResultsIndex].rcode
                 ) {
                   flagX.push(xResultsIndex);
                   xFlag = true;
@@ -347,9 +326,9 @@ export class GraphSelectionsService {
             }
 
             this.assignColors(xFlag, yFlag);
-            this.valuesX.push(filteredY[xResultsIndex].result);
+            this.valuesX.push(filteredX[xResultsIndex].result);
             this.valuesY.push(filteredY[yResultsIndex].result);
-            this.allDataX.push(filteredY[xResultsIndex]);
+            this.allDataX.push(filteredX[xResultsIndex]);
             this.allDataY.push(filteredY[yResultsIndex]);
             this.sid.push(filteredY[yResultsIndex].sid);
           }
@@ -357,6 +336,8 @@ export class GraphSelectionsService {
             yResultsIndex > filteredY.length - 2 &&
             xResultsIndex > filteredX.length - 2
           ) {
+            /* console.log(yResultsIndex, "filt", filteredY.length)
+            console.log(xResultsIndex, "filt", filteredX.length) */
             this.formatMetadata(this.allDataX, 'xAxis');
             this.formatMetadata(this.allDataY, 'yAxis');
             this.flagIndexX.next(flagX);

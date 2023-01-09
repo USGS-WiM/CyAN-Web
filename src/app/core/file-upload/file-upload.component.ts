@@ -115,6 +115,7 @@ export class FileUploadComponent {
     //expected headers
     let expectedHeaders = [
       'rcode',
+      'minimum_reporting_level',
       'pcode',
       'mcode',
       'date_time_group',
