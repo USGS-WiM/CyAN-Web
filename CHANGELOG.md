@@ -83,6 +83,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Put units on second line in graph axis titles
 - Replace pcode with short name in map popups
 - Removes null checkbox and related code
+- Layout edits
 
 ### Fixed
 
@@ -103,4 +104,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Submit button appears on lasso select before x/y checkboxes are selected
 - Mat-chips going outside of sidebar
 - Corrected axis label
--
+- Prevents user from switching flag selection while flag model is open
