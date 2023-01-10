@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased](https://github.com/USGS-WiM/CyAN-Web/tree/dev)
 
 ### Added
+
 - Text to graph stating exlcuded count
 - Text to generating graph section of userguide
 
@@ -107,3 +108,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Mat-chips going outside of sidebar
 - Corrected axis label
 - Prevents user from switching flag selection while flag model is open
+- Formats database name in metadata download; removes console error on graph clear
