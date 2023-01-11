@@ -361,12 +361,16 @@ export class GraphOptionsComponent implements OnInit {
       (minDate) => (minDateReturned = minDate)
     );
 
+    //Format the database names for the metadata download
     let orgValue = this.graphSelectionsForm.get('Database').value;
     let orgName: string = '';
+    //Get the code of each selected database
     for (let i = 0; i < orgValue.length; i++) {
-      let tempOrg = this.databaseChoices[i].toString();
+      //Get the name of each database corresponding with the codes
+      let tempOrg = this.databaseChoices[i].name.toString();
       if (i !== orgValue.length - 1) {
-        orgName = orgName + tempOrg + ', ';
+        //If multiple databases were selected, create a string of their names joined by a ;
+        orgName = orgName + tempOrg + '; ';
       } else {
         orgName = orgName + tempOrg;
       }
@@ -469,10 +473,11 @@ export class GraphOptionsComponent implements OnInit {
   }
 
   public createGraph(newPlot: Boolean) {
-
     // getting count of not plotted results (less thans)
     this.graphSelectionsService.excludedFromGraphCountSubject.subscribe(
-      (num) => { this.count = num}
+      (num) => {
+        this.count = num;
+      }
     );
 
     if (newPlot) {
@@ -571,7 +576,7 @@ export class GraphOptionsComponent implements OnInit {
       AxisLegendFillerY,
       AxisLegendFillerXY,
     ];
-    let title = ""
+    let title = "";
     if (this.count !== 0) {
       title = "Excluded less thans from plot: " + this.count
     }
@@ -1975,7 +1980,13 @@ export class GraphOptionsComponent implements OnInit {
       //this.graphMargins = 20;
     }
 
-    if (this.showGraph && redrawGraph && !this.showFlagOptions) {
+    if (
+      this.showGraph &&
+      redrawGraph &&
+      !this.showFlagOptions &&
+      !this.showFlagOptionsX &&
+      !this.showFlagOptionsY
+    ) {
       this.createGraph(false);
     }
   }
@@ -2095,7 +2106,7 @@ export class GraphOptionsComponent implements OnInit {
     this.datefromMapChecked = false;
 
     // purging the graph and hiding the div
-    if (this.bivariatePlot == undefined) {
+    if (this.bivariatePlot !== undefined) {
       Plotly.purge(this.bivariatePlot);
     }
     if (this.showGraph) {
