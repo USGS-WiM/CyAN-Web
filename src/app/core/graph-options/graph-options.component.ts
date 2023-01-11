@@ -576,9 +576,12 @@ export class GraphOptionsComponent implements OnInit {
       AxisLegendFillerY,
       AxisLegendFillerXY,
     ];
-
+    let title = "";
+    if (this.count !== 0) {
+      title = "Excluded less thans from plot: " + this.count
+    }
     var layout = {
-      title: 'Excluded less thans from plot: ' + this.count,
+      title: title,
       dragmode: 'lasso',
       font: {
         size: 14,
