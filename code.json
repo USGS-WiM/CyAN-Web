@@ -1,6 +1,6 @@
 [
   {
-    "name": "Great Lakes FIELD",
+    "name": "CyAN FIELD",
     "organization": "U.S. Geological Survey",
     "description": "Web app for exploring water quality field samples",
     "version": "v1.0.0-beta",
@@ -34,7 +34,7 @@
       "email": "kdooley@usgs.gov"
     },
     "date": {
-      "metadataLastUpdated": "2022-11-01"
+      "metadataLastUpdated": "2023-11-01"
     }
   }
 ]

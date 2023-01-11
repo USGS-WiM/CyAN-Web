@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Text to graph stating exlcuded count
 - Text to generating graph section of userguide
+- Adds version number
 
 ### Changed
 
@@ -18,7 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed
 
-## [v0.0.1](https://github.com/USGS-WiM/CyAN-Web/releases/tag/v1.0.0-beta) - 2022-11-02
+## [v1.0.0](https://github.com/USGS-WiM/CyAN-Web/releases/tag/v1.0.0-beta) - 2022-11-02
 
 ### Added
 
