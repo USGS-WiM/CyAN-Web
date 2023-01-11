@@ -11,13 +11,27 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Text to graph stating exlcuded count
 - Text to generating graph section of userguide
+- Adds accessibility features: tab in About modal and high contrast mode
+- Adds format date to csv downloads
+- Adds CSV download for interpreting results column headers
+- Adds lat/lng coordinates on cursor move
+- Adds database selection
+- Adds formatting for new mcode and pcode fields
+- Adds additional links to the FAQ
+- Adds option for accessible forms
 - Adds version number
 
 ### Changed
 
 - Changes autotick to true for log scale
+- Replace pcode with short name in map popups
+- Removes null checkbox and related code
+- Layout edits
 
 ### Fixed
+
+- Prevents user from switching flag selection while flag model is open
+- Formats database name in metadata download; removes console error on graph clear
 
 ## [v1.0.0](https://github.com/USGS-WiM/CyAN-Web/releases/tag/v1.0.0-beta) - 2022-11-02
 
@@ -62,14 +76,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Clear Map button for Map
 - Tooltips to Clear Filters and Download Flags buttons on graph page
 - Inline Ability to clear X and Y parameters on graph page
-- Adds accessibility features: tab in About modal and high contrast mode
-- Adds format date to csv downloads
-- Adds CSV download for interpreting results column headers
-- Adds lat/lng coordinates on cursor move
-- Adds database selection
-- Adds formatting for new mcode and pcode fields
-- Adds additional links to the FAQ
-- Adds option for accessible forms
 
 ### Changed
 
@@ -85,9 +91,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changes look of landing page and About modal buttons
 - Changes size and transparency of unflagged points to help identify overlapping points
 - Put units on second line in graph axis titles
-- Replace pcode with short name in map popups
-- Removes null checkbox and related code
-- Layout edits
 
 ### Fixed
 
@@ -108,5 +111,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Submit button appears on lasso select before x/y checkboxes are selected
 - Mat-chips going outside of sidebar
 - Corrected axis label
-- Prevents user from switching flag selection while flag model is open
-- Formats database name in metadata download; removes console error on graph clear
