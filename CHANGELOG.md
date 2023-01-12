@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace pcode with short name in map popups
 - Removes null checkbox and related code
 - Layout edits
+- Prevents map data with `minimum_reporting_value` of < from being mapped
 
 ### Fixed
 
