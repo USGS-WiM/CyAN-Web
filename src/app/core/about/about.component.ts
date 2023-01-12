@@ -282,7 +282,7 @@ export class AboutComponent implements OnInit {
     let infoContentID = document.getElementById('infoContentID');
 
     infoPanelID.style.height = (mapHeight - 130).toString() + 'px';
-    infoContentID.style.height = (mapHeight - 210).toString() + 'px';
+    infoContentID.style.height = (mapHeight - 220).toString() + 'px';
     if (windowWidth < 900) {
       infoPanelID.classList.remove('marginLeftFullWidth');
       infoPanelID.classList.add('marginLeftSmallWidth');
