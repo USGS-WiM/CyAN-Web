@@ -220,8 +220,6 @@ export class MapOptionsComponent implements OnInit {
   //This is called whenever the parameter selection changes
   //It takes the selected parameters and uses them to populate Methods with corresponding methods
   public parameterSelected() {
-    console.log('entering parameterSelected');
-    console.log('this.chipParams', this.chipParams);
     // chips contain the short_name so getting the pcodes
     for (let sn in this.chipParams) {
       let shortname = this.chipParams[sn];
@@ -236,18 +234,17 @@ export class MapOptionsComponent implements OnInit {
     this.snToPcode = this.snToPcode.filter(function (value, index, array) {
       return array.indexOf(value) === index;
     });
-
-    console.log('this.snToPcode', this.snToPcode);
-    console.log('this.mcodeShortName', this.mcodeShortName);
     this.matchingMcodes = [];
     for (let x = 0; x < this.snToPcode.length; x++) {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
         if (pcode == this.snToPcode[x]) {
-          mcodes.push(this.pcodeToMcode[pcode]);
+          for (let m = 0; m < this.pcodeToMcode[pcode].length; m++) {
+            mcodes.push(this.pcodeToMcode[pcode][m]);
+          }
           for (let i = 0; i < this.mcodeShortName.length; i++) {
-            for (let x = 0; x < mcodes[0].length; x++) {
-              if (mcodes[0][x] == this.mcodeShortName[i].mcode) {
+            for (let x = 0; x < mcodes.length; x++) {
+              if (mcodes[x] == this.mcodeShortName[i].mcode) {
                 this.matchingMcodes.push(this.mcodeShortName[i]);
               }
             }
