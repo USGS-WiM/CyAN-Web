@@ -234,13 +234,14 @@ export class MapOptionsComponent implements OnInit {
     this.snToPcode = this.snToPcode.filter(function (value, index, array) {
       return array.indexOf(value) === index;
     });
-
     this.matchingMcodes = [];
     for (let x = 0; x < this.snToPcode.length; x++) {
       let mcodes = [];
       for (let pcode in this.pcodeToMcode) {
         if (pcode == this.snToPcode[x]) {
-          mcodes.push(this.pcodeToMcode[pcode]);
+          for (let m = 0; m < this.pcodeToMcode[pcode].length; m++) {
+            mcodes.push(this.pcodeToMcode[pcode][m]);
+          }
           for (let i = 0; i < this.mcodeShortName.length; i++) {
             for (let x = 0; x < mcodes.length; x++) {
               if (mcodes[x] == this.mcodeShortName[i].mcode) {
