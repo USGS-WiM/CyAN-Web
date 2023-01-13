@@ -111,15 +111,21 @@ export class MapLayersService {
             base.classList.remove('initial-loader');
           } else {
             mapData = res;
+            let count = 0;
             for (let i = 0; i < res.length; i++) {
-              let lat = Number(res[i].latitude);
-              let lng = Number(res[i].longitude);
+                // filtering out less thans from being mapped
+                if ((res[i].minimum_reporting_level == '<') || (res[i].minimum_reporting_level == ' < ')) {
+                  count++;
+                } else {
+                  let lat = Number(res[i].latitude);
+                  let lng = Number(res[i].longitude);
 
-              L.marker([lat, lng], {
-                icon: L.divIcon({
-                  className: 'allSiteIcon',
-                }),
-              }).addTo(this.mapWQSites);
+                  L.marker([lat, lng], {
+                    icon: L.divIcon({
+                      className: 'allSiteIcon',
+                    }),
+                  }).addTo(this.mapWQSites);
+                }
             }
             this.filterWqSampleSubject.next(this.mapWQSites);
             this.mapQueryResultsSubject.next(mapData);
