@@ -240,14 +240,20 @@ export class GraphSelectionsService {
     if (tempResultsX && tempResultsY) {
       // filtering out less thans
       for (let i = 0; i < tempResultsX.length; i++) {
-        if ((tempResultsX[i].minimum_reporting_level == '<') || (tempResultsX[i].minimum_reporting_level == ' < ')) {
+        if (
+          tempResultsX[i].minimum_reporting_level == '<' ||
+          tempResultsX[i].minimum_reporting_level == ' < '
+        ) {
           excludedCount++;
         } else {
           filteredX.push(tempResultsX[i]);
         }
       }
       for (let i = 0; i < tempResultsY.length; i++) {
-        if ((tempResultsY[i].minimum_reporting_level == '<') || (tempResultsY[i].minimum_reporting_level == ' < ')) {
+        if (
+          tempResultsY[i].minimum_reporting_level == '<' ||
+          tempResultsY[i].minimum_reporting_level == ' < '
+        ) {
           excludedCount++;
         } else {
           filteredY.push(tempResultsY[i]);
@@ -256,7 +262,7 @@ export class GraphSelectionsService {
 
       // storing number excluded
       this.excludedFromGraphCountSubject.next(excludedCount);
-      
+
       // matching for download, includes less thans
       for (
         let xResultsIndex = 0;
@@ -281,7 +287,6 @@ export class GraphSelectionsService {
         }
       }
 
-      
       // matching results that don't have less thans and checking for flags
       for (
         let xResultsIndex = 0;
