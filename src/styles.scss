@@ -265,11 +265,9 @@ a.modebar-btn svg {
 }
 .mapFilterBtn {
   width: 100px;
-  line-height: 35px;
 }
 .flagTemplateBtn {
   width: 130px;
-  line-height: 35px;
 }
 .dataBtn {
   font-size: 16px;
@@ -489,14 +487,16 @@ mat-chip {
 }
 .aboutBtn {
   cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 44px;
+  width: 44px;
   margin-right: 5px;
   text-align: center;
 }
 .aboutIcon {
-  margin-left: -4px;
-  margin-top: 3px;
+	font-size: 24px;
+	margin-top: 5px;
+	text-align: center;
+	display: block;
 }
 .version {
   text-align: right;
