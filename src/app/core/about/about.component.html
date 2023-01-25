@@ -2,19 +2,19 @@
   aria-label="This panel contains information about CyAN">
   <div class="aboutModal">
     <div class="flex-container">
-      <div matTooltip="FAQ" class="aboutBtn" (click)=" aboutView('faqView')" id="faqViewID">
-        <mat-icon class="aboutText flex-child aboutIcon">question_answer</mat-icon>
-      </div>
-      <div matTooltip="User's Guide" class="aboutBtn" (click)="aboutView('userGuideView')" id="userGuideViewID">
-        <mat-icon class="aboutText flex-child aboutIcon">library_books</mat-icon>
-      </div>
-      <div matTooltip="Accessibility Tips" class="aboutBtn" (click)="aboutView('accessibilityView')"
+      <button matTooltip="FAQ" class="aboutBtn" (click)=" aboutView('faqView')" id="faqViewID">
+        <mat-icon class="flex-child aboutIcon">question_answer</mat-icon>
+      </button>
+      <button matTooltip="User's Guide" class="aboutBtn" (click)="aboutView('userGuideView')" id="userGuideViewID">
+        <mat-icon class="flex-child aboutIcon">library_books</mat-icon>
+      </button>
+      <button matTooltip="Accessibility Tips" class="aboutBtn" (click)="aboutView('accessibilityView')"
         id="accessibilityViewID">
-        <mat-icon class="aboutText flex-child aboutIcon">accessibility_new</mat-icon>
-      </div>
-      <div matTooltip="Disclaimer" class="aboutBtn " (click)="aboutView('disclaimerView')" id="disclaimerViewID">
-        <mat-icon class="aboutText flex-child aboutIcon">warning</mat-icon>
-      </div>
+        <mat-icon class="flex-child aboutIcon">accessibility_new</mat-icon>
+      </button>
+      <button matTooltip="Disclaimer" class="aboutBtn " (click)="aboutView('disclaimerView')" id="disclaimerViewID">
+        <mat-icon class="flex-child aboutIcon">warning</mat-icon>
+      </button>
     </div>
     <div class="infoContent marginTopFullHeight" id="infoContentID">
       <div [hidden]="!userGuide">
@@ -471,18 +471,18 @@
           types, download the <i>Flag Types</i> table. For help interpreting the columns in your downloaded results,
           download the <i>Results</i> table.
           <div class="flex-container">
-            <div class="mapFilterBtn dataBtn" (click)="pcodeDownload()">
+            <button class="mapFilterBtn dataBtn" (click)="pcodeDownload()">
               Parameters
-            </div>
-            <div class="mapFilterBtn dataBtn leftBreak" (click)="mcodeDownload()">
+            </button>
+            <button class="mapFilterBtn dataBtn leftBreak" (click)="mcodeDownload()">
               Methods
-            </div>
-            <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
+            </button>
+            <button class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()">
               Flag Types
-            </div>
-            <div class="mapFilterBtn dataBtn leftBreak" (click)="resultsKeyDownload()">
+            </button>
+            <button class="mapFilterBtn dataBtn leftBreak" (click)="resultsKeyDownload()">
               Results
-            </div>
+            </button>
           </div>
         </ol>
       </div>
@@ -616,12 +616,12 @@
           <i>annotation</i> column is for you to type custom notes; there is no required format for this.
         </div>
         <div class="flex-container">
-          <div class="flagTemplateBtn dataBtn" (click)="flagTemplateDownload()" matTooltip="{{flagTemplateTooltip()}}">
+          <button class="flagTemplateBtn dataBtn" (click)="flagTemplateDownload()" matTooltip="{{flagTemplateTooltip()}}">
             Flag Template
-          </div>
-          <div class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()" matTooltip="{{flagTypesTooltip()}}">
+		  </button>
+          <button class="mapFilterBtn dataBtn leftBreak" (click)="flagTypesDownload()" matTooltip="{{flagTypesTooltip()}}">
             Flag Types
-          </div>
+		  </button>
         </div>
       </div>
     </div>
