@@ -27,11 +27,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Replace pcode with short name in map popups
 - Removes null checkbox and related code
 - Layout edits
+- Prevents map data with `minimum_reporting_value` of < from being mapped
 
 ### Fixed
 
 - Prevents user from switching flag selection while flag model is open
 - Formats database name in metadata download; removes console error on graph clear
+- Populates method list in map correctly when parameter has multiple methods
 
 ## [v1.0.0](https://github.com/USGS-WiM/CyAN-Web/releases/tag/v1.0.0-beta) - 2022-11-02
 
