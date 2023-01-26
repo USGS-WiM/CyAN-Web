@@ -44,6 +44,9 @@ export class MapLayersService {
   public mapQueryResultsSubject = new BehaviorSubject<any>(undefined);
   mapQueryResults$ = this.mapQueryResultsSubject.asObservable();
 
+  public downloadMapQueryResultsSubject = new BehaviorSubject<any>(undefined); // inlcudes less thans which are not mapped
+  downloadMapQueryResultsSubject$ = this.downloadMapQueryResultsSubject.asObservable();
+
   //Get map data from service and populate water quality layer
   public filterWqSample(options: {
     meta: {
@@ -111,12 +114,10 @@ export class MapLayersService {
             base.classList.remove('initial-loader');
           } else {
             mapData = res;
-            let count = 0;
+            let noLessThanData = [];
             for (let i = 0; i < res.length; i++) {
                 // filtering out less thans from being mapped
-                if ((res[i].minimum_reporting_level == '<') || (res[i].minimum_reporting_level == ' < ')) {
-                  count++;
-                } else {
+                if ((res[i].minimum_reporting_level !== '<') || (res[i].minimum_reporting_level !== ' < ')) {
                   let lat = Number(res[i].latitude);
                   let lng = Number(res[i].longitude);
 
@@ -125,10 +126,12 @@ export class MapLayersService {
                       className: 'allSiteIcon',
                     }),
                   }).addTo(this.mapWQSites);
+                  noLessThanData.push(res[i])
                 }
             }
             this.filterWqSampleSubject.next(this.mapWQSites);
-            this.mapQueryResultsSubject.next(mapData);
+            this.mapQueryResultsSubject.next(noLessThanData);
+            this.downloadMapQueryResultsSubject.next(mapData);
             base.classList.remove('initial-loader');
             let mapDownloadBtn = document.getElementById('mapDownloadBtn');
             mapDownloadBtn.classList.remove('disabledDataBtn');
@@ -138,6 +141,7 @@ export class MapLayersService {
       //Clears observables, resetting the map and map options for a new query
       this.filterWqSampleSubject.next(undefined);
       this.mapQueryResultsSubject.next(undefined);
+      this.downloadMapQueryResultsSubject.next(undefined);
       base.classList.remove('initial-loader');
       let mapDownloadBtn = document.getElementById('mapDownloadBtn');
       mapDownloadBtn.classList.add('disabledDataBtn');
