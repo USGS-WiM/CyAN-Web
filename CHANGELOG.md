@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Prevents user from switching flag selection while flag model is open
 - Formats database name in metadata download; removes console error on graph clear
 - Populates method list in map correctly when parameter has multiple methods
+- Fixes mean value in map pop-up
 
 ## [v1.0.0](https://github.com/USGS-WiM/CyAN-Web/releases/tag/v1.0.0-beta) - 2022-11-02
 

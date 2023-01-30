@@ -266,6 +266,9 @@ export class MapOptionsComponent implements OnInit {
   //This is called when 'Filter' button is clicked
   //It formats the user's selections into an object that can be used to retrieve data from the service
   public runFilters() {
+    //sending click trigger for recognition in map.component
+    this.mapLayersService.sendClearMapClickEvent();
+
     //Users must select at least one parameter, method, and database
     if (
       this.snToPcode == null ||
