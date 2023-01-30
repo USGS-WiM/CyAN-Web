@@ -162,7 +162,9 @@ export class MapComponent implements AfterViewInit {
                         pCodeSummary[i].count.toString() +
                         '</td><td>' +
                         (
-                          Math.round(pCodeSummary[i].result * 100) / 100
+                          Math.round(
+                            (pCodeSummary[i].result / totalSamples) * 100
+                          ) / 100
                         ).toString() +
                         '</td>';
                       if (i === pCodeSummary.length - 1) {
