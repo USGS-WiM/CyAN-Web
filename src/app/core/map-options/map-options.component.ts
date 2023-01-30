@@ -171,7 +171,7 @@ export class MapOptionsComponent implements OnInit {
   }
 
   public getMapData() {
-    this.mapLayersService.mapQueryResultsSubject.subscribe(
+    this.mapLayersService.downloadMapQueryResultsSubject.subscribe(
       (mapQueryResults) => {
         this.allMapData = mapQueryResults;
       }
