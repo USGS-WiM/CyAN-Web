@@ -771,3 +771,20 @@ h2,
 		text-decoration: underline;
 	}
 }
+
+.intro-btn{
+	border: none;
+	background-color: transparent;
+	padding: 5px 0;
+	vertical-align: middle;
+
+	mat-icon{
+		vertical-align: middle;
+	}
+
+	&:focus,
+	&:hover{
+		cursor: pointer;
+		text-decoration: underline;
+	}
+}
