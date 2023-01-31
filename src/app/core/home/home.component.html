@@ -4,43 +4,42 @@
       <div [hidden]="!showFullCyanHomeBtn"
         aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
         <div class="flex-child" [hidden]="!showFullCyanHomeBtn">
-          <div id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth" (click)="clickHome()"
+          <button id="homeBtnFullID" class="landingPgBtns homeBtn homeBtnColor marginLeftFullWidth wm-focus" (click)="clickHome()"
             [hidden]="!showFullCyanHomeBtn" matTooltip="Home">
-            <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home
-            </mat-icon>
+            <mat-icon class="homeFullScreenIcon" aria-hidden="false" aria-label="Example home icon">home</mat-icon>
             CyAN FIELD
-          </div>
+		</button>
         </div>
       </div>
       <div>
         <div class="flex-child flex-container">
           <div [hidden]="windowWidthResize">
-            <div id='homeBtnSmID' class="homeBtnColor smNavBtn marginLeftSmallWidth" (click)="clickHome()"
+            <button id='homeBtnSmID' class="homeBtnColor smNavBtn marginLeftSmallWidth wm-focus" (click)="clickHome()"
               matTooltip="Home"
               aria-label="This is a yellow button featuring a house icon. Clicking on it will take you to the CyAN landing page.">
               <p>
                 <mat-icon aria-hidden="false" class="smBtnIcon" aria-label="Example home icon">home
                 </mat-icon>
               </p>
-            </div>
+            </button>
           </div>
           <div>
-            <div id='mapBtnID' class="mapBtnColor smNavBtn" (click)="clickMap()" matTooltip="Map"
+            <button id='mapBtnID' class="mapBtnColor smNavBtn wm-focus" (click)="clickMap()" matTooltip="Map"
               aria-label="This is a gray button featuring a map icon> Clicking on this button will lead to the the map and map filters.">
               <mat-icon class="smBtnIcon">map</mat-icon>
-            </div>
+			</button>
           </div>
           <div>
-            <div id='graphBtnID' class="graphBtnColor smNavBtn" (click)="clickGraph()" matTooltip="Graph"
+            <button id='graphBtnID' class="graphBtnColor smNavBtn wm-focus" (click)="clickGraph()" matTooltip="Graph"
               aria-label="This is a blue button featuring three dots meant to represent a graph. Clicking on this button will lead to the graph and graph filters.">
               <mat-icon class="smBtnIcon">scatter_plot</mat-icon>
-            </div>
+		    </button>
           </div>
           <div>
-            <div id='infoBtnID' class="infoBtnColor smNavBtn" (click)="clickInfo()" matTooltip="About"
+            <button id='infoBtnID' class="infoBtnColor smNavBtn wm-focus" (click)="clickInfo()" matTooltip="About"
               aria-label="This is an orange button feature a white icon logo (letter i with a circle around it). Clicking on this button will lead ot the info page.">
               <mat-icon class="smBtnIcon">info</mat-icon>
-            </div>
+		    </button>
           </div>
         </div>
       </div>

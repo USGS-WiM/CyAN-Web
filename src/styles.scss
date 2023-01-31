@@ -92,11 +92,10 @@ a.modebar-btn svg {
 
 /* Start full home screen nav buttons */
 .homeBtn {
-  height: 60px;
-  width: 265px;
+  height: 70px;
+  width: 273px;
   font-size: 30px;
   vertical-align: middle;
-  line-height: 60px;
 }
 .infoBtn {
   height: 210px;
@@ -119,7 +118,6 @@ a.modebar-btn svg {
 }
 .landingPgBtns {
   cursor: pointer;
-  position: relative;
   text-align: center;
 }
 .homeFullScreenIcon {
@@ -180,16 +178,18 @@ a.modebar-btn svg {
 
 /* Start small navbar buttons */
 .smBtnIcon {
-  font-size: 40px;
-  text-align: center;
-  line-height: 60px;
-  vertical-align: center;
-  margin-left: 10px;
-  position: relative;
+//   font-size: 40px;
+//   text-align: center;
+//   line-height: 60px;
+//   vertical-align: center;
+//   margin-left: 10px;
+//   position: relative;
+	transform: scale(1.5);
+	margin-top: 4px;
 }
 .smNavBtn {
-  height: 60px;
-  width: 60px;
+  height: 70px;
+  width: 70px;
   cursor: pointer;
   position: relative;
 }
@@ -265,11 +265,9 @@ a.modebar-btn svg {
 }
 .mapFilterBtn {
   width: 100px;
-  line-height: 35px;
 }
 .flagTemplateBtn {
   width: 130px;
-  line-height: 35px;
 }
 .dataBtn {
   font-size: 16px;
@@ -489,14 +487,16 @@ mat-chip {
 }
 .aboutBtn {
   cursor: pointer;
-  height: 40px;
-  width: 40px;
+  height: 44px;
+  width: 44px;
   margin-right: 5px;
   text-align: center;
 }
 .aboutIcon {
-  margin-left: -4px;
-  margin-top: 3px;
+	font-size: 24px;
+	margin-top: 5px;
+	text-align: center;
+	display: block;
 }
 .version {
   text-align: right;
@@ -542,6 +542,10 @@ mat-chip {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  &:focus-within{
+	text-decoration: underline;
+  }
 }
 
 /* Hide the browser's default radio button */
@@ -755,4 +759,15 @@ h2,
   &.centered {
     justify-content: center;
   }
+}
+
+// Block display
+.block{
+	display: block;
+}
+.wm-focus{
+
+	&:focus{
+		text-decoration: underline;
+	}
 }
