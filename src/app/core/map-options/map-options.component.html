@@ -14,10 +14,11 @@
   <div class="mapLayers leftBreak" id="mapLayersID">
     <label class="radioContainer" id="radioContainerResize0"
       aria-label="This button changes the base map to display streets">Streets & Cities
-      <input id="streetRadio" (change)="newBasemap()" type="radio" checked="checked" name="radio" />
+      <input id="streetRadio" (change)="newBasemap()" type="radio" checked="checked" name="radio"  />
       <span class="radioCheckmark" id="radioCheckmarkOuter0"></span>
     </label>
     <label class="radioContainer" id="radioContainerResize1"
+		for="imageryRadio"
       aria-label="This button changes the basemap to display satellite imagery">Satellite Imagery
       <input type="radio" name="radio" id="imageryRadio" (change)="newBasemap()" />
       <span class="radioCheckmark" id="radioCheckmarkOuter1"></span>
