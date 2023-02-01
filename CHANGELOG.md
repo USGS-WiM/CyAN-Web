@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Adds additional links to the FAQ
 - Adds option for accessible forms
 - Adds version number
+- Adds support for keyboard navigation
 
 ### Changed
 
