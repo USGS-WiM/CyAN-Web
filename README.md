@@ -1,5 +1,9 @@
 ![WiM](wim.png)
 
+# Archived
+
+This repository is archived. The active repository is in [GitLab](https://code.usgs.gov/WiM/CyAN-Web)
+
 # CyAN
 
 The purpose of the Cyanobacterial Assessment Network (CyAN) web app is to display, distribute, and analyze harmful algal bloom (HAB) data. Users can query water quality samples and access the data through maps, charts, and tables. These data will be used for calibrating satellite data to improve algal bloom detection in the United States.
